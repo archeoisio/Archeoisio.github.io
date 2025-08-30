@@ -15,11 +15,16 @@ html, body { margin:0; padding:0; height:100% }
 
 
 /* Container custom allineato a destra sotto switcher */
-.leaflet-top.leaflet-right .custom-controls {
-  display: flex;
-  flex-direction: column;
-  margin-top: 0px;    /* distanza dal switcher */
-  margin-right: 5px;
+.leaflet-top.leaflet-right .leaflet-control-layers {
+  margin-top: 20px;         /* distanza dall’alto */
+  margin-right: 5px;        /* distanza dal bordo destro */
+  width: 20px;             /* larghezza del popup */
+  max-height: 30px;        /* altezza massima con scroll */
+  overflow-y: auto;         
+  background: white;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  border-radius: 4px;
+}
 }
 .leaflet-top.leaflet-right .custom-controls .leaflet-control {
   margin-top: 10px;
