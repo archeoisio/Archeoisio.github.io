@@ -110,7 +110,7 @@ cities.forEach(function(city) {
 
     // Quando clicchi su un marker, la mappa si zooma sulla città e la centra
     marker.on('click', function() {
-        map.setView([city.lat, city.lon], 8);  // Zoom al livello 8 sulla città
+        map.setView([city.lat, city.lon], 10);  // Zoom al livello 8 sulla città
     });
 });
 
@@ -142,6 +142,7 @@ leafletLayerControl.style.top = '120px';  // Distanza dal top per posizionarlo s
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
 
 
