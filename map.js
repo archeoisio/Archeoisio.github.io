@@ -99,9 +99,9 @@ var cities = [
 
 // 2. Inizializzazione della mappa
 var map = L.map('map', {
-  center: [45, 30],
+  center: [50, 30],
   zoom: 5,
-  minZoom: 3,
+  minZoom: 4,
   scrollWheelZoom: true
 });
 
@@ -130,7 +130,7 @@ var HomeControl = L.Control.extend({
     btn.innerHTML = '🏠';
     btn.title = 'Torna alla vista iniziale';
     btn.onclick = function() {
-      map.setView([50, 20], 4);
+      map.setView([50, 30], 5);
     };
     return btn;
   }
@@ -147,7 +147,7 @@ var CustomToggle = L.Control.extend({
     // stili inline per posizionamento al centro
     Object.assign(container.style, {
       position: 'absolute',
-      top: '50%',
+      top: 'calc(50% + 1cm)',
       left: '50%',
       transform: 'translate(-50%, -50%)',
       background: 'white',
@@ -189,4 +189,5 @@ map.addControl(new CustomToggle());
 // 7. (Opzionale) Sensibilità dello zoom a rotellina
 // se la tua versione di Leaflet supporta questo, altrimenti commenta:
 // map.scrollWheelZoom.options.zoomSensitivity = 0.2;
+
 
