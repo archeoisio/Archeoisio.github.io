@@ -55,8 +55,8 @@ cities.forEach(function(city) {
 // Carica i poligoni direttamente nel codice
 var countriesLayer = L.layerGroup();
 
-// Incolla qui il tuo GeoJSON con i confini reali dei paesi
-var geojsonData = {
+// Incolla direttamente i tuoi dati JSON come stringa
+const geojsonData = JSON.parse(`
     {
 "type": "FeatureCollection",
                                                                                 
