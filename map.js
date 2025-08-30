@@ -1,5 +1,5 @@
 // Inizializza la mappa
-var map = L.map('map').setView([31.505, -0.09], 5);  // Cambia latitudine e longitudine iniziali come desideri
+var map = L.map('map').setView([81.505, -0.09], 5);  // Cambia latitudine e longitudine iniziali come desideri
 
 // Aggiungi il tile layer 8-bit per lo sfondo (puoi usare OpenStreetMap o tile 8-bit)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
