@@ -130,7 +130,7 @@ cities.forEach(function(city) {
   L.marker([city.lat, city.lon])
     .bindPopup("<b>" + city.name + "</b>")
     .on('click', function() {
-      map.setView([city.lat, city.lon], 10);
+      map.setView([city.lat, city.lon], 14);
     })
     .addTo(markerLayer);
 });
@@ -203,6 +203,7 @@ map.addControl(new CustomToggle());
 // 7. (Opzionale) Sensibilità dello zoom a rotellina
 // se la tua versione di Leaflet supporta questo, altrimenti commenta:
 // map.scrollWheelZoom.options.zoomSensitivity = 0.2;
+
 
 
 
