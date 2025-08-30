@@ -2,45 +2,43 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Leaflet Multi-Basemap + Home</title>
+  <title>Mappa Capitali del Mondo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-XQoYMqMTK8LvdlDXvXO0A8NIBjgPq30z4h0gh+qW0M4="
-    crossorigin=""
   />
 
-  <!-- (Opzionale) CSS per Leaflet.Control.Home -->
+  <!-- Home Control CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet-control-home@1.0.1/leaflet.control.home.css"
   />
 
   <style>
-    /* Mappa a schermo intero */
     html, body { margin:0; padding:0; height:100%; }
-    #map { width:100%; height:100%; }
+    #map      { width:100%; height:100%; }
   </style>
 </head>
 <body>
+
   <div id="map"></div>
 
   <!-- Leaflet JS -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-u1iG1Zsy7iL7H+0Glyb17lJC6+nyTO8tN0PkA5B8Hro="
-    crossorigin=""
+    defer
   ></script>
 
-  <!-- Plugin Home Control -->
+  <!-- Home Control JS -->
   <script
     src="https://unpkg.com/leaflet-control-home@1.0.1/leaflet.control.home.js"
+    defer
   ></script>
 
-  <!-- Il tuo script di configurazione della mappa -->
-  <script src="map.js"></script>
+  <!-- Script di inizializzazione -->
+  <script src="map.js" defer></script>
 </body>
 </html>
