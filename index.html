@@ -2,25 +2,34 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Leaflet – Map con Zoom, Home e Layer</title>
+  <title>Leaflet – Mappa con Zoom, Home e Layer (Satellite di default)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Leaflet CSS -->
+  <!-- 1. Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2JT6mYhLqszyLq7mXNCkLmUBYAHmd5T9e+ly8nY="
+    crossorigin=""
   />
 
+  <!-- 2. Custom CSS inline -->
   <style>
+    /* Corpo pagina e mappa a pieno schermo */
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
     }
-
     #map {
       width: 100%;
       height: 100%;
+    }
+
+    /* Abilita pan + pinch-zoom sui dispositivi touch */
+    .leaflet-container.leaflet-touch-zoom {
+      -ms-touch-action: pan-x pan-y pinch-zoom !important;
+      touch-action:       pan-x pan-y pinch-zoom !important;
     }
 
     /* Scala solo l'emoji del Home-Control */
@@ -37,15 +46,18 @@
   </style>
 </head>
 <body>
+  <!-- 3. Contenitore mappa -->
   <div id="map"></div>
 
-  <!-- Leaflet JS -->
+  <!-- 4. Leaflet JS -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o8Kv2GStg+g33kkQmHt5DDuT3tZs9xN1IXTTAfF5cQA="
+    crossorigin=""
     defer
   ></script>
 
-  <!-- Tuo map.js -->
+  <!-- 5. Il tuo map.js -->
   <script src="map.js" defer></script>
 </body>
 </html>
