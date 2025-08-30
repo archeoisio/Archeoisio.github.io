@@ -41,7 +41,7 @@ L.control.layers(baseMaps, { Capitali: capitali }).addTo(map);
 // 5. Scala metrica (più larga)
 L.control.scale({
   position: 'bottomleft',
-  maxWidth: 200,
+  maxWidth: 400,
   metric: true,
   imperial: false
 }).addTo(map);
@@ -83,4 +83,5 @@ map.on('locationfound', (e) => {
 map.on('locationerror', (err) => {
   console.warn('Errore geolocalizzazione:', err.message);
 });
+
 
