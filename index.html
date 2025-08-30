@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         #map {
-            height: 95vh;
+            height: 100vh;
+            width: 100%;
         }
 
         /* Controllo dei layer in alto a destra */
@@ -18,7 +19,7 @@
             z-index: 1000; /* Assicura che non venga coperto dai pulsanti di zoom */
         }
 
-        /* Personalizzazione del bottone "Home" */
+        /* Bottone Home */
         .leaflet-bar .leaflet-control {
             background: #fff;
             border-radius: 4px;
@@ -39,7 +40,6 @@
             text-decoration: none;
             display: inline-block;
         }
-
     </style> 
 </head>
 <body>
