@@ -115,7 +115,7 @@ cities.forEach(function(city) {
 
     // Quando clicchi su un marker, la mappa si zooma sulla città e la centra
     marker.on('click', function() {
-        map.setView([city.lat, city.lon], 8);  // Zoom al livello 8 sulla città
+        map.setView([city.lat, city.lon], 10);  // Zoom al livello 8 sulla città
     });
 });
 
@@ -127,7 +127,7 @@ var homeControl = L.Control.extend({
         btn.innerHTML = '🏠';
         btn.title = 'Torna alla posizione iniziale';
         btn.onclick = function() {
-            map.setView([50,10], 4.7);  // Centra sulla posizione iniziale (Europa)
+            map.setView([60,10], 5);  // Centra sulla posizione iniziale (Europa)
         };
         return btn;
     }
@@ -149,6 +149,7 @@ leafletLayerControl.style.transform = 'translate(-50%, -50%)';  // Centrare il c
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
 
 
