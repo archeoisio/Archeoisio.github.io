@@ -99,8 +99,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 2. Parametri iniziali desktop vs mobile
   var startParams = {
-    desktop: { center: [20, 0], zoom: 2 },
-    mobile:  { center: [20, 0], zoom: 1 }
+    desktop: { center: [49, 30], zoom: 5 },
+    mobile:  { center: [50, 10], zoom: 5 }
   };
   var mql      = window.matchMedia('(max-width:767px)');
   var isMobile = mql.matches;
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
     L.marker([city.lat, city.lon])
       .bindPopup('<b>' + city.name + '</b>')
       .on('click', function() {
-        map.setView([city.lat, city.lon], 6);
+        map.setView([city.lat, city.lon], 14);
       })
       .addTo(capitali);
   });
@@ -169,3 +169,4 @@ document.addEventListener('DOMContentLoaded', function() {
     map.setView(opts.center, opts.zoom);
   });
 });
+
