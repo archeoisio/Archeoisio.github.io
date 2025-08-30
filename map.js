@@ -1,8 +1,7 @@
 // 1. Base layers
 const baseMaps = {
   'Esri Satellite': L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/' +
-    'tile/{z}/{y}/{x}',
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     {
       attribution:
         'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, ' +
@@ -15,14 +14,25 @@ const baseMaps = {
   )
 };
 
-// 2. LayerGroup “capitali”
-const capitali = L.layerGroup([
-  L.marker([41.9028, 12.4964]).bindPopup('Roma'),
-  L.marker([48.8566, 2.3522]).bindPopup('Parigi'),
-  L.marker([51.5074, -0.1278]).bindPopup('Londra')
-]);
+// 2. Overlay “Capitali” con click-to-zoom
+const capitali = L.layerGroup();
+[
+  { name: 'Roma',    coords: [41.9028, 12.4964] },
+  { name: 'Parigi',  coords: [48.8566,  2.3522] },
+  { name: 'Londra',  coords: [51.5074, -0.1278] }
+].forEach(({ name, coords }) => {
+  const m = L.marker(coords)
+    .bindPopup(name)
+    .on('click', () => {
+      // zoom su marker a livello 10
+      map.setView(coords, 10);
+      // apri il popup
+      m.openPopup();
+    });
+  capitali.addLayer(m);
+});
 
-// 3. Mappa con bounds fissi e zoom super-lento
+// 3. Inizializza mappa
 const map = L.map('map', {
   zoomControl: false,
   scrollWheelZoom: {
@@ -35,45 +45,32 @@ const map = L.map('map', {
 })
 .setView([41.9028, 12.4964], 6);
 
-// 4. LayerSwitcher
-L.control.layers(baseMaps, { Capitali: capitali }).addTo(map);
+// 4. Layer switcher
+L.control.layers(baseMaps, { 'Capitali': capitali }).addTo(map);
 
-// 5. Funzione per rigenerare la scala
-let scaleControl;
-function updateScale() {
-  const maxWidth = Math.floor(window.innerWidth * 0.25);
-  if (scaleControl) map.removeControl(scaleControl);
-  scaleControl = L.control.scale({
-    position: 'bottomleft',
-    maxWidth: maxWidth,
-    metric: true,
-    imperial: false
-  }).addTo(map);
-}
+// 5. Scala metrica
+L.control.scale({
+  position: 'bottomleft',
+  maxWidth: 200,
+  metric: true,
+  imperial: false
+}).addTo(map);
 
-// creo la scala al load
-updateScale();
-
-// 6. Ricalcolo scala ad ogni zoom o resize
-map.on('zoomend', updateScale);
-window.addEventListener('resize', updateScale);
-
-// 7. Home 🏠
+// 6. Pulsante Home 🏠
 L.control.home({
   position: 'topright',
   icon: '🏠'
 }).addTo(map);
 
-// 8. DivIcon per locate 📍
+// 7. DivIcon e LocateControl 📍
 const locateEmoji      = '📍';
 const locateMarkerIcon = L.divIcon({
   html:       locateEmoji,
   className:  'custom-locate-marker',
-  iconSize:   [60, 60],
-  iconAnchor: [30, 30]
+  iconSize:   [50, 50],
+  iconAnchor: [25, 25]
 });
 
-// 9. LocateControl (niente pinpoint blu)
 L.control.locate({
   position:             'topright',
   icon:                 locateEmoji,
@@ -83,15 +80,10 @@ L.control.locate({
   flyTo:                true
 }).addTo(map);
 
-// 10. Marker custom on locate
 let _lastLocateMarker;
 map.on('locationfound', (e) => {
   if (_lastLocateMarker) map.removeLayer(_lastLocateMarker);
   _lastLocateMarker = L.marker(e.latlng, { icon: locateMarkerIcon })
                        .addTo(map);
 });
-
-// 11. Gestione errori locate
-map.on('locationerror', (err) => {
-  console.warn('Errore geolocalizzazione:', err.message);
-});
+map.on('locationerror', (err) => console.warn(err.message));
