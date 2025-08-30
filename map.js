@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
-  const satellite = L.tileLayer(
+   const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     { attribution: '&copy; Esri', noWrap: true }
   );
@@ -41,9 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
-  // Zoom nativo
-  L.control.zoom({ position: 'topleft' }).addTo(map);
-
   // Layer switcher
   L.control.layers(baseLayers, { 'Capitali': capitali }, { collapsed: true }).addTo(map);
 
@@ -67,33 +64,25 @@ document.addEventListener('DOMContentLoaded', () => {
   map.on('zoomend', updateScale);
   window.addEventListener('resize', updateScale);
 
-  // Home button
+  // Pulsante Home
   if (typeof L.Control.Home === 'function') {
     new L.Control.Home({
       position: 'topright',
       lat: initialView.center[0],
       lng: initialView.center[1],
-      zoom: initialView.zoom,
-      className: 'home-control'
+      zoom: initialView.zoom
     }).addTo(map);
   } else {
     console.warn('HomeControl non trovato');
   }
 
-  // Locate button
+  // Pulsante Locate con icona personalizzata via CSS
   if (typeof L.control.locate === 'function') {
     L.control.locate({
       position: 'topright',
-      icon: '📍',
-      markerStyle: { opacity: 0 },
-      showPopup: false,
-      keepCurrentZoomLevel: true,
-      flyTo: true,
-      strings: { title: 'Localizza me' },
-      className: 'locate-control'
+      strings: { title: 'Localizza me' }
     }).addTo(map);
   } else {
     console.warn('LocateControl non trovato');
   }
 });
-
