@@ -1,130 +1,93 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // 1. Base layers con noWrap per bloccare la vista al globo
-  const baseMaps = {
-    'Esri Satellite': L.tileLayer(
-      'https://server.arcgisonline.com/ArcGIS/rest/services/' +
-      'World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      {
-        attribution:
-          'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, ' +
-          'Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-        noWrap: true
-      }
-    ),
-    'OpenStreetMap': L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {
-        attribution: '© OpenStreetMap contributors',
-        noWrap: true
-      }
-    )
-  };
+// 1. Soglia per distinguere mobile vs desktop
+const MOBILE_MAX_WIDTH = 767;
 
-  // 2. Overlay "Capitali" con click-to-zoom
-  const capitali = L.layerGroup();
-  [
-    { name: 'Roma',   coords: [41.9028, 12.4964] },
-    { name: 'Parigi', coords: [48.8566,  2.3522] },
-    { name: 'Londra', coords: [51.5074, -0.1278] }
-  ].forEach(({ name, coords }) => {
-    const marker = L.marker(coords)
-      .bindPopup(name)
-      .on('click', () => {
-        map.setView(coords, 10);
-        marker.openPopup();
-      });
-    capitali.addLayer(marker);
-  });
+// 2. Configura centro e zoom per entrambe le modalità
+const mobileView = {
+  center: [41.223, 14.104], // Caserta
+  zoom: 6
+};
+const desktopView = {
+  center: [41.8708, 12.5674], // Centro Italia
+  zoom: 7
+};
 
-  // 3. Inizializza mappa con zoomControl disabilitato e scroll-wheel super lento
-  const map = L.map('map', {
-    center:       [41.9028, 12.4964],
-    zoom:         6,
-    layers:       [ baseMaps['Esri Satellite'], capitali ],
-    maxBounds:    [[-90, -180], [90, 180]],
-    maxBoundsViscosity: 1.0,
-    zoomControl:  false,
-    scrollWheelZoom: {
-      wheelPxPerZoomLevel: 1000,
-      wheelDebounceTime:   80
-    },
-    zoomDelta:    0.1
-  });
+// 3. Preparo il layer satellitare di default
+const defaultSatellite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+    attribution: '&copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye'
+  }
+);
 
-  // 4. LayerSwitcher (collapsed)
-  L.control
-    .layers(baseMaps, { 'Capitali': capitali }, { collapsed: true })
-    .addTo(map);
+// 4. BaseLayers e overlays (se ne avrai bisogno)
+const baseLayers = {
+  'Satellite': defaultSatellite,
+  'OpenStreetMap': L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    { attribution: '&copy; OpenStreetMap contributors' }
+  )
+};
+const overlays = {
+  // 'My Overlay': L.geoJSON(...)
+};
 
-  // 5. Scala metrica (viene disegnata con CSS ingrandito)
-  L.control
-    .scale({
-      position: 'bottomleft',
-      maxWidth: Math.floor(window.innerWidth * 0.3),
-      metric:   true,
-      imperial: false
-    })
-    .addTo(map);
+// 5. Determino la vista iniziale
+const isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
+const initialView = isMobile ? mobileView : desktopView;
 
-  // 6. Pulsante Home custom 🏠
-  L.Control.Home = L.Control.extend({
-    options: {
-      position:   'topright',
-      title:      'Torna alla vista iniziale',
-      homeCoords: [41.9028, 12.4964],
-      homeZoom:   6
-    },
-    onAdd: function(map) {
-      const opts      = this.options;
-      const container = L.DomUtil.create(
-        'div',
-        'leaflet-bar leaflet-control leaflet-control-home'
-      );
-      const btn = L.DomUtil.create('a', '', container);
-      btn.href      = '#';
-      btn.title     = opts.title;
-      btn.innerHTML = '🏠';
+// 6. Creo la mappa con restrizioni e layer di partenza
+const map = L.map('map', {
+  center: initialView.center,
+  zoom: initialView.zoom,
+  minZoom: 5,
+  maxZoom: 12,
+  zoomControl: false,
+  layers: [defaultSatellite]
+});
 
-      L.DomEvent.on(btn, 'click', L.DomEvent.stop)
-                .on(btn, 'click', () => {
-                  map.setView(opts.homeCoords, opts.homeZoom);
-                });
+// 7. Fissi i confini (esempio: confina l’Italia)
+const southWest = L.latLng(35, 6);
+const northEast = L.latLng(48, 19);
+map.setMaxBounds(L.latLngBounds(southWest, northEast));
 
-      return container;
-    }
-  });
-  L.control.home = function(opts) {
-    return new L.Control.Home(opts);
-  };
-  L.control.home().addTo(map);
+// 8. Aggiungo layer-switcher
+L.control.layers(baseLayers, overlays, { collapsed: false }).addTo(map);
 
-  // 7. LocateControl 📍 con marker custom
-  const locateEmoji      = '📍';
-  const locateMarkerIcon = L.divIcon({
-    html:       locateEmoji,
-    className:  'custom-locate-marker',
-    iconSize:   [50, 50],
-    iconAnchor: [25, 25]
-  });
+// 9. Aggiungo e riposiziono il zoom control
+L.control.zoom({ position: 'topright' }).addTo(map);
 
-  L.control
-    .locate({
-      position:             'topright',
-      icon:                 locateEmoji,
-      markerStyle:          { opacity: 0 },
-      showPopup:            false,
-      keepCurrentZoomLevel: true,
-      flyTo:                true
-    })
-    .addTo(map);
+// 10. Aggiungo il controllo Home (torna alla vista iniziale)
+L.control.home({
+  position: 'topright',
+  zoom: initialView.zoom,
+  lat: initialView.center[0],
+  lng: initialView.center[1]
+}).addTo(map);
 
-  let lastLocateMarker;
-  map.on('locationfound', e => {
-    if (lastLocateMarker) map.removeLayer(lastLocateMarker);
-    lastLocateMarker = L.marker(e.latlng, { icon: locateMarkerIcon })
-                       .addTo(map);
-  });
-  map.on('locationerror', () => {
-    alert('Impossibile rilevare la posizione');
-  });
+// 11. Aggiungo il Locate Control
+L.control.locate({
+  position: 'topright',
+  strings: {
+    title: 'Trova la tua posizione'
+  },
+  flyTo: true,
+  keepCurrentZoomLevel: true
+}).addTo(map);
+
+// 12. Aggiungo una barra di scala grande
+L.control.scale({
+  position: 'bottomleft',
+  maxWidth: 200,
+  metric: true,
+  imperial: false
+}).addTo(map);
+
+// 13. (Opzionale) Ricalibra view al resize/orientamento
+window.addEventListener('resize', () => {
+  const nowMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
+  if (nowMobile !== isMobile) {
+    // Ripristino la vista appropriata
+    const view = nowMobile ? mobileView : desktopView;
+    map.setView(view.center, view.zoom);
+  }
 });
