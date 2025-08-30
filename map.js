@@ -1,10 +1,4 @@
-// Inizializzazione mappa
-var map = L.map('map', {
-    center: [45, 30],
-    zoom: 5,
-    minZoom: 3,  // Impostato il minimo zoom a livello 2
-    scrollWheelZoom: true
-});
+// map.js
 
 // Aggiungere il layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -108,45 +102,87 @@ var cities = [
     { name: "Zanzibar City", lat: -6.1659, lon: 39.2026 }
 ];
 
-// Aggiungere i marker sulla mappa
-cities.forEach(function(city) {
-    var marker = L.marker([city.lat, city.lon]).addTo(map)
-        .bindPopup("<b>" + city.name + "</b>");
-
-    marker.on('click', function() {
-        map.setView([city.lat, city.lon], 8);  // Zoom al livello 8 sulla città
-    });
+// 2. Inizializzazione della mappa
+var map = L.map('map', {
+  center: [45, 30],
+  zoom: 5,
+  minZoom: 3,
+  scrollWheelZoom: true
 });
 
-// Aggiungere il controllo "Home" per tornare alla vista iniziale
+// 3. Aggiunta del layer OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: 'Map data © OpenStreetMap contributors'
+}).addTo(map);
+
+// 4. Creazione del layerGroup per i marker
+var markerLayer = L.layerGroup();
+cities.forEach(function(city) {
+  L.marker([city.lat, city.lon])
+    .bindPopup("<b>" + city.name + "</b>")
+    .on('click', function() {
+      map.setView([city.lat, city.lon], 8);
+    })
+    .addTo(markerLayer);
+});
+markerLayer.addTo(map);
+
+// 5. Controllo "Home" per tornare alla vista iniziale
 var homeControl = L.Control.extend({
-    options: {position: 'topright'},
-    onAdd: function(map) {
-        var btn = L.DomUtil.create('button', 'leaflet-control-home');
-        btn.innerHTML = '🏠';
-        btn.title = 'Torna alla posizione iniziale';
-        btn.onclick = function() {
-            map.setView([50, 20], 4);  // Centra sulla posizione iniziale (Europa)
-        };
-        return btn;
-    }
+  options: { position: 'topright' },
+  onAdd: function(map) {
+    var btn = L.DomUtil.create('button', 'leaflet-control-home');
+    btn.innerHTML = '🏠';
+    btn.title = 'Torna alla posizione iniziale';
+    btn.onclick = function() {
+      map.setView([50, 20], 4);
+    };
+    return btn;
+  }
 });
 map.addControl(new homeControl());
 
-// Aggiungere il controllo per i Layer
-var layerControl = L.control.layers({
-    "Marker": markerLayer  // Aggiungi i tuoi layer qui
-}).addTo(map);
+// 6. Controllo personalizzato per attivare o disattivare il layer dei marker
+var CustomToggle = L.Control.extend({
+  options: { position: 'topright' },
+  onAdd: function(map) {
+    var container = L.DomUtil.create('div', 'leaflet-bar custom-toggle');
+    container.innerHTML =
+      '<label style="margin:0; padding:6px; display:flex; align-items:center;">' +
+        '<input type="checkbox" checked id="chkCapitals" style="margin-right:4px;" />' +
+        'Capitali' +
+      '</label>';
+    L.DomEvent.disableClickPropagation(container);
+    return container;
+  }
+});
+map.addControl(new CustomToggle());
 
-// Posizionare il controllo dei layer al centro della pagina sopra la mappa
-var leafletLayerControl = document.querySelector('.leaflet-control-layers');
-leafletLayerControl.style.position = 'absolute';
-leafletLayerControl.style.top = '50%';  // Centra verticalmente
-leafletLayerControl.style.left = '50%'; // Centra orizzontalmente
-leafletLayerControl.style.transform = 'translate(-50%, -50%)';  // Centrato esattamente
+// 7. Event listener per il checkbox
+document.getElementById('chkCapitals').addEventListener('change', function(e) {
+  if (e.target.checked) {
+    markerLayer.addTo(map);
+  } else {
+    map.removeLayer(markerLayer);
+  }
+});
 
-// Ridurre la velocità dello zoom con la rotellina
+// 8. Iniezione CSS per centrare il controllo
+var style = document.createElement('style');
+style.innerHTML = `
+  .custom-toggle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: white;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    z-index: 1000;
+  }
+`;
+document.head.appendChild(style);
+
+// 9. Regolazione della sensibilità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
-map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
-
-
+map.scrollWheelZoom.options.zoomSensitivity = 0.2;
