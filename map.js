@@ -1,7 +1,12 @@
-// Inizializzazione mappa
-var map = L.map('map').setView([50,10], 4.2);  // Centra inizialmente sull'Europa con zoom a livello 4
+// Aggiungere la mappa
+var map = L.map('map', {
+    center: [51.505, -0.09],
+    zoom: 4,
+    minZoom: 2,  // Limita lo zoom minimo a livello 2
+    scrollWheelZoom: true
+});
 
-// Aggiunta del layer OpenStreetMap
+// Aggiungere il layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
@@ -108,9 +113,8 @@ cities.forEach(function(city) {
     var marker = L.marker([city.lat, city.lon]).addTo(map)
         .bindPopup("<b>" + city.name + "</b>");
 
-    // Quando clicchi su un marker, la mappa si zooma sulla città e la centra
     marker.on('click', function() {
-        map.setView([city.lat, city.lon], 10);  // Zoom al livello 8 sulla città
+        map.setView([city.lat, city.lon], 8);  // Zoom sulla città
     });
 });
 
@@ -131,17 +135,15 @@ map.addControl(new homeControl());
 
 // Aggiungere il controllo per i Layer
 var layerControl = L.control.layers({
-    "Marker": markerLayer,  // Aggiungi qui i tuoi layers, ad esempio markerLayer
-    // Puoi aggiungere altri layer qui
+    "Marker": markerLayer  // Aggiungi i tuoi layer qui
 }).addTo(map);
 
 // Personalizzare il posizionamento del controllo Layer per metterlo sotto il tasto Home
 var leafletLayerControl = document.querySelector('.leaflet-control-layers');
-leafletLayerControl.style.top = '120px';  // Aggiusta la distanza dal top per posizionarlo sotto il tasto Home
+leafletLayerControl.style.top = '120px';  // Distanza dal top per posizionarlo sotto il tasto Home
 
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
-
 
 
