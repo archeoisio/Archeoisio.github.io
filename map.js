@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 1. Lista capitali
   var cities = [
-     var cities = [
     { name: "Abu Dhabi",        lat: 24.4539,  lon: 54.3773 },
     { name: "Abuja",            lat: 9.0579,   lon: 7.49508 },
     { name: "Addis Abeba",      lat: 9.145,    lon: 40.4897 },
@@ -210,4 +209,5 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 }); // fine DOMContentLoaded
+
 
