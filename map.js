@@ -78,16 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
         iconAnchor:[15,30]
       })
     }).addTo(map);
-
-    // piccolo pallino blu
-    L.circle(e.latlng,{
-      radius: 5, // metà dimensione
-      color:'blue',
-      fillColor:'blue',
-      fillOpacity:0.5,
-      weight:0
-    }).addTo(map);
   });
 });
+
 
 
