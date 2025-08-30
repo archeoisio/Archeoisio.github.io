@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 1. Lista capitali
   var cities = [
-    { name: "Abu Dhabi",        lat: 24.4539,  lon: 54.3773 },
-    { name: "Abuja",            lat: 9.0579,   lon: 7.49508 },
-    { name: "Addis Abeba",      lat: 9.145,    lon: 40.4897 },
+    { name: "Abu Dhabi",     lat: 24.4539, lon: 54.3773 },
+    { name: "Abuja",         lat: 9.0579,  lon: 7.49508 },
+    { name: "Addis Abeba",   lat: 9.145,   lon: 40.4897 },
     /* … tutte le altre … */
-    { name: "Zanzibar City",    lat: -6.1659,  lon: 39.2026 }
+    { name: "Zanzibar City", lat: -6.1659, lon: 39.2026 }
   ];
 
   // 2. Vista iniziale desktop vs mobile
@@ -46,35 +46,22 @@ document.addEventListener('DOMContentLoaded', function() {
       .addTo(capitali);
   });
 
-  // 5. Inizializzazione mappa
+  // 5. Inizializzazione mappa (zoomControl:false -> niente bottoni zoom)
   var map = L.map('map', {
-    center:        initial.center,
-    zoom:          initial.zoom,
-    minZoom:       3,
-    worldCopyJump: true,
-    layers:        [ baseMaps['OSM Standard'], capitali ],
-    
-    // disabilita il controllo zoom default
-    zoomControl:   false,
-    
-    // scroll‐wheel più fluido
+    center:         initial.center,
+    zoom:           initial.zoom,
+    minZoom:        3,
+    worldCopyJump:  true,
+    layers:         [ baseMaps['OSM Standard'], capitali ],
+    zoomControl:    false,
     scrollWheelZoom: {
-      wheelPxPerZoomLevel: 240,
+      wheelPxPerZoomLevel: 1000,  // più alto = scroll‐zoom più lento
       wheelDebounceTime:   80
     },
-
-    // passi di zoom ridotti
-    zoomDelta: 0.25
+    zoomDelta:      0.1         // passi di zoom molto piccoli
   });
 
-  // 6. Riaggiungi + / – a sinistra
-  L.control.zoom({ position: 'topleft' }).addTo(map);
-
-  // 7. Limiti di navigazione
-  map.setMaxBounds([[-90, -180], [90, 180]]);
-  map.options.maxBoundsViscosity = 1.0;
-
-  // 8. Home‐Control custom
+  // 6. Home‐Control custom
   L.Control.Home = L.Control.extend({
     options: {
       position:   'topright',
@@ -106,12 +93,58 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   L.control.home().addTo(map);
 
-  // 9. Layer switcher
+  // 7. Layer‐switcher (basemaps + capitali)
   L.control.layers(
     baseMaps,
     { 'Capitali': capitali },
     { collapsed: false, position: 'topright' }
   ).addTo(map);
+
+  // 8. Scala metrica in basso a sinistra
+  L.control.scale({
+    position: 'bottomleft',
+    metric:   true,
+    imperial: false
+  }).addTo(map);
+
+  // 9. Pulsante di localizzazione
+  L.Control.Locate = L.Control.extend({
+    options: { position: 'topright', title: 'Mostra la mia posizione' },
+    onAdd: function(map) {
+      var container = L.DomUtil.create(
+        'div',
+        'leaflet-bar leaflet-control leaflet-control-locate'
+      );
+      var btn = L.DomUtil.create('a', '', container);
+      btn.href      = '#';
+      btn.title     = this.options.title;
+      btn.innerHTML = '📍';
+
+      L.DomEvent.on(btn, 'click', L.DomEvent.stop)
+                .on(btn, 'click', function() {
+                  map.locate({ setView: true, maxZoom: 14 });
+                });
+
+      return container;
+    }
+  });
+  L.control.locate = function(opts) {
+    return new L.Control.Locate(opts);
+  };
+  L.control.locate().addTo(map);
+
+  // Gestione evento successo/fallimento localizzazione
+  map.on('locationfound', function(e) {
+    var radius = e.accuracy / 2;
+    L.marker(e.latlng)
+     .addTo(map)
+     .bindPopup("Sei entro " + Math.round(radius) + " metri")
+     .openPopup();
+    L.circle(e.latlng, { radius: radius }).addTo(map);
+  });
+  map.on('locationerror', function() {
+    alert("Impossibile rilevare la posizione");
+  });
 
   // 10. Risposta al resize/orientamento
   mql.addEventListener('change', function(e) {
@@ -120,4 +153,3 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 });
-
