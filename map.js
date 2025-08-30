@@ -3,11 +3,11 @@ const MOBILE_MAX_WIDTH = 767;
 
 // 2. Configura centro e zoom per entrambe le modalità
 const mobileView = {
-  center: [41.223, 14.104], // Caserta
+  center: [49, 30], // Eurasia
   zoom: 6
 };
 const desktopView = {
-  center: [41.8708, 12.5674], // Centro Italia
+  center: [50, 10], // Italia
   zoom: 7
 };
 
@@ -40,7 +40,7 @@ const map = L.map('map', {
   center: initialView.center,
   zoom: initialView.zoom,
   minZoom: 5,
-  maxZoom: 12,
+  maxZoom: 20,
   zoomControl: false,
   layers: [defaultSatellite]
 });
@@ -52,9 +52,6 @@ map.setMaxBounds(L.latLngBounds(southWest, northEast));
 
 // 8. Aggiungo layer-switcher
 L.control.layers(baseLayers, overlays, { collapsed: false }).addTo(map);
-
-// 9. Aggiungo e riposiziono il zoom control
-L.control.zoom({ position: 'topright' }).addTo(map);
 
 // 10. Aggiungo il controllo Home (torna alla vista iniziale)
 L.control.home({
@@ -91,3 +88,4 @@ window.addEventListener('resize', () => {
     map.setView(view.center, view.zoom);
   }
 });
+
