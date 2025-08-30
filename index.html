@@ -24,7 +24,7 @@
   />
 
   <style>
-    /* full-screen map */
+    /* full-screen */
     html, body {
       margin: 0;
       padding: 0;
@@ -41,28 +41,17 @@
       touch-action:       pan-x pan-y pinch-zoom !important;
     }
 
-    /* rimuovo default margin-bottom sui controlli */
-    .leaflet-top .leaflet-control {
-      margin-bottom: 0 !important;
-    }
-
-    /* faccio diventare il container top-right un flex row */
+    /* top-right in flex row, permetti click */
     .leaflet-top.leaflet-right {
       display:        flex !important;
       flex-direction: row !important;
       align-items:    center !important;
       padding:        5px !important;
-      pointer-events: none;      /* fa in modo che il contenitore non catturi click */
+      pointer-events: none;
     }
-    /* ma permetto i click sui singoli controlli */
     .leaflet-top.leaflet-right .leaflet-control {
       pointer-events: auto;
-    }
-
-    /* spaziatura tra Home e Locate */
-    .leaflet-control-home,
-    .leaflet-control-locate {
-      margin: 0 5px !important;
+      margin:         0 5px 0 0 !important;
     }
 
     /* dimensionamento emoji sui pulsanti */
@@ -78,7 +67,7 @@
       padding:         0 !important;
     }
 
-    /* marker di locate identico al pulsante (niente sfondo o bordo) */
+    /* marker di locate identico al pulsante */
     .custom-locate-marker {
       background: none !important;
       border:     none !important;
@@ -86,7 +75,14 @@
       line-height: 1;
     }
 
-    /* scala in basso a sinistra (nessuna modifica necessaria) */
+    /* scala più grande */
+    .leaflet-control-scale {
+      font-size: 16px !important;
+    }
+    .leaflet-control-scale-line {
+      border-top: 2px solid #000 !important;
+      height:     6px !important;
+    }
   </style>
 </head>
 <body>
@@ -110,7 +106,7 @@
     defer
   ></script>
 
-  <!-- Il tuo map.js -->
+  <!-- map.js -->
   <script src="map.js" defer></script>
 </body>
 </html>
