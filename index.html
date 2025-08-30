@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mappa Leaflet – Mobile/Desktop</title>
+  <title>Mappa Leaflet</title>
 
-  <!-- Leaflet core CSS -->
+  <!-- 1. Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <!-- LocateControl CSS (se serve) -->
+  <!-- 2. LocateControl CSS via jsDelivr -->
   <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css"
+    href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css"
   />
 
-  <!-- HomeControl CSS via jsDelivr per CORS -->
+  <!-- 3. HomeControl CSS via jsDelivr -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css"
@@ -31,16 +31,16 @@
 <body>
   <div id="map"></div>
 
-  <!-- Leaflet core JS -->
+  <!-- 4. Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- HomeControl JS via jsDelivr -->
+  <!-- 5. HomeControl JS via jsDelivr -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.js"></script>
 
-  <!-- LocateControl JS -->
-  <script src="https://unpkg.com/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
+  <!-- 6. LocateControl JS via jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
-  <!-- Il tuo map.js -->
+  <!-- 7. Il tuo map.js -->
   <script src="map.js"></script>
 </body>
 </html>
