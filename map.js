@@ -129,9 +129,20 @@ var homeControl = L.Control.extend({
 });
 map.addControl(new homeControl());
 
+// Aggiungere il controllo per i Layer
+var layerControl = L.control.layers({
+    "Marker": markerLayer,  // Aggiungi qui i tuoi layers, ad esempio markerLayer
+    // Puoi aggiungere altri layer qui
+}).addTo(map);
+
+// Personalizzare il posizionamento del controllo Layer per metterlo sotto il tasto Home
+var leafletLayerControl = document.querySelector('.leaflet-control-layers');
+leafletLayerControl.style.top = '120px';  // Distanza dal top per posizionarlo sotto il tasto Home
+
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
 
 
