@@ -1,10 +1,5 @@
-// Inizializzazione mappa, centrata sull'Europa
-var map = L.map('map', {
-    center: [50, 10],  // Centro Europa
-    zoom: 4,           // Zoom iniziale
-    zoomControl: true,  // Controllo zoom visibile
-    scrollWheelZoom: false // Disabilita lo zoom con la rotella del mouse (opzionale)
-});
+// Inizializzazione mappa centrata sull'Europa
+var map = L.map('map').setView([50, 10], 4);  // Centro sull'Europa con un livello di zoom moderato
 
 // Aggiunta del layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -109,12 +104,26 @@ var cities = [
 ];
 
 // Aggiungere i marker sulla mappa
+var markerLayer = L.layerGroup();
 cities.forEach(function(city) {
-    var marker = L.marker([city.lat, city.lon]).addTo(map)
-        .bindPopup("<b>" + city.name + "</b>");
-        
-    // Aggiungi l'evento di zoom sul marker quando viene cliccato
+    var marker = L.marker([city.lat, city.lon]).bindPopup("<b>" + city.name + "</b>");
     marker.on('click', function() {
-        map.setView(marker.getLatLng(), 10); // Zoom 10 sul marker
+        map.setView([city.lat, city.lon], 10);  // Zooma sulla città cliccata
     });
+    markerLayer.addLayer(marker);
 });
+
+// Creare il controllo dei layer
+var baseLayers = {
+    "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    })
+};
+
+// Aggiungi il controllo per il layer dei marker
+var overlays = {
+    "Marker": markerLayer
+};
+
+// Aggiungere il controllo a destra della mappa (con pallini)
+L.control.layers(baseLayers, overlays, { position: 'topright' }).addTo(map);
