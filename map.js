@@ -1,5 +1,5 @@
-// Inizializzazione mappa
-var map = L.map('map').setView([20, 0], 2);  // Centro globale
+// Inizializzazione mappa, centrata sull'Europa
+var map = L.map('map').setView([50, 10], 4);  // Centro Europa
 
 // Aggiunta del layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -82,7 +82,6 @@ var cities = [
     { name: "Sofia", lat: 42.6977, lon: 23.3219 },
     { name: "Stockholm", lat: 59.3293, lon: 18.0686 },
     { name: "Tashkent", lat: 41.2995, lon: 69.2401 },
-    { name: "Tegucigalpa", lat: 13.9676, lon:
     { name: "Tegucigalpa", lat: 13.9676, lon: -86.9515 },
     { name: "Thimphu", lat: 27.4728, lon: 89.6399 },
     { name: "Tirana", lat: 41.3275, lon: 19.8189 },
@@ -109,56 +108,4 @@ cities.forEach(function(city) {
     L.marker([city.lat, city.lon]).addTo(map)
         .bindPopup("<b>" + city.name + "</b>")
         .openPopup();
-});
-
-// Opzione per selezionare marker o poligoni
-var control = L.control({ position: 'topright' });
-
-control.onAdd = function(map) {
-    var div = L.DomUtil.create('div', 'leaflet-control-layers leaflet-control-layers-expanded');
-    div.innerHTML = '<select id="markerPolygonSelect">' +
-                    '<option value="marker">Mostra Marker</option>' +
-                    '<option value="polygon">Mostra Poligoni</option>' +
-                    '<option value="both">Mostra Entrambi</option>' +
-                    '</select>';
-    return div;
-};
-
-control.addTo(map);
-
-// Cambiare tra marker e poligoni
-document.getElementById('markerPolygonSelect').addEventListener('change', function(event) {
-    var choice = event.target.value;
-
-    if (choice === 'marker') {
-        // Mostra solo marker
-        cities.forEach(function(city) {
-            L.marker([city.lat, city.lon]).addTo(map)
-                .bindPopup("<b>" + city.name + "</b>")
-                .openPopup();
-        });
-    } else if (choice === 'polygon') {
-        // Mostra solo poligoni
-        // (Esempio di poligoni di un singolo paese, inserire le geometrie delle capitali o altri dati geospaziali per un uso completo)
-        var polygon = L.polygon([
-            [37.7749, -122.4194],
-            [37.7839, -122.4294],
-            [37.7849, -122.4194]
-        ]).addTo(map);
-        polygon.bindPopup("Polygon Example");
-    } else {
-        // Mostra entrambi (marker e poligoni)
-        cities.forEach(function(city) {
-            L.marker([city.lat, city.lon]).addTo(map)
-                .bindPopup("<b>" + city.name + "</b>")
-                .openPopup();
-        });
-
-        var polygon = L.polygon([
-            [37.7749, -122.4194],
-            [37.7839, -122.4294],
-            [37.7849, -122.4194]
-        ]).addTo(map);
-        polygon.bindPopup("Polygon Example");
-    }
 });
