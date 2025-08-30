@@ -144,10 +144,11 @@ document.addEventListener('DOMContentLoaded', function() {
     scrollWheelZoom: {
     wheelPxPerZoomLevel: 120,  // default 60: più alto = serve più scroll per 1 livello
     wheelDebounceTime:   40    // default 40ms: più basso = più eventi, scroll più fluido
-     // 2) Passi di zoom più piccoli
-  zoomDelta:       0.25,       // default 1: riduce ampiezza dei click su +/–
+       }, 
+    // 2) Passi di zoom più piccoli
+    zoomDelta:       0.25,       // default 1: riduce ampiezza dei click su +/–
   
-  layers:          [ baseMaps['OSM Standard'], capitali ]
+    layers:          [ baseMaps['OSM Standard'], capitali ]
 });
   L.control.zoom({ position: 'topleft' }).addTo(map);
 
@@ -215,6 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 }); // fine DOMContentLoaded
+
 
 
 
