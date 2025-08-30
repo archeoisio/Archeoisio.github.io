@@ -97,53 +97,55 @@ var cities = [
     { name: "Zanzibar City", lat: -6.1659, lon: 39.2026 }
 ];
 
-// 1. Definisci il layer OSM senza wrapping orizzontale
+// 2. Tile-layer di base OpenStreetMap (senza wrap orizzontale)
 var osmLayer = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     noWrap: true,
     attribution: '&copy; OpenStreetMap contributors'
   }
 );
 
-// 2. Inizializza la mappa con le opzioni corrette
+
+// 3. Inizializza la mappa
 var map = L.map('map', {
   center: [49, 30],
   zoom: 5,
   minZoom: 4,
-  scrollWheelZoom: true,    // <- virgola aggiunta qui
-  layers: [osmLayer],
-  worldCopyJump: true       // evita di ritrovarti copie multiple del marker
+  scrollWheelZoom: true,
+  worldCopyJump: true,
+  wheelPxPerZoomLevel: 120,   // pixels per zoom level (default 60)
+  wheelDebounceTime: 40,      // ms debounce (default 40)
+  layers: [ osmLayer ]
 });
-
-// 3. (Opzionale) Blocca il pannello oltre i confini del mondo
+// 4. Imposta i limiti del mondo
 map.setMaxBounds([[-90, -180], [90, 180]]);
 map.options.maxBoundsViscosity = 1.0;
-// 3. TileLayer OpenStreetMap
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: 'Map data © OpenStreetMap contributors'
-}).addTo(map);
 
-// 4. Creazione del layerGroup per i marker
-var markerLayer = L.layerGroup();
+
+// 5. Crea il layerGroup “Capitali”
+var capitali = L.layerGroup();
 cities.forEach(function(city) {
   L.marker([city.lat, city.lon])
-    .bindPopup("<b>" + city.name + "</b>")
+    .bindPopup('<b>' + city.name + '</b>')
     .on('click', function() {
       map.setView([city.lat, city.lon], 14);
     })
-    .addTo(markerLayer);
+    .addTo(capitali);
 });
-markerLayer.addTo(map);  // layer acceso di default
 
-// 5. Controllo "Home" (come prima)
+// 6. Aggiungi “Capitali” di default (opzionale)
+// capitali.addTo(map);
+
+
+// 7. Bottone “Home” personalizzato
 var HomeControl = L.Control.extend({
   options: { position: 'topright' },
   onAdd: function(map) {
     var btn = L.DomUtil.create('button', 'leaflet-control-home');
     btn.innerHTML = '🏠';
-    btn.title = 'Torna alla vista iniziale';
-    btn.onclick = function() {
+    btn.title     = 'Torna alla vista iniziale';
+    btn.onclick   = function() {
       map.setView([49, 30], 5);
     };
     return btn;
@@ -151,61 +153,19 @@ var HomeControl = L.Control.extend({
 });
 map.addControl(new HomeControl());
 
-// 6. Controllo personalizzato per togglare markerLayer
-var CustomToggle = L.Control.extend({
-  options: { position: 'topright' },
-  onAdd: function(map) {
-    // container principale
-    var container = L.DomUtil.create('div', 'leaflet-bar custom-toggle');
-    
-    // stili inline per posizionamento al centro
-    Object.assign(container.style, {
-      position: 'absolute',
-      top: 'calc(50% + 2cm)',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      background: 'white',
-      border: '1px solid #bbb',
-      borderRadius: '4px',
-      padding: '4px 8px',
-      zIndex: 1000
-    });
 
-    // checkbox
-    var checkbox = L.DomUtil.create('input', '', container);
-    checkbox.type = 'checkbox';
-    checkbox.checked = true;
-    checkbox.id = 'chkCapitals';
-    checkbox.style.marginRight = '6px';
+// 8. Controllo Layers: OSM + Capitali
+var baseMaps = {
+  "OpenStreetMap": osmLayer
+};
+var overlays = {
+  "Capitali": capitali
+};
+L.control.layers(baseMaps, overlays, {
+  collapsed: false,
+  position: 'topright'
+}).addTo(map);
 
-    // label
-    var label = L.DomUtil.create('label', '', container);
-    label.htmlFor = 'chkCapitals';
-    label.innerText = 'Capitali';
-
-    // disabilita la propagazione del click alla mappa
-    L.DomEvent.disableClickPropagation(container);
-
-    // binding dell'evento direttamente qui
-    L.DomEvent.on(checkbox, 'change', function(e) {
-      if (e.target.checked) {
-        map.addLayer(markerLayer);
-      } else {
-        map.removeLayer(markerLayer);
-      }
-    });
-
-    return container;
-  }
-});
-map.addControl(new CustomToggle());
-
-// 7. (Opzionale) Sensibilità dello zoom a rotellina
-// se la tua versione di Leaflet supporta questo, altrimenti commenta:
+// 9. Zoom a rotellina: sensibilità (opzionale)
 // map.scrollWheelZoom.options.zoomSensitivity = 0.2;
-
-
-
-
-
 
