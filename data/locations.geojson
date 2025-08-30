@@ -1,31 +1,38 @@
 {
   "type": "FeatureCollection",
   "features": [
-    {
-      "type": "Feature",
-      "properties": { "name": "Vienna", "type": "capital" },
-      "geometry": { "type": "Point", "coordinates": [16.3738, 48.2082] }
-    },
-    {
-      "type": "Feature",
-      "properties": { "name": "Rome", "type": "capital" },
-      "geometry": { "type": "Point", "coordinates": [12.4964, 41.9028] }
-    },
-    {
-      "type": "Feature",
-      "properties": { "name": "Berlin", "type": "capital" },
-      "geometry": { "type": "Point", "coordinates": [13.4050, 52.5200] }
-    },
-    {
-      "type": "Feature",
-      "properties": { "name": "Madrid", "type": "capital" },
-      "geometry": { "type": "Point", "coordinates": [-3.7038, 40.4168] }
-    },
-    {
-      "type": "Feature",
-      "properties": { "name": "Paris", "type": "capital" },
-      "geometry": { "type": "Point", "coordinates": [2.3522, 48.8566] }
-    }
+    { "type": "Feature", "properties": { "name": "Vienna", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [16.3738, 48.2082] } },
+    { "type": "Feature", "properties": { "name": "Rome", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [12.4964, 41.9028] } },
+    { "type": "Feature", "properties": { "name": "Berlin", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [13.4050, 52.5200] } },
+    { "type": "Feature", "properties": { "name": "Madrid", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [-3.7038, 40.4168] } },
+    { "type": "Feature", "properties": { "name": "Paris", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [2.3522, 48.8566] } },
+    { "type": "Feature", "properties": { "name": "London", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [-0.1278, 51.5074] } },
+    { "type": "Feature", "properties": { "name": "Brussels", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [4.3517, 50.8503] } },
+    { "type": "Feature", "properties": { "name": "Amsterdam", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [4.9041, 52.3676] } },
+    { "type": "Feature", "properties": { "name": "Lisbon", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [-9.1395, 38.7169] } },
+    { "type": "Feature", "properties": { "name": "Oslo", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [10.7522, 59.9139] } },
+    { "type": "Feature", "properties": { "name": "Stockholm", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [18.0686, 59.3293] } },
+    { "type": "Feature", "properties": { "name": "Helsinki", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [24.9384, 60.1692] } },
+    { "type": "Feature", "properties": { "name": "Copenhagen", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [12.5683, 55.6761] } },
+    { "type": "Feature", "properties": { "name": "Warsaw", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [21.0122, 52.2298] } },
+    { "type": "Feature", "properties": { "name": "Athens", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [23.7275, 37.9838] } },
+    { "type": "Feature", "properties": { "name": "Budapest", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [19.0402, 47.4979] } },
+    { "type": "Feature", "properties": { "name": "Prague", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [14.4208, 50.0755] } },
+    { "type": "Feature", "properties": { "name": "Belgrade", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [20.4633, 44.8176] } },
+    { "type": "Feature", "properties": { "name": "Bucharest", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [26.1025, 44.4268] } },
+    { "type": "Feature", "properties": { "name": "Sofia", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [23.3219, 42.6977] } },
+    { "type": "Feature", "properties": { "name": "Zagreb", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [15.9819, 45.8131] } },
+    { "type": "Feature", "properties": { "name": "Sarajevo", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [18.4131, 43.8486] } },
+    { "type": "Feature", "properties": { "name": "Skopje", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [21.7178, 41.9981] } },
+    { "type": "Feature", "properties": { "name": "Tirana", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [19.8189, 41.3275] } },
+    { "type": "Feature", "properties": { "name": "Chisinau", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [28.9794, 47.0105] } },
+    { "type": "Feature", "properties": { "name": "Podgorica", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [19.2636, 42.4411] } },
+    { "type": "Feature", "properties": { "name": "Yerevan", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [40.1792, 44.4991] } },
+    { "type": "Feature", "properties": { "name": "Baku", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [49.8671, 40.4093] } },
+    { "type": "Feature", "properties": { "name": "Tbilisi", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [44.7872, 41.7151] } },
+    { "type": "Feature", "properties": { "name": "Astana", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [71.4196, 51.1694] } },
+    { "type": "Feature", "properties": { "name": "Chisinau", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [28.9794, 47.0105] } },
+    { "type": "Feature", "properties": { "name": "Luxembourg", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [6.13, 49.6116] } },
+    { "type": "Feature", "properties": { "name": "Monaco", "type": "capital" }, "geometry": { "type": "Point", "coordinates": [7.4167, 43.7333] } }
   ]
 }
-
