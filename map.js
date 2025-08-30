@@ -5,8 +5,8 @@ const baseMaps = {
     'tile/{z}/{y}/{x}',
     {
       attribution:
-        'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, ' +
-        'Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, ' +
+        'Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
     }
   ),
   'OpenStreetMap': L.tileLayer(
@@ -15,7 +15,7 @@ const baseMaps = {
   )
 };
 
-// 2. LayerGroup esemplificativo “capitali”
+// 2. LayerGroup “capitali”
 const capitali = L.layerGroup([
   L.marker([41.9028, 12.4964]).bindPopup('Roma'),
   L.marker([48.8566, 2.3522]).bindPopup('Parigi'),
@@ -33,26 +33,38 @@ const map = L.map('map', {
   maxBounds: [[-90, -180], [90, 180]],
   maxBoundsViscosity: 1.0
 })
-.setView([49, 30], 5);
+.setView([41.9028, 12.4964], 6);
 
 // 4. LayerSwitcher
 L.control.layers(baseMaps, { Capitali: capitali }).addTo(map);
 
-// 5. Scala metrica (più larga)
-L.control.scale({
-  position: 'bottomleft',
-  maxWidth: 400,
-  metric: true,
-  imperial: false
-}).addTo(map);
+// 5. Funzione per rigenerare la scala
+let scaleControl;
+function updateScale() {
+  const maxWidth = Math.floor(window.innerWidth * 0.25);
+  if (scaleControl) map.removeControl(scaleControl);
+  scaleControl = L.control.scale({
+    position: 'bottomleft',
+    maxWidth: maxWidth,
+    metric: true,
+    imperial: false
+  }).addTo(map);
+}
 
-// 6. Home 🏠
+// creo la scala al load
+updateScale();
+
+// 6. Ricalcolo scala ad ogni zoom o resize
+map.on('zoomend', updateScale);
+window.addEventListener('resize', updateScale);
+
+// 7. Home 🏠
 L.control.home({
   position: 'topright',
   icon: '🏠'
 }).addTo(map);
 
-// 7. DivIcon per locate 📍
+// 8. DivIcon per locate 📍
 const locateEmoji      = '📍';
 const locateMarkerIcon = L.divIcon({
   html:       locateEmoji,
@@ -61,7 +73,7 @@ const locateMarkerIcon = L.divIcon({
   iconAnchor: [30, 30]
 });
 
-// 8. LocateControl (nasconde pinpoint blu)
+// 9. LocateControl (niente pinpoint blu)
 L.control.locate({
   position:             'topright',
   icon:                 locateEmoji,
@@ -71,7 +83,7 @@ L.control.locate({
   flyTo:                true
 }).addTo(map);
 
-// 9. Re-inserisco marker custom alla localizzazione
+// 10. Marker custom on locate
 let _lastLocateMarker;
 map.on('locationfound', (e) => {
   if (_lastLocateMarker) map.removeLayer(_lastLocateMarker);
@@ -79,9 +91,7 @@ map.on('locationfound', (e) => {
                        .addTo(map);
 });
 
-// 10. Gestione errori geolocalizzazione
+// 11. Gestione errori locate
 map.on('locationerror', (err) => {
   console.warn('Errore geolocalizzazione:', err.message);
 });
-
-
