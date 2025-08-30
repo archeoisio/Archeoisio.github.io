@@ -1,7 +1,7 @@
 // Inizializzazione mappa
 var map = L.map('map', {
     center: [45, 30],
-    zoom: 4,
+    zoom: 5,
     minZoom: 3,  // Impostato il minimo zoom a livello 2
     scrollWheelZoom: true
 });
@@ -148,4 +148,5 @@ leafletLayerControl.style.transform = 'translate(-50%, -50%)';  // Centrato esat
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
