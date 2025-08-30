@@ -1,109 +1,54 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <title>Leaflet – LayerSwitcher + Home + Locate + Scala</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mappa Leaflet – Mobile/Desktop</title>
 
   <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+4+b0Va6kG5vB09MB+yT+dr6Yk7Y1lro7zzYP3r0A="
+    crossorigin=""
   />
 
-  <!-- LocateControl CSS -->
+  <!-- Leaflet Locate Control CSS -->
   <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.locatecontrol@0.73.0/dist/L.Control.Locate.min.css"
+    href="https://unpkg.com/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css"
+  />
+
+  <!-- Leaflet Home Control CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css"
   />
 
   <style>
-    /* mappa a pieno schermo */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* pan + pinch-zoom abilitati */
-    .leaflet-container.leaflet-touch-zoom {
-      touch-action: pan-x pan-y pinch-zoom !important;
-    }
-
-    /* colonna di controlli in alto a destra */
-    .leaflet-top.leaflet-right {
-      display:        flex !important;
-      flex-direction: column !important;
-      align-items:    flex-end !important;
-      padding:        8px !important;
-    }
-    .leaflet-control-layers {
-      order: 0;
-      margin-bottom: 10px !important;
-    }
-    .leaflet-control-home {
-      order: 1;
-      margin-bottom: 10px !important;
-    }
-    .leaflet-control-locate {
-      order: 2;
-    }
-
-    /* emoji sui pulsanti Home e Locate */
-    .leaflet-control-home a,
-    .leaflet-control-locate a {
-      display:         flex !important;
-      align-items:     center !important;
-      justify-content: center !important;
-      width:           50px !important;
-      height:          50px !important;
-      line-height:     50px !important;
-      font-size:       32px !important;
-      padding:         0 !important;
-    }
-
-    /* marker di locate identico al pulsante */
-    .custom-locate-marker {
-      background: none !important;
-      border:     none !important;
-      font-size:  50px;
-      line-height: 1;
-    }
-
-    /* scala metrica più spessa e leggibile */
-    .leaflet-control-scale {
-      background: rgba(255,255,255,0.8) !important;
-      padding:    6px 8px !important;
-      border-radius: 4px !important;
-      font-size:  18px !important;
-      box-shadow: 0 0 4px rgba(0,0,0,0.3) !important;
-    }
-    .leaflet-control-scale-line {
-      border-top: 4px solid #000 !important;
-      height:     8px !important;
-    }
+    /* Assicura che la mappa occupi tutta la finestra */
+    html, body { margin: 0; padding: 0; height: 100%; }
+    #map { width: 100%; height: 100%; }
   </style>
 </head>
+
 <body>
   <div id="map"></div>
 
   <!-- Leaflet JS -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    defer
+    integrity="sha256-o9N1j6kPKgPc7QiFQeoYsbQH+ik+GsI1M4pMWR7yUjY="
+    crossorigin=""
   ></script>
 
-  <!-- LocateControl JS -->
-  <script
-    src="https://unpkg.com/leaflet.locatecontrol@0.73.0/dist/L.Control.Locate.min.js"
-    defer
-  ></script>
+  <!-- Locate Control JS -->
+  <script src="https://unpkg.com/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
-  <!-- Il tuo map.js -->
-  <script src="map.js" defer></script>
+  <!-- Home Control JS -->
+  <script src="https://unpkg.com/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.js"></script>
+
+  <!-- Il tuo script di inizializzazione della mappa -->
+  <script src="map.js"></script>
 </body>
 </html>
