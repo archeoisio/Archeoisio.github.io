@@ -126,4 +126,6 @@ var overlays = {
 };
 
 // Aggiungere il controllo a destra della mappa (con pallini)
-L.control.layers(baseLayers, overlays, { position: 'topright' }).addTo(map);
+L.control.layers(baseLayers, overlays, {
+    position: 'topright'  // Posiziona il controllo in alto a destra
+}).addTo(map);
