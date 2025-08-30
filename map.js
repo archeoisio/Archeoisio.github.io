@@ -113,9 +113,8 @@ cities.forEach(function(city) {
     var marker = L.marker([city.lat, city.lon]).addTo(map)
         .bindPopup("<b>" + city.name + "</b>");
 
-    // Quando clicchi su un marker, la mappa si zooma sulla città e la centra
     marker.on('click', function() {
-        map.setView([city.lat, city.lon], 10);  // Zoom al livello 8 sulla città
+        map.setView([city.lat, city.lon], 8);  // Zoom al livello 8 sulla città
     });
 });
 
@@ -127,35 +126,25 @@ var homeControl = L.Control.extend({
         btn.innerHTML = '🏠';
         btn.title = 'Torna alla posizione iniziale';
         btn.onclick = function() {
-            map.setView([50,40], 4);  // Centra sulla posizione iniziale (Europa)
+            map.setView([50, 10], 4.7);  // Centra sulla posizione iniziale (Europa)
         };
         return btn;
     }
 });
 map.addControl(new homeControl());
 
-// Aggiungere il controllo per i Layer (Posizionato temporaneamente al centro della pagina sopra la mappa)
+// Aggiungere il controllo per i Layer
 var layerControl = L.control.layers({
-    "Marker": markerLayer  // Aggiungi il tuo layer di marker, se necessario
+    "Marker": markerLayer  // Aggiungi i tuoi layer qui
 }).addTo(map);
 
-// Posizionare temporaneamente il controllo dei layer al centro sopra la mappa
+// Posizionare il controllo dei layer al centro della pagina sopra la mappa
 var leafletLayerControl = document.querySelector('.leaflet-control-layers');
 leafletLayerControl.style.position = 'absolute';
-leafletLayerControl.style.top = '50%';  // Al centro della pagina
-leafletLayerControl.style.left = '50%';
-leafletLayerControl.style.transform = 'translate(-50%, -50%)';  // Centrare il controllo
+leafletLayerControl.style.top = '50%';  // Centra verticalmente
+leafletLayerControl.style.left = '50%'; // Centra orizzontalmente
+leafletLayerControl.style.transform = 'translate(-50%, -50%)';  // Centrato esattamente
 
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
-
-
-
-
-
-
-
-
-
-
