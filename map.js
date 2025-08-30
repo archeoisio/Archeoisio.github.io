@@ -2,7 +2,7 @@
 var map = L.map('map', {
     zoomDelta: 0.5,  // Rende lo zoom più lento
     wheelPxPerZoomLevel: 100  // Regola la velocità dello zoom con la rotella del mouse
-}).setView([48.8566, 2.3522], 1);  // Imposta la posizione iniziale (ad esempio, Parigi)
+}).setView([48.8566, 2.3522], 3;  // Imposta la posizione iniziale (ad esempio, Parigi)
 
 // Aggiungi il tile layer 8-bit (puoi usare OpenStreetMap o tile 8-bit)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
