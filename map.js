@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var map = L.map('map', {
     center:          initial.center,
     zoom:            initial.zoom,
-    minZoom:         1,
+    minZoom:         3,
     worldCopyJump:   true,
     layers:          [ baseMaps['OSM Standard'], capitali ],
     scrollWheelZoom: true,    // scroll “smooth”
@@ -209,5 +209,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 }); // fine DOMContentLoaded
+
 
 
