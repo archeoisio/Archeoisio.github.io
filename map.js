@@ -1,5 +1,5 @@
 // Inizializzazione mappa
-var map = L.map('map').setView([50,10], 4.5);  // Centra inizialmente sull'Europa con zoom a livello 4
+var map = L.map('map').setView([50,10], 4,5);  // Centra inizialmente sull'Europa con zoom a livello 4
 
 // Aggiunta del layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -132,5 +132,6 @@ map.addControl(new homeControl());
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
 
