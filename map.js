@@ -1,7 +1,7 @@
 // Aggiungere la mappa
 var map = L.map('map', {
     center: [50,10],
-    zoom: 4,5,
+    zoom: 5,
     minZoom: 3,  // Limita lo zoom minimo a livello 2
     scrollWheelZoom: true
 });
@@ -145,6 +145,7 @@ leafletLayerControl.style.top = '120px';  // Distanza dal top per posizionarlo s
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
 
 
