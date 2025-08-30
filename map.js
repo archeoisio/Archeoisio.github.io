@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Pulsante Locate ---
   const locateBtn = L.DomUtil.create('div','custom-locate-button leaflet-control');
   locateBtn.title = "Localizza me";
-  locateBtn.innerHTML = '<a>📍</a>';
+  locateBtn.innerHTML = '<a></a>';
   customContainer.appendChild(locateBtn);
 
   locateBtn.addEventListener('click', ()=>{
@@ -89,4 +89,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
 
