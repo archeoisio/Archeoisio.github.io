@@ -1,26 +1,30 @@
-const map = L.map('map').setView([54, 15], 4);
+// Crea la mappa centrata sull'Europa con uno zoom iniziale
+var map = L.map('map').setView([51.1657, 10.4515], 4); // Latitudine e longitudine per il centro dell'Europa
 
-L.tileLayer('tiles/{z}/{x}/{y}.png', { maxZoom: 6, attribution: '' }).addTo(map);
+// Aggiungi il layer OpenStreetMap come sfondo
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-const myIcon = L.icon({
-  iconUrl: 'tiles/marker.png',
-  iconSize: [16, 16],
-  iconAnchor: [8, 16],
-  popupAnchor: [0, -16],
-});
-
+// Carica il file geojson con le città e aggiungi i marker
 fetch('data/locations.geojson')
-  .then(res => res.json())
-  .then(data => {
-    L.geoJSON(data, {
-      pointToLayer: (feature, latlng) => L.marker(latlng, { icon: myIcon }),
-      onEachFeature: (feature, layer) => {
-        layer.bindPopup(`<b>${feature.properties.name}</b>`, { autoPan: true });
-        layer.on('click', (e) => {
-          layer.openPopup();
-          map.flyTo(e.latlng, 7);
-        });
-      },
-    }).addTo(map);
-  });
+    .then(response => response.json())
+    .then(data => {
+        // Aggiungi ogni feature del GeoJSON alla mappa
+        data.features.forEach(function(feature) {
+            var lat = feature.geometry.coordinates[1]; // Latitudine
+            var lon = feature.geometry.coordinates[0]; // Longitudine
+            var city = feature.properties.name;        // Nome della città
+            var country = feature.properties.country;  // Paese della città
 
+            // Crea il marker per ogni città
+            var marker = L.marker([lat, lon]).addTo(map);
+
+            // Aggiungi un pop-up personalizzato al marker
+            marker.bindPopup(`<b>${city}</b><br>${country}`)
+                .openPopup(); // Puoi rimuovere .openPopup() se non vuoi che il pop-up sia visibile subito
+        });
+    })
+    .catch(error => {
+        console.log("Errore nel caricamento del file geojson:", error);
+    });
