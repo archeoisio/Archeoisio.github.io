@@ -1,7 +1,7 @@
 // Inizializzazione mappa
 var map = L.map('map', {
-    center: [50, 50],
-    zoom: 5,
+    center: [50, 30],
+    zoom: 4,
     minZoom: 3,  // Impostato il minimo zoom a livello 2
     scrollWheelZoom: true
 });
@@ -127,7 +127,7 @@ var homeControl = L.Control.extend({
         btn.innerHTML = '🏠';
         btn.title = 'Torna alla posizione iniziale';
         btn.onclick = function() {
-            map.setView([50,80], 5);  // Centra sulla posizione iniziale (Europa)
+            map.setView([50,40], 4);  // Centra sulla posizione iniziale (Europa)
         };
         return btn;
     }
@@ -149,6 +149,7 @@ leafletLayerControl.style.transform = 'translate(-50%, -50%)';  // Centrare il c
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
 
 
