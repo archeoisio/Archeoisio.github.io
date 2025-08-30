@@ -5,62 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mappa Leaflet – Mobile/Desktop</title>
 
-  <!-- 1. Leaflet core CSS -->
+  <!-- Leaflet core CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    crossorigin="anonymous"
   />
 
-  <!-- 2. LocateControl CSS -->
+  <!-- LocateControl CSS (se serve) -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css"
-    crossorigin="anonymous"
   />
 
-  <!-- 3. HomeControl CSS -->
+  <!-- HomeControl CSS via jsDelivr per CORS -->
   <link
     rel="stylesheet"
-    href="https://unpkg.com/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css"
-    crossorigin="anonymous"
+    href="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css"
   />
 
   <style>
-    /* mappa a pieno schermo */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
+    html, body { margin:0; padding:0; height:100% }
+    #map { width:100%; height:100% }
   </style>
 </head>
 <body>
   <div id="map"></div>
 
-  <!-- 4. Leaflet core JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    crossorigin="anonymous"
-  ></script>
+  <!-- Leaflet core JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- 5. HomeControl JS -->
-  <script
-    src="https://unpkg.com/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.js"
-    crossorigin="anonymous"
-  ></script>
+  <!-- HomeControl JS via jsDelivr -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.js"></script>
 
-  <!-- 6. LocateControl JS -->
-  <script
-    src="https://unpkg.com/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"
-    crossorigin="anonymous"
-  ></script>
+  <!-- LocateControl JS -->
+  <script src="https://unpkg.com/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
-  <!-- 7. Il tuo script di inizializzazione -->
+  <!-- Il tuo map.js -->
   <script src="map.js"></script>
 </body>
 </html>
