@@ -97,7 +97,7 @@ var cities = [
     { name: "Zanzibar City", lat: -6.1659, lon: 39.2026 }
 ];
 
-// 2. Tile-layer di base OpenStreetMap (senza wrap orizzontale)
+// 2. Layer di base OpenStreetMap (senza wrap orizzontale)
 var osmLayer = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
@@ -106,7 +106,6 @@ var osmLayer = L.tileLayer(
   }
 );
 
-
 // 3. Inizializza la mappa
 var map = L.map('map', {
   center: [49, 30],
@@ -114,16 +113,22 @@ var map = L.map('map', {
   minZoom: 4,
   scrollWheelZoom: true,
   worldCopyJump: true,
-  wheelPxPerZoomLevel: 120,   // pixels per zoom level (default 60)
-  wheelDebounceTime: 40,      // ms debounce (default 40)
   layers: [ osmLayer ]
 });
-// 4. Imposta i limiti del mondo
+
+// 4. Limiti del mondo
 map.setMaxBounds([[-90, -180], [90, 180]]);
 map.options.maxBoundsViscosity = 1.0;
 
+// 5. Regola la sensibilità dello zoom a rotellina
+//    Leaflet espone wheelPxPerZoomLevel e wheelDebounceTime come opzioni della mappa,
+//    ma per farle valere devi ri-inizializzare il handler:
+map.scrollWheelZoom.disable();
+map.options.wheelPxPerZoomLevel = 120;  // più alto = zoom più lento
+map.options.wheelDebounceTime    = 40;  // minimo intervallo tra due scroll
+map.scrollWheelZoom.enable();
 
-// 5. Crea il layerGroup “Capitali”
+// 6. Crea il LayerGroup “Capitali”
 var capitali = L.layerGroup();
 cities.forEach(function(city) {
   L.marker([city.lat, city.lon])
@@ -134,14 +139,13 @@ cities.forEach(function(city) {
     .addTo(capitali);
 });
 
-// 6. Aggiungi “Capitali” di default (opzionale)
+// 7. (Opzionale) se vuoi attivare “Capitali” all’avvio
 // capitali.addTo(map);
 
-
-// 7. Bottone “Home” personalizzato
-var HomeControl = L.Control.extend({
+// 8. Pulsante “Home” personalizzato
+L.Control.Home = L.Control.extend({
   options: { position: 'topright' },
-  onAdd: function(map) {
+  onAdd: function() {
     var btn = L.DomUtil.create('button', 'leaflet-control-home');
     btn.innerHTML = '🏠';
     btn.title     = 'Torna alla vista iniziale';
@@ -151,21 +155,12 @@ var HomeControl = L.Control.extend({
     return btn;
   }
 });
-map.addControl(new HomeControl());
+map.addControl(new L.Control.Home());
 
-
-// 8. Controllo Layers: OSM + Capitali
-var baseMaps = {
-  "OpenStreetMap": osmLayer
-};
-var overlays = {
-  "Capitali": capitali
-};
-L.control.layers(baseMaps, overlays, {
-  collapsed: false,
-  position: 'topright'
-}).addTo(map);
-
-// 9. Zoom a rotellina: sensibilità (opzionale)
-// map.scrollWheelZoom.options.zoomSensitivity = 0.2;
+// 9. Controllo layers: OSM + Capitali
+L.control.layers(
+  { "OpenStreetMap": osmLayer },
+  { "Capitali":      capitali },
+  { collapsed: false, position: 'topright' }
+).addTo(map);
 
