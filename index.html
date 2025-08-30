@@ -2,8 +2,8 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Leaflet – LayerSwitcher + Home + Locate</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Leaflet – LayerSwitcher + Home + Locate + Scala</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Leaflet CSS -->
   <link
@@ -17,33 +17,43 @@
     href="https://unpkg.com/leaflet.locatecontrol@0.73.0/dist/L.Control.Locate.min.css"
   />
 
-  <!-- HomeButton CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet-homebutton@1.2.0/dist/L.Control.HomeButton.min.css"
-  />
-
   <style>
-    html, body { margin:0; padding:0; height:100%; }
-    #map      { width:100%; height:100%; }
+    /* mappa a pieno schermo */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
 
     /* pan + pinch-zoom abilitati */
     .leaflet-container.leaflet-touch-zoom {
       touch-action: pan-x pan-y pinch-zoom !important;
     }
 
-    /* TOP-RIGHT: colonna di controlli */
+    /* colonna di controlli in alto a destra */
     .leaflet-top.leaflet-right {
       display:        flex !important;
       flex-direction: column !important;
       align-items:    flex-end !important;
       padding:        8px !important;
     }
-    .leaflet-control-layers { order: 0; margin-bottom: 10px !important; }
-    .leaflet-control-home   { order: 1; margin-bottom: 10px !important; }
-    .leaflet-control-locate { order: 2; }
+    .leaflet-control-layers {
+      order: 0;
+      margin-bottom: 10px !important;
+    }
+    .leaflet-control-home {
+      order: 1;
+      margin-bottom: 10px !important;
+    }
+    .leaflet-control-locate {
+      order: 2;
+    }
 
-    /* dimensionamento emoji sui pulsanti */
+    /* emoji sui pulsanti Home e Locate */
     .leaflet-control-home a,
     .leaflet-control-locate a {
       display:         flex !important;
@@ -64,12 +74,16 @@
       line-height: 1;
     }
 
-    /* scala metrica ingrandita */
+    /* scala metrica più spessa e leggibile */
     .leaflet-control-scale {
-      font-size: 16px !important;
+      background: rgba(255,255,255,0.8) !important;
+      padding:    6px 8px !important;
+      border-radius: 4px !important;
+      font-size:  18px !important;
+      box-shadow: 0 0 4px rgba(0,0,0,0.3) !important;
     }
     .leaflet-control-scale-line {
-      border-top: 3px solid #000 !important;
+      border-top: 4px solid #000 !important;
       height:     8px !important;
     }
   </style>
@@ -89,13 +103,7 @@
     defer
   ></script>
 
-  <!-- HomeButton JS -->
-  <script
-    src="https://unpkg.com/leaflet-homebutton@1.2.0/dist/L.Control.HomeButton.min.js"
-    defer
-  ></script>
-
-  <!-- map.js -->
+  <!-- Il tuo map.js -->
   <script src="map.js" defer></script>
 </body>
 </html>
