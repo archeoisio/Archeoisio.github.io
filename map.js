@@ -1,5 +1,10 @@
 // Inizializzazione mappa, centrata sull'Europa
-var map = L.map('map').setView([50, 10], 4);  // Centro Europa
+var map = L.map('map', {
+    center: [50, 10],  // Centro Europa
+    zoom: 4,           // Zoom iniziale
+    zoomControl: true,  // Controllo zoom visibile
+    scrollWheelZoom: false // Disabilita lo zoom con la rotella del mouse (opzionale)
+});
 
 // Aggiunta del layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -105,7 +110,11 @@ var cities = [
 
 // Aggiungere i marker sulla mappa
 cities.forEach(function(city) {
-    L.marker([city.lat, city.lon]).addTo(map)
-        .bindPopup("<b>" + city.name + "</b>")
-        .openPopup();
+    var marker = L.marker([city.lat, city.lon]).addTo(map)
+        .bindPopup("<b>" + city.name + "</b>");
+        
+    // Aggiungi l'evento di zoom sul marker quando viene cliccato
+    marker.on('click', function() {
+        map.setView(marker.getLatLng(), 10); // Zoom 10 sul marker
+    });
 });
