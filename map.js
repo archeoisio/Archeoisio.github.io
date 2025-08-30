@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map',{
     center: initialView.center,
     zoom: initialView.zoom,
-    minZoom: 2,
+    minZoom: 3,
     maxZoom: 20,
     zoomControl:false,
     scrollWheelZoom:{wheelPxPerZoomLevel:1000,wheelDebounceTime:80},
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
 
 
 
