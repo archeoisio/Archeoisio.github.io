@@ -1,8 +1,9 @@
 // Inizializzazione della mappa con centro sull'Europa
 var map = L.map('map', {
-    center: [51.505, -0.09], // Centro sull'Europa (Londra come esempio)
+    center: [51.505, -0.09], // Centro iniziale dell'Europa (Londra come esempio)
     zoom: 4,  // Zoom iniziale
-    scrollWheelZoom: true  // Abilita lo zoom con la rotellina
+    scrollWheelZoom: true,  // Abilita lo zoom con la rotellina
+    zoomDelta: 0.5  // Riduce la velocità di zoom (default è 1)
 });
 
 // Aggiunta del layer OpenStreetMap
@@ -108,6 +109,7 @@ var cities = [
 ];
 
 // Aggiungere i marker sulla mappa
+var markers = [];
 cities.forEach(function(city) {
     var marker = L.marker([city.lat, city.lon]).addTo(map)
         .bindPopup("<b>" + city.name + "</b>");
@@ -116,13 +118,15 @@ cities.forEach(function(city) {
     marker.on('click', function() {
         map.setView([city.lat, city.lon], 10); // Zoom sul marker con livello 10
     });
+
+    markers.push(marker); // Salviamo i marker in un array
 });
 
-// Aggiunta dei controlli dei Layer a destra (controllo visibilità layer)
+// Aggiunta dei controlli dei Layer a destra (posizionamento in basso)
 L.control.layers({
-    "Mostra Marker": marker, // Aggiungere un layer per i marker se necessario
+    "Mostra Marker": markers, // Aggiungere un layer per i marker
 }, {}, {
-    position: 'topright'  // Posizione del controllo in alto a destra
+    position: 'bottomright'  // Posizione del controllo in basso a destra
 }).addTo(map);
 
 // Aggiungere un bottone "Home" per tornare alla posizione iniziale
