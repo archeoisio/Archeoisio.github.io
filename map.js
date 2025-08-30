@@ -126,7 +126,7 @@ var homeControl = L.Control.extend({
         btn.innerHTML = '🏠';
         btn.title = 'Torna alla posizione iniziale';
         btn.onclick = function() {
-            map.setView([50,50], 5);  // Centra sulla posizione iniziale (Europa)
+            map.setView([50,150], 5);  // Centra sulla posizione iniziale (Europa)
         };
         return btn;
     }
@@ -145,6 +145,7 @@ leafletLayerControl.style.top = '120px';  // Distanza dal top per posizionarlo s
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
 
 
