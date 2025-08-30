@@ -1,34 +1,9 @@
 // map.js
 document.addEventListener('DOMContentLoaded', function() {
 
-  // 0. Custom Home‐Control inline
-  L.Control.Home = L.Control.extend({
-    options: {
-      position:    'topright',
-      title:       'Ritorna alla vista iniziale',
-      homeCoords:  [20, 0],
-      homeZoom:    2
-    },
-    onAdd: function(map) {
-      var opts = this.options;
-      var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-      var btn = L.DomUtil.create('a', '', container);
-      btn.href = '#';
-      btn.title = opts.title;
-      btn.innerHTML = '🏠';
-      L.DomEvent.on(btn, 'click', L.DomEvent.stop)
-                .on(btn, 'click', function() {
-                  map.setView(opts.homeCoords, opts.homeZoom);
-                }, this);
-      return container;
-    }
-  });
-  L.control.home = function(opts) {
-    return new L.Control.Home(opts);
-  };
-
   // 1. Lista capitali
   var cities = [
+     var cities = [
     { name: "Abu Dhabi",        lat: 24.4539,  lon: 54.3773 },
     { name: "Abuja",            lat: 9.0579,   lon: 7.49508 },
     { name: "Addis Abeba",      lat: 9.145,    lon: 40.4897 },
@@ -129,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
     desktop: { center: [20, 0], zoom: 2 },
     mobile:  { center: [20, 0], zoom: 1 }
   };
-  var mql      = window.matchMedia('(max-width:767px)');
-  var initial  = mql.matches ? params.mobile : params.desktop;
+  var mql     = window.matchMedia('(max-width:767px)');
+  var initial = mql.matches ? params.mobile : params.desktop;
 
   // 3. Basemap
   var baseMaps = {
@@ -167,23 +142,59 @@ document.addEventListener('DOMContentLoaded', function() {
     minZoom:         1,
     worldCopyJump:   true,
     layers:          [ baseMaps['OSM Standard'], capitali ],
-    scrollWheelZoom:{
-      wheelPxPerZoomLevel: 300,
-      wheelDebounceTime:   60
-    },
-    zoomDelta:       0.5
+    scrollWheelZoom: true,    // scroll “smooth”
+    zoomDelta:       0.25     // passi di zoom più piccoli
   });
 
   // 6. Boundaries
   map.setMaxBounds([[-90, -180], [90, 180]]);
   map.options.maxBoundsViscosity = 1.0;
 
-  // 7. Aggiungi Home‐Control custom
-  map.addControl(L.control.home({
-    homeCoords: initial.center,
-    homeZoom:   initial.zoom,
-    title:      'Torna alla vista iniziale'
-  }));
+  // 7. Definizione e aggiunta del Home-Control
+  L.Control.Home = L.Control.extend({
+    options: {
+      position:   'topright',
+      title:      'Torna alla vista iniziale',
+      homeCoords: initial.center,
+      homeZoom:   initial.zoom
+    },
+    onAdd: function(map) {
+      var opts      = this.options;
+      // container con classe leaflet-control-home per il selettore CSS
+      var container = L.DomUtil.create(
+        'div',
+        'leaflet-bar leaflet-control leaflet-control-home'
+      );
+      var btn       = L.DomUtil.create('a', '', container);
+      btn.href      = '#';
+      btn.title     = opts.title;
+      btn.innerHTML = '🏠';
+
+      L.DomEvent.on(btn, 'click', L.DomEvent.stop)
+                .on(btn, 'click', function() {
+                  map.setView(opts.homeCoords, opts.homeZoom);
+                }, this);
+
+      return container;
+    }
+  });
+  L.control.home = function(opts) {
+    return new L.Control.Home(opts);
+  };
+
+  // Aggiungi e ridimensiona solo il <a> dentro Home-Control
+  var homeControl = L.control.home().addTo(map);
+  var btnHome     = homeControl.getContainer().querySelector('a');
+
+  // flex + centratura emoji + dimensioni
+  btnHome.style.display       = 'flex';
+  btnHome.style.alignItems    = 'center';
+  btnHome.style.justifyContent = 'center';
+  btnHome.style.width         = '48px';
+  btnHome.style.height        = '48px';
+  btnHome.style.lineHeight    = '48px';
+  btnHome.style.padding       = '0';
+  btnHome.style.fontSize      = '28px';
 
   // 8. Layer control
   L.control.layers(
@@ -197,4 +208,5 @@ document.addEventListener('DOMContentLoaded', function() {
     var p = e.matches ? params.mobile : params.desktop;
     map.setView(p.center, p.zoom);
   });
-});
+
+}); // fine DOMContentLoaded
