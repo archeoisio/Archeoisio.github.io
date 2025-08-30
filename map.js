@@ -178,24 +178,48 @@ document.addEventListener('DOMContentLoaded', function() {
   map.setMaxBounds([[-90, -180], [90, 180]]);
   map.options.maxBoundsViscosity = 1.0;
 
-  // 7. Aggiungi Home‐Control custom
-  map.addControl(L.control.home({
-    homeCoords: initial.center,
-    homeZoom:   initial.zoom,
-    title:      'Torna alla vista iniziale'
-  }));
+ // 7. Aggiungi Home‐Control custom e assegnalo a una variabile
+var homeControl = L.control.home({
+  homeCoords: initial.center,
+  homeZoom:   initial.zoom,
+  title:      'Torna alla vista iniziale'
+});
+map.addControl(homeControl);
 
-  // 8. Layer control
-  L.control.layers(
-    baseMaps,
-    { 'Capitali': capitali },
-    { collapsed: false, position: 'topright' }
-  ).addTo(map);
+// 8. Personalizza dimensioni pulsante Home
+var container = homeControl.getContainer();
+var link      = container.querySelector('a');
 
-  // 9. Aggiorna su resize/orientamento
-  mql.addEventListener('change', function(e) {
-    var p = e.matches ? params.mobile : params.desktop;
-    map.setView(p.center, p.zoom);
-  });
+container.style.width      = '48px';
+container.style.height     = '48px';
+
+link.style.width    = '48px';
+link.style.height   = '48px';
+link.style.lineHeight = '48px';
+link.style.padding  = '0';
+
+var css = `
+  .leaflet-control-home a::before {
+    font-size: 28px !important;
+    background-size: 28px 28px !important;
+  }
+`;
+var styleTag = document.createElement('style');
+styleTag.type = 'text/css';
+styleTag.appendChild(document.createTextNode(css));
+document.head.appendChild(styleTag);
+
+// 9. Layer control
+L.control.layers(
+  baseMaps,
+  { 'Capitali': capitali },
+  { collapsed: false, position: 'topright' }
+).addTo(map);
+
+// 10. Aggiorna su resize/orientamento
+mql.addEventListener('change', function(e) {
+  var p = e.matches ? params.mobile : params.desktop;
+  map.setView(p.center, p.zoom);
 });
 
+// --- Fine closure: assicurati di chiudere eventuali wrapper qui sotto ---
