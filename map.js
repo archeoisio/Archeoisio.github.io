@@ -1,8 +1,8 @@
-// Inizializzazione mappa centrata sull'Europa
+// Inizializzazione della mappa con centro sull'Europa
 var map = L.map('map', {
-    center: [50, 10], // Centro iniziale dell'Europa
-    zoom: 4,          // Zoom iniziale
-    scrollWheelZoom: true // Abilita lo zoom con la rotellina del mouse
+    center: [51.505, -0.09], // Centro sull'Europa (Londra come esempio)
+    zoom: 4,  // Zoom iniziale
+    scrollWheelZoom: true  // Abilita lo zoom con la rotellina
 });
 
 // Aggiunta del layer OpenStreetMap
@@ -108,41 +108,24 @@ var cities = [
 ];
 
 // Aggiungere i marker sulla mappa
-var markerLayer = L.layerGroup();
 cities.forEach(function(city) {
-    var marker = L.marker([city.lat, city.lon]).bindPopup("<b>" + city.name + "</b>");
+    var marker = L.marker([city.lat, city.lon]).addTo(map)
+        .bindPopup("<b>" + city.name + "</b>");
+
+    // Funzionalità per zoomare sul marker quando cliccato
     marker.on('click', function() {
-        map.setView([city.lat, city.lon], 10);  // Zooma sulla città cliccata
+        map.setView([city.lat, city.lon], 10); // Zoom sul marker con livello 10
     });
-    markerLayer.addLayer(marker);
 });
 
-// Creare il controllo dei layer
-var baseLayers = {
-    "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    })
-};
-
-// Aggiungi il controllo per il layer dei marker
-var overlays = {
-    "Marker": markerLayer
-};
-
-// Aggiungere il controllo a destra della mappa (con pallini)
-L.control.layers(baseLayers, overlays, {
-    position: 'topright'  // Posiziona il controllo in alto a destra
+// Aggiunta dei controlli dei Layer a destra (controllo visibilità layer)
+L.control.layers({
+    "Mostra Marker": marker, // Aggiungere un layer per i marker se necessario
+}, {}, {
+    position: 'topright'  // Posizione del controllo in alto a destra
 }).addTo(map);
 
-// Aggiungere il tasto "Home" nella barra di controllo
-var homeButton = L.control({position: 'topright'});
-homeButton.onAdd = function (map) {
-    var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
-    div.innerHTML = '<a href="#" class="leaflet-home-button" title="Torna alla vista iniziale">🏠</a>';
-    div.querySelector('a').addEventListener('click', function (e) {
-        e.preventDefault();
-        map.setView([50, 10], 4);  // Ritorna alla vista iniziale centrata sull'Europa
-    });
-    return div;
-};
-homeButton.addTo(map);
+// Aggiungere un bottone "Home" per tornare alla posizione iniziale
+L.easyButton('fa-home', function() {
+    map.setView([51.505, -0.09], 4); // Torna alla visualizzazione iniziale
+}).addTo(map);
