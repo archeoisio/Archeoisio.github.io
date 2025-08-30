@@ -2,7 +2,7 @@
 var map = L.map('map', {
     zoomDelta: 0.5,  // Rende lo zoom più lento
     wheelPxPerZoomLevel: 100  // Regola la velocità dello zoom con la rotella del mouse
-}).setView([48.8566, 2.3522], 5);  // Imposta la posizione iniziale (ad esempio, Parigi)
+}).setView([50, 10], 4);  // Modifica la posizione iniziale per centrare l'Europa
 
 // Aggiungi il tile layer 8-bit (puoi usare OpenStreetMap o tile 8-bit)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -50,6 +50,12 @@ cities.forEach(function(city) {
     var marker = L.marker([city.lat, city.lon]).addTo(map);
     marker.bindPopup("<b>" + city.name + "</b>");
 });
+
+// Adatta la vista per includere tutti i marker
+var bounds = cities.map(function(city) {
+    return [city.lat, city.lon];
+});
+map.fitBounds(bounds);
 
 // Impostazioni per il comportamento della mappa (zoom, drag, ecc.)
 map.on('click', function(e) {
