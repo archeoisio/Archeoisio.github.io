@@ -1,5 +1,32 @@
 // map.js
 
+// 1. Definizione delle basemap
+var osm = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; OpenStreetMap contributors',
+    noWrap: true
+  }
+);
+
+var positron = L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+  {
+    attribution: '&copy; CartoDB',
+    subdomains: 'abcd',
+    noWrap: true
+  }
+);
+
+var satellite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+  'World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {
+    attribution: '&copy; Esri',
+    noWrap: true
+  }
+);
+
 // 1. Dati delle capitali mondiali
 var cities = [
   { name: "Abu Dhabi", lat: 24.4539, lon: 54.3773 },
@@ -97,38 +124,24 @@ var cities = [
     { name: "Zanzibar City", lat: -6.1659, lon: 39.2026 }
 ];
 
-// 2. Layer di base OpenStreetMap (senza wrap orizzontale)
-var osmLayer = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    noWrap: true,
-    attribution: '&copy; OpenStreetMap contributors'
-  }
-);
-
-// 3. Inizializza la mappa
+// 3. Inizializzazione della mappa con basemap di default (OSM)
 var map = L.map('map', {
-  center: [49, 30],
-  zoom: 5,
-  minZoom: 4,
-  scrollWheelZoom: true,
+  center: [42.5, 12.5],
+  zoom: 6,
+  minZoom: 3,
   worldCopyJump: true,
-  layers: [ osmLayer ]
+  layers: [ osm ]
 });
 
-// 4. Limiti del mondo
+// 4. Limiti massimi e impostazioni dello scroll wheel
 map.setMaxBounds([[-90, -180], [90, 180]]);
 map.options.maxBoundsViscosity = 1.0;
-
-// 5. Regola la sensibilità dello zoom a rotellina
-//    Leaflet espone wheelPxPerZoomLevel e wheelDebounceTime come opzioni della mappa,
-//    ma per farle valere devi ri-inizializzare il handler:
 map.scrollWheelZoom.disable();
-map.options.wheelPxPerZoomLevel = 120;  // più alto = zoom più lento
-map.options.wheelDebounceTime    = 40;  // minimo intervallo tra due scroll
+map.options.wheelPxPerZoomLevel = 300;
+map.options.wheelDebounceTime    = 60;
 map.scrollWheelZoom.enable();
 
-// 6. Crea il LayerGroup “Capitali”
+// 5. Creazione del layerGroup “Capitali”
 var capitali = L.layerGroup();
 cities.forEach(function(city) {
   L.marker([city.lat, city.lon])
@@ -139,28 +152,21 @@ cities.forEach(function(city) {
     .addTo(capitali);
 });
 
-// 7. (Opzionale) se vuoi attivare “Capitali” all’avvio
-// capitali.addTo(map);
+// 6. Aggiunta del pulsante Home (serve il plugin Leaflet.Control.Home)
+map.addControl(new L.Control.Home({ position: 'topright' }));
 
-// 8. Pulsante “Home” personalizzato
-L.Control.Home = L.Control.extend({
-  options: { position: 'topright' },
-  onAdd: function() {
-    var btn = L.DomUtil.create('button', 'leaflet-control-home');
-    btn.innerHTML = '🏠';
-    btn.title     = 'Torna alla vista iniziale';
-    btn.onclick   = function() {
-      map.setView([49, 30], 5);
-    };
-    return btn;
-  }
-});
-map.addControl(new L.Control.Home());
+// 7. Configurazione di control.layers con baseMaps e overlay
+var baseMaps = {
+  'OpenStreetMap':       osm,
+  'CartoDB Positron':    positron,
+  'Satellite (Esri)':    satellite
+};
 
-// 9. Controllo layers: OSM + Capitali
-L.control.layers(
-  { "OpenStreetMap": osmLayer },
-  { "Capitali":      capitali },
-  { collapsed: false, position: 'topright' }
-).addTo(map);
+var overlays = {
+  'Capitali': capitali
+};
 
+L.control.layers(baseMaps, overlays, {
+  collapsed: false,
+  position:  'topright'
+}).addTo(map);
