@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
- const satellite = L.tileLayer(
+  const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     { attribution: '&copy; Esri', noWrap: true }
   );
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   L.control.layers(baseLayers,{ 'Capitali': capitali },{collapsed:true}).addTo(map);
 
-  // Container custom
+  // Container custom allineato a destra
   const topRight = map._controlCorners.topright;
   const customContainer = L.DomUtil.create('div','custom-controls');
   topRight.appendChild(customContainer);
@@ -63,11 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
   customContainer.appendChild(locateBtn);
 
   locateBtn.addEventListener('click', ()=>{
-    map.locate({ setView:false, watch:false, maxZoom:2 });
+    map.locate({ setView:false, watch:false, maxZoom:18 });
   });
 
   map.on('locationfound', e=>{
-    map.flyTo(e.latlng,2);
+    map.flyTo(e.latlng,18);
 
     // marker emoji
     L.marker(e.latlng,{
@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
 
     // piccolo pallino blu
-    const circle = L.circle(e.latlng,{
-      radius: 5, // metà del default
+    L.circle(e.latlng,{
+      radius: 5, // metà dimensione
       color:'blue',
       fillColor:'blue',
       fillOpacity:0.5,
