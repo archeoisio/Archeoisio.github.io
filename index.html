@@ -13,19 +13,19 @@
 html, body { margin:0; padding:0; height:100% }
 #map { width:100%; height:100% }
 
-/* Container custom */
+/* Container custom allineato a destra sotto switcher */
 .leaflet-top.leaflet-right .custom-controls {
   display: flex;
   flex-direction: column;
   margin-top: 5px;
-  align-items: center;
+  align-items: flex-end; /* allineati a destra */
 }
 
 .leaflet-top.leaflet-right .custom-controls .leaflet-control {
   margin-top: 5px;
 }
 
-/* Spazio vuoto primo slot */
+/* Primo slot vuoto */
 .custom-spacer { height: 36px; }
 
 /* Pulsante Home */
@@ -42,14 +42,17 @@ html, body { margin:0; padding:0; height:100% }
   cursor:pointer;
 }
 
-/* Pulsante Locate emoji */
+/* Pulsante Locate con sfondo e icona centrata */
 .custom-locate-button a {
-  font-size:20px;
   display:flex;
   justify-content:center;
   align-items:center;
   width:34px;
   height:34px;
+  font-size:20px;
+  background:white;
+  border-radius:4px;
+  box-shadow:0 1px 5px rgba(0,0,0,0.4);
   cursor:pointer;
 }
 
