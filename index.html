@@ -41,15 +41,28 @@
       touch-action:       pan-x pan-y pinch-zoom !important;
     }
 
-    /* affianca Home e Locate in alto a destra */
-    .leaflet-top.leaflet-right .leaflet-control-home,
-    .leaflet-top.leaflet-right .leaflet-control-locate {
-      display: inline-flex !important;
-      margin: 0 4px 0 0 !important;
-      float: none !important;
-    }
-    .leaflet-top.leaflet-right .leaflet-control {
+    /* rimuovo default margin-bottom sui controlli */
+    .leaflet-top .leaflet-control {
       margin-bottom: 0 !important;
+    }
+
+    /* faccio diventare il container top-right un flex row */
+    .leaflet-top.leaflet-right {
+      display:        flex !important;
+      flex-direction: row !important;
+      align-items:    center !important;
+      padding:        5px !important;
+      pointer-events: none;      /* fa in modo che il contenitore non catturi click */
+    }
+    /* ma permetto i click sui singoli controlli */
+    .leaflet-top.leaflet-right .leaflet-control {
+      pointer-events: auto;
+    }
+
+    /* spaziatura tra Home e Locate */
+    .leaflet-control-home,
+    .leaflet-control-locate {
+      margin: 0 5px !important;
     }
 
     /* dimensionamento emoji sui pulsanti */
@@ -72,6 +85,8 @@
       font-size:  60px;
       line-height: 1;
     }
+
+    /* scala in basso a sinistra (nessuna modifica necessaria) */
   </style>
 </head>
 <body>
