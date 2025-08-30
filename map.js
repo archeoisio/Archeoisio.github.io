@@ -101,8 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 2. Vista iniziale desktop vs mobile
   var params = {
-    desktop: { center: [20, 0], zoom: 2 },
-    mobile:  { center: [20, 0], zoom: 1 }
+    desktop: { center: [49, 30], zoom: 5 },
+    mobile:  { center: [50, 10], zoom: 5 }
   };
   var mql     = window.matchMedia('(max-width:767px)');
   var initial = mql.matches ? params.mobile : params.desktop;
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
     L.marker([c.lat, c.lon])
       .bindPopup('<b>' + c.name + '</b>')
       .on('click', function() {
-        map.setView([c.lat, c.lon], 4);
+        map.setView([c.lat, c.lon], 14);
       })
       .addTo(capitali);
   });
@@ -210,3 +210,4 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 }); // fine DOMContentLoaded
+
