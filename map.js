@@ -57,8 +57,10 @@ var overlayMaps = {
     "Capitali": markersLayer
 };
 
+// Crea un gruppo per i poligoni (confini dei paesi)
+var countriesLayer = L.layerGroup();
+
 // Carica il file GeoJSON dei confini dei paesi europei dal repository GitHub
-var countriesLayer = new L.LayerGroup();  // Crea un gruppo per i poligoni
 fetch('https://raw.githubusercontent.com/leakyMirror/map-of-europe/master/GeoJSON/europe.geojson?short_path=e6b7b33')
     .then(response => response.json())
     .then(data => {
@@ -77,7 +79,7 @@ fetch('https://raw.githubusercontent.com/leakyMirror/map-of-europe/master/GeoJSO
                 // Aggiungi pop-up con il nome del paese
                 layer.bindPopup('<b>' + feature.properties.name + '</b>');
             }
-        }).addTo(countriesLayer);
+        }).addTo(countriesLayer);  // Aggiungi i poligoni al layer
     })
     .catch(error => {
         console.log('Errore nel caricamento del file GeoJSON: ', error);
