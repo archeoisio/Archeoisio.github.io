@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [49, 30], zoom: 6 };
-  const desktopView = { center: [50, 10], zoom: 7 };
+  const mobileView  = { center: [50, 10], zoom: 5 };
+  const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Pulsante Locate ---
   const locateBtn = L.DomUtil.create('div','custom-locate-button leaflet-control');
   locateBtn.title = "Localizza me";
-  locateBtn.innerHTML = '<a></a>';
+  locateBtn.innerHTML = '<a>📍</a>';
   customContainer.appendChild(locateBtn);
 
   locateBtn.addEventListener('click', ()=>{
@@ -89,3 +89,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
