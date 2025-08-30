@@ -1,7 +1,7 @@
-// Inizializza la mappa
+// Inizializza la mapp
 var map = L.map('map', {
     zoomDelta: 0.5,  // Rende lo zoom più lento
-    wheelPxPerZoomLevel: 100  // Regola la velocità dello zoom con la rotella del mouse
+    wheelPxPerZoomLevel: 50  // Regola la velocità dello zoom con la rotella del mouse
 }).setView([50, 10], 4);  // Modifica la posizione iniziale per centrare l'Europa
 
 // Aggiungi il tile layer 8-bit (puoi usare OpenStreetMap o tile 8-bit)
