@@ -1,9 +1,8 @@
 // 1. Base layers
 const baseMaps = {
   'Esri Satellite': L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/' +
-    'tile/{z}/{y}/{x}',
-    {
+    'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+    'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       attribution:
         'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, ' +
         'Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
@@ -33,35 +32,35 @@ const capitali = L.layerGroup();
 
 // 3. Inizializza mappa
 const map = L.map('map', {
-  zoomControl: false,
-  scrollWheelZoom: {
-    wheelPxPerZoomLevel: 1000,
-    zoomDelta: 0.1
-  },
-  layers: [ baseMaps['Esri Satellite'], capitali ],
-  maxBounds: [[-90, -180], [90, 180]],
-  maxBoundsViscosity: 1.0
-})
-.setView([41.9028, 12.4964], 6);
+  zoomControl:         false,
+  scrollWheelZoom:     true,
+  wheelPxPerZoomLevel: 1000,
+  zoomDelta:           0.1,
+  layers:              [ baseMaps['Esri Satellite'], capitali ],
+  maxBounds:           [[-90, -180], [90, 180]],
+  maxBoundsViscosity:  1.0
+}).setView([41.9028, 12.4964], 6);
 
-// 4. Layer switcher (basemap + overlay)
-L.control.layers(baseMaps, { 'Capitali': capitali }).addTo(map);
+// 4. LayerSwitcher (collapsed)
+L.control
+  .layers(baseMaps, { 'Capitali': capitali }, { collapsed: true })
+  .addTo(map);
 
 // 5. Scala metrica
 L.control.scale({
   position: 'bottomleft',
-  maxWidth: 200,
-  metric: true,
+  maxWidth: Math.floor(window.innerWidth * 0.3),
+  metric:   true,
   imperial: false
 }).addTo(map);
 
 // 6. Pulsante Home 🏠
 L.control.home({
   position: 'topright',
-  icon: '🏠'
+  icon:     '🏠'
 }).addTo(map);
 
-// 7. DivIcon e LocateControl 📍
+// 7. LocateControl 📍 + marker custom
 const locateEmoji      = '📍';
 const locateMarkerIcon = L.divIcon({
   html:       locateEmoji,
@@ -82,7 +81,6 @@ L.control.locate({
 let _lastLocateMarker;
 map.on('locationfound', (e) => {
   if (_lastLocateMarker) map.removeLayer(_lastLocateMarker);
-  _lastLocateMarker = L.marker(e.latlng, { icon: locateMarkerIcon })
-                       .addTo(map);
+  _lastLocateMarker = L.marker(e.latlng, { icon: locateMarkerIcon }).addTo(map);
 });
-map.on('locationerror', (err) => console.warn(err.message));
+map.on('locationerror', (err) => console.warn('Locate error:', err.message));
