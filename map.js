@@ -46,14 +46,262 @@ var cities = [
 ];
 
 // Funzione per aggiungere i marker sulla mappa
+var markerLayer = L.layerGroup(); // Group per i marker
 cities.forEach(function(city) {
-    var marker = L.marker([city.lat, city.lon]).addTo(map);
+    var marker = L.marker([city.lat, city.lon]).addTo(markerLayer);
     marker.bindPopup("<b>" + city.name + "</b>");
 });
 
-// Adatta la vista per includere tutti i marker
+// Dati per i poligoni delle nazioni (esempio con due paesi)
+var countriesPolygons = {
+    "Austria": L.polygon([
+        [47.1, 9.5], [47.1, 17.5], [48.2, 17.5], [48.2, 9.5]
+    ], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.3
+    }),
+    "Italia": L.polygon([
+        [37.5, 6.5], [37.5, 15.5], [45.5, 15.5], [45.5, 6.5]
+    ], {
+        color: 'green',
+        fillColor: 'green',
+        fillOpacity: 0.3
+    }),
+    "Germania": L.polygon([
+        [47.5, 5.5], [47.5, 15.0], [55.5, 15.0], [55.5, 5.5]
+    ], {
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.3
+    }),
+    "Spagna": L.polygon([
+        [36.0, -9.0], [36.0, 3.0], [42.0, 3.0], [42.0, -9.0]
+    ], {
+        color: 'yellow',
+        fillColor: 'yellow',
+        fillOpacity: 0.3
+    }),
+    "Francia": L.polygon([
+        [42.0, -5.0], [42.0, 9.0], [48.0, 9.0], [48.0, -5.0]
+    ], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.3
+    }),
+    "Regno Unito": L.polygon([
+        [49.0, -8.0], [49.0, 2.0], [60.0, 2.0], [60.0, -8.0]
+    ], {
+        color: 'purple',
+        fillColor: 'purple',
+        fillOpacity: 0.3
+    }),
+    "Belgio": L.polygon([
+        [50.5, 3.5], [50.5, 6.5], [52.0, 6.5], [52.0, 3.5]
+    ], {
+        color: 'orange',
+        fillColor: 'orange',
+        fillOpacity: 0.3
+    }),
+    "Paesi Bassi": L.polygon([
+        [50.5, 3.5], [50.5, 7.0], [53.5, 7.0], [53.5, 3.5]
+    ], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.3
+    }),
+    "Portogallo": L.polygon([
+        [37.0, -9.5], [37.0, -6.0], [42.0, -6.0], [42.0, -9.5]
+    ], {
+        color: 'green',
+        fillColor: 'green',
+        fillOpacity: 0.3
+    }),
+    "Norvegia": L.polygon([
+        [58.0, 5.0], [58.0, 13.0], [71.0, 13.0], [71.0, 5.0]
+    ], {
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.3
+    }),
+    "Svezia": L.polygon([
+        [56.0, 11.0], [56.0, 19.0], [69.0, 19.0], [69.0, 11.0]
+    ], {
+        color: 'yellow',
+        fillColor: 'yellow',
+        fillOpacity: 0.3
+    }),
+    "Finlandia": L.polygon([
+        [60.0, 20.0], [60.0, 30.0], [70.0, 30.0], [70.0, 20.0]
+    ], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.3
+    }),
+    "Danimarca": L.polygon([
+        [54.0, 7.0], [54.0, 15.0], [58.0, 15.0], [58.0, 7.0]
+    ], {
+        color: 'green',
+        fillColor: 'green',
+        fillOpacity: 0.3
+    }),
+    "Polonia": L.polygon([
+        [49.0, 14.0], [49.0, 24.0], [55.0, 24.0], [55.0, 14.0]
+    ], {
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.3
+    }),
+    "Grecia": L.polygon([
+        [36.0, 19.0], [36.0, 28.0], [42.0, 28.0], [42.0, 19.0]
+    ], {
+        color: 'purple',
+        fillColor: 'purple',
+        fillOpacity: 0.3
+    }),
+    "Ungheria": L.polygon([
+        [45.5, 16.0], [45.5, 23.0], [49.0, 23.0], [49.0, 16.0]
+    ], {
+        color: 'orange',
+        fillColor: 'orange',
+        fillOpacity: 0.3
+    }),
+    "Repubblica Ceca": L.polygon([
+        [48.5, 12.0], [48.5, 19.5], [52.0, 19.5], [52.0, 12.0]
+    ], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.3
+    }),
+    "Serbia": L.polygon([
+        [43.0, 18.5], [43.0, 21.5], [46.0, 21.5], [46.0, 18.5]
+    ], {
+        color: 'green',
+        fillColor: 'green',
+        fillOpacity: 0.3
+    }),
+    "Romania": L.polygon([
+        [44.5, 20.5], [44.5, 30.0], [48.0, 30.0], [48.0, 20.5]
+    ], {
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.3
+    }),
+    "Bulgaria": L.polygon([
+        [41.5, 22.5], [41.5, 28.5], [44.0, 28.5], [44.0, 22.5]
+    ], {
+        color: 'yellow',
+        fillColor: 'yellow',
+        fillOpacity: 0.3
+    }),
+    "Croazia": L.polygon([
+        [43.0, 15.0], [43.0, 20.0], [46.0, 20.0], [46.0, 15.0]
+    ], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.3
+    }),
+    "Bosnia ed Erzegovina": L.polygon([
+        [43.0, 15.5], [43.0, 19.0], [45.5, 19.0], [45.5, 15.5]
+    ], {
+        color: 'green',
+        fillColor: 'green',
+        fillOpacity: 0.3
+    }),
+    "Macedonia del Nord": L.polygon([
+        [41.5, 20.0], [41.5, 22.5], [42.5, 22.5], [42.5, 20.0]
+    ], {
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.3
+    }),
+    "Albania": L.polygon([
+        [40.0, 19.5], [40.0, 21.5], [42.0, 21.5], [42.0, 19.5]
+    ], {
+        color: 'yellow',
+        fillColor: 'yellow',
+        fillOpacity: 0.3
+    }),
+    "Moldavia": L.polygon([
+        [45.5, 26.0], [45.5, 30.0], [48.0, 30.0], [48.0, 26.0]
+    ], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.3
+    }),
+    "Montenegro": L.polygon([
+        [42.5, 18.5], [42.5, 20.0], [43.5, 20.0], [43.5, 18.5]
+    ], {
+        color: 'green',
+        fillColor: 'green',
+        fillOpacity: 0.3
+    }),
+    "Armenia": L.polygon([
+        [40.0, 39.0], [40.0, 42.5], [41.5, 42.5], [41.5, 39.0]
+    ], {
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.3
+    }),
+    "Azerbaijan": L.polygon([
+        [39.5, 45.0], [39.5, 51.0], [42.0, 51.0], [42.0, 45.0]
+    ], {
+        color: 'yellow',
+        fillColor: 'yellow',
+        fillOpacity: 0.3
+    }),
+    "Georgia": L.polygon([
+        [41.0, 43.0], [41.0, 46.5], [43.0, 46.5], [43.0, 43.0]
+    ], {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.3
+    }),
+    "Kazakhstan": L.polygon([
+        [48.0, 50.0], [48.0, 87.0], [55.0, 87.0], [55.0, 50.0]
+    ], {
+        color: 'green',
+        fillColor: 'green',
+        fillOpacity: 0.3
+    }),
+    "Lussemburgo": L.polygon([
+        [49.5, 5.5], [49.5, 7.5], [50.5, 7.5], [50.5, 5.5]
+    ], {
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.3
+    }),
+    "Monaco": L.polygon([
+        [43.7, 7.4], [43.7, 7.8], [44.0, 7.8], [44.0, 7.4]
+    ], {
+        color: 'purple',
+        fillColor: 'purple',
+        fillOpacity: 0.3
+    })
+};
+
+// Funzione per aggiungere i poligoni sulla mappa
+var polygonLayer = L.layerGroup(); // Group per i poligoni
+Object.keys(countriesPolygons).forEach(function(country) {
+    countriesPolygons[country].bindPopup("<b>" + country + "</b>").addTo(polygonLayer);
+});
+
+// Aggiungi il controllo dei layer
+var baseMaps = {};
+var overlayMaps = {
+    "Capitali": markerLayer,
+    "Poligoni delle Nazioni": polygonLayer
+};
+
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+// Adatta la vista per includere tutti i marker e i poligoni
 var bounds = cities.map(function(city) {
     return [city.lat, city.lon];
+});
+Object.keys(countriesPolygons).forEach(function(country) {
+    bounds.push(countriesPolygons[country].getBounds().getSouthWest());
+    bounds.push(countriesPolygons[country].getBounds().getNorthEast());
 });
 map.fitBounds(bounds);
 
