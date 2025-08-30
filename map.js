@@ -108,8 +108,8 @@ var osmLayer = L.tileLayer(
 
 // 2. Inizializza la mappa con le opzioni corrette
 var map = L.map('map', {
-  center: [48, 30],
-  zoom: 6,
+  center: [49, 30],
+  zoom: 5,
   minZoom: 4,
   scrollWheelZoom: true,    // <- virgola aggiunta qui
   layers: [osmLayer],
@@ -144,7 +144,7 @@ var HomeControl = L.Control.extend({
     btn.innerHTML = '🏠';
     btn.title = 'Torna alla vista iniziale';
     btn.onclick = function() {
-      map.setView([48, 30], 5);
+      map.setView([49, 30], 5);
     };
     return btn;
   }
@@ -203,6 +203,7 @@ map.addControl(new CustomToggle());
 // 7. (Opzionale) Sensibilità dello zoom a rotellina
 // se la tua versione di Leaflet supporta questo, altrimenti commenta:
 // map.scrollWheelZoom.options.zoomSensitivity = 0.2;
+
 
 
 
