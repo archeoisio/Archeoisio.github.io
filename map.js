@@ -1,30 +1,27 @@
-// Crea la mappa centrata sull'Europa con uno zoom iniziale
-var map = L.map('map').setView([51.1657, 10.4515], 4); // Latitudine e longitudine per il centro dell'Europa
+// Inizializza la mappa
+var map = L.map('map').setView([51.505, -0.09], 5);  // Cambia latitudine e longitudine iniziali come desideri
 
-// Aggiungi il layer OpenStreetMap come sfondo
+// Aggiungi il tile layer 8-bit per lo sfondo (puoi usare OpenStreetMap o tile 8-bit)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// Carica il file geojson con le città e aggiungi i marker
-fetch('data/locations.geojson')
-    .then(response => response.json())
-    .then(data => {
-        // Aggiungi ogni feature del GeoJSON alla mappa
-        data.features.forEach(function(feature) {
-            var lat = feature.geometry.coordinates[1]; // Latitudine
-            var lon = feature.geometry.coordinates[0]; // Longitudine
-            var city = feature.properties.name;        // Nome della città
-            var country = feature.properties.country;  // Paese della città
+// Dati delle città (sostituisci con le tue città e le loro coordinate)
+var cities = [
+    { name: "Roma", lat: 41.9028, lon: 12.4964 },
+    { name: "Milano", lat: 45.4642, lon: 9.1900 },
+    { name: "Parigi", lat: 48.8566, lon: 2.3522 },
+    { name: "Berlino", lat: 52.5200, lon: 13.4050 },
+    { name: "Londra", lat: 51.5074, lon: -0.1278 }
+];
 
-            // Crea il marker per ogni città
-            var marker = L.marker([lat, lon]).addTo(map);
+// Funzione per aggiungere i marker sulla mappa
+cities.forEach(function(city) {
+    var marker = L.marker([city.lat, city.lon]).addTo(map);
+    marker.bindPopup("<b>" + city.name + "</b>").openPopup();
+});
 
-            // Aggiungi un pop-up personalizzato al marker
-            marker.bindPopup(`<b>${city}</b><br>${country}`)
-                .openPopup(); // Puoi rimuovere .openPopup() se non vuoi che il pop-up sia visibile subito
-        });
-    })
-    .catch(error => {
-        console.log("Errore nel caricamento del file geojson:", error);
-    });
+// Impostazioni per il comportamento della mappa (zoom, drag, ecc.)
+map.on('click', function(e) {
+    console.log("Coordinate cliccate: " + e.latlng.lat + ", " + e.latlng.lng);
+});
