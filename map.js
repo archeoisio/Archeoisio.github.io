@@ -1,15 +1,11 @@
-// Inizializzazione della mappa con centro sull'Europa
-var map = L.map('map', {
-    center: [50, 10], // Centro iniziale dell'Europa (Londra come esempio)
-    zoom: 5,  // Zoom iniziale
-    scrollWheelZoom: true,  // Abilita lo zoom con la rotellina
-    zoomDelta: 0.2  // Riduce la velocità di zoom (default è 1)
-});
+// Inizializzazione mappa
+var map = L.map('map').setView([51.505, -0.09], 4);  // Centra inizialmente sull'Europa con zoom a livello 4
 
 // Aggiunta del layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
+
 
 // Dati delle capitali mondiali (esempio parziale)
 var cities = [
@@ -109,29 +105,31 @@ var cities = [
 ];
 
 // Aggiungere i marker sulla mappa
-var markers = [];
 cities.forEach(function(city) {
     var marker = L.marker([city.lat, city.lon]).addTo(map)
         .bindPopup("<b>" + city.name + "</b>");
 
-    // Funzionalità per zoomare sul marker quando cliccato
+    // Quando clicchi su un marker, la mappa si zooma sulla città e la centra
     marker.on('click', function() {
-        map.setView([city.lat, city.lon], 10); // Zoom sul marker con livello 10
+        map.setView([city.lat, city.lon], 8);  // Zoom al livello 8 sulla città
     });
-
-    markers.push(marker); // Salviamo i marker in un array
 });
 
-// Aggiunta dei controlli dei Layer a destra (posizionamento in basso)
-L.control.layers({
-    "Mostra Marker": markers, // Aggiungere un layer per i marker
-}, {}, {
-    position: 'bottomright'  // Posizione del controllo in basso a destra
-}).addTo(map);
+// Aggiungere il controllo "Home" per tornare alla vista iniziale
+var homeControl = L.Control.extend({
+    options: {position: 'topright'},
+    onAdd: function(map) {
+        var btn = L.DomUtil.create('button', 'leaflet-control-home');
+        btn.innerHTML = '🏠';
+        btn.title = 'Torna alla posizione iniziale';
+        btn.onclick = function() {
+            map.setView([51.505, -0.09], 4);  // Centra sulla posizione iniziale (Europa)
+        };
+        return btn;
+    }
+});
+map.addControl(new homeControl());
 
-// Aggiungere un bottone "Home" per tornare alla posizione iniziale
-L.easyButton('fa-home', function() {
-    map.setView([51.505, -0.09], 4); // Torna alla visualizzazione iniziale
-}).addTo(map);
-
-
+// Ridurre la velocità dello zoom con la rotellina
+map.scrollWheelZoom.enable();
+map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
