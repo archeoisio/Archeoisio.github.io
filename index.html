@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Leaflet – LayerSwitcher, Home e Locate in colonna</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Leaflet – LayerSwitcher + Home + Locate</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
   <!-- Leaflet CSS -->
   <link
@@ -24,11 +24,10 @@
   />
 
   <style>
-    /* full-screen */
     html, body { margin:0; padding:0; height:100%; }
     #map      { width:100%; height:100%; }
 
-    /* pan + pinch-zoom */
+    /* pan + pinch-zoom abilitati */
     .leaflet-container.leaflet-touch-zoom {
       touch-action: pan-x pan-y pinch-zoom !important;
     }
@@ -38,22 +37,11 @@
       display:        flex !important;
       flex-direction: column !important;
       align-items:    flex-end !important;
-      padding:        10px !important;
+      padding:        8px !important;
     }
-
-    /* ordine e spaziatura */
-    .leaflet-control-layers {
-      order:  0;
-      margin-bottom: 8px !important;
-    }
-    .leaflet-control-home {
-      order:  1;
-      margin-bottom: 8px !important;
-    }
-    .leaflet-control-locate {
-      order:  2;
-      margin-bottom: 0   !important;
-    }
+    .leaflet-control-layers { order: 0; margin-bottom: 10px !important; }
+    .leaflet-control-home   { order: 1; margin-bottom: 10px !important; }
+    .leaflet-control-locate { order: 2; }
 
     /* dimensionamento emoji sui pulsanti */
     .leaflet-control-home a,
@@ -76,13 +64,13 @@
       line-height: 1;
     }
 
-    /* scala ben visibile */
+    /* scala metrica ingrandita */
     .leaflet-control-scale {
       font-size: 16px !important;
     }
     .leaflet-control-scale-line {
-      border-top: 2px solid #000 !important;
-      height:     6px !important;
+      border-top: 3px solid #000 !important;
+      height:     8px !important;
     }
   </style>
 </head>
