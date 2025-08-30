@@ -1,17 +1,21 @@
-// Inizializza la mapp
+// Inizializza la mappa con una vista iniziale e livello di zoom
 var map = L.map('map', {
     zoomDelta: 0.5,  // Rende lo zoom più lento
     wheelPxPerZoomLevel: 100  // Regola la velocità dello zoom con la rotella del mouse
-}).setView([50, 10], 3);  // Modifica la posizione iniziale per centrare l'Europa
+}).setView([48.8566, 2.3522], 1);  // Imposta la posizione iniziale (ad esempio, Parigi)
 
 // Aggiungi il tile layer 8-bit (puoi usare OpenStreetMap o tile 8-bit)
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// Dati delle capitali europee
+// Crea layer per marker e poligoni
+var markerLayer = L.layerGroup().addTo(map);  // Creiamo un layer per i marker
+var polygonLayer = L.layerGroup().addTo(map);  // Creiamo un layer per i poligoni
+
+// Dati delle capitali (solo per i marker)
 var cities = [
-    { name: "Vienna", lat: 48.2082, lon: 16.3738 },
+     { name: "Vienna", lat: 48.2082, lon: 16.3738 },
     { name: "Roma", lat: 41.9028, lon: 12.4964 },
     { name: "Berlino", lat: 52.5200, lon: 13.4050 },
     { name: "Madrid", lat: 40.4168, lon: -3.7038 },
@@ -45,16 +49,15 @@ var cities = [
     { name: "Monaco", lat: 43.7333, lon: 7.4167 }
 ];
 
-// Funzione per aggiungere i marker sulla mappa
-var markerLayer = L.layerGroup(); // Group per i marker
+// Aggiungi i marker al layer dei marker
 cities.forEach(function(city) {
     var marker = L.marker([city.lat, city.lon]).addTo(markerLayer);
     marker.bindPopup("<b>" + city.name + "</b>");
 });
 
-// Dati per i poligoni delle nazioni (esempio con due paesi)
+// Dati dei poligoni (esempio)
 var countriesPolygons = {
-    "Austria": L.polygon([
+   "Austria": L.polygon([
         [47.1, 9.5], [47.1, 17.5], [48.2, 17.5], [48.2, 9.5]
     ], {
         color: 'blue',
@@ -280,23 +283,8 @@ var countriesPolygons = {
     })
 };
 
-// Funzione per aggiungere i poligoni sulla mappa
-var polygonLayer = L.layerGroup(); // Group per i poligoni
-Object.keys(countriesPolygons).forEach(function(country) {
-    countriesPolygons[country].bindPopup("<b>" + country + "</b>").addTo(polygonLayer);
-});
-
-// Aggiungi il controllo dei layer
-var baseMaps = {};
-var overlayMaps = {
-    "Capitali": markerLayer,
-    "Poligoni delle Nazioni": polygonLayer
-};
-
-L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-
-// Impostazioni per il comportamento della mappa (zoom, drag, ecc.)
-map.on('click', function(e) {
-    console.log("Coordinate cliccate: " + e.latlng.lat + ", " + e.latlng.lng);
-});
+// Aggiungi il controllo dei layer (interattivo)
+L.control.layers({
+    'Marker': markerLayer,
+    'Poligoni': polygonLayer
+}, {}).addTo(map);
