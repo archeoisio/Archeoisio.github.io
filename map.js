@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
-   const satellite = L.tileLayer(
+  const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     { attribution: '&copy; Esri', noWrap: true }
   );
@@ -64,25 +64,46 @@ document.addEventListener('DOMContentLoaded', () => {
   map.on('zoomend', updateScale);
   window.addEventListener('resize', updateScale);
 
+  // --- Container custom per Home e Locate ---
+  const topRight = map._controlCorners.topright;
+  const customContainer = L.DomUtil.create('div', 'custom-controls');
+  topRight.appendChild(customContainer);
+
   // Pulsante Home
   if (typeof L.Control.Home === 'function') {
-    new L.Control.Home({
-      position: 'topright',
+    const home = new L.Control.Home({
       lat: initialView.center[0],
       lng: initialView.center[1],
       zoom: initialView.zoom
-    }).addTo(map);
-  } else {
-    console.warn('HomeControl non trovato');
+    });
+    home.addTo(map);
+    customContainer.appendChild(home.getContainer());
   }
 
-  // Pulsante Locate con icona personalizzata via CSS
+  // Pulsante Locate con marker emoji
   if (typeof L.control.locate === 'function') {
-    L.control.locate({
-      position: 'topright',
-      strings: { title: 'Localizza me' }
+    const locate = L.control.locate({
+      strings: { title: 'Localizza me' },
+      setView: true,
+      keepCurrentZoomLevel: false,
+      flyTo: true,
+      drawCircle: false,
+      showPopup: false
     }).addTo(map);
-  } else {
-    console.warn('LocateControl non trovato');
+
+    customContainer.appendChild(locate.getContainer());
+
+    // Aggiungo marker emoji sulla posizione trovata
+    map.on('locationfound', function(e) {
+      const latlng = e.latlng;
+      L.marker(latlng, {
+        icon: L.divIcon({
+          html: '📍',
+          className: 'custom-locate-marker',
+          iconSize: [30, 30],
+          iconAnchor: [15, 30]
+        })
+      }).addTo(map);
+    });
   }
 });
