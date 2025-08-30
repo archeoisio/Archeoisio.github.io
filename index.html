@@ -13,11 +13,6 @@
 html, body { margin:0; padding:0; height:100% }
 #map { width:100%; height:100% }
 
-/* Posizione switcher layers */
-.leaflet-top.leaflet-right .leaflet-control-layers {
-  margin-top: 140px;    /* distanza dal bordo superiore */
-  margin-right: 10px;   /* distanza dal bordo destro */
-}
 
 /* Container custom allineato a destra sotto switcher */
 .leaflet-top.leaflet-right .custom-controls {
@@ -26,12 +21,16 @@ html, body { margin:0; padding:0; height:100% }
   margin-top: 0px;    /* distanza dal switcher */
   margin-right: 5px;
 }
-
 .leaflet-top.leaflet-right .custom-controls .leaflet-control {
   margin-top: 10px;
 }
+  /* Posizione switcher layers */
+.leaflet-top.leaflet-right .leaflet-control-layers {
+  margin-top: 140px;    /* distanza dal bordo superiore */
+  margin-right: 10px;   /* distanza dal bordo destro */
+}
 
-/* Pulsante Home */
+  /* Pulsante Home */
 .custom-home-button a {
   display:flex;
   justify-content:center;
