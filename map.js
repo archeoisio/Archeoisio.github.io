@@ -1,8 +1,8 @@
-// Aggiungere la mappa
+// Inizializzazione mappa
 var map = L.map('map', {
-    center: [80,10],
+    center: [80, 10],
     zoom: 5,
-    minZoom: 4,  // Limita lo zoom minimo a livello 2
+    minZoom: 4,  // Impostato il minimo zoom a livello 2
     scrollWheelZoom: true
 });
 
@@ -113,8 +113,9 @@ cities.forEach(function(city) {
     var marker = L.marker([city.lat, city.lon]).addTo(map)
         .bindPopup("<b>" + city.name + "</b>");
 
+    // Quando clicchi su un marker, la mappa si zooma sulla città e la centra
     marker.on('click', function() {
-        map.setView([city.lat, city.lon], 10);  // Zoom sulla città
+        map.setView([city.lat, city.lon], 8);  // Zoom al livello 8 sulla città
     });
 });
 
@@ -126,21 +127,24 @@ var homeControl = L.Control.extend({
         btn.innerHTML = '🏠';
         btn.title = 'Torna alla posizione iniziale';
         btn.onclick = function() {
-            map.setView([80,10], 5);  // Centra sulla posizione iniziale (Europa)
+            map.setView([50,10], 4.7);  // Centra sulla posizione iniziale (Europa)
         };
         return btn;
     }
 });
 map.addControl(new homeControl());
 
-// Aggiungere il controllo per i Layer
+// Aggiungere il controllo per i Layer (Posizionato temporaneamente al centro della pagina sopra la mappa)
 var layerControl = L.control.layers({
-    "Marker": markerLayer  // Aggiungi i tuoi layer qui
+    "Marker": markerLayer  // Aggiungi il tuo layer di marker, se necessario
 }).addTo(map);
 
-// Personalizzare il posizionamento del controllo Layer per metterlo sotto il tasto Home
+// Posizionare temporaneamente il controllo dei layer al centro sopra la mappa
 var leafletLayerControl = document.querySelector('.leaflet-control-layers');
-leafletLayerControl.style.top = '120px';  // Distanza dal top per posizionarlo sotto il tasto Home
+leafletLayerControl.style.position = 'absolute';
+leafletLayerControl.style.top = '50%';  // Al centro della pagina
+leafletLayerControl.style.left = '50%';
+leafletLayerControl.style.transform = 'translate(-50%, -50%)';  // Centrare il controllo
 
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
