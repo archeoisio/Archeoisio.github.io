@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // scroll‐wheel più fluido
     scrollWheelZoom: {
-      wheelPxPerZoomLevel: 120,
-      wheelDebounceTime:   40
+      wheelPxPerZoomLevel: 240,
+      wheelDebounceTime:   80
     },
 
     // passi di zoom ridotti
@@ -120,3 +120,4 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 });
+
