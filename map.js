@@ -1,11 +1,38 @@
 // map.js
 document.addEventListener('DOMContentLoaded', function() {
-  // 1. Lista delle capitali
+
+  // 0. Custom Home‐Control inline
+  L.Control.Home = L.Control.extend({
+    options: {
+      position:    'topright',
+      title:       'Ritorna alla vista iniziale',
+      homeCoords:  [49, 30],
+      homeZoom:    5
+    },
+    onAdd: function(map) {
+      var opts = this.options;
+      var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+      var btn = L.DomUtil.create('a', '', container);
+      btn.href = '#';
+      btn.title = opts.title;
+      btn.innerHTML = '🏠';
+      L.DomEvent.on(btn, 'click', L.DomEvent.stop)
+                .on(btn, 'click', function() {
+                  map.setView(opts.homeCoords, opts.homeZoom);
+                }, this);
+      return container;
+    }
+  });
+  L.control.home = function(opts) {
+    return new L.Control.Home(opts);
+  };
+
+  // 1. Lista capitali
   var cities = [
     { name: "Abu Dhabi",        lat: 24.4539,  lon: 54.3773 },
     { name: "Abuja",            lat: 9.0579,   lon: 7.49508 },
     { name: "Addis Abeba",      lat: 9.145,    lon: 40.4897 },
-    { name: "Algiers",          lat: 36.737232,lon: 3.086472 },
+    { name: "Algiers",          lat: 36.7372,  lon: 3.0865 },
     { name: "Amman",            lat: 31.9454,  lon: 35.9284 },
     { name: "Ankara",           lat: 39.9334,  lon: 32.8597 },
     { name: "Asunción",         lat: -25.2637, lon: -57.5759 },
@@ -93,24 +120,23 @@ document.addEventListener('DOMContentLoaded', function() {
     { name: "Windhoek",         lat: -22.5597, lon: 17.0836 },
     { name: "Yamoussoukro",     lat: 6.8197,   lon: -5.2783 },
     { name: "Yaoundé",          lat: 3.8480,   lon: 11.5021 },
-    { name: "Zagreb",           lat: 45.8131,  lon: 15.9780 },
+    { name: "Zagreb",           lat: 45.8131,  lon: 15.9780 },  
     { name: "Zanzibar City",    lat: -6.1659,  lon: 39.2026 }
   ];
 
-  // 2. Parametri iniziali desktop vs mobile
-  var startParams = {
-    desktop: { center: [49, 30], zoom: 5 },
-    mobile:  { center: [50, 10], zoom: 5 }
+  // 2. Vista iniziale desktop vs mobile
+  var params = {
+    desktop: { center: [20, 0], zoom: 2 },
+    mobile:  { center: [20, 0], zoom: 1 }
   };
   var mql      = window.matchMedia('(max-width:767px)');
-  var isMobile = mql.matches;
-  var initial  = isMobile ? startParams.mobile : startParams.desktop;
+  var initial  = mql.matches ? params.mobile : params.desktop;
 
-  // 3. Definizione basemap
+  // 3. Basemap
   var baseMaps = {
-    'OpenStreetMap Standard': L.tileLayer(
+    'OSM Standard': L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      { attribution: '&copy; OpenStreetMap contributors', noWrap: true }
+      { attribution: '&copy; OpenStreetMap', noWrap: true }
     ),
     'CartoDB Positron': L.tileLayer(
       'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
@@ -125,48 +151,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // 4. Overlay Capitali
   var capitali = L.layerGroup();
-  cities.forEach(function(city) {
-    L.marker([city.lat, city.lon])
-      .bindPopup('<b>' + city.name + '</b>')
+  cities.forEach(function(c) {
+    L.marker([c.lat, c.lon])
+      .bindPopup('<b>' + c.name + '</b>')
       .on('click', function() {
-        map.setView([city.lat, city.lon], 14);
+        map.setView([c.lat, c.lon], 14);
       })
       .addTo(capitali);
   });
 
-  // 5. Inizializzazione mappa
+  // 5. Init mappa
   var map = L.map('map', {
     center:          initial.center,
     zoom:            initial.zoom,
     minZoom:         1,
     worldCopyJump:   true,
-    layers:          [ baseMaps['OpenStreetMap Standard'], capitali ],
-    scrollWheelZoom:{ wheelPxPerZoomLevel: 300, wheelDebounceTime: 60 },
+    layers:          [ baseMaps['OSM Standard'], capitali ],
+    scrollWheelZoom:{
+      wheelPxPerZoomLevel: 300,
+      wheelDebounceTime:   60
+    },
     zoomDelta:       0.5
   });
 
-  // 6. Limiti e viscosità
+  // 6. Boundaries
   map.setMaxBounds([[-90, -180], [90, 180]]);
   map.options.maxBoundsViscosity = 1.0;
 
-  // 7. Pulsante Home
-  map.addControl(new L.Control.Home({
-    position:        'topright',
-    homeCoordinates: initial.center,
-    zoomHome:        initial.zoom
+  // 7. Aggiungi Home‐Control custom
+  map.addControl(L.control.home({
+    homeCoords: initial.center,
+    homeZoom:   initial.zoom,
+    title:      'Torna alla vista iniziale'
   }));
 
-  // 8. Control layers
+  // 8. Layer control
   L.control.layers(
     baseMaps,
     { 'Capitali': capitali },
     { collapsed: false, position: 'topright' }
   ).addTo(map);
 
-  // 9. Aggiorna vista al resize
+  // 9. Aggiorna su resize/orientamento
   mql.addEventListener('change', function(e) {
-    var opts = e.matches ? startParams.mobile : startParams.desktop;
-    map.setView(opts.center, opts.zoom);
+    var p = e.matches ? params.mobile : params.desktop;
+    map.setView(p.center, p.zoom);
   });
 });
-
