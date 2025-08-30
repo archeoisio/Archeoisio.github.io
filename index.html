@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Leaflet – Map con Zoom lento, Home, Localize e Scala</title>
+  <title>Leaflet – Home + Locate + Capitals Zoom</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Leaflet CSS -->
@@ -24,54 +24,51 @@
   />
 
   <style>
-    /* full-screen */
-    html, body { margin: 0; padding: 0; height: 100%; }
-    #map      { width: 100%; height: 100%; }
+    /* full-screen map */
+    html, body { margin:0; padding:0; height:100%; }
+    #map      { width:100%; height:100%; }
 
     /* pan + pinch-zoom */
     .leaflet-container.leaflet-touch-zoom {
       touch-action: pan-x pan-y pinch-zoom !important;
     }
 
-    /* top-right in row */
-    .leaflet-top.leaflet-right {
-      display:        flex !important;
-      flex-direction: row  !important;
-      align-items:    flex-start !important;
-      padding:        5px !important;
-    }
+    /* top-right: inline controls cliccabili */
     .leaflet-top.leaflet-right .leaflet-control {
-      margin-right: 5px !important;
+      float: none !important;
+      display: inline-flex !important;
+      margin: 0 8px 0 0 !important;
+      pointer-events: auto !important;
     }
 
-    /* pulsanti emoji grandi */
+    /* emoji sui pulsanti ridimensionati */
     .leaflet-control-home a,
     .leaflet-control-locate a {
       display:         flex !important;
       align-items:     center !important;
       justify-content: center !important;
-      width:           60px !important;
-      height:          60px !important;
-      line-height:     60px !important;
-      font-size:       36px !important;
+      width:           50px !important;
+      height:          50px !important;
+      line-height:     50px !important;
+      font-size:       32px !important;
       padding:         0 !important;
     }
 
-    /* marker locate come emoji */
+    /* marker locate personalizzato */
     .custom-locate-marker {
       background: none !important;
       border:     none !important;
-      font-size:  60px;
+      font-size:  50px;
       line-height: 1;
     }
 
-    /* scala ingrandita */
+    /* scala ben visibile */
     .leaflet-control-scale {
-      font-size: 18px !important;
+      font-size: 16px !important;
     }
     .leaflet-control-scale-line {
-      border-top: 3px solid #000 !important;
-      height:     8px !important;
+      border-top: 2px solid #000 !important;
+      height:     6px !important;
     }
   </style>
 </head>
