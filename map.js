@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Parigi', coords:[48.8566,2.3522] },
     { name: 'Londra', coords:[51.5074,-0.1278] }
   ].forEach(({name,coords}) => {
-    const m = L.marker(coords).bindPopup(name).on('click',()=>{ map.setView(coords,10); m.openPopup(); });
+    const m = L.marker(coords).bindPopup(name).on('click',()=>{ map.setView(coords,14); m.openPopup(); });
     capitali.addLayer(m);
   });
 
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
 
 
 
