@@ -1,5 +1,9 @@
 // Inizializzazione mappa centrata sull'Europa
-var map = L.map('map').setView([50, 10], 4);  // Centro sull'Europa con un livello di zoom moderato
+var map = L.map('map', {
+    center: [50, 10], // Centro iniziale dell'Europa
+    zoom: 4,          // Zoom iniziale
+    scrollWheelZoom: true // Abilita lo zoom con la rotellina del mouse
+});
 
 // Aggiunta del layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -129,3 +133,16 @@ var overlays = {
 L.control.layers(baseLayers, overlays, {
     position: 'topright'  // Posiziona il controllo in alto a destra
 }).addTo(map);
+
+// Aggiungere il tasto "Home" nella barra di controllo
+var homeButton = L.control({position: 'topright'});
+homeButton.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    div.innerHTML = '<a href="#" class="leaflet-home-button" title="Torna alla vista iniziale">🏠</a>';
+    div.querySelector('a').addEventListener('click', function (e) {
+        e.preventDefault();
+        map.setView([50, 10], 4);  // Ritorna alla vista iniziale centrata sull'Europa
+    });
+    return div;
+};
+homeButton.addTo(map);
