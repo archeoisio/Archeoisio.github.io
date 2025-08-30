@@ -2,7 +2,7 @@
 var map = L.map('map', {
     zoomDelta: 0.5,  // Rende lo zoom più lento
     wheelPxPerZoomLevel: 100  // Regola la velocità dello zoom con la rotella del mouse
-}).setView([50, 10], 5);  // Imposta la posizione iniziale (al centro dell'Europa)
+}).setView([50, 10], 4);  // Imposta la posizione iniziale (al centro dell'Europa)
 
 // Aggiungi il tile layer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
