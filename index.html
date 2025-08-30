@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <title>Mappa 8‑bit Europa</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mappa 8-bit - Europa</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> <!-- Stile di Leaflet -->
+
+    <style>
+        /* Impostazioni della mappa */
+        #map {
+            width: 100%;
+            height: 500px; /* Altezza della mappa, puoi modificarla */
+        }
+    </style>
 </head>
 <body>
-  <div id="map"></div>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="map.js"></script>
+    <h1>Mappa 8-bit - Europa</h1>
+    <p>Questo è un esempio di mappa interattiva in stile 8-bit</p>
+
+    <!-- Div per la mappa -->
+    <div id="map"></div>
+
+    <!-- Script di Leaflet e il tuo map.js -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="map.js"></script> <!-- Assicurati di avere map.js nella stessa cartella -->
 </body>
 </html>
