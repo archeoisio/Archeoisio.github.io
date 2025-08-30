@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [50, 10], zoom: 5 };
-  const desktopView = { center: [49, 30], zoom: 5 };
+  const mobileView  = { center: [49, 30], zoom: 6 };
+  const desktopView = { center: [50, 10], zoom: 7 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
-const satellite = L.tileLayer(
+  const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     { attribution: '&copy; Esri', noWrap: true }
   );
@@ -31,7 +31,7 @@ const satellite = L.tileLayer(
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    minZoom: 3,
+    minZoom: 2,
     maxZoom: 20,
     zoomControl: false,
     scrollWheelZoom: { wheelPxPerZoomLevel: 1000, wheelDebounceTime: 80 },
@@ -69,7 +69,7 @@ const satellite = L.tileLayer(
   const customContainer = L.DomUtil.create('div', 'custom-controls');
   topRight.appendChild(customContainer);
 
-  // Home button
+  // Pulsante Home
   if (typeof L.Control.Home === 'function') {
     const home = new L.Control.Home({
       lat: initialView.center[0],
@@ -80,26 +80,27 @@ const satellite = L.tileLayer(
     customContainer.appendChild(home.getContainer());
   }
 
-  // Locate button con emoji e marker
+  // Pulsante Locate con emoji e marker
   if (typeof L.control.locate === 'function') {
     const locate = L.control.locate({
       strings: { title: 'Localizza me' },
-      setView: true,
+      setView: false, // gestiamo flyTo manualmente
       keepCurrentZoomLevel: false,
-      flyTo: true,
-      drawCircle: false,
+      drawCircle: true,
       showPopup: false
     }).addTo(map);
 
-    // Sposto il pulsante nel container custom e aggiungo classe CSS
+    // Sposto nel container custom e aggiungo classe CSS per emoji
     const locateEl = locate.getContainer();
     locateEl.classList.add('custom-locate-button');
     customContainer.appendChild(locateEl);
 
-    // Marker emoji sulla posizione
     map.on('locationfound', function(e) {
-      const latlng = e.latlng;
-      L.marker(latlng, {
+      // Fly e zoom 2
+      map.flyTo(e.latlng, 2);
+
+      // Marker emoji
+      L.marker(e.latlng, {
         icon: L.divIcon({
           html: '📍',
           className: 'custom-locate-marker',
@@ -107,6 +108,16 @@ const satellite = L.tileLayer(
           iconAnchor: [15, 30]
         })
       }).addTo(map);
+
+      // Ridimensionamento cerchio blu metà
+      if (e.accuracy) {
+        locate._circle.setRadius(e.accuracy / 2);
+      }
+    });
+
+    // Clic sul pulsante Locate: attiva localizzazione
+    locateEl.addEventListener('click', () => {
+      locate.start();
     });
   }
 });
