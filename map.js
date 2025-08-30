@@ -141,9 +141,15 @@ document.addEventListener('DOMContentLoaded', function() {
     minZoom:         3,
     worldCopyJump:   true,
     layers:          [ baseMaps['OSM Standard'], capitali ],
-    scrollWheelZoom: true,    // scroll “smooth”
-    zoomDelta:       0.25     // passi di zoom più piccoli
-  });
+    scrollWheelZoom: {
+    wheelPxPerZoomLevel: 120,  // default 60: più alto = serve più scroll per 1 livello
+    wheelDebounceTime:   40    // default 40ms: più basso = più eventi, scroll più fluido
+     // 2) Passi di zoom più piccoli
+  zoomDelta:       0.25,       // default 1: riduce ampiezza dei click su +/–
+  
+  layers:          [ baseMaps['OSM Standard'], capitali ]
+});
+  L.control.zoom({ position: 'topleft' }).addTo(map);
 
   // 6. Boundaries
   map.setMaxBounds([[-90, -180], [90, 180]]);
@@ -209,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 }); // fine DOMContentLoaded
+
 
 
 
