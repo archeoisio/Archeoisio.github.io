@@ -18,22 +18,40 @@
     html, body { margin:0; padding:0; height:100% }
     #map { width:100%; height:100% }
 
-    /* Container custom per i controlli */
+    /* Container custom per Home e Locate sotto layer switcher */
     .leaflet-top.leaflet-right .custom-controls {
       display: flex;
       flex-direction: column;
       margin-top: 5px; /* distanza dal layer switcher */
     }
 
-    /* Margine tra i pulsanti */
     .leaflet-top.leaflet-right .custom-controls .leaflet-control {
-      margin-top: 5px;
+      margin-top: 5px; /* distanza tra pulsanti */
     }
 
     /* Marker Locate emoji */
     .custom-locate-marker {
       font-size: 30px;
       text-align: center;
+    }
+
+    /* Emoji pulsante Locate */
+    .custom-locate-button a {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+    }
+
+    .custom-locate-button a::before {
+      content: '📍';
+    }
+
+    /* Home button styling */
+    .leaflet-control-home {
+      font-size: 18px;
     }
   </style>
 </head>
