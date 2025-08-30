@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
-  const satellite = L.tileLayer(
+const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     { attribution: '&copy; Esri', noWrap: true }
   );
@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const capitali = L.layerGroup();
   [
-    { name: 'Roma',   coords: [41.9028, 12.4964] },
-    { name: 'Parigi', coords: [48.8566,  2.3522] },
+    { name: 'Roma', coords: [41.9028, 12.4964] },
+    { name: 'Parigi', coords: [48.8566, 2.3522] },
     { name: 'Londra', coords: [51.5074, -0.1278] }
   ].forEach(({ name, coords }) => {
     const m = L.marker(coords).bindPopup(name).on('click', () => {
@@ -64,12 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
   map.on('zoomend', updateScale);
   window.addEventListener('resize', updateScale);
 
-  // --- Container custom per Home e Locate ---
+  // --- Container custom sotto switcher ---
   const topRight = map._controlCorners.topright;
   const customContainer = L.DomUtil.create('div', 'custom-controls');
   topRight.appendChild(customContainer);
 
-  // Pulsante Home
+  // Home button
   if (typeof L.Control.Home === 'function') {
     const home = new L.Control.Home({
       lat: initialView.center[0],
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     customContainer.appendChild(home.getContainer());
   }
 
-  // Pulsante Locate con marker emoji
+  // Locate button con emoji e marker
   if (typeof L.control.locate === 'function') {
     const locate = L.control.locate({
       strings: { title: 'Localizza me' },
@@ -91,9 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
       showPopup: false
     }).addTo(map);
 
-    customContainer.appendChild(locate.getContainer());
+    // Sposto il pulsante nel container custom e aggiungo classe CSS
+    const locateEl = locate.getContainer();
+    locateEl.classList.add('custom-locate-button');
+    customContainer.appendChild(locateEl);
 
-    // Aggiungo marker emoji sulla posizione trovata
+    // Marker emoji sulla posizione
     map.on('locationfound', function(e) {
       const latlng = e.latlng;
       L.marker(latlng, {
