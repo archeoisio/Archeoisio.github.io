@@ -33,7 +33,7 @@ const map = L.map('map', {
   maxBounds: [[-90, -180], [90, 180]],
   maxBoundsViscosity: 1.0
 })
-.setView([41.9028, 12.4964], 6);
+.setView([49, 30], 5);
 
 // 4. LayerSwitcher
 L.control.layers(baseMaps, { Capitali: capitali }).addTo(map);
@@ -83,3 +83,4 @@ map.on('locationfound', (e) => {
 map.on('locationerror', (err) => {
   console.warn('Errore geolocalizzazione:', err.message);
 });
+
