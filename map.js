@@ -1,32 +1,5 @@
 // map.js
 
-// 1. Definizione delle basemap
-var osm = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; OpenStreetMap contributors',
-    noWrap: true
-  }
-);
-
-var positron = L.tileLayer(
-  'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-  {
-    attribution: '&copy; CartoDB',
-    subdomains: 'abcd',
-    noWrap: true
-  }
-);
-
-var satellite = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/' +
-  'World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  {
-    attribution: '&copy; Esri',
-    noWrap: true
-  }
-);
-
 // 1. Dati delle capitali mondiali
 var cities = [
   { name: "Abu Dhabi", lat: 24.4539, lon: 54.3773 },
@@ -124,24 +97,42 @@ var cities = [
     { name: "Zanzibar City", lat: -6.1659, lon: 39.2026 }
 ];
 
-// 3. Inizializzazione della mappa con basemap di default (OSM)
-var map = L.map('map', {
-  center: [42.5, 12.5],
-  zoom: 6,
-  minZoom: 3,
-  worldCopyJump: true,
-  layers: [ osm ]
-});
+// 2. Breakpoint e parametri di avvio
+var startParams = {
+  desktop: { center: [49, 30], zoom: 5 },
+  mobile:  { center: [50, 10], zoom: 5 }
+};
+var mql      = window.matchMedia('(max-width:767px)');
+var isMobile = mql.matches;
+var initial  = isMobile ? startParams.mobile : startParams.desktop;
 
-// 4. Limiti massimi e impostazioni dello scroll wheel
-map.setMaxBounds([[-90, -180], [90, 180]]);
-map.options.maxBoundsViscosity = 1.0;
-map.scrollWheelZoom.disable();
-map.options.wheelPxPerZoomLevel = 300;
-map.options.wheelDebounceTime    = 60;
-map.scrollWheelZoom.enable();
 
-// 5. Creazione del layerGroup “Capitali”
+// 3. Creazione delle basemap
+var baseMaps = {
+  'OpenStreetMap Standard': L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      noWrap: true
+    }
+  ),
+  'CartoDB Positron': L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; CartoDB',
+      subdomains: 'abcd',
+      noWrap: true
+    }
+  ),
+  'Esri Satellite': L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/' +
+    'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; Esri',
+      noWrap: true
+    }
+  )
+};
+
+
+// 4. LayerGroup per le Capitali
 var capitali = L.layerGroup();
 cities.forEach(function(city) {
   L.marker([city.lat, city.lon])
@@ -152,21 +143,51 @@ cities.forEach(function(city) {
     .addTo(capitali);
 });
 
-// 6. Aggiunta del pulsante Home (serve il plugin Leaflet.Control.Home)
-map.addControl(new L.Control.Home({ position: 'topright' }));
 
-// 7. Configurazione di control.layers con baseMaps e overlay
-var baseMaps = {
-  'OpenStreetMap':       osm,
-  'CartoDB Positron':    positron,
-  'Satellite (Esri)':    satellite
-};
+// 5. Inizializzazione della mappa
+var map = L.map('map', {
+  center:       initial.center,
+  zoom:         initial.zoom,
+  minZoom:      4,
+  worldCopyJump:true,
+  layers:       [
+    baseMaps['OpenStreetMap Standard'],
+    capitali
+  ],
+  scrollWheelZoom: {
+    wheelPxPerZoomLevel: 300,
+    wheelDebounceTime:   60
+  },
+  zoomDelta: 0.5
+});
 
-var overlays = {
-  'Capitali': capitali
-};
 
-L.control.layers(baseMaps, overlays, {
-  collapsed: false,
-  position:  'topright'
-}).addTo(map);
+// 6. Boundaries e viscosità
+map.setMaxBounds([[-90, -180], [90, 180]]);
+map.options.maxBoundsViscosity = 1.0;
+
+
+// 7. Pulsante Home (usa la vista iniziale come “home”)
+map.addControl(
+  new L.Control.Home({
+    position:     'topright',
+    zoomHome:     initial.zoom,
+    homeCoordinates: initial.center
+  })
+);
+
+
+// 8. Control per basemap e overlay
+L.control.layers(
+  baseMaps,
+  { 'Capitali': capitali },
+  { collapsed: false, position: 'topright' }
+).addTo(map);
+
+
+// 9. Listener per cambio breakpoint
+function onBreakpointChange(e) {
+  var opts   = e.matches ? startParams.mobile : startParams.desktop;
+  map.setView(opts.center, opts.zoom);
+}
+mql.addListener(onBreakpointChange);
