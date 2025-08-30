@@ -1,6 +1,6 @@
 // Inizializzazione della mappa con centro sull'Europa
 var map = L.map('map', {
-    center: [51.505, -0.09], // Centro iniziale dell'Europa (Londra come esempio)
+    center: [50, 10], // Centro iniziale dell'Europa (Londra come esempio)
     zoom: 5,  // Zoom iniziale
     scrollWheelZoom: true,  // Abilita lo zoom con la rotellina
     zoomDelta: 0.2  // Riduce la velocità di zoom (default è 1)
@@ -133,4 +133,5 @@ L.control.layers({
 L.easyButton('fa-home', function() {
     map.setView([51.505, -0.09], 4); // Torna alla visualizzazione iniziale
 }).addTo(map);
+
 
