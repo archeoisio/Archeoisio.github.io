@@ -25,36 +25,26 @@
 
   <style>
     /* full-screen */
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-    #map {
-      width: 100%;
-      height: 100%;
-    }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    #map      { width: 100%; height: 100%; }
 
     /* pan + pinch-zoom */
     .leaflet-container.leaflet-touch-zoom {
-      -ms-touch-action: pan-x pan-y pinch-zoom !important;
-      touch-action:       pan-x pan-y pinch-zoom !important;
+      touch-action: pan-x pan-y pinch-zoom !important;
     }
 
-    /* top-right in flex row, permetti click */
+    /* top-right in row */
     .leaflet-top.leaflet-right {
       display:        flex !important;
-      flex-direction: row !important;
-      align-items:    center !important;
+      flex-direction: row  !important;
+      align-items:    flex-start !important;
       padding:        5px !important;
-      pointer-events: none;
     }
     .leaflet-top.leaflet-right .leaflet-control {
-      pointer-events: auto;
-      margin:         0 5px 0 0 !important;
+      margin-right: 5px !important;
     }
 
-    /* dimensionamento emoji sui pulsanti */
+    /* pulsanti emoji grandi */
     .leaflet-control-home a,
     .leaflet-control-locate a {
       display:         flex !important;
@@ -67,7 +57,7 @@
       padding:         0 !important;
     }
 
-    /* marker di locate identico al pulsante */
+    /* marker locate come emoji */
     .custom-locate-marker {
       background: none !important;
       border:     none !important;
@@ -75,13 +65,13 @@
       line-height: 1;
     }
 
-    /* scala più grande */
+    /* scala ingrandita */
     .leaflet-control-scale {
-      font-size: 16px !important;
+      font-size: 18px !important;
     }
     .leaflet-control-scale-line {
-      border-top: 2px solid #000 !important;
-      height:     6px !important;
+      border-top: 3px solid #000 !important;
+      height:     8px !important;
     }
   </style>
 </head>
