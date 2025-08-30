@@ -11,60 +11,41 @@
             width: 100%;
         }
 
-        /* Posizionamento dei controlli in alto a destra */
+        /* Controllo Layer */
         .leaflet-control-layers {
             position: absolute;
-            top: 10px;  /* Posizione verticale */
+            bottom: 10px;  /* Posizione verticale */
             right: 10px;   /* Posizione orizzontale */
             z-index: 1000; /* Assicura che non venga coperto dai pulsanti di zoom */
         }
 
-        /* Impostazione dello zoom verticale */
-        .leaflet-bar .leaflet-control-zoom {
-            display: flex;
-            flex-direction: column; /* Disporre i controlli uno sopra l'altro */
-            background: #fff;
+        /* Bottone Home */
+        .leaflet-control-home {
+            background-color: #fff;
+            border: 2px solid #0078e7;
             border-radius: 4px;
-            border: 1px solid #0078e7;
-            padding: 5px;
-            cursor: pointer;
-        }
-
-        .leaflet-bar .leaflet-control-zoom-in, 
-        .leaflet-bar .leaflet-control-zoom-out {
-            font-size: 20px;
+            color: #0078e7;
+            font-size: 30px; /* Aumenta la dimensione dell'icona */
+            width: 50px; /* Aumenta la larghezza del bottone */
+            height: 50px; /* Aumenta l'altezza del bottone */
+            line-height: 50px; /* Centra l'icona verticalmente */
             text-align: center;
-            padding: 5px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
-        .leaflet-control-zoom-in:hover, 
-        .leaflet-control-zoom-out:hover {
+        /* Colore e background al passaggio del mouse */
+        .leaflet-control-home:hover {
             background-color: #0078e7;
             color: white;
         }
 
-        /* Bottone Home */
-        .leaflet-bar .leaflet-control-home {
-            background: #fff;
-            border-radius: 4px;
-            border: 1px solid #0078e7;
-            color: #0078e7;
-            padding: 5px;
-            cursor: pointer;
+        /* Style per il controllo dei layers */
+        .leaflet-bar {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
         }
-
-        .leaflet-bar .leaflet-control-home:hover {
-            background: #0078e7;
-            color: white;
-        }
-
-        .leaflet-bar a {
-            font-size: 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-        }
-    </style> 
+    </style>
 </head>
 <body>
     <div id="map"></div>
