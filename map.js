@@ -97,14 +97,28 @@ var cities = [
     { name: "Zanzibar City", lat: -6.1659, lon: 39.2026 }
 ];
 
-// 2. Inizializzazione della mappa
+// 1. Definisci il layer OSM senza wrapping orizzontale
+var osmLayer = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
+  {
+    noWrap: true,
+    attribution: '&copy; OpenStreetMap contributors'
+  }
+);
+
+// 2. Inizializza la mappa con le opzioni corrette
 var map = L.map('map', {
   center: [48, 30],
-  zoom: 5,
+  zoom: 6,
   minZoom: 4,
-  scrollWheelZoom: true
+  scrollWheelZoom: true,    // <- virgola aggiunta qui
+  layers: [osmLayer],
+  worldCopyJump: true       // evita di ritrovarti copie multiple del marker
 });
 
+// 3. (Opzionale) Blocca il pannello oltre i confini del mondo
+map.setMaxBounds([[-90, -180], [90, 180]]);
+map.options.maxBoundsViscosity = 1.0;
 // 3. TileLayer OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: 'Map data © OpenStreetMap contributors'
@@ -189,6 +203,7 @@ map.addControl(new CustomToggle());
 // 7. (Opzionale) Sensibilità dello zoom a rotellina
 // se la tua versione di Leaflet supporta questo, altrimenti commenta:
 // map.scrollWheelZoom.options.zoomSensitivity = 0.2;
+
 
 
 
