@@ -1,8 +1,8 @@
 // Aggiungere la mappa
 var map = L.map('map', {
-    center: [50,10],
-    zoom: 10,
-    minZoom: 3,  // Limita lo zoom minimo a livello 2
+    center: [80,10],
+    zoom: 5,
+    minZoom: 4,  // Limita lo zoom minimo a livello 2
     scrollWheelZoom: true
 });
 
@@ -114,7 +114,7 @@ cities.forEach(function(city) {
         .bindPopup("<b>" + city.name + "</b>");
 
     marker.on('click', function() {
-        map.setView([city.lat, city.lon], 8);  // Zoom sulla città
+        map.setView([city.lat, city.lon], 10);  // Zoom sulla città
     });
 });
 
@@ -126,7 +126,7 @@ var homeControl = L.Control.extend({
         btn.innerHTML = '🏠';
         btn.title = 'Torna alla posizione iniziale';
         btn.onclick = function() {
-            map.setView([50,150], 5);  // Centra sulla posizione iniziale (Europa)
+            map.setView([80,10], 5);  // Centra sulla posizione iniziale (Europa)
         };
         return btn;
     }
@@ -145,6 +145,7 @@ leafletLayerControl.style.top = '120px';  // Distanza dal top per posizionarlo s
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;  // Impostazione della velocità dello zoom
+
 
 
 
