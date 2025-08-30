@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <title>Leaflet – Map con Zoom lento, Home, Scala e Localizzazione</title>
+  <meta charset="UTF-8">
+  <title>Leaflet – Map con Zoom lento, Home, Localize e Scala</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- 1. Leaflet CSS -->
+  <!-- Leaflet CSS -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
-  <!-- 2. Custom CSS inline -->
+  <!-- LocateControl CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.locatecontrol@0.73.0/dist/L.Control.Locate.min.css"
+  />
+
+  <!-- HomeButton CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet-homebutton@1.2.0/dist/L.Control.HomeButton.min.css"
+  />
+
   <style>
-    /* mappa a pieno schermo */
+    /* full-screen map */
     html, body {
       margin: 0;
       padding: 0;
@@ -24,48 +35,67 @@
       height: 100%;
     }
 
-    /* Abilita pan + pinch-zoom sui dispositivi touch */
+    /* pan + pinch-zoom */
     .leaflet-container.leaflet-touch-zoom {
       -ms-touch-action: pan-x pan-y pinch-zoom !important;
       touch-action:       pan-x pan-y pinch-zoom !important;
     }
 
-    /* Scala emoji del Home-Control */
-    .leaflet-control-home a {
-      display:         flex !important;
-      align-items:     center !important;
-      justify-content: center !important;
-      width:           48px !important;
-      height:          48px !important;
-      line-height:     48px !important;
-      font-size:       28px !important;
-      padding:         0 !important;
+    /* affianca Home e Locate in alto a destra */
+    .leaflet-top.leaflet-right .leaflet-control-home,
+    .leaflet-top.leaflet-right .leaflet-control-locate {
+      display: inline-flex !important;
+      margin: 0 4px 0 0 !important;
+      float: none !important;
+    }
+    .leaflet-top.leaflet-right .leaflet-control {
+      margin-bottom: 0 !important;
     }
 
-    /* Scala emoji del Locate-Control */
+    /* dimensionamento emoji sui pulsanti */
+    .leaflet-control-home a,
     .leaflet-control-locate a {
       display:         flex !important;
       align-items:     center !important;
       justify-content: center !important;
-      width:           48px !important;
-      height:          48px !important;
-      line-height:     48px !important;
-      font-size:       32px !important;
+      width:           60px !important;
+      height:          60px !important;
+      line-height:     60px !important;
+      font-size:       36px !important;
       padding:         0 !important;
+    }
+
+    /* marker di locate identico al pulsante (niente sfondo o bordo) */
+    .custom-locate-marker {
+      background: none !important;
+      border:     none !important;
+      font-size:  60px;
+      line-height: 1;
     }
   </style>
 </head>
 <body>
-  <!-- 3. Il contenitore della mappa -->
   <div id="map"></div>
 
-  <!-- 4. Leaflet JS -->
+  <!-- Leaflet JS -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     defer
   ></script>
 
-  <!-- 5. Il tuo map.js -->
+  <!-- LocateControl JS -->
+  <script
+    src="https://unpkg.com/leaflet.locatecontrol@0.73.0/dist/L.Control.Locate.min.js"
+    defer
+  ></script>
+
+  <!-- HomeButton JS -->
+  <script
+    src="https://unpkg.com/leaflet-homebutton@1.2.0/dist/L.Control.HomeButton.min.js"
+    defer
+  ></script>
+
+  <!-- Il tuo map.js -->
   <script src="map.js" defer></script>
 </body>
 </html>
