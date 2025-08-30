@@ -1,0 +1,5 @@
+/* Override touch-action per pan + pinch-zoom */
+.leaflet-container.leaflet-touch-zoom {
+  -ms-touch-action: pan-x pan-y pinch-zoom !important;
+  touch-action:       pan-x pan-y pinch-zoom !important;
+}
