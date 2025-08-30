@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
     layers:         [ baseMaps['OSM Standard'], capitali ],
     zoomControl:    false,
     scrollWheelZoom: {
-      wheelPxPerZoomLevel: 1000,  // più alto = scroll‐zoom più lento
+      wheelPxPerZoomLevel: 10000,  // più alto = scroll‐zoom più lento
       wheelDebounceTime:   80
     },
     zoomDelta:      0.1         // passi di zoom molto piccoli
@@ -153,3 +153,4 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 });
+
