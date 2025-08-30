@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('Leaflet versione:', L.version);
+  console.log('HomeControl presente?', typeof L.control.home);
+  console.log('LocateControl presente?', typeof L.control.locate);
+  
   // 1. Soglia mobile vs desktop
   const MOBILE_MAX_WIDTH = 767;
   const mobileView  = { center: [49, 30], zoom: 6 };
@@ -119,3 +123,4 @@ document.addEventListener('DOMContentLoaded', () => {
     console.warn('LocateControl non trovato: L.control.locate è undefined');
   }
 });
+
