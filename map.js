@@ -1,27 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Soglia mobile vs desktop
   const MOBILE_MAX_WIDTH = 767;
-
-  // 2. Configurazioni delle due viste
   const mobileView  = { center: [49, 30], zoom: 6 };
   const desktopView = { center: [50, 10], zoom: 7 };
+  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
+  const initialView = isMobile ? mobileView : desktopView;
 
-  // 3. Layer di base
+  // 2. Layer di base
   const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: '&copy; Esri' , noWrap: true }
+    { attribution: '&copy; Esri', noWrap: true }
   );
   const osm = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { attribution: '&copy; OSM' , noWrap: true }
+    { attribution: '&copy; OpenStreetMap contributors', noWrap: true }
   );
-
   const baseLayers = {
     'Satellite': satellite,
     'OpenStreetMap': osm
   };
 
-  // 4. Overlay di esempio: capitali con click‐zoom
+  // 3. Overlay di esempio: capitali con click-zoom
   const capitali = L.layerGroup();
   [
     { name: 'Roma',   coords: [41.9028, 12.4964] },
@@ -37,79 +36,38 @@ document.addEventListener('DOMContentLoaded', () => {
     capitali.addLayer(m);
   });
 
-  // 5. Scegli vista iniziale
-  const isMobile     = window.innerWidth <= MOBILE_MAX_WIDTH;
-  const initialView  = isMobile ? mobileView : desktopView;
-
-  // 6. Istanzia la mappa
+  // 4. Istanzia la mappa
   const map = L.map('map', {
-    center:        initialView.center,
-    zoom:          initialView.zoom,
-    minZoom:       3,
-    maxZoom:       20,
-    zoomControl:   false,
-    scrollWheelZoom: {
-      wheelPxPerZoomLevel: 1000,
-      wheelDebounceTime:   80
-    },
-    zoomDelta:     0.1,
-    layers:        [ satellite, capitali ],
-    maxBounds:     [[-90, -180], [90, 180]],
+    center:           initialView.center,
+    zoom:             initialView.zoom,
+    minZoom:          3,
+    maxZoom:          20,
+    zoomControl:      false,
+    scrollWheelZoom:  { wheelPxPerZoomLevel: 1000, wheelDebounceTime: 80 },
+    zoomDelta:        0.1,
+    layers:           [satellite, capitali],
+    maxBounds:        [[-90, -180], [90, 180]],
     maxBoundsViscosity: 1.0
   });
 
-  // 7. LayerSwitcher (collapsed → icona)
+  // 5. Aggiungi zoom nativo in alto a sinistra
+  L.control.zoom({ position: 'topleft' }).addTo(map);
+
+  // 6. LayerSwitcher (collapsed)
   L.control.layers(baseLayers, { 'Capitali': capitali }, { collapsed: true })
     .addTo(map);
 
-  // 8. Scala metrica
-  L.control.scale({
+  // 7. Scala metrica (ri-creata al resize/zoom)
+  let scaleControl = L.control.scale({
     position: 'bottomleft',
     maxWidth: Math.floor(window.innerWidth * 0.3),
     metric:   true,
     imperial: false
   }).addTo(map);
 
-  // 9. Pulsante Home 🏠
-  L.control.home({
-    position: 'topright',
-    lat: initialView.center[0],
-    lng: initialView.center[1],
-    zoom: initialView.zoom
-  }).addTo(map);
-
-  // 10. Pulsante Locate 📍 con marker custom
-  const locateEmoji      = '📍';
-  const locateMarkerIcon = L.divIcon({
-    html:       locateEmoji,
-    className:  'custom-locate-marker',
-    iconSize:   [50, 50],
-    iconAnchor: [25, 25]
-  });
-
-  L.control.locate({
-    position:             'topright',
-    icon:                 locateEmoji,
-    markerStyle:          { opacity: 0 },
-    showPopup:            false,
-    keepCurrentZoomLevel: true,
-    flyTo:                true
-  }).addTo(map);
-
-  let _locMarker;
-  map.on('locationfound', e => {
-    if (_locMarker) map.removeLayer(_locMarker);
-    _locMarker = L.marker(e.latlng, { icon: locateMarkerIcon })
-                   .addTo(map);
-  });
-  map.on('locationerror', () => {
-    alert('Impossibile rilevare la posizione');
-  });
-
-  // 11. Aggiorna scala al resize/zoom
   function updateScale() {
-    map.removeControl(map.scaleControl);
-    map.scaleControl = L.control.scale({
+    map.removeControl(scaleControl);
+    scaleControl = L.control.scale({
       position: 'bottomleft',
       maxWidth: Math.floor(window.innerWidth * 0.3),
       metric:   true,
@@ -118,4 +76,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   map.on('zoomend', updateScale);
   window.addEventListener('resize', updateScale);
+
+  // 8. Pulsante Home 🏠 (solo se il plugin è caricato)
+  if (typeof L.control.home === 'function') {
+    L.control.home({
+      position: 'topright',
+      lat:      initialView.center[0],
+      lng:      initialView.center[1],
+      zoom:     initialView.zoom
+    }).addTo(map);
+  } else {
+    console.warn('HomeControl non trovato: L.control.home è undefined');
+  }
+
+  // 9. Pulsante Locate 📍 (solo se il plugin è caricato)
+  if (typeof L.control.locate === 'function') {
+    L.control.locate({
+      position:             'topright',
+      icon:                 '📍',
+      markerStyle:          { opacity: 0 },
+      showPopup:            false,
+      keepCurrentZoomLevel: true,
+      flyTo:                true
+    }).addTo(map);
+
+    // custom marker emoji
+    map.on('locationfound', e => {
+      L.marker(e.latlng, {
+        icon: L.divIcon({
+          html:       '📍',
+          className:  'custom-locate-marker',
+          iconSize:   [50, 50],
+          iconAnchor: [25, 25]
+        })
+      }).addTo(map);
+    });
+
+    map.on('locationerror', () => {
+      alert('Impossibile rilevare la posizione');
+    });
+  } else {
+    console.warn('LocateControl non trovato: L.control.locate è undefined');
+  }
 });
