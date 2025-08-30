@@ -104,7 +104,7 @@ var cities = [
 
 // 2. Inizializzazione della mappa
 var map = L.map('map', {
-  center: [45, 30],
+  center: [50, 30],
   zoom: 5,
   minZoom: 3,
   scrollWheelZoom: true
@@ -135,7 +135,7 @@ var homeControl = L.Control.extend({
     btn.innerHTML = '🏠';
     btn.title = 'Torna alla posizione iniziale';
     btn.onclick = function() {
-      map.setView([50, 20], 4);
+      map.setView([50, 30], 5);
     };
     return btn;
   }
@@ -186,3 +186,4 @@ document.head.appendChild(style);
 // 9. Regolazione della sensibilità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
 map.scrollWheelZoom.options.zoomSensitivity = 0.2;
+
