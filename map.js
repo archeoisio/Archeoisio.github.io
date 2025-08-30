@@ -1,7 +1,8 @@
 // 1. Base layers
 const baseMaps = {
   'Esri Satellite': L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/' +
+    'tile/{z}/{y}/{x}',
     {
       attribution:
         'Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, ' +
@@ -24,9 +25,7 @@ const capitali = L.layerGroup();
   const m = L.marker(coords)
     .bindPopup(name)
     .on('click', () => {
-      // zoom su marker a livello 10
       map.setView(coords, 10);
-      // apri il popup
       m.openPopup();
     });
   capitali.addLayer(m);
@@ -45,7 +44,7 @@ const map = L.map('map', {
 })
 .setView([41.9028, 12.4964], 6);
 
-// 4. Layer switcher
+// 4. Layer switcher (basemap + overlay)
 L.control.layers(baseMaps, { 'Capitali': capitali }).addTo(map);
 
 // 5. Scala metrica
