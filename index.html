@@ -11,15 +11,15 @@
             width: 100%;
         }
 
-        /* Controllo Layer */
+        /* Controllo Layer - Posizione corretta sotto il tasto Home */
         .leaflet-control-layers {
             position: absolute;
-            bottom: 10px;  /* Posizione verticale */
-            right: 10px;   /* Posizione orizzontale */
+            top: 120px;  /* Posizionato sotto il tasto Home */
+            right: 10px;   /* Posizione orizzontale a destra */
             z-index: 1000; /* Assicura che non venga coperto dai pulsanti di zoom */
         }
 
-        /* Bottone Home */
+        /* Bottone Home - Aumenta la dimensione del bottone */
         .leaflet-control-home {
             background-color: #fff;
             border: 2px solid #0078e7;
