@@ -2,10 +2,12 @@
 var map = L.map('map').setView([51.505, -0.09], 4);  // Centra inizialmente sull'Europa con zoom a livello 4
 
 // Aggiunta del layer OpenStreetMap
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+});
 
+// Aggiungere il layer iniziale alla mappa
+osmLayer.addTo(map);
 
 // Dati delle capitali mondiali (esempio parziale)
 var cities = [
@@ -129,6 +131,13 @@ var homeControl = L.Control.extend({
     }
 });
 map.addControl(new homeControl());
+
+// Aggiungere il controllo per i layer
+var layerControl = L.control.layers({
+    "OpenStreetMap": osmLayer
+}, {}, {
+    position: 'topright' // Posizione del controllo dei layer
+}).addTo(map);
 
 // Ridurre la velocità dello zoom con la rotellina
 map.scrollWheelZoom.enable();
