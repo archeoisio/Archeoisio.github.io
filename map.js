@@ -295,15 +295,6 @@ var overlayMaps = {
 
 L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-// Adatta la vista per includere tutti i marker e i poligoni
-var bounds = cities.map(function(city) {
-    return [city.lat, city.lon];
-});
-Object.keys(countriesPolygons).forEach(function(country) {
-    bounds.push(countriesPolygons[country].getBounds().getSouthWest());
-    bounds.push(countriesPolygons[country].getBounds().getNorthEast());
-});
-map.fitBounds(bounds);
 
 // Impostazioni per il comportamento della mappa (zoom, drag, ecc.)
 map.on('click', function(e) {
