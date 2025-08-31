@@ -46,11 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Container pulsanti + switcher ---
   const customControls = L.control({ position: 'topright' });
-
   customControls.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
 
-    // --- SWITCHER layer primo in alto ---
+    // --- SWITCHER primo in alto ---
     const layersControl = L.control.layers(
       { "Satellite": satellite, "OpenStreetMap": osm },
       { "Capitali": capitali },
@@ -91,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // --- Pulsante Locate standard ---
+    // --- Pulsante Locate ---
     const locateControl = L.control.locate({
       flyTo: { duration: 15 },
       strings: { title: "Mostrami la mia posizione" },
