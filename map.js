@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
-      map.flyTo(coords, 18, { animate: true, duration: 10 });
+      map.flyTo(coords, 14, { animate: true, duration: 10 });
       marker.openPopup();
     });
   });
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(pinBtn, 'click', function(e){
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      alert('Clicca sulla mappa per aggiungere un marker giallo');
+      alert('Clicca sulla mappa per aggiungere un marker');
       map.once('click', function(ev){
         L.marker(ev.latlng, {
           icon: L.divIcon({
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
             iconAnchor: [15, 30],
             popupAnchor: [0, -30]
           })
-        }).addTo(map).bindPopup('Marker giallo').openPopup();
+        }).addTo(map).bindPopup('Marker utente').openPopup();
       });
     });
 
@@ -100,3 +100,4 @@ document.addEventListener('DOMContentLoaded', () => {
     locateOptions: { enableHighAccuracy: true, watch: true }
   }).addTo(map);
 });
+
