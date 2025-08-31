@@ -5,83 +5,66 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
-  const satellite = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: '&copy; Esri', noWrap: true }
-  );
-  const osm = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    { attribution: '&copy; OpenStreetMap contributors', noWrap: true }
-  );
-  const baseLayers = { 'Satellite': satellite, 'OpenStreetMap': osm };
-
-  const capitali = L.layerGroup();
-  [
-    { name: 'Roma', coords:[41.9028,12.4964] },
-    { name: 'Parigi', coords:[48.8566,2.3522] },
-    { name: 'Londra', coords:[51.5074,-0.1278] }
-  ].forEach(({name,coords}) => {
-    const m = L.marker(coords).bindPopup(name).on('click',()=>{ map.setView(coords,14); m.openPopup(); });
-    capitali.addLayer(m);
-  });
-
-  const map = L.map('map',{
-    center: initialView.center,
-    zoom: initialView.zoom,
-    minZoom: 3,
-    maxZoom: 20,
-    zoomControl:false,
-    scrollWheelZoom:{wheelPxPerZoomLevel:1000,wheelDebounceTime:80},
-    zoomDelta:0.1,
-    layers:[satellite,capitali],
-    maxBounds:[[-90,-180],[90,180]],
-    maxBoundsViscosity:1.0
-  });
-
-  L.control.layers(baseLayers,{ 'Capitali': capitali },{collapsed:true}).addTo(map);
-
-  // Container custom allineato a destra
-  const topRight = map._controlCorners.topright;
-  const customContainer = L.DomUtil.create('div','custom-controls');
-  topRight.appendChild(customContainer);
-
-  // --- Primo slot vuoto ---
-  const spacer = L.DomUtil.create('div','custom-spacer leaflet-control');
-  customContainer.appendChild(spacer);
-
-  // --- Pulsante Home ---
-  const homeBtn = L.DomUtil.create('div','custom-home-button leaflet-control');
-  homeBtn.title = "Torna Home";
-  homeBtn.innerHTML = '<a>🏠</a>';
-  homeBtn.onclick = ()=>{ map.setView(initialView.center, initialView.zoom); };
-  customContainer.appendChild(homeBtn);
-
-  // --- Pulsante Locate ---
-  const locateBtn = L.DomUtil.create('div','custom-locate-button leaflet-control');
-  locateBtn.title = "Localizza me";
-  locateBtn.innerHTML = '<a></a>';
-  customContainer.appendChild(locateBtn);
-
-  locateBtn.addEventListener('click', ()=>{
-    map.locate({ setView:false, watch:false, maxZoom:18 });
-  });
-
-  map.on('locationfound', e=>{
-    map.flyTo(e.latlng,18);
-
-    // marker emoji
-    L.marker(e.latlng,{
-      icon: L.divIcon({
-        html:'📍',
-        className:'custom-locate-marker',
-        iconSize:[30,30],
-        iconAnchor:[15,30]
-      })
-    }).addTo(map);
-  });
+const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
+  'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri'
 });
 
+// Overlay esempio (capitali)
+const capitali = L.layerGroup();
+L.marker([41.9028, 12.4964]).bindPopup("Roma").addTo(capitali);
+L.marker([48.8566, 2.3522]).bindPopup("Parigi").addTo(capitali);
+L.marker([51.5074, -0.1278]).bindPopup("Londra").addTo(capitali);
 
+// --- CONTAINER PULSANTI in alto a destra ---
+const customControls = L.control({ position: 'topright' });
+customControls.onAdd = function(map) {
+  const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
 
+  // Pulsante Home
+  const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+  homeBtn.innerHTML = '⌂';
+  homeBtn.href = '#';
+  L.DomEvent.on(homeBtn, 'click', function(e) {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    map.setView([41.9028, 12.4964], 6); // Torna a Roma zoom 6
+  });
 
+  // Pulsante Locate
+  const locateBtn = L.DomUtil.create('a', 'custom-locate-button', container);
+  locateBtn.href = '#';
+  L.DomEvent.on(locateBtn, 'click', function(e) {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    map.locate({ setView: true, maxZoom: 18 });
+  });
 
+  return container;
+};
+customControls.addTo(map);
+
+// --- SWITCHER subito sotto i pulsanti ---
+L.control.layers(
+  { "OpenStreetMap": osm, "Satellite": satellite },
+  { "Capitali": capitali },
+  { collapsed: true, position: 'topright' }
+).addTo(map);
+
+// Quando la posizione viene trovata → marker + cerchietto
+map.on('locationfound', function(e) {
+  L.marker(e.latlng, {
+    icon: L.divIcon({
+      className: 'custom-locate-marker',
+      html: '📍',
+      iconSize: [30, 30]
+    })
+  }).addTo(map);
+
+  L.circleMarker(e.latlng, {
+    radius: 5,
+    color: 'blue',
+    fillColor: 'blue',
+    fillOpacity: 0.5
+  }).addTo(map);
+});
