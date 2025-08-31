@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 1.2 });
+      map.flyTo(coords, 14, { animate: true, duration: 5 });
       marker.openPopup();
     });
   });
@@ -47,11 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Pulsante Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
-    homeBtn.innerHTML = '⌂';
+    homeBtn.innerHTML = '🏠';
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1.5 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5 });
     });
 
     // Pulsante Locate
