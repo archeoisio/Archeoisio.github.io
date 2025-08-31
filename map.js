@@ -103,7 +103,7 @@ L.DomEvent.on(pinBtn, 'click', function(e) {
   ).addTo(map);
       
     });
-  });
 });
+
 
 
