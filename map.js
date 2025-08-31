@@ -11,11 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     noWrap: true
   });
 
-  const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
-    'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri',
-    noWrap: true
-  });
+  const satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Tiles &copy; Esri', noWrap: true }
+  );
 
   // --- Overlay capitali ---
   const capitali = L.layerGroup();
@@ -25,85 +24,79 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Londra", coords: [51.5074, -0.1278] }
   ];
 
-  capitalsData.forEach(({ name, coords }) => {
-    const marker = L.marker(coords).bindPopup(name).addTo(capitali);
-    marker.on('click', () => {
-      map.flyTo(coords, 10, { animate: true, duration: 10 });
-      marker.openPopup();
-    });
-  });
-
   // --- Istanza mappa ---
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    layers: [satellite, capitali],
+    layers: [osm, capitali],
     zoomControl: true,
     minZoom: 3,
     maxBounds: [[-90, -180], [90, 180]],
     maxBoundsViscosity: 1.0
   });
 
-  // --- Pulsante Home ---
+  capitalsData.forEach(({ name, coords }) => {
+    const marker = L.marker(coords).bindPopup(name).addTo(capitali);
+    marker.on('click', () => {
+      map.flyTo(coords, 18, { animate: true, duration: 10 });
+      marker.openPopup();
+    });
+  });
+
+  // --- Container pulsanti + switcher ---
   const customControls = L.control({ position: 'topright' });
   customControls.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
 
+    // Pulsante Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🗺️';
-    L.DomEvent.on(homeBtn, 'click', function(e) {
+    L.DomEvent.on(homeBtn, 'click', function(e){
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
     });
 
+    // Pulsante Pinpoint
+    const pinBtn = L.DomUtil.create('a', 'custom-pin-button', container);
+    pinBtn.href = '#';
+    pinBtn.innerHTML = '📌';
+    L.DomEvent.on(pinBtn, 'click', function(e){
+      L.DomEvent.stopPropagation(e);
+      L.DomEvent.preventDefault(e);
+      alert('Clicca sulla mappa per aggiungere un marker giallo');
+      map.once('click', function(ev){
+        L.marker(ev.latlng, {
+          icon: L.divIcon({
+            className: 'custom-pin-marker',
+            html: '📍',
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -30]
+          })
+        }).addTo(map).bindPopup('Marker giallo').openPopup();
+      });
+    });
+
+    // Switcher (layer control) dentro stesso container
+    const layersControl = L.control.layers(
+      { "Satellite": satellite, "OpenStreetMap": osm },
+      { "Capitali": capitali },
+      { collapsed: false }
+    ).addTo(map);
+
+    container.appendChild(layersControl.getContainer());
+
     return container;
   };
   customControls.addTo(map);
 
-   // --- LocateControl plugin (default cerchio e marker) ---
-const locateControl = L.control.locate({
-  position: 'topright',
-  flyTo: { duration: 10 },
-  strings: { title: "Mostrami la mia posizione" },
-  locateOptions: { enableHighAccuracy: true, watch: true } // watch: true per aggiornamenti live
-}).addTo(map);
-
-// --- Pulsante Pinpoint ---
-const pinBtn = L.DomUtil.create('a', 'custom-pin-button', container);
-pinBtn.href = '#';
-pinBtn.innerHTML = '📌';
-L.DomEvent.on(pinBtn, 'click', function(e) {
-  L.DomEvent.stopPropagation(e);
-  L.DomEvent.preventDefault(e);
-  
-  alert('Clicca sulla mappa per aggiungere un marker giallo');
-
-  map.once('click', function(ev) {
-    L.marker(ev.latlng, {
-      icon: L.divIcon({
-        className: 'custom-pin-marker',
-        html: '📍',
-        iconSize: [30, 30],
-        iconAnchor: [15, 30],
-        popupAnchor: [0, -30]
-      })
-    }).addTo(map)
-    .bindPopup('Marker giallo')
-    .openPopup();
-  });
+  // --- LocateControl plugin default ---
+  L.control.locate({
+    position: 'topright',
+    flyTo: { duration: 10 },
+    strings: { title: "Mostrami la mia posizione" },
+    locateOptions: { enableHighAccuracy: true, watch: true }
+  }).addTo(map);
 });
-  
-// --- SWITCHER subito sotto pulsante Home ---
-  L.control.layers(
-    { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Capitali": capitali },
-    { collapsed: false, position: 'topright' }
-  ).addTo(map);
-      
-    });
-});
-
-
-
