@@ -4,21 +4,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-  
 
   // --- Layer base ---
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
-      noWrap: true
+    noWrap: true
   });
 
   const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
     'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri',
-      noWrap: true
+    noWrap: true
   });
 
-  // --- Overlay capitale ---
+  // --- Overlay capitali ---
   const capitali = L.layerGroup();
   const capitalsData = [
     { name: "Roma", coords: [41.9028, 12.4964] },
@@ -38,11 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    layers: [satellite, capitali],
+    layers: [osm, capitali],   // OSM iniziale
     zoomControl: true,
-    minZoom: 3,                // ← limite zoom minimo
-    maxBounds: [[-90, -180], [90, 180]],  // ← limita la mappa ai confini reali del globo
-    maxBoundsViscosity: 1.0    // ← impedisce scroll fuori dai confini
+    minZoom: 2,
+    maxBounds: [[-90, -180], [90, 180]],
+    maxBoundsViscosity: 1.0
   });
 
   // --- Pulsanti Home + Locate ---
@@ -53,39 +52,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Pulsante Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
-    homeBtn.innerHTML = '🏠';
+    homeBtn.innerHTML = '🗺️';
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 15 });
     });
 
-   map.on('locationfound', function(e) {
-  const flyDuration = 15; // secondi
-
-  // FlyTo verso posizione con animazione
-  map.flyTo(e.latlng, 18, { animate: true, duration: flyDuration });
-
-  // Marker emoji
-  L.marker(e.latlng, {
-    icon: L.divIcon({
-      className: 'custom-locate-marker',
-      html: '📍',
-      iconSize: [30, 30]
-    })
-  }).addTo(map);
-
-  // Dopo che la mappa ha finito di volare, aggiungi cerchio stile Apple
-  map.once('moveend', () => {
-    L.circle(e.latlng, {
-      radius: 50,          // dimensione in metri (puoi adattare)
-      color: '#007aff',    // tipico blu Apple
-      fillColor: '#007aff',
-      fillOpacity: 0.2,
-      weight: 2
-    }).addTo(map);
-  });
-});
+    // Pulsante Locate
+    const locateBtn = L.DomUtil.create('a', 'custom-locate-button', container);
+    locateBtn.href = '#';
+    locateBtn.innerHTML = '📍';
+    L.DomEvent.on(locateBtn, 'click', function(e) {
+      L.DomEvent.stopPropagation(e);
+      L.DomEvent.preventDefault(e);
+      map.locate({ setView: false, watch: false });
+    });
 
     return container;
   };
@@ -93,17 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- SWITCHER subito sotto ---
   L.control.layers(
-    { "Satellite": satellite, "OpenStreetMap": osm },
+    { "OpenStreetMap": osm, "Satellite": satellite },
     { "Capitali": capitali },
-    { collapsed: false, position: 'topright' }
+    { collapsed: true, position: 'topright' }
   ).addTo(map);
 
-  // --- Marker Locate ---
+  // --- Marker Locate e cerchio Apple style ---
   map.on('locationfound', function(e) {
-    // FlyTo verso posizione
-    map.flyTo(e.latlng, 18, { animate: true, duration: 1.5 });
+    const flyDuration = 15; // secondi
 
-    // Emoji marker
+    // FlyTo verso posizione
+    map.flyTo(e.latlng, 18, { animate: true, duration: flyDuration });
+
+    // Marker emoji
     L.marker(e.latlng, {
       icon: L.divIcon({
         className: 'custom-locate-marker',
@@ -111,12 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
         iconSize: [30, 30]
       })
     }).addTo(map);
+
+    // Cerchio blu stile Apple dopo la fine del flyTo
+    map.once('moveend', () => {
+      L.circle(e.latlng, {
+        radius: 50,         // in metri
+        color: '#007aff',   // tipico blu Apple
+        fillColor: '#007aff',
+        fillOpacity: 0.2,
+        weight: 2
+      }).addTo(map);
+    });
   });
 });
-
-
-
-
-
-
-
