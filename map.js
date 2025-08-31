@@ -4,19 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-  const flyDuration = 10; // durata totale volo in secondi
 
   // --- Layer base ---
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
-    noWrap: true,
-    updateWhenIdle: true,
-    updateWhenZooming: false
+    noWrap: true
   });
 
   const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: 'Tiles &copy; Esri', noWrap: true, updateWhenIdle: true, updateWhenZooming: false }
+    { attribution: 'Tiles &copy; Esri', noWrap: true }
   );
 
   // --- Overlay capitali ---
@@ -38,35 +35,33 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
-  // --- Funzione di volo “navicella spaziale” ---
-  function smoothFly(marker, targetLatLng, targetZoom) {
-    // fase 1: volo orizzontale
-    map.flyTo([targetLatLng[0], targetLatLng[1]], map.getZoom(), {
-      animate: true,
-      duration: flyDuration * 0.5,
-      easeLinearity: 0.1
-    });
+  // --- Funzione fly fluido tipo navicella ---
+  function smoothFly(targetLatLng, targetZoom, marker = null) {
+    const current = map.getCenter();
+    const totalDuration = 15; // secondi
+    const verticalDuration = totalDuration * 2/3;
+    const horizontalDuration = totalDuration - verticalDuration;
 
-    // fase 2: zoom verticale alla destinazione
+    // Fase 1: movimento orizzontale lento (lat costante)
+    const intermediateLatLng = [current.lat, targetLatLng.lng];
+    map.flyTo(intermediateLatLng, map.getZoom(), { animate: true, duration: horizontalDuration });
+
     map.once('moveend', () => {
-      map.flyTo(targetLatLng, targetZoom, {
-        animate: true,
-        duration: flyDuration * 0.5,
-        easeLinearity: 0.1
+      // Fase 2: discesa verticale + zoom lento
+      map.flyTo(targetLatLng, targetZoom, { animate: true, duration: verticalDuration });
+
+      map.once('moveend', () => {
+        // Apri popup se marker esiste
+        if (marker) marker.openPopup();
       });
-    });
-
-    // apri popup alla fine del volo
-    map.once('moveend', () => {
-      if(marker) marker.openPopup();
     });
   }
 
-  // --- Marker capitali con flyTo e popup ---
+  // --- Marker capitali con flyTo navicella + popup alla fine ---
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
-      smoothFly(marker, coords, 14);
+      smoothFly(coords, 14, marker);
     });
   });
 
@@ -81,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const homeBox = L.control({ position: 'topright' });
   homeBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
-    container.style.marginTop = '10px';  // distanza dal top / switcher
+    container.style.marginTop = '10px';  
     container.style.marginRight = '10px';
 
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
@@ -92,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault();
-      smoothFly(null, initialView.center, initialView.zoom);
+      smoothFly(initialView.center, initialView.zoom, null);
     });
 
     return container;
