@@ -327,7 +327,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // personalizzazione dimensioni
 locateBtn.style.width = '45px';
 locateBtn.style.height = '45px';
-locateBtn.style.fontSize = '22px';
+locateBtn.style.alignItems = 'center';
+locateBtn.style.fontSize = '25px';
 locateBtn.style.background = 'white';
 locateBtn.style.borderRadius = '4px';
 locateBtn.style.boxShadow = '0 1px 5px rgba(0,0,0,0.4)';
