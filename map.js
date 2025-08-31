@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       map.closePopup();
 
       // FlyTo iniziale
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8, easeLinearity: 0,3 });
     });
 
     return container;
