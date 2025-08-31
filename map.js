@@ -30,13 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: initialView.zoom,
     layers: [satellite, capitali],
     zoomControl: true,
-    minZoom: 3,
-    maxBounds: [[-90, -180], [90, 180]],
+    minZoom: 3
   });
 
-  // --- Precaricamento tiles: buffer doppio rispetto alla vista iniziale ---
+  // --- Precaricamento tiles (doppio rispetto alla vista iniziale) ---
   const preloadTiles = (layer, center, zoom) => {
-    const mapSize = map.getSize();
     const bounds = map.getBounds();
     const bufferLat = (bounds.getNorth() - bounds.getSouth()) * 1.5;
     const bufferLng = (bounds.getEast() - bounds.getWest()) * 1.5;
@@ -45,29 +43,43 @@ document.addEventListener('DOMContentLoaded', () => {
       [center[0]+bufferLat, center[1]+bufferLng]
     );
     layer.addTo(map);
-    layer._reset && layer._reset(); // forza refresh tiles
     map.fitBounds(preBounds, { animate: false });
     map.setView(center, zoom, { animate: false });
   };
-
   preloadTiles(satellite, initialView.center, initialView.zoom);
 
-  // --- FlyTo iniziale molto smooth ---
+  // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
 
-  // --- Marker capitali con flyTo smooth e popup alla fine ---
+  // --- Marker capitali con singolo/doppio clic ---
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).addTo(capitali);
+    let clickTimeout = null;
 
     marker.on('click', () => {
-      map.flyTo(coords, 12, { animate: true, duration: 8, easeLinearity: 1 });
-      map.once('moveend', () => {
-        marker.bindPopup(name).openPopup();
-      });
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
+
+        // Doppio clic: flyTo e popup finale
+        map.flyTo(coords, 12, { animate: true, duration: 8, easeLinearity: 1 });
+        map.once('moveend', () => {
+          marker.bindPopup(name).openPopup();
+        });
+      } else {
+        clickTimeout = setTimeout(() => {
+          clickTimeout = null;
+          if (marker.getPopup() && marker.getPopup().isOpen()) {
+            marker.closePopup();
+          } else {
+            marker.bindPopup(name).openPopup();
+          }
+        }, 400);
+      }
     });
   });
 
-  // --- SWITCHER layer primo in alto ---
+  // --- SWITCHER layer ---
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": capitali },
@@ -78,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const homeBox = L.control({ position: 'topright' });
   homeBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
-    container.style.marginTop = '10px';  // distanza dal top / switcher
+    container.style.marginTop = '10px';
     container.style.marginRight = '10px';
 
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
@@ -89,6 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
+
+      // Chiudi eventuali popup aperti
+      map.closePopup();
+
+      // FlyTo iniziale
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
     });
 
