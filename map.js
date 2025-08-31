@@ -32,8 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomControl: true,
     minZoom: 3,
     maxBounds: [[-90, -180], [90, 180]],
-    maxBoundsViscosity: 1.0,
-    preferCanvas: true
   });
 
   // --- Precaricamento tiles: buffer doppio rispetto alla vista iniziale ---
