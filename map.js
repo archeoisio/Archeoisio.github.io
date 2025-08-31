@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 5 });
+      map.flyTo(coords, 14, { animate: true, duration: 20 });
       marker.openPopup();
     });
   });
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 20 });
     });
 
     // Pulsante Locate
@@ -94,16 +94,9 @@ document.addEventListener('DOMContentLoaded', () => {
         iconSize: [30, 30]
       })
     }).addTo(map);
-
-    // Cerchietto blu piccolo
-    L.circleMarker(e.latlng, {
-      radius: 5,
-      color: 'blue',
-      fillColor: 'blue',
-      fillOpacity: 0.5
-    }).addTo(map);
   });
 });
+
 
 
 
