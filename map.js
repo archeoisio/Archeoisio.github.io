@@ -316,12 +316,14 @@ controlBox.onAdd = function(map) {
   });
   const locateBtn = locateControl.onAdd(map);
 
-  locateBtn.style.fontSize = '30px';      // Pulsante più grande
+  // Ridimensiona l'icona interna del pulsante
+  const svgIcon = locateBtn.querySelector('svg');
+  svgIcon.setAttribute('width', '30px');
+  svgIcon.setAttribute('height', '30px');
+  
+  // Pulsante più grande
   locateBtn.style.width = '50px';
   locateBtn.style.height = '50px';
-  locateBtn.style.lineHeight = '50px';
-  locateBtn.style.textAlign = 'center';
-  locateBtn.style.display = 'block';
   locateBtn.style.background = 'rgba(255,255,255,0.8)';
   locateBtn.style.border = 'none';
   locateBtn.style.borderRadius = '8px';
