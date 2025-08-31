@@ -325,15 +325,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
    const locateBtn = locateControl.onAdd(map);
 // personalizzazione dimensioni
-locateBtn.style.width = '45px';
-locateBtn.style.height = '45px';
-locateBtn.style.alignItems = 'right';
-locateBtn.style.marginRight = '10px';
-locateBtn.style.fontSize = '25px';
-locateBtn.style.background = 'white';
-locateBtn.style.borderRadius = '4px';
-locateBtn.style.boxShadow = '0 1px 5px rgba(0,0,0,0.4)';
-
+locateBtn.style.display = 'flex';
+    locateBtn.style.justifyContent = 'center';
+    locateBtn.style.alignItems = 'center';
+    locateBtn.style.width = '45px';
+    locateBtn.style.height = '45px';
+    locateBtn.style.fontSize = '25px';
+    locateBtn.style.background = 'white';
+    locateBtn.style.borderRadius = '4px';
+    locateBtn.style.cursor = 'pointer';
+    locateBtn.style.boxShadow = '0 1px 5px rgba(0,0,0,0.4)';
+    locateBtn.style.textDecoration = 'none';
+    locateBtn.style.marginBottom = '5px';
 container.appendChild(locateBtn);
 
     return container;
