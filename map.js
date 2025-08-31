@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
       { "Satellite": satellite, "OpenStreetMap": osm },
       { "Capitali": capitali },
       { collapsed: false }
-    ).addTo(map);
-
+    );
+    layersControl.onAdd(map);  // inizializza container
     container.appendChild(layersControl.getContainer());
 
     // --- Pulsante Home ---
@@ -104,4 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return container;
   };
+
   customControls.addTo(map);
+});
