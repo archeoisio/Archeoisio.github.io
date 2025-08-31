@@ -45,44 +45,17 @@ customControls.onAdd = function(map) {
     });
   });
 
-  // --- Pulsante Locate (personalizzato) ---
-  const locateBtn = L.DomUtil.create('a', 'custom-locate-button', container);
-  locateBtn.href = '#';
-  locateBtn.innerHTML = '📍';
-  locateBtn.title = "Mostrami la mia posizione";
-  L.DomEvent.on(locateBtn, 'click', e => {
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-
-    map.locate({ setView: false, watch: false, enableHighAccuracy: true });
-
-    // evento locationfound per marker + cerchio
-    map.once('locationfound', function(ev) {
-      map.flyTo(ev.latlng, 18, { animate: true, duration: 15 });
-
-      // marker emoji posizione
-      L.marker(ev.latlng, {
-        icon: L.divIcon({
-          className: 'custom-locate-marker',
-          html: '📍',
-          iconSize: [40, 40],
-          iconAnchor: [20, 40]
-        })
-      }).addTo(map);
-
-      // cerchio Apple-style al termine del flyTo
-      map.once('moveend', () => {
-        L.circle(ev.latlng, {
-          radius: 30,
-          color: '#007aff',
-          fillColor: '#007aff',
-          fillOpacity: 0.2,
-          weight: 2
-        }).addTo(map);
-      });
-    });
-  });
+// --- Pulsante Locate standard ---
+L.control.locate({
+  position: 'topright',
+  flyTo: { duration: 15 },
+  strings: { title: "Mostrami la mia posizione" },
+  locateOptions: { enableHighAccuracy: true, watch: true }
+}).addTo(map);
+// Aggiungiamo il pulsante Locate al container custom
+  container.appendChild(locateControl.getContainer());
 
   return container;
 };
+
 customControls.addTo(map);
