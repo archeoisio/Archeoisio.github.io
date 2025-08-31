@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: initialView.zoom,
     layers: [satellite, capitali],
     zoomControl: true,
-    minZoom: 3
+    minZoom: 3,
+    maxBounds: [[-90, -180], [90, 180]],
   });
 
   // --- Precaricamento tiles ---
