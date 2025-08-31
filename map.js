@@ -37,9 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    layers: [osm, capitali],
+    layers: [satellite, capitali],
     zoomControl: true,
-    minZoom: 2,
+    minZoom: 3,
     maxBounds: [[-90, -180], [90, 180]],
     maxBoundsViscosity: 1.0
   });
@@ -62,42 +62,22 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   customControls.addTo(map);
 
-  // --- SWITCHER subito sotto pulsante Home ---
+   // --- LocateControl plugin (default cerchio e marker) ---
+const locateControl = L.control.locate({
+  position: 'topright',
+  flyTo: { duration: 10 },
+  strings: { title: "Mostrami la mia posizione" },
+  locateOptions: { enableHighAccuracy: true, watch: true } // watch: true per aggiornamenti live
+}).addTo(map);
+
+// --- SWITCHER subito sotto pulsante Home ---
   L.control.layers(
-    { "OpenStreetMap": osm, "Satellite": satellite },
+    { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": capitali },
-    { collapsed: true, position: 'topright' }
+    { collapsed: false, position: 'topright' }
   ).addTo(map);
-
-  // --- LocateControl plugin ---
-  const locateControl = L.control.locate({
-    position: 'topright',
-    flyTo: { duration: 10 },
-    strings: { title: "Mostrami la mia posizione" },
-    locateOptions: { enableHighAccuracy: true, watch: false }
-  }).addTo(map);
-
-  // Rimuovo cerchio default e uso marker + cerchio Apple-style personalizzato
-  locateControl.on('locationfound', function(e) {
-    // Marker emoji
-    L.marker(e.latlng, {
-      icon: L.divIcon({
-        className: 'custom-locate-marker',
-        html: '📍',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40]
-      })
-    }).addTo(map);
-
-    // Cerchio stile Apple alla fine del flyTo
-    map.once('moveend', () => {
-      L.circle(e.latlng, {
-        radius: 30,
-        color: '#007aff',
-        fillColor: '#007aff',
-        fillOpacity: 0.2,
-        weight: 2
-      }).addTo(map);
+      
     });
   });
 });
+
