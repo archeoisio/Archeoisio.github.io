@@ -11,60 +11,59 @@
 <!-- LocateControl CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
 
-<style>
-  html, body { margin:0; padding:0; height:100% }
-  #map { width:100%; height:100% }
+<!-- HomeControl CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css" />
 
-  /* Contenitore personalizzato pulsanti + switcher */
+<style>
+  html, body { margin:0; padding:0; height:100%; }
+  #map { width:100%; height:100%; }
+
+  /* Container pulsanti + switcher */
   .leaflet-top.leaflet-right .custom-controls {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     margin-top: 5px;
     margin-right: 10px;
-    background: transparent;
-    box-shadow: none;
-    padding: 0;
-    border: none;
+    background: #f0f0f0;   /* sfondo container */
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+    padding: 5px;
+    border-radius: 4px;
   }
 
-  /* Distanza tra pulsanti */
+  /* Margine tra pulsanti */
   .leaflet-top.leaflet-right .custom-controls .leaflet-control {
-    margin-top: 6px;
+    margin-top: 5px;
   }
 
-  /* Stile base pulsanti personalizzati */
-  .custom-home-button,
-  .custom-pin-button {
+  /* Pulsanti Home / Pinpoint */
+  .custom-home-button a,
+  .custom-pin-button a {
     display:flex;
     justify-content:center;
     align-items:center;
-    width:42px;
-    height:42px;
-    font-size:22px;
-    background:#f0f0f0;   /* grigio visibile */
-    border-radius:6px;
+    width:45px;
+    height:45px;
+    font-size:25px;
+    background:#d0d0d0;      /* sfondo pulsante */
+    box-shadow:0 1px 5px rgba(0,0,0,0.4);
+    border-radius:4px;
     cursor:pointer;
-    text-decoration: none;
+    text-decoration:none;
     color:black;
   }
 
-  .custom-home-button:hover,
-  .custom-pin-button:hover {
-    background:#d9d9d9;
-  }
-
-  /* Marker emoji Pinpoint */
+  /* Marker Pinpoint */
   .custom-pin-marker {
     font-size:30px;
     text-align:center;
   }
 
-  /* Switcher layer (rende visibile sfondo) */
+  /* Switcher */
   .leaflet-control-layers {
-    background:#f0f0f0 !important;
-    border:none !important;
-    box-shadow:none !important;
+    background:#d0d0d0 !important;
+    box-shadow:0 1px 5px rgba(0,0,0,0.4);
+    border-radius:4px;
   }
 </style>
 </head>
@@ -74,6 +73,9 @@
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- HomeControl JS -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.js"></script>
 
   <!-- LocateControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
