@@ -15,56 +15,48 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css" />
 
 <style>
-  html, body { margin:0; padding:0; height:100%; }
-  #map { width:100%; height:100%; }
+html, body { margin:0; padding:0; height:100% }
+#map { width:100%; height:100% }
 
-  /* Container pulsanti + switcher */
-  .leaflet-top.leaflet-right .custom-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-top: 5px;
-    margin-right: 10px;
-    background: #f0f0f0;   /* sfondo container */
-    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-    padding: 5px;
-    border-radius: 4px;
-  }
+/* Container unico per switcher + pulsanti */
+.leaflet-top.leaflet-right .custom-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 5px;
+  margin-right: 10px;
+  background: white;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  border-radius: 4px;
+  padding: 5px;
+}
 
-  /* Margine tra pulsanti */
-  .leaflet-top.leaflet-right .custom-controls .leaflet-control {
-    margin-top: 5px;
-  }
+/* Margine tra elementi */
+.leaflet-top.leaflet-right .custom-controls > * {
+  margin-top: 5px;
+}
 
-  /* Pulsanti Home / Pinpoint */
-  .custom-home-button a,
-  .custom-pin-button a {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    width:45px;
-    height:45px;
-    font-size:25px;
-    background:#d0d0d0;      /* sfondo pulsante */
-    box-shadow:0 1px 5px rgba(0,0,0,0.4);
-    border-radius:4px;
-    cursor:pointer;
-    text-decoration:none;
-    color:black;
-  }
+/* Pulsanti Home, Pinpoint */
+.custom-home-button a,
+.custom-pin-button a,
+.custom-locate-button a {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:45px;
+  height:45px;
+  font-size:25px;
+  background:#e0e0e0;
+  border: 1px solid #999;
+  border-radius:4px;
+  cursor:pointer;
+}
 
-  /* Marker Pinpoint */
-  .custom-pin-marker {
-    font-size:30px;
-    text-align:center;
-  }
-
-  /* Switcher */
-  .leaflet-control-layers {
-    background:#d0d0d0 !important;
-    box-shadow:0 1px 5px rgba(0,0,0,0.4);
-    border-radius:4px;
-  }
+/* Marker Pinpoint emoji */
+.custom-pin-marker {
+  font-size:30px;
+  text-align:center;
+}
 </style>
 </head>
 
@@ -80,7 +72,7 @@
   <!-- LocateControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
-  <!-- Script mappa -->
+  <!-- Script principale -->
   <script src="map.js"></script>
 </body>
 </html>
