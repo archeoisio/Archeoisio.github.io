@@ -15,20 +15,20 @@
   html, body { margin:0; padding:0; height:100% }
   #map { width:100%; height:100% }
 
-  /* Contenitore pulsanti + switcher trasparente */
+  /* Contenitore pulsanti + switcher */
   .leaflet-top.leaflet-right .custom-controls {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     margin-top: 5px;
     margin-right: 10px;
-    background: transparent;
+    background: transparent; /* invisibile */
     box-shadow: none;
     border: none;
     padding: 0;
   }
 
-  /* Pulsanti custom (Home, Pin, Locate) */
+  /* Stile base per tutti i pulsanti */
   .custom-home-button,
   .custom-pin-button,
   .leaflet-control-locate {
@@ -38,19 +38,22 @@
     width: 45px;
     height: 45px;
     font-size: 25px;
-    background: #f0f0f0;   /* grigio */
-    border: none;          /* no bordo */
-    box-shadow: none;      /* no ombra */
-    border-radius: 6px;    /* angoli arrotondati */
+    background: #f0f0f0;   /* grigio chiaro */
+    border: none;          /* senza bordo */
+    box-shadow: none;      /* senza ombra */
+    border-radius: 6px;
     cursor: pointer;
     margin-top: 5px;
+    text-decoration: none; /* togli underline dai link */
+    color: black;          /* colore testo/emoji */
   }
 
   /* Switcher layers */
   .leaflet-control-layers {
-    background: #f0f0f0 !important; /* sfondo grigio */
-    border: none !important;        /* nessun bordo */
-    box-shadow: none !important;    /* nessuna ombra */
+    background: #f0f0f0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 6px !important;
   }
 
   .leaflet-control-layers-expanded {
@@ -76,7 +79,7 @@
   <!-- LocateControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
-  <!-- Il tuo script map.js -->
+  <!-- Il tuo script -->
   <script src="map.js"></script>
 </body>
 </html>
