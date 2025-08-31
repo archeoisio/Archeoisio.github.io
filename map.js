@@ -35,12 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
-  // --- Marker capitali con flyTo e popup ---
+  // --- FlyTo iniziale molto smooth ---
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
+
+  // --- Marker capitali con flyTo smooth e popup alla fine ---
   capitalsData.forEach(({ name, coords }) => {
-    const marker = L.marker(coords).bindPopup(name).addTo(capitali);
+    const marker = L.marker(coords).addTo(capitali);
+
     marker.on('click', () => {
       map.flyTo(coords, 14, { animate: true, duration: 10 });
-      marker.openPopup();
+      map.once('moveend', () => {
+        marker.bindPopup(name).openPopup();
+      });
     });
   });
 
@@ -66,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
     });
 
     return container;
