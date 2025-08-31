@@ -13,11 +13,19 @@
 html, body { margin:0; padding:0; height:100% }
 #map { width:100%; height:100% }
 
+/* --- CONTAINER PULSANTI --- */
+.leaflet-top.leaflet-right .custom-controls {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;   /* distanza dall’alto */
+  margin-right: 10px; /* distanza dal bordo destro */
+  align-items: flex-end;
 }
 .leaflet-top.leaflet-right .custom-controls .leaflet-control {
-  margin-top: 10px;
+  margin-top: 10px;   /* spaziatura verticale tra pulsanti */
 }
-  /* Pulsante Home */
+
+/* Pulsante Home */
 .custom-home-button a {
   display:flex;
   justify-content:center;
@@ -31,7 +39,7 @@ html, body { margin:0; padding:0; height:100% }
   cursor:pointer;
 }
 
-/* Pulsante Locate con sfondo e icona centrata */
+/* Pulsante Locate */
 .custom-locate-button a {
   display:flex;
   justify-content:center;
@@ -44,7 +52,6 @@ html, body { margin:0; padding:0; height:100% }
   box-shadow:0 1px 5px rgba(0,0,0,0.4);
   cursor:pointer;
 }
-
 .custom-locate-button a::before {
   content: '📍';
 }
@@ -55,14 +62,14 @@ html, body { margin:0; padding:0; height:100% }
   text-align:center;
 }
 
-/* Container custom allineato a destra sotto switcher */
+/* --- SWITCHER sotto i pulsanti --- */
 .leaflet-top.leaflet-right .leaflet-control-layers {
-  margin-top: 20px;         /* distanza dall’alto */
-  margin-right: 10px;        /* distanza dal bordo destro */
+  margin-top: 10px;       /* distanza dai pulsanti sopra */
+  margin-right: 10px;     /* allineato con i pulsanti */
   min-width: 45px;
-  max-width:150px;             /* larghezza del popup */
-  max-height: 100px;        /* altezza massima con scroll */
-  overflow-y: auto;         
+  max-width:150px;
+  max-height: 120px;
+  overflow-y: auto;
   background: white;
   box-shadow: 0 1px 5px rgba(0,0,0,0.4);
   border-radius: 4px;
