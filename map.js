@@ -43,6 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
   L.control.layers(
     { "OpenStreetMap": osm, "Satellite": satellite },
     { "Capitali": capitali },
-    { collapsed: false, position: 'topright' }
+    { collapsed: true, position: 'topright' }
   ).addTo(map);
 });
