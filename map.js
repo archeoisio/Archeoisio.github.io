@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const marker = L.marker(coords).addTo(capitali);
 
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 10 });
+      map.flyTo(coords, 14, { animate: true, duration: 8 });
       map.once('moveend', () => {
         marker.bindPopup(name).openPopup();
       });
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
     });
 
     return container;
