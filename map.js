@@ -44,12 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Container pulsanti + switcher ---
+  // --- Container unico pulsanti + switcher ---
   const customControls = L.control({ position: 'topright' });
+
   customControls.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
 
-    // --- SWITCHER primo in alto ---
+    // --- SWITCHER layer primo in alto ---
     const layersControl = L.control.layers(
       { "Satellite": satellite, "OpenStreetMap": osm },
       { "Capitali": capitali },
