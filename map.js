@@ -33,49 +33,42 @@ document.addEventListener('DOMContentLoaded', () => {
     minZoom: 3
   });
 
-  // --- Precaricamento tiles (doppio rispetto alla vista iniziale) ---
-  const preloadTiles = (layer, center, zoom) => {
-    const bounds = map.getBounds();
-    const bufferLat = (bounds.getNorth() - bounds.getSouth()) * 1.5;
-    const bufferLng = (bounds.getEast() - bounds.getWest()) * 1.5;
-    const preBounds = L.latLngBounds(
-      [center[0]-bufferLat, center[1]-bufferLng],
-      [center[0]+bufferLat, center[1]+bufferLng]
-    );
-    layer.addTo(map);
-    map.fitBounds(preBounds, { animate: false });
-    map.setView(center, zoom, { animate: false });
-  };
-  preloadTiles(satellite, initialView.center, initialView.zoom);
+  // --- Precaricamento tiles ---
+  satellite.addTo(map);
 
   // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
 
-  // --- Marker capitali con singolo/doppio clic ---
+  // --- Marker capitali con popup contenente icona lente ---
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).addTo(capitali);
-    let clickTimeout = null;
+
+    const popupContent = document.createElement('div');
+    popupContent.style.display = 'flex';
+    popupContent.style.justifyContent = 'space-between';
+    popupContent.style.alignItems = 'center';
+    popupContent.style.width = '150px';
+
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = name;
+
+    const zoomIcon = document.createElement('span');
+    zoomIcon.innerHTML = '🔍';
+    zoomIcon.style.cursor = 'pointer';
+    zoomIcon.style.fontSize = '18px';
+
+    popupContent.appendChild(nameSpan);
+    popupContent.appendChild(zoomIcon);
+
+    marker.bindPopup(popupContent);
+
+    zoomIcon.addEventListener('click', () => {
+      marker.closePopup();
+      map.flyTo(coords, 12, { animate: true, duration: 8, easeLinearity: 1 });
+    });
 
     marker.on('click', () => {
-      if (clickTimeout) {
-        clearTimeout(clickTimeout);
-        clickTimeout = null;
-
-        // Doppio clic: flyTo e popup finale
-        map.flyTo(coords, 14, { animate: true, duration: 8, easeLinearity: 1 });
-        map.once('moveend', () => {
-          marker.bindPopup(name).openPopup();
-        });
-      } else {
-        clickTimeout = setTimeout(() => {
-          clickTimeout = null;
-          if (marker.getPopup() && marker.getPopup().isOpen()) {
-            marker.closePopup();
-          } else {
-            marker.bindPopup(name).openPopup();
-          }
-        }, 400);
-      }
+      marker.openPopup();
     });
   });
 
@@ -106,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
       map.closePopup();
 
       // FlyTo iniziale
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8, easeLinearity: 0,3 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
     });
 
     return container;
