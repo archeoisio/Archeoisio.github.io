@@ -52,7 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const nameSpan = document.createElement('span');
     nameSpan.textContent = name;
-
+    nameSpan.style.fontSize = '24px'; // qui imposti la grandezza del testo
+    
     const zoomIcon = document.createElement('span');
     zoomIcon.innerHTML = '🔍';
     zoomIcon.style.cursor = 'pointer';
