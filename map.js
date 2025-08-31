@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
+  // --- Marker capitali con flyTo e popup ---
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
@@ -43,32 +44,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Container pulsanti + switcher ---
+  // --- Container pulsanti custom ---
   const customControls = L.control({ position: 'topright' });
   customControls.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
 
-    // Pulsante Home
+    // Home button
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🗺️';
-    homeBtn.title = "Torna alla vista iniziale";   // ← titolo tooltip
-    L.DomEvent.on(homeBtn, 'click', function(e){
+    homeBtn.title = "Torna alla vista iniziale";
+    L.DomEvent.on(homeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
     });
 
-    // Pulsante Pinpoint
+    // Pinpoint button
     const pinBtn = L.DomUtil.create('a', 'custom-pin-button', container);
     pinBtn.href = '#';
     pinBtn.innerHTML = '📌';
-    pinBtn.title = "Aggiungi un marker"; 
-    L.DomEvent.on(pinBtn, 'click', function(e){
+    pinBtn.title = "Aggiungi un marker";
+    L.DomEvent.on(pinBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
       alert('Clicca sulla mappa per aggiungere un marker');
-      map.once('click', function(ev){
+      map.once('click', ev => {
         L.marker(ev.latlng, {
           icon: L.divIcon({
             className: 'custom-pin-marker',
@@ -80,32 +81,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }).addTo(map).bindPopup('Marker utente').openPopup();
       });
     });
- 
-    // --- LocateControl plugin default ---
+
+    return container;
+  };
+  customControls.addTo(map);
+
+  // --- LocateControl plugin ---
   L.control.locate({
     position: 'topright',
     flyTo: { duration: 10 },
     strings: { title: "Mostrami la mia posizione" },
     locateOptions: { enableHighAccuracy: true, watch: true }
   }).addTo(map);
+
+  // --- Layers switcher (sotto pulsanti) ---
+  const layersControl = L.control.layers(
+    { "Satellite": satellite, "OpenStreetMap": osm },
+    { "Capitali": capitali },
+    { collapsed: false }
+  ).addTo(map);
+
+  // Append switcher container sotto customControls
+  const customContainer = document.querySelector('.custom-controls');
+  if(customContainer) {
+    customContainer.appendChild(layersControl.getContainer());
+  }
 });
-   
-  // Switcher (layer control) dentro stesso container
-    const layersControl = L.control.layers(
-      { "Satellite": satellite, "OpenStreetMap": osm },
-      { "Capitali": capitali },
-      { collapsed: false }
-    ).addTo(map);
-
-    container.appendChild(layersControl.getContainer());
-
-    return container;
-  };
-  customControls.addTo(map);
-
-
-
-
-
-
-
