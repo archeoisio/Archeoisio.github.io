@@ -48,11 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     popupContent.style.display = 'flex';
     popupContent.style.justifyContent = 'space-between';
     popupContent.style.alignItems = 'center';
-    popupContent.style.width = '100px';
+    popupContent.style.width = '80px';
 
     const nameSpan = document.createElement('span');
     nameSpan.textContent = name;
-    nameSpan.style.fontSize = '24px'; // qui imposti la grandezza del testo
+    nameSpan.style.fontSize = '20px'; // qui imposti la grandezza del testo
     
     const zoomIcon = document.createElement('span');
     zoomIcon.innerHTML = '🔍';
@@ -90,10 +90,10 @@ capitalsData.forEach(({ name, coords }) => {
 
 // mostra/nascondi in base allo zoom
 map.on('zoomend', () => {
-  if (map.getZoom() >= 12) {
-    map.addLayer(labels);
+  if (map.getZoom() === 18) {
+    map.addLayer(labels);   // mostra etichette solo a zoom massimo
   } else {
-    map.removeLayer(labels);
+    map.removeLayer(labels); // nasconde etichette per qualsiasi zoom < 18
   }
 });
 
