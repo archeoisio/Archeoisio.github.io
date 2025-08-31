@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🗺️';
+    homeBtn.title = "Torna alla vista iniziale";   // ← titolo tooltip
     L.DomEvent.on(homeBtn, 'click', function(e){
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
@@ -62,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pinBtn = L.DomUtil.create('a', 'custom-pin-button', container);
     pinBtn.href = '#';
     pinBtn.innerHTML = '📌';
+    pinBtn.title = "Aggiungi un marker"; 
     L.DomEvent.on(pinBtn, 'click', function(e){
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
@@ -100,4 +102,5 @@ document.addEventListener('DOMContentLoaded', () => {
     locateOptions: { enableHighAccuracy: true, watch: true }
   }).addTo(map);
 });
+
 
