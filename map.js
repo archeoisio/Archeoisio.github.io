@@ -44,12 +44,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // --- Container pulsanti custom ---
+  // --- Container pulsanti + switcher ---
   const customControls = L.control({ position: 'topright' });
   customControls.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
 
-    // Home button
+    // --- SWITCHER layer primo in alto ---
+    const layersControl = L.control.layers(
+      { "Satellite": satellite, "OpenStreetMap": osm },
+      { "Capitali": capitali },
+      { collapsed: false }
+    ).addTo(map);
+
+    container.appendChild(layersControl.getContainer());
+
+    // --- Pulsante Home ---
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🗺️';
@@ -60,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
     });
 
-    // Pinpoint button
+    // --- Pulsante Pinpoint ---
     const pinBtn = L.DomUtil.create('a', 'custom-pin-button', container);
     pinBtn.href = '#';
     pinBtn.innerHTML = '📌';
@@ -82,11 +91,22 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
+    // --- Pulsante Locate ---
+    const locateBtn = L.DomUtil.create('a', 'custom-locate-button', container);
+    locateBtn.href = '#';
+    locateBtn.innerHTML = '📍';
+    locateBtn.title = "Mostrami la mia posizione";
+    L.DomEvent.on(locateBtn, 'click', e => {
+      L.DomEvent.stopPropagation(e);
+      L.DomEvent.preventDefault(e);
+      map.locate({ setView: true, maxZoom: 18 });
+    });
+
     return container;
   };
   customControls.addTo(map);
 
-  // --- LocateControl plugin ---
+  // --- LocateControl plugin (opzionale, solo per marker live se vuoi) ---
   L.control.locate({
     position: 'topright',
     flyTo: { duration: 10 },
@@ -94,16 +114,4 @@ document.addEventListener('DOMContentLoaded', () => {
     locateOptions: { enableHighAccuracy: true, watch: true }
   }).addTo(map);
 
-  // --- Layers switcher (sotto pulsanti) ---
-  const layersControl = L.control.layers(
-    { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Capitali": capitali },
-    { collapsed: false }
-  ).addTo(map);
-
-  // Append switcher container sotto customControls
-  const customContainer = document.querySelector('.custom-controls');
-  if(customContainer) {
-    customContainer.appendChild(layersControl.getContainer());
-  }
 });
