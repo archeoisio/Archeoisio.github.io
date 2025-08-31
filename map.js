@@ -331,3 +331,4 @@ controlBox.onAdd = function(map) {
   return container;
 };
 controlBox.addTo(map);
+});
