@@ -276,41 +276,58 @@ document.addEventListener('DOMContentLoaded', () => {
     { collapsed: true }
   ).addTo(map);
 
-  // --- Box Home + Locate ---
-  const controlBox = L.control({ position: 'topright' });
-  controlBox.onAdd = function(map) {
-    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
-    container.style.marginTop = '10px';
-    container.style.marginRight = '10px';
+// --- Box Home + Locate ---
+const controlBox = L.control({ position: 'topright' });
+controlBox.onAdd = function(map) {
+  const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+  container.style.marginTop = '10px';
+  container.style.marginRight = '10px';
+  container.style.border = 'none';       // Rimuove il bordo
+  container.style.background = 'transparent'; // Sfondo trasparente
+  container.style.padding = '0';         // Nessun padding
 
-    // Pulsante Home
-    const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
-    homeBtn.href = '#';
-    homeBtn.innerHTML = '🗺️';
-    homeBtn.title = "Torna alla vista iniziale";
+  // Pulsante Home
+  const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+  homeBtn.href = '#';
+  homeBtn.innerHTML = '🗺️';
+  homeBtn.title = "Torna alla vista iniziale";
+  homeBtn.style.fontSize = '30px';       // Pulsante più grande
+  homeBtn.style.width = '50px';
+  homeBtn.style.height = '50px';
+  homeBtn.style.lineHeight = '50px';
+  homeBtn.style.textAlign = 'center';
+  homeBtn.style.display = 'block';
+  homeBtn.style.background = 'rgba(255,255,255,0.8)';
+  homeBtn.style.borderRadius = '8px';
+  homeBtn.style.marginBottom = '5px';
 
-    L.DomEvent.on(homeBtn, 'click', function(e) {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
+  L.DomEvent.on(homeBtn, 'click', function(e) {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    map.closePopup();
+    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
+  });
 
-      // Chiudi eventuali popup aperti
-      map.closePopup();
+  // Pulsante Locate
+  const locateControl = L.control.locate({
+    flyTo: { duration: 10, easeLinearity: 1 },
+    strings: { title: "Mostrami la mia posizione" },
+    locateOptions: { enableHighAccuracy: true, watch: false }
+  });
+  const locateBtn = locateControl.onAdd(map);
 
-      // FlyTo iniziale
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
-    });
+  locateBtn.style.fontSize = '30px';      // Pulsante più grande
+  locateBtn.style.width = '50px';
+  locateBtn.style.height = '50px';
+  locateBtn.style.lineHeight = '50px';
+  locateBtn.style.textAlign = 'center';
+  locateBtn.style.display = 'block';
+  locateBtn.style.background = 'rgba(255,255,255,0.8)';
+  locateBtn.style.border = 'none';
+  locateBtn.style.borderRadius = '8px';
 
-     // --- Pulsante Locate ---
-    const locateControl = L.control.locate({
-      flyTo: { duration: 10, easeLinearity: 1 },
-      strings: { title: "Mostrami la mia posizione" },
-      locateOptions: { enableHighAccuracy: true, watch: false }
-    });
-    const locateBtn = locateControl.onAdd(map);
+  container.appendChild(locateBtn);
 
-    container.appendChild(locateBtn);
-
-    return container;
-  };
-  controlBox.addTo(map);
-});
+  return container;
+};
+controlBox.addTo(map);
