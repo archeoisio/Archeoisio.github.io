@@ -326,8 +326,8 @@ document.addEventListener('DOMContentLoaded', () => {
    const locateBtn = locateControl.onAdd(map);
 // personalizzazione dimensioni
 locateBtn.style.display = 'flex';
-    locateBtn.style.justifyContent = 'center';
-    locateBtn.style.alignItems = 'center';
+    locateBtn.style.justifyContent = 'right';
+    locateBtn.style.alignItems = 'right';
     locateBtn.style.width = '45px';
     locateBtn.style.height = '45px';
     locateBtn.style.fontSize = '25px';
