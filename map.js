@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- SWITCHER subito sotto ---
   L.control.layers(
-    { "OpenStreetMap": osm, "Satellite": satellite },
+    { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": capitali },
     { collapsed: false, position: 'topright' }
   ).addTo(map);
@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
 
 
 
