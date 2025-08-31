@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 20 });
+      map.flyTo(coords, 14, { animate: true, duration: 15 });
       marker.openPopup();
     });
   });
@@ -57,18 +57,35 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 20 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 15 });
     });
 
-    // Pulsante Locate
-    const locateBtn = L.DomUtil.create('a', 'custom-locate-button', container);
-    locateBtn.href = '#';
-    locateBtn.innerHTML = '📍';
-    L.DomEvent.on(locateBtn, 'click', function(e) {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      map.locate({ setView: false, watch: false });
-    });
+   map.on('locationfound', function(e) {
+  const flyDuration = 15; // secondi
+
+  // FlyTo verso posizione con animazione
+  map.flyTo(e.latlng, 18, { animate: true, duration: flyDuration });
+
+  // Marker emoji
+  L.marker(e.latlng, {
+    icon: L.divIcon({
+      className: 'custom-locate-marker',
+      html: '📍',
+      iconSize: [30, 30]
+    })
+  }).addTo(map);
+
+  // Dopo che la mappa ha finito di volare, aggiungi cerchio stile Apple
+  map.once('moveend', () => {
+    L.circle(e.latlng, {
+      radius: 50,          // dimensione in metri (puoi adattare)
+      color: '#007aff',    // tipico blu Apple
+      fillColor: '#007aff',
+      fillOpacity: 0.2,
+      weight: 2
+    }).addTo(map);
+  });
+});
 
     return container;
   };
@@ -96,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
 
 
 
