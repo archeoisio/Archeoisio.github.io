@@ -50,13 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
   customControls.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
 
-    // --- SWITCHER layer primo in alto (non aggiunto a map) ---
+    // --- SWITCHER layer primo in alto ---
     const layersControl = L.control.layers(
       { "Satellite": satellite, "OpenStreetMap": osm },
       { "Capitali": capitali },
       { collapsed: false }
     );
-    container.appendChild(layersControl.onAdd(map)); // aggiunto manualmente nel container
+    container.appendChild(layersControl.onAdd(map));
 
     // --- Pulsante Home ---
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       strings: { title: "Mostrami la mia posizione" },
       locateOptions: { enableHighAccuracy: true, watch: true }
     });
-    container.appendChild(locateControl.onAdd(map)); // aggiunto al container manualmente
+    container.appendChild(locateControl.onAdd(map));
 
     return container;
   };
