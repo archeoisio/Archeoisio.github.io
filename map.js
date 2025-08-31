@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Switcher (layer control) dentro stesso container
     const layersControl = L.control.layers(
-      { "OpenStreetMap": osm, "Satellite": satellite },
+      { "Satellite": satellite, "OpenStreetMap": osm },
       { "Capitali": capitali },
       { collapsed: false }
     ).addTo(map);
@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     locateOptions: { enableHighAccuracy: true, watch: true }
   }).addTo(map);
 });
+
 
 
 
