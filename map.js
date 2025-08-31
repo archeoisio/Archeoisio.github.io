@@ -32,18 +32,37 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomControl: true,
     minZoom: 3,
     maxBounds: [[-90, -180], [90, 180]],
-    maxBoundsViscosity: 1.0
+    maxBoundsViscosity: 1.0,
+    preferCanvas: true
   });
 
+  // --- Precaricamento tiles: buffer doppio rispetto alla vista iniziale ---
+  const preloadTiles = (layer, center, zoom) => {
+    const mapSize = map.getSize();
+    const bounds = map.getBounds();
+    const bufferLat = (bounds.getNorth() - bounds.getSouth()) * 1.5;
+    const bufferLng = (bounds.getEast() - bounds.getWest()) * 1.5;
+    const preBounds = L.latLngBounds(
+      [center[0]-bufferLat, center[1]-bufferLng],
+      [center[0]+bufferLat, center[1]+bufferLng]
+    );
+    layer.addTo(map);
+    layer._reset && layer._reset(); // forza refresh tiles
+    map.fitBounds(preBounds, { animate: false });
+    map.setView(center, zoom, { animate: false });
+  };
+
+  preloadTiles(satellite, initialView.center, initialView.zoom);
+
   // --- FlyTo iniziale molto smooth ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 0.25 });
 
   // --- Marker capitali con flyTo smooth e popup alla fine ---
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).addTo(capitali);
 
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 8 });
+      map.flyTo(coords, 14, { animate: true, duration: 8, easeLinearity: 0.25 });
       map.once('moveend', () => {
         marker.bindPopup(name).openPopup();
       });
@@ -72,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 0.25 });
     });
 
     return container;
