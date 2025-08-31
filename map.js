@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Overlay capitali ---
   const capitali = L.layerGroup();
+  const labels = L.layerGroup(); // per etichette testuali
   const capitalsData = [
     { name: "Abu Dhabi", coords: [24.4539, 54.3773] },
   { name: "Abuja", coords: [9.0579, 7.4951] },
@@ -200,14 +201,14 @@ document.addEventListener('DOMContentLoaded', () => {
   { name: "Zagabria", coords: [45.8150, 15.9819] } 
   ];
 
-  // --- Istanza mappa ---
+// --- Istanza mappa ---
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
     layers: [satellite, capitali],
     zoomControl: true,
     minZoom: 3,
-    maxBounds: [[-90, -180], [90, 180]]
+    maxBounds: [[-90, -180], [90, 180]] // limiti mondo
   });
 
   // --- Precaricamento tiles ---
@@ -224,16 +225,15 @@ document.addEventListener('DOMContentLoaded', () => {
     popupContent.style.display = 'flex';
     popupContent.style.justifyContent = 'space-between';
     popupContent.style.alignItems = 'center';
-    popupContent.style.width = '80px';
+    popupContent.style.width = '100px';
 
     const nameSpan = document.createElement('span');
     nameSpan.textContent = name;
-    nameSpan.style.fontSize = '20px';
 
     const zoomIcon = document.createElement('span');
     zoomIcon.innerHTML = '🔍';
     zoomIcon.style.cursor = 'pointer';
-    zoomIcon.style.fontSize = '24px';
+    zoomIcon.style.fontSize = '18px';
 
     popupContent.appendChild(nameSpan);
     popupContent.appendChild(zoomIcon);
@@ -242,74 +242,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     zoomIcon.addEventListener('click', () => {
       marker.closePopup();
-      map.flyTo(coords, 14, { animate: true, duration: 8, easeLinearity: 1 });
+      map.flyTo(coords, 12, { animate: true, duration: 8, easeLinearity: 1 });
     });
 
     marker.on('click', () => {
       marker.openPopup();
     });
-  });
 
-  // --- Etichette capitali (visibili solo a zoom ≥16) ---
-  const labels = L.layerGroup().addTo(map);
-  capitalsData.forEach(({ name, coords }) => {
+    // Etichetta testuale (visibile solo a zoom >= 16)
     const label = L.marker(coords, {
       icon: L.divIcon({
-        className: 'capital-label',
-        html: `<span style="color: black; font-size:14px;">${name}</span>`,
-        iconSize: [100, 20],
-        iconAnchor: [50, 0]
-      }),
-      interactive: false
+        className: 'text-label',
+        html: `<span style="font-size:14px; color:white; text-shadow:1px 1px 2px black;">${name}</span>`
+      })
     });
     labels.addLayer(label);
   });
 
+  // --- Mostra/nascondi etichette in base allo zoom ---
   map.on('zoomend', () => {
     if (map.getZoom() >= 16) {
-      map.addLayer(labels);   // mostra etichette a zoom 16, 17, 18
+      map.addLayer(labels);
     } else {
-      map.removeLayer(labels); // nasconde etichette per zoom < 16
+      map.removeLayer(labels);
     }
   });
 
   // --- SWITCHER layer ---
-  L.control.layers(
+  const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": capitali },
     { collapsed: true }
   ).addTo(map);
 
-  // --- Box Home + Locate sotto switcher ---
+  // --- Box Home + Locate ---
   const homeBox = L.control({ position: 'topright' });
   homeBox.onAdd = function(map) {
-    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
-    container.style.marginTop = '10px';
-    container.style.marginRight = '10px';
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.alignItems = 'flex-end';
-    container.style.background = 'transparent';
-    container.style.boxShadow = 'none';
+    const container = L.DomUtil.create('div', 'leaflet-bar');
 
-    // --- Pulsante Home ---
-    const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+    // Pulsante Home
+    const homeBtn = L.DomUtil.create('a', '', container);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🗺️';
     homeBtn.title = "Torna alla vista iniziale";
-    homeBtn.style.display = 'flex';
-    homeBtn.style.justifyContent = 'center';
-    homeBtn.style.alignItems = 'center';
-    homeBtn.style.width = '45px';
-    homeBtn.style.height = '45px';
-    homeBtn.style.fontSize = '25px';
-    homeBtn.style.background = 'white';
-    homeBtn.style.borderRadius = '4px';
-    homeBtn.style.cursor = 'pointer';
-    homeBtn.style.boxShadow = '0 1px 5px rgba(0,0,0,0.4)';
-    homeBtn.style.textDecoration = 'none';
-    homeBtn.style.marginBottom = '5px';
-
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
@@ -317,25 +292,18 @@ document.addEventListener('DOMContentLoaded', () => {
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
     });
 
-    // --- Pulsante Locate ---
-    const locateControl = L.control.locate({
-      flyTo: { duration: 10, easeLinearity: 1 },
-      strings: { title: "Mostrami la mia posizione" },
-      locateOptions: { enableHighAccuracy: true, watch: false }
+    // Pulsante Locate
+    const locateBtn = L.DomUtil.create('a', '', container);
+    locateBtn.href = '#';
+    locateBtn.innerHTML = '📍';
+    locateBtn.title = "Trova la mia posizione";
+    L.DomEvent.on(locateBtn, 'click', function(e) {
+      L.DomEvent.stopPropagation(e);
+      L.DomEvent.preventDefault(e);
+      if (map.locate) {
+        map.locate({ setView: true, maxZoom: 12 });
+      }
     });
-    const locateBtn = locateControl.onAdd(map);
-
-    locateBtn.style.width = '45px';
-    locateBtn.style.height = '45px';
-    locateBtn.style.fontSize = '25px';
-    locateBtn.style.background = 'white';
-    locateBtn.style.borderRadius = '4px';
-    locateBtn.style.cursor = 'pointer';
-    locateBtn.style.boxShadow = '0 1px 5px rgba(0,0,0,0.4)';
-    locateBtn.style.textDecoration = 'none';
-    locateBtn.style.marginBottom = '5px';
-
-    container.appendChild(locateBtn);
 
     return container;
   };
