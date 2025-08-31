@@ -53,14 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
   preloadTiles(satellite, initialView.center, initialView.zoom);
 
   // --- FlyTo iniziale molto smooth ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 0.25 });
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
 
   // --- Marker capitali con flyTo smooth e popup alla fine ---
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).addTo(capitali);
 
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 8, easeLinearity: 0.25 });
+      map.flyTo(coords, 14, { animate: true, duration: 8, easeLinearity: 1 });
       map.once('moveend', () => {
         marker.bindPopup(name).openPopup();
       });
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 0.25 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
     });
 
     return container;
