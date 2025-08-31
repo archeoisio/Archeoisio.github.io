@@ -15,59 +15,56 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css" />
 
 <style>
-  html, body { margin:0; padding:0; height:100% }
-  #map { width:100%; height:100% }
+html, body {
+  margin:0;
+  padding:0;
+  height:100%;
+}
 
-  /* Container pulsanti + switcher trasparente */
-  .leaflet-top.leaflet-right .custom-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-top: 5px;
-    margin-right: 10px;
-    background: transparent;
-    box-shadow: none;
-    padding: 0;
-  }
+#map {
+  width:100%;
+  height:100%;
+}
 
-  /* Margine tra pulsanti */
-  .leaflet-top.leaflet-right .custom-controls .leaflet-control {
-    margin-top: 10px;
-  }
+/* Container pulsanti + switcher trasparente */
+.leaflet-top.leaflet-right .custom-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 5px;
+  margin-right: 10px;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  /* Pulsante Home */
-  .custom-home-button a {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    width:45px;
-    height:45px;
-    font-size:25px;
-    box-shadow:0 1px 5px rgba(0,0,0,0.4);
-    background:white;
-    border-radius:4px;
-    cursor:pointer;
-  }
+/* Margine tra pulsanti */
+.leaflet-top.leaflet-right .custom-controls .leaflet-control {
+  margin-top: 10px;
+}
 
-  /* Pulsante Pinpoint */
-  .custom-pin-button a {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    width:45px;
-    height:45px;
-    font-size:25px;
-    box-shadow:0 1px 5px rgba(0,0,0,0.4);
-    background:white;
-    border-radius:4px;
-    cursor:pointer;
-  }
+/* Pulsante Home e Pinpoint */
+.custom-home-button, .custom-pin-button {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:45px;
+  height:45px;
+  font-size:25px;
+  box-shadow:none;
+  border: none;
+  background:white;
+  border-radius:0px;
+  cursor:pointer;
+  box-sizing: border-box;
+}
 
-  /* Marker emoji Pinpoint */
-  .custom-pin-marker {
-    font-size:30px;
-    text-align:center;
-  }
+/* Marker emoji Pinpoint */
+.custom-pin-marker {
+  font-size:30px;
+  text-align:center;
+}
 </style>
 </head>
 
@@ -83,7 +80,7 @@
   <!-- LocateControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
-  <!-- Il tuo script map.js -->
+  <!-- Script della mappa -->
   <script src="map.js"></script>
 </body>
 </html>
