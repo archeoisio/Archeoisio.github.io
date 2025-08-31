@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const initialView = { center: [50, 10], zoom: 5 };
+  const initialView = { center: [49, 10], zoom: 5 };
 
   // --- Layer base ---
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
