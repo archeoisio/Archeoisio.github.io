@@ -35,31 +35,22 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
-  // --- Precaricamento tiles doppio ---
-  map.setMaxBounds(map.getBounds().pad(1)); // Estende la visuale di sicurezza
+  // --- FlyTo iniziale molto smooth ---
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
 
-  // --- Funzione fly “smooth” tipo navicella ---
-  function smoothFlyTo(latlng, zoom, duration = 15) {
-    const current = map.getCenter();
-    const intermediate = L.latLng(current.lat, latlng.lng); // prima orizzontale
-
-    map.flyTo(intermediate, map.getZoom(), { animate: true, duration: duration / 3 });
-
-    map.once('moveend', () => {
-      map.flyTo(latlng, zoom, { animate: true, duration: (duration / 3) * 2 });
-    });
-  }
-
-  // --- Marker capitali con flyTo e popup ---
+  // --- Marker capitali con flyTo smooth e popup alla fine ---
   capitalsData.forEach(({ name, coords }) => {
-    const marker = L.marker(coords).bindPopup(name).addTo(capitali);
+    const marker = L.marker(coords).addTo(capitali);
+
     marker.on('click', () => {
-      smoothFlyTo(coords, 10, 15); // Fly smooth verso capitale
-      marker.openPopup();
+      map.flyTo(coords, 14, { animate: true, duration: 10 });
+      map.once('moveend', () => {
+        marker.bindPopup(name).openPopup();
+      });
     });
   });
 
-  // --- SWITCHER layer ---
+  // --- SWITCHER layer primo in alto ---
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": capitali },
@@ -70,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const homeBox = L.control({ position: 'topright' });
   homeBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
-    container.style.marginTop = '10px';
+    container.style.marginTop = '10px';  // distanza dal top / switcher
     container.style.marginRight = '10px';
 
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
@@ -81,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      smoothFlyTo(initialView.center, initialView.zoom, 15); // Fly smooth alla vista iniziale
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
     });
 
     return container;
