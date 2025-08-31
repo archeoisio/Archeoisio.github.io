@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    layers: [osm, capitali],   // OSM iniziale
+    layers: [satellite, capitali],   // OSM iniziale
     zoomControl: true,
     minZoom: 2,
     maxBounds: [[-90, -180], [90, 180]],
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- SWITCHER subito sotto ---
   L.control.layers(
-    { "OpenStreetMap": osm, "Satellite": satellite },
+    { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": capitali },
     { collapsed: true, position: 'topright' }
   ).addTo(map);
@@ -92,14 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
       icon: L.divIcon({
         className: 'custom-locate-marker',
         html: '📍',
-        iconSize: [30, 30]
+        iconSize: [40, 40]
       })
     }).addTo(map);
 
     // Cerchio blu stile Apple dopo la fine del flyTo
     map.once('moveend', () => {
       L.circle(e.latlng, {
-        radius: 50,         // in metri
+        radius: 20,         // in metri
         color: '#007aff',   // tipico blu Apple
         fillColor: '#007aff',
         fillOpacity: 0.2,
@@ -108,3 +108,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
