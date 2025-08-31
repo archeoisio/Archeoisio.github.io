@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
   L.control.layers(
     { "OpenStreetMap": osm, "Satellite": satellite },
     { "Capitali": capitali },
-    { collapsed: true, position: 'topright' }
+    { collapsed: false, position: 'topright' }
   ).addTo(map);
 
   // --- Marker Locate ---
@@ -98,3 +98,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
