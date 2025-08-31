@@ -70,6 +70,31 @@ const locateControl = L.control.locate({
   locateOptions: { enableHighAccuracy: true, watch: true } // watch: true per aggiornamenti live
 }).addTo(map);
 
+// --- Pulsante Pinpoint ---
+const pinBtn = L.DomUtil.create('a', 'custom-pin-button', container);
+pinBtn.href = '#';
+pinBtn.innerHTML = '📌';
+L.DomEvent.on(pinBtn, 'click', function(e) {
+  L.DomEvent.stopPropagation(e);
+  L.DomEvent.preventDefault(e);
+  
+  alert('Clicca sulla mappa per aggiungere un marker giallo');
+
+  map.once('click', function(ev) {
+    L.marker(ev.latlng, {
+      icon: L.divIcon({
+        className: 'custom-pin-marker',
+        html: '📍',
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30]
+      })
+    }).addTo(map)
+    .bindPopup('Marker giallo')
+    .openPopup();
+  });
+});
+  
 // --- SWITCHER subito sotto pulsante Home ---
   L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
@@ -80,4 +105,5 @@ const locateControl = L.control.locate({
     });
   });
 });
+
 
