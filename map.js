@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 15 });
+      map.flyTo(coords, 14, { animate: true, duration: 12 });
       marker.openPopup();
     });
   });
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 15 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
     });
 
     // Pulsante Locate
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Marker Locate e cerchio Apple style ---
   map.on('locationfound', function(e) {
-    const flyDuration = 15; // secondi
+    const flyDuration = 10; // secondi
 
     // FlyTo verso posizione
     map.flyTo(e.latlng, 18, { animate: true, duration: flyDuration });
@@ -109,5 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
 
 
