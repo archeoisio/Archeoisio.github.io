@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": capitali },
-    { collapsed: false }
+    { collapsed: true }
   ).addTo(map);
 
   // --- Box Home sotto switcher ---
