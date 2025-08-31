@@ -80,8 +80,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }).addTo(map).bindPopup('Marker utente').openPopup();
       });
     });
-
-    // Switcher (layer control) dentro stesso container
+ 
+    // --- LocateControl plugin default ---
+  L.control.locate({
+    position: 'topright',
+    flyTo: { duration: 10 },
+    strings: { title: "Mostrami la mia posizione" },
+    locateOptions: { enableHighAccuracy: true, watch: true }
+  }).addTo(map);
+});
+   
+  // Switcher (layer control) dentro stesso container
     const layersControl = L.control.layers(
       { "Satellite": satellite, "OpenStreetMap": osm },
       { "Capitali": capitali },
@@ -94,14 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   customControls.addTo(map);
 
-  // --- LocateControl plugin default ---
-  L.control.locate({
-    position: 'topright',
-    flyTo: { duration: 10 },
-    strings: { title: "Mostrami la mia posizione" },
-    locateOptions: { enableHighAccuracy: true, watch: true }
-  }).addTo(map);
-});
+
+
 
 
 
