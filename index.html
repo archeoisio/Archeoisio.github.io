@@ -11,14 +11,11 @@
 <!-- LocateControl CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
 
-<!-- HomeControl CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css" />
-
 <style>
   html, body { margin:0; padding:0; height:100% }
   #map { width:100%; height:100% }
 
-  /* Container pulsanti + switcher trasparente */
+  /* Contenitore pulsanti + switcher trasparente */
   .leaflet-top.leaflet-right .custom-controls {
     display: flex;
     flex-direction: column;
@@ -27,43 +24,45 @@
     margin-right: 10px;
     background: transparent;
     box-shadow: none;
+    border: none;
     padding: 0;
   }
 
-  /* Margine tra pulsanti */
-  .leaflet-top.leaflet-right .custom-controls .leaflet-control {
-    margin-top: 10px;
+  /* Pulsanti custom (Home, Pin, Locate) */
+  .custom-home-button,
+  .custom-pin-button,
+  .leaflet-control-locate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    font-size: 25px;
+    background: #f0f0f0;   /* grigio */
+    border: none;          /* no bordo */
+    box-shadow: none;      /* no ombra */
+    border-radius: 6px;    /* angoli arrotondati */
+    cursor: pointer;
+    margin-top: 5px;
   }
 
-  /* Pulsante Home */
-  .custom-home-button a,
-  .custom-pin-button a {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    width:45px;
-    height:45px;
-    font-size:25px;
-    background: #d3d3d3; /* grigio chiaro */
-    border: none;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-    border-radius: 4px;
-    cursor:pointer;
+  /* Switcher layers */
+  .leaflet-control-layers {
+    background: #f0f0f0 !important; /* sfondo grigio */
+    border: none !important;        /* nessun bordo */
+    box-shadow: none !important;    /* nessuna ombra */
+  }
+
+  .leaflet-control-layers-expanded {
+    background: #f0f0f0 !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   /* Marker emoji Pinpoint */
   .custom-pin-marker {
-    font-size:30px;
-    text-align:center;
-  }
-
-  /* Switcher (Layer Control) con sfondo grigio */
-  .leaflet-top.leaflet-right .leaflet-control-layers {
-    background: #d3d3d3;  /* sfondo grigio */
-    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-    border-radius: 4px;
-    padding: 5px;
-    margin-top: 0; /* allineato in alto */
+    font-size: 30px;
+    text-align: center;
   }
 </style>
 </head>
@@ -73,9 +72,6 @@
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- HomeControl JS -->
-  <script src="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.js"></script>
 
   <!-- LocateControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
