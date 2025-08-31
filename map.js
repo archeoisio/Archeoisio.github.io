@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: initialView.zoom,
     layers: [satellite, capitali],
     zoomControl: true,
-    minZoom: 2,                // ← limite zoom minimo
+    minZoom: 3,                // ← limite zoom minimo
     maxBounds: [[-90, -180], [90, 180]],  // ← limita la mappa ai confini reali del globo
     maxBoundsViscosity: 1.0    // ← impedisce scroll fuori dai confini
   });
@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
 
 
 
