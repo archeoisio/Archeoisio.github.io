@@ -72,6 +72,29 @@ document.addEventListener('DOMContentLoaded', () => {
       marker.openPopup();
     });
   });
+const labels = L.layerGroup().addTo(map);
+
+capitalsData.forEach(({ name, coords }) => {
+  const label = L.marker(coords, {
+    icon: L.divIcon({
+      className: 'capital-label',
+      html: name,
+      iconSize: [100, 20],
+      iconAnchor: [50, 0]  // testo centrato sopra il punto
+    }),
+    interactive: false // non cliccabile
+  });
+  labels.addLayer(label);
+});
+
+// mostra/nascondi in base allo zoom
+map.on('zoomend', () => {
+  if (map.getZoom() >= 12) {
+    map.addLayer(labels);
+  } else {
+    map.removeLayer(labels);
+  }
+});
 
   // --- SWITCHER layer ---
   const layersControl = L.control.layers(
