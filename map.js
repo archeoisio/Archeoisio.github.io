@@ -4,15 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
+  
 
   // --- Layer base ---
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+    attribution: '&copy; OpenStreetMap contributors',
+      noWrap: true
   });
 
   const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/' +
     'World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri'
+    attribution: 'Tiles &copy; Esri',
+      noWrap: true
   });
 
   // --- Overlay capitale ---
@@ -36,7 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
     center: initialView.center,
     zoom: initialView.zoom,
     layers: [osm, capitali],
-    zoomControl: true
+    zoomControl: true,
+    minZoom: 2,                // ← limite zoom minimo
+    maxBounds: [[-90, -180], [90, 180]],  // ← limita la mappa ai confini reali del globo
+    maxBoundsViscosity: 1.0    // ← impedisce scroll fuori dai confini
   });
 
   // --- Pulsanti Home + Locate ---
@@ -98,4 +104,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
 
