@@ -35,33 +35,27 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
-  // --- Funzione fly fluido tipo navicella ---
-  function smoothFly(targetLatLng, targetZoom, marker = null) {
-    const current = map.getCenter();
-    const totalDuration = 15; // secondi
-    const verticalDuration = totalDuration * 2/3;
-    const horizontalDuration = totalDuration - verticalDuration;
+  // --- Precaricamento tiles doppio ---
+  map.setMaxBounds(map.getBounds().pad(1)); // Estende la visuale di sicurezza
 
-    // Fase 1: movimento orizzontale lento (lat costante)
-    const intermediateLatLng = [current.lat, targetLatLng.lng];
-    map.flyTo(intermediateLatLng, map.getZoom(), { animate: true, duration: horizontalDuration });
+  // --- Funzione fly “smooth” tipo navicella ---
+  function smoothFlyTo(latlng, zoom, duration = 15) {
+    const current = map.getCenter();
+    const intermediate = L.latLng(current.lat, latlng.lng); // prima orizzontale
+
+    map.flyTo(intermediate, map.getZoom(), { animate: true, duration: duration / 3 });
 
     map.once('moveend', () => {
-      // Fase 2: discesa verticale + zoom lento
-      map.flyTo(targetLatLng, targetZoom, { animate: true, duration: verticalDuration });
-
-      map.once('moveend', () => {
-        // Apri popup se marker esiste
-        if (marker) marker.openPopup();
-      });
+      map.flyTo(latlng, zoom, { animate: true, duration: (duration / 3) * 2 });
     });
   }
 
-  // --- Marker capitali con flyTo navicella + popup alla fine ---
+  // --- Marker capitali con flyTo e popup ---
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
-      smoothFly(coords, 14, marker);
+      smoothFlyTo(coords, 10, 15); // Fly smooth verso capitale
+      marker.openPopup();
     });
   });
 
@@ -76,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const homeBox = L.control({ position: 'topright' });
   homeBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
-    container.style.marginTop = '10px';  
+    container.style.marginTop = '10px';
     container.style.marginRight = '10px';
 
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
@@ -86,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault();
-      smoothFly(initialView.center, initialView.zoom, null);
+      L.DomEvent.preventDefault(e);
+      smoothFlyTo(initialView.center, initialView.zoom, 15); // Fly smooth alla vista iniziale
     });
 
     return container;
