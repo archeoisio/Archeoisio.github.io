@@ -28,7 +28,7 @@ customControls.onAdd = function(map) {
   L.DomEvent.on(homeBtn, 'click', function(e) {
     L.DomEvent.stopPropagation(e);
     L.DomEvent.preventDefault(e);
-    map.setView([41.9028, 12.4964], 6); // Torna a Roma zoom 6
+    map.setView([41.9028, 12.4964], 14); // Torna a Roma zoom 6
   });
 
   // Pulsante Locate
@@ -68,3 +68,4 @@ map.on('locationfound', function(e) {
     fillOpacity: 0.5
   }).addTo(map);
 });
+
