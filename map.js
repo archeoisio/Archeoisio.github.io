@@ -4,16 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
+  const flyDuration = 10; // durata totale volo in secondi
 
   // --- Layer base ---
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
-    noWrap: true
+    noWrap: true,
+    updateWhenIdle: true,
+    updateWhenZooming: false
   });
 
   const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: 'Tiles &copy; Esri', noWrap: true }
+    { attribution: 'Tiles &copy; Esri', noWrap: true, updateWhenIdle: true, updateWhenZooming: false }
   );
 
   // --- Overlay capitali ---
@@ -35,22 +38,39 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
-  // --- FlyTo iniziale molto smooth ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
+  // --- Funzione di volo “navicella spaziale” ---
+  function smoothFly(marker, targetLatLng, targetZoom) {
+    // fase 1: volo orizzontale
+    map.flyTo([targetLatLng[0], targetLatLng[1]], map.getZoom(), {
+      animate: true,
+      duration: flyDuration * 0.5,
+      easeLinearity: 0.1
+    });
 
-  // --- Marker capitali con flyTo smooth e popup alla fine ---
-  capitalsData.forEach(({ name, coords }) => {
-    const marker = L.marker(coords).addTo(capitali);
-
-    marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 10 });
-      map.once('moveend', () => {
-        marker.bindPopup(name).openPopup();
+    // fase 2: zoom verticale alla destinazione
+    map.once('moveend', () => {
+      map.flyTo(targetLatLng, targetZoom, {
+        animate: true,
+        duration: flyDuration * 0.5,
+        easeLinearity: 0.1
       });
+    });
+
+    // apri popup alla fine del volo
+    map.once('moveend', () => {
+      if(marker) marker.openPopup();
+    });
+  }
+
+  // --- Marker capitali con flyTo e popup ---
+  capitalsData.forEach(({ name, coords }) => {
+    const marker = L.marker(coords).bindPopup(name).addTo(capitali);
+    marker.on('click', () => {
+      smoothFly(marker, coords, 14);
     });
   });
 
-  // --- SWITCHER layer primo in alto ---
+  // --- SWITCHER layer ---
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": capitali },
@@ -71,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
+      L.DomEvent.preventDefault();
+      smoothFly(null, initialView.center, initialView.zoom);
     });
 
     return container;
