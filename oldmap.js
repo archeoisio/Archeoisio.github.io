@@ -35,72 +35,47 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
-  // --- Marker capitali con flyTo e popup ---
+  // --- FlyTo iniziale molto smooth ---
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
+
+  // --- Marker capitali con flyTo smooth e popup alla fine ---
   capitalsData.forEach(({ name, coords }) => {
-    const marker = L.marker(coords).bindPopup(name).addTo(capitali);
+    const marker = L.marker(coords).addTo(capitali);
+
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 10 });
-      marker.openPopup();
+      map.flyTo(coords, 14, { animate: true, duration: 8 });
+      map.once('moveend', () => {
+        marker.bindPopup(name).openPopup();
+      });
     });
   });
 
-  // --- Container unico pulsanti + switcher ---
-  const customControls = L.control({ position: 'topright' });
+  // --- SWITCHER layer primo in alto ---
+  const layersControl = L.control.layers(
+    { "Satellite": satellite, "OpenStreetMap": osm },
+    { "Capitali": capitali },
+    { collapsed: true }
+  ).addTo(map);
 
-  customControls.onAdd = function(map) {
-    const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
+  // --- Box Home sotto switcher ---
+  const homeBox = L.control({ position: 'topright' });
+  homeBox.onAdd = function(map) {
+    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+    container.style.marginTop = '10px';  // distanza dal top / switcher
+    container.style.marginRight = '10px';
 
-    // --- SWITCHER layer primo in alto ---
-    const layersControl = L.control.layers(
-      { "Satellite": satellite, "OpenStreetMap": osm },
-      { "Capitali": capitali },
-      { collapsed: false }
-    );
-    container.appendChild(layersControl.onAdd(map));
-
-    // --- Pulsante Home ---
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🗺️';
     homeBtn.title = "Torna alla vista iniziale";
-    L.DomEvent.on(homeBtn, 'click', e => {
+
+    L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
     });
 
-    // --- Pulsante Pinpoint ---
-    const pinBtn = L.DomUtil.create('a', 'custom-pin-button', container);
-    pinBtn.href = '#';
-    pinBtn.innerHTML = '📌';
-    pinBtn.title = "Aggiungi un marker";
-    L.DomEvent.on(pinBtn, 'click', e => {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      alert('Clicca sulla mappa per aggiungere un marker');
-      map.once('click', ev => {
-        L.marker(ev.latlng, {
-          icon: L.divIcon({
-            className: 'custom-pin-marker',
-            html: '📍',
-            iconSize: [30, 30],
-            iconAnchor: [15, 30],
-            popupAnchor: [0, -30]
-          })
-        }).addTo(map).bindPopup('Marker utente').openPopup();
-      });
-    });
-
-    // --- Pulsante Locate ---
-    const locateControl = L.control.locate({
-      flyTo: { duration: 15 },
-      strings: { title: "Mostrami la mia posizione" },
-      locateOptions: { enableHighAccuracy: true, watch: true }
-    });
-    container.appendChild(locateControl.onAdd(map));
-
     return container;
   };
-
-  customControls.addTo(map);
+  homeBox.addTo(map);
 });
