@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   capitalsData.forEach(({ name, coords }) => {
     const marker = L.marker(coords).bindPopup(name).addTo(capitali);
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 12 });
+      map.flyTo(coords, 10, { animate: true, duration: 10 });
       marker.openPopup();
     });
   });
@@ -37,71 +37,63 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    layers: [satellite, capitali],   // OSM iniziale
+    layers: [osm, capitali],
     zoomControl: true,
     minZoom: 2,
     maxBounds: [[-90, -180], [90, 180]],
     maxBoundsViscosity: 1.0
   });
 
-  // --- Pulsanti Home + Locate ---
+  // --- Pulsante Home ---
   const customControls = L.control({ position: 'topright' });
   customControls.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-controls leaflet-bar');
 
-    // Pulsante Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🗺️';
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
-    });
-
-    // Pulsante Locate
-    const locateBtn = L.DomUtil.create('a', 'custom-locate-button', container);
-    locateBtn.href = '#';
-    locateBtn.innerHTML = '📍';
-    L.DomEvent.on(locateBtn, 'click', function(e) {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      map.locate({ setView: false, watch: false });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
     });
 
     return container;
   };
   customControls.addTo(map);
 
-  // --- SWITCHER subito sotto ---
+  // --- SWITCHER subito sotto pulsante Home ---
   L.control.layers(
-    { "Satellite": satellite, "OpenStreetMap": osm },
+    { "OpenStreetMap": osm, "Satellite": satellite },
     { "Capitali": capitali },
     { collapsed: true, position: 'topright' }
   ).addTo(map);
 
-  // --- Marker Locate e cerchio Apple style ---
-  map.on('locationfound', function(e) {
-    const flyDuration = 10; // secondi
+  // --- LocateControl plugin ---
+  const locateControl = L.control.locate({
+    position: 'topright',
+    flyTo: { duration: 10 },
+    strings: { title: "Mostrami la mia posizione" },
+    locateOptions: { enableHighAccuracy: true, watch: false }
+  }).addTo(map);
 
-    // FlyTo verso posizione
-    map.flyTo(e.latlng, 18, { animate: true, duration: flyDuration });
-
+  // Rimuovo cerchio default e uso marker + cerchio Apple-style personalizzato
+  locateControl.on('locationfound', function(e) {
     // Marker emoji
     L.marker(e.latlng, {
       icon: L.divIcon({
         className: 'custom-locate-marker',
         html: '📍',
         iconSize: [40, 40],
-        iconAnchor: [20, 40]        // punta del marker al centro in basso
+        iconAnchor: [20, 40]
       })
     }).addTo(map);
 
-    // Cerchio blu stile Apple dopo la fine del flyTo
+    // Cerchio stile Apple alla fine del flyTo
     map.once('moveend', () => {
       L.circle(e.latlng, {
-        radius: 20,         // in metri
-        color: '#007aff',   // tipico blu Apple
+        radius: 30,
+        color: '#007aff',
         fillColor: '#007aff',
         fillOpacity: 0.2,
         weight: 2
@@ -109,6 +101,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-
-
-
