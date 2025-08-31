@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mappa Leaflet</title>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<!-- LocateControl CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
+
+<!-- HomeControl CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.css" />
+
+<style>
+  html, body { margin:0; padding:0; height:100% }
+  #map { width:100%; height:100% }
+
+  /* Container pulsanti + switcher trasparente */
+  .leaflet-top.leaflet-right .custom-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 5px;
+    margin-right: 10px;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  /* Margine tra pulsanti */
+  .leaflet-top.leaflet-right .custom-controls .leaflet-control {
+    margin-top: 10px;
+  }
+
+  /* Pulsante Home */
+  .custom-home-button a {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:45px;
+    height:45px;
+    font-size:25px;
+    box-shadow:0 1px 5px rgba(0,0,0,0.4);
+    background:white;
+    border-radius:4px;
+    cursor:pointer;
+  }
+
+  /* Pulsante Pinpoint */
+  .custom-pin-button a {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:45px;
+    height:45px;
+    font-size:25px;
+    box-shadow:0 1px 5px rgba(0,0,0,0.4);
+    background:white;
+    border-radius:4px;
+    cursor:pointer;
+  }
+
+  /* Marker emoji Pinpoint */
+  .custom-pin-marker {
+    font-size:30px;
+    text-align:center;
+  }
+</style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- HomeControl JS -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.homecontrol@0.3.5/dist/Leaflet.homecontrol.js"></script>
+
+  <!-- LocateControl JS -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
+
+  <!-- Il tuo script map.js -->
+  <script src="map.js"></script>
+</body>
+</html>
