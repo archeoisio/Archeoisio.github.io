@@ -324,11 +324,11 @@ document.addEventListener('DOMContentLoaded', () => {
       locateOptions: { enableHighAccuracy: true, watch: false }
     });
    const locateBtn = locateControl.onAdd(map);
-
 // personalizzazione dimensioni
 locateBtn.style.width = '45px';
 locateBtn.style.height = '45px';
-locateBtn.style.alignItems = 'center';
+locateBtn.style.alignItems = 'right';
+locateBtn.style.marginRight = '10px';
 locateBtn.style.fontSize = '25px';
 locateBtn.style.background = 'white';
 locateBtn.style.borderRadius = '4px';
