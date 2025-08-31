@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     popupContent.style.display = 'flex';
     popupContent.style.justifyContent = 'space-between';
     popupContent.style.alignItems = 'center';
-    popupContent.style.width = '150px';
+    popupContent.style.width = '100px';
 
     const nameSpan = document.createElement('span');
     nameSpan.textContent = name;
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const zoomIcon = document.createElement('span');
     zoomIcon.innerHTML = '🔍';
     zoomIcon.style.cursor = 'pointer';
-    zoomIcon.style.fontSize = '18px';
+    zoomIcon.style.fontSize = '24px';
 
     popupContent.appendChild(nameSpan);
     popupContent.appendChild(zoomIcon);
