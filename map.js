@@ -266,12 +266,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   map.on('zoomend', () => {
-    if (map.getZoom() === 18) {
-      map.addLayer(labels);
-    } else {
-      map.removeLayer(labels);
-    }
-  });
+  if (map.getZoom() >= 16) {
+    map.addLayer(labels);   // mostra etichette a zoom 16, 17, 18
+  } else {
+    map.removeLayer(labels); // nasconde etichette per zoom < 16
+  }
+});
 
   // --- SWITCHER layer ---
   L.control.layers(
