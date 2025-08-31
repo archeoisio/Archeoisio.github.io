@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const marker = L.marker(coords).addTo(capitali);
 
     marker.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 8, easeLinearity: 1 });
+      map.flyTo(coords, 12, { animate: true, duration: 8, easeLinearity: 1 });
       map.once('moveend', () => {
         marker.bindPopup(name).openPopup();
       });
