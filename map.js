@@ -92,7 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
       icon: L.divIcon({
         className: 'custom-locate-marker',
         html: '📍',
-        iconSize: [40, 40]
+        iconSize: [40, 40],
+        iconAnchor: [20, 40]        // punta del marker al centro in basso
       })
     }).addTo(map);
 
@@ -108,4 +109,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
 
