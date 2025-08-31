@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    layers: [osm, capitali],
+    layers: [satellite, capitali],
     zoomControl: true,
     minZoom: 2,                // ← limite zoom minimo
     maxBounds: [[-90, -180], [90, 180]],  // ← limita la mappa ai confini reali del globo
@@ -104,5 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
   });
 });
+
 
 
