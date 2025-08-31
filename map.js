@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    layers: [osm, capitali],
+    layers: [satellite, capitali],
     zoomControl: true,
     minZoom: 3,
     maxBounds: [[-90, -180], [90, 180]],
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Switcher (layer control) dentro stesso container
     const layersControl = L.control.layers(
-      { "Satellite": satellite, "OpenStreetMap": osm },
+      { "OpenStreetMap": osm, "Satellite": satellite },
       { "Capitali": capitali },
       { collapsed: false }
     ).addTo(map);
@@ -102,5 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
     locateOptions: { enableHighAccuracy: true, watch: true }
   }).addTo(map);
 });
+
 
 
