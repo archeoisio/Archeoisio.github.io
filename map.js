@@ -300,15 +300,13 @@ document.addEventListener('DOMContentLoaded', () => {
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
     });
 
-    // Pulsante Locate
+     // --- Pulsante Locate ---
     const locateControl = L.control.locate({
-      flyTo: true,
+      flyTo: { duration: 10, easeLinearity: 1 },
       strings: { title: "Mostrami la mia posizione" },
       locateOptions: { enableHighAccuracy: true, watch: false }
     });
     const locateBtn = locateControl.onAdd(map);
-    locateBtn.innerHTML = '📍';
-    locateBtn.title = "Mostrami la mia posizione";
 
     container.appendChild(locateBtn);
 
