@@ -252,25 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2, easeLinearity: 0.25 });
 
-  // --- CSS etichette ---
-  const style = document.createElement('style');
-  style.innerHTML = `
-   .capital-box {
-      display: inline-block;
-      background: white;
-      color: black;
-      font-size: 10px;
-      padding: 2px 4px;
-      border-radius: 6px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-      white-space: nowrap;
-      cursor: pointer;
-      min-width: fit-content;
-      text-align: center;
-   }
-  `;
-  document.head.appendChild(style);
-
   // --- SWITCHER layer ---
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
