@@ -202,16 +202,22 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
 // --- Crea etichette capitali ---
-  capitalsData.forEach(({ name, coords }) => {
-    const label = L.marker(coords, {
-      icon: L.divIcon({
-        className: 'capital-label',
-        html: `<div class="capital-box">${name}</div>`,
-        iconAnchor: [50, 20] // regola la posizione della label
-      })
-    });
-    labels.addLayer(label);
+ capitalsData.forEach(({ name, coords }) => {
+  const label = L.marker(coords, {
+    icon: L.divIcon({
+      className: 'capital-label',
+      html: `<div class="capital-box">${name}</div>`,
+      iconAnchor: [50, 20] // regola la posizione della label
+    })
   });
+
+  // Evento click sulla label: flyTo sul marker a zoom 14
+  label.on('click', () => {
+    map.flyTo(coords, 14, { animate: true, duration: 0.25, easeLinearity: 1 });
+  });
+
+  labels.addLayer(label);
+});
 
   // --- Crea mappa ---
   const map = L.map('map', {
@@ -254,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- SWITCHER layer ---
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Etichette capitali": labels },
+    { "Capitali": labels },
     { collapsed: true }
   ).addTo(map);
 
