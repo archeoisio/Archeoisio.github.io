@@ -316,11 +316,6 @@ controlBox.onAdd = function(map) {
   });
   const locateBtn = locateControl.onAdd(map);
 
-  // Ridimensiona l'icona interna del pulsante
-  const svgIcon = locateBtn.querySelector('svg');
-  svgIcon.setAttribute('width', '30px');
-  svgIcon.setAttribute('height', '30px');
-  
   // Pulsante più grande
   locateBtn.style.width = '50px';
   locateBtn.style.height = '50px';
