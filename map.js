@@ -332,4 +332,20 @@ preloadTiles(osm, initialView.center, 3, 10);
     return container;
   };
   controlBox.addTo(map);
+  map.on('zoomend', () => {
+    const zoom = map.getZoom();
+    const labels = document.querySelectorAll('.capital-box');
+
+    labels.forEach(label => {
+      if (zoom < 4) {
+        label.style.fontSize = '8px';
+      } else if (zoom < 6) {
+        label.style.fontSize = '10px';
+      } else if (zoom < 8) {
+        label.style.fontSize = '12px';
+      } else {
+        label.style.fontSize = '14px';
+      }
+    });
+  });
 });
