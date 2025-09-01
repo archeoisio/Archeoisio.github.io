@@ -294,6 +294,9 @@ preloadTiles(osm, initialView.center, 3, 10);
 
     // Pulsante Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+    homeBtn.href = '#';
+    homeBtn.innerHTML = '🏠';
+    homeBtn.title = "Torna alla vista iniziale";
     
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
