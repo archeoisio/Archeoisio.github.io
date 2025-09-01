@@ -321,20 +321,21 @@ preloadTiles(osm, initialView.center, 3, 10);
     const zoom = map.getZoom();
     const labels = document.querySelectorAll('.capital-box');
 
-    labels.forEach(label => {
-  if (zoom < 4) {
-    label.style.fontSize = '18px';
-    label.style.padding = '8px 16px';
-  } else if (zoom < 6) {
-    label.style.fontSize = '12px';
-    label.style.padding = '6px 12px';
-  } else if (zoom < 8) {
-    label.style.fontSize = '10px';
-    label.style.padding = '2px 4px';
-  } else {
-    label.style.fontSize = '10px';
-    label.style.padding = '2px 4px';
-  }
+map.on('zoomend', () => {
+  const zoom = map.getZoom();
+  const labels = document.querySelectorAll('.capital-box');
+
+  labels.forEach(label => {
+    // dimensione del font proporzionale allo zoom (es. 5 → 12px, 18 → 8px)
+    const fontSize = Math.max(8, 18 - (zoom - 3) * 1.2); 
+    label.style.fontSize = `${fontSize}px`;
+
+    // padding proporzionale (riduce al crescere dello zoom)
+    const verticalPadding = Math.max(2, 8 - (zoom - 3) * 0.5);
+    const horizontalPadding = Math.max(4, 16 - (zoom - 3) * 1);
+    label.style.padding = `${verticalPadding}px ${horizontalPadding}px`;
+  });
+});
 });
 });
 });
