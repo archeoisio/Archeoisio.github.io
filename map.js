@@ -264,7 +264,7 @@ preloadTiles(osm, initialView.center, 3, 10);
   background: white;
   color: black;
   font-size: 10px;
-  padding: 4px 8px;           /* spazio intorno al testo */
+  padding: 2px 4px;           /* spazio intorno al testo */
   border-radius: 6px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   white-space: nowrap;         /* impedisce al testo di andare a capo */
