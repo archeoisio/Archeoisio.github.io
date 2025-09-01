@@ -229,25 +229,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   labels.addTo(map);
 
-  // --- Aggiorna font/padding delle etichette in base allo zoom ---
-  function updateLabels() {
-    const zoom = map.getZoom();
-    const minZoom = 5, maxZoom = 14;
-    const minFont = 10, maxFont = 10;
-    const minPadding = 2, maxPadding =2;
+ // --- Aggiorna font/padding delle etichette in base allo zoom ---
+function updateLabels() {
+  const zoom = map.getZoom();
+  const minZoom = 5, maxZoom = 14;
+  const minFont = 10, maxFont = 10;
+  const minPadding = 0, maxPadding = 4;
 
-    const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
+  const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
 
-    document.querySelectorAll('.capital-box').forEach(label => {
-      const fontSize = minFont + factor * (maxFont - minFont);
-      const padding = minPadding + factor * (maxPadding - minPadding);
-      label.style.fontSize = `${fontSize}px`;
-      label.style.padding = `${padding}px ${padding*2}px`;
-    });
-  }
+  document.querySelectorAll('.capital-box').forEach(label => {
+    const fontSize = minFont + factor * (maxFont - minFont);
+    const padding = minPadding + factor * (maxPadding - minPadding);
+    label.style.fontSize = `${fontSize}px`;
+    label.style.padding = `${padding}px ${padding*2}px`;
+  });
+}
 
-  map.on('zoomend', updateLabels);
-  map.fire('zoomend'); // forza aggiornamento iniziale
+// Aggiorna etichette durante lo zoom (anche animato)
+map.on('zoom', updateLabels);
+
+// Aggiornamento iniziale
+updateLabels();
 
   // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2, easeLinearity: 0.25 });
