@@ -16,23 +16,19 @@ document.addEventListener('DOMContentLoaded', () => {
     { attribution: 'Tiles &copy; Esri', noWrap: true }
   );
 
- // --- Precaricamento tiles dai livelli 5 a 18 ---
-function preloadTiles(layer, center, minZoom, maxZoom) {
-  const tmpMap = L.map(document.createElement('div'), { attributionControl: false, zoomControl: false });
-  tmpMap.setView(center, minZoom);
-  layer.addTo(tmpMap);
-
-  for (let z = minZoom; z <= maxZoom; z++) {
-    tmpMap.setZoom(z); // forza il caricamento dei tiles a questo zoom
+  // --- Precaricamento tiles dai livelli 5 a 18 ---
+  function preloadTiles(layer, center, minZoom, maxZoom) {
+    const tmpMap = L.map(document.createElement('div'), { attributionControl: false, zoomControl: false });
+    tmpMap.setView(center, minZoom);
+    layer.addTo(tmpMap);
+    for (let z = minZoom; z <= maxZoom; z++) {
+      tmpMap.setZoom(z); // forza il caricamento dei tiles a questo zoom
+    }
+    tmpMap.remove();
   }
 
-  // rimuovi il layer temporaneo
-  tmpMap.remove();
-}
-
-// Esempio di utilizzo
-preloadTiles(satellite, initialView.center, 5, 18);
-preloadTiles(osm, initialView.center, 5, 18);
+  preloadTiles(satellite, initialView.center, 5, 18);
+  preloadTiles(osm, initialView.center, 5, 18);
 
   // --- Overlay etichette ---
   const labels = L.layerGroup();
@@ -218,19 +214,51 @@ preloadTiles(osm, initialView.center, 5, 18);
   { name: "Zagabria", coords: [45.8150, 15.9819] } 
   ];
 
-  // --- Crea mappa ---
-  const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite],
-    zoomControl: true,
-    minZoom: 3,
-    maxBounds: [
-      [-90, -180],
-      [90, 180]
-    ],
-    maxBoundsViscosity: 1.0
+  document.addEventListener('DOMContentLoaded', () => {
+  const MOBILE_MAX_WIDTH = 767;
+  const mobileView  = { center: [50, 10], zoom: 5 };
+  const desktopView = { center: [49, 30], zoom: 5 };
+  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
+  const initialView = isMobile ? mobileView : desktopView;
+
+  // --- Layer base ---
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    noWrap: true
   });
+
+  const satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Tiles &copy; Esri', noWrap: true }
+  );
+
+  // --- Precaricamento tiles dai livelli 5 a 18 ---
+  function preloadTiles(layer, center, minZoom, maxZoom) {
+    const tmpMap = L.map(document.createElement('div'), { attributionControl: false, zoomControl: false });
+    tmpMap.setView(center, minZoom);
+    layer.addTo(tmpMap);
+    for (let z = minZoom; z <= maxZoom; z++) {
+      tmpMap.setZoom(z); // forza il caricamento dei tiles a questo zoom
+    }
+    tmpMap.remove();
+  }
+
+  preloadTiles(satellite, initialView.center, 5, 18);
+  preloadTiles(osm, initialView.center, 5, 18);
+
+  // --- Overlay etichette ---
+  const labels = L.layerGroup();
+
+  const capitalsData = [
+    { name: "Abu Dhabi", coords: [24.4539, 54.3773] },
+    { name: "Abuja", coords: [9.0579, 7.4951] },
+    { name: "Accra", coords: [5.6037, -0.1870] },
+    { name: "Addis Abeba", coords: [9.0300, 38.7400] },
+    { name: "Algeri", coords: [36.7538, 3.0588] },
+    { name: "Amman", coords: [31.9454, 35.9284] },
+    { name: "Amsterdam", coords: [52.3676, 4.9041] },
+    // ... aggiungi tutte le altre capitali
+  ];
 
   // --- Crea etichette capitali cliccabili ---
   capitalsData.forEach(({ name, coords }) => {
@@ -248,8 +276,22 @@ preloadTiles(osm, initialView.center, 5, 18);
     });
 
     labels.addLayer(label);
- 
   });
+
+  // --- Crea mappa ---
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: 3,
+    maxBounds: [
+      [-90, -180],
+      [90, 180]
+    ],
+    maxBoundsViscosity: 1.0
+  });
+
   // --- Aggiungi etichette alla mappa ---
   labels.addTo(map);
 
@@ -260,18 +302,18 @@ preloadTiles(osm, initialView.center, 5, 18);
   const style = document.createElement('style');
   style.innerHTML = `
    .capital-box {
-  display: inline-block;      /* permette al div di adattarsi al contenuto */
-  background: white;
-  color: black;
-  font-size: 10px;
-  padding: 2px 4px;           /* spazio intorno al testo */
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-  white-space: nowrap;         /* impedisce al testo di andare a capo */
-  cursor: pointer;
-  min-width: fit-content;      /* il box non sarà mai più piccolo del testo */
-  text-align: center;          /* centra il testo dentro il box */
-}
+      display: inline-block;
+      background: white;
+      color: black;
+      font-size: 10px;
+      padding: 2px 4px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      white-space: nowrap;
+      cursor: pointer;
+      min-width: fit-content;
+      text-align: center;
+   }
   `;
   document.head.appendChild(style);
 
@@ -287,8 +329,6 @@ preloadTiles(osm, initialView.center, 5, 18);
   controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
     container.style.marginTop = '10px';
-    container.style.marginRight = '0';
-    container.style.border = 'none';
     container.style.background = 'transparent';
     container.style.padding = '0';
 
@@ -297,11 +337,10 @@ preloadTiles(osm, initialView.center, 5, 18);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🏠';
     homeBtn.title = "Torna alla vista iniziale";
-    
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true,  duration: 2, easeLinearity: 0.25 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2, easeLinearity: 0.25 });
     });
 
     // Pulsante Locate
@@ -311,21 +350,21 @@ preloadTiles(osm, initialView.center, 5, 18);
       locateOptions: { enableHighAccuracy: true, watch: false }
     });
     const locateBtn = locateControl.onAdd(map);
-
-     container.appendChild(locateBtn);
+    container.appendChild(locateBtn);
 
     return container;
   };
   controlBox.addTo(map);
-map.on('zoomend', () => {
-  const zoom = map.getZoom();
-  document.querySelectorAll('.capital-box').forEach(label => {
-    // font e padding proporzionali allo zoom
-    const fontSize = Math.max(6, 18 - (zoom - 3) * 1.2);       // mai sotto 6px
-    const verticalPadding = Math.max(1, 8 - (zoom - 3) * 0.5);
-    const horizontalPadding = Math.max(2, 16 - (zoom - 3) * 1);
 
-    label.style.fontSize = `${fontSize}px`;
-    label.style.padding = `${verticalPadding}px ${horizontalPadding}px`;
+  // --- Ridimensionamento etichette in base allo zoom ---
+  map.on('zoomend', () => {
+    const zoom = map.getZoom();
+    document.querySelectorAll('.capital-box').forEach(label => {
+      const fontSize = Math.max(6, 18 - (zoom - 3) * 1.2);       
+      const verticalPadding = Math.max(1, 8 - (zoom - 3) * 0.5);
+      const horizontalPadding = Math.max(2, 16 - (zoom - 3) * 1);
+      label.style.fontSize = `${fontSize}px`;
+      label.style.padding = `${verticalPadding}px ${horizontalPadding}px`;
+    });
   });
 });
