@@ -296,8 +296,8 @@ controlBox.onAdd = function(map) {
   homeBtn.innerHTML = '🗺️';
   homeBtn.title = "Torna alla vista iniziale";
   homeBtn.style.fontSize = '30px';       // Pulsante più grande
-  homeBtn.style.width = '50px';
-  homeBtn.style.height = '50px';
+  homeBtn.style.width = '45px';
+  homeBtn.style.height = '45px';
   homeBtn.style.lineHeight = '50px';
   homeBtn.style.textAlign = 'center';
   homeBtn.style.display = 'block';
@@ -323,8 +323,8 @@ controlBox.onAdd = function(map) {
   const locateBtn = locateControl.onAdd(map);
 
   // Pulsante più grande
-  locateBtn.style.width = '50px';
-  locateBtn.style.height = '50px';
+  locateBtn.style.width = '45px';
+  locateBtn.style.height = '45px';
   locateBtn.style.background = 'rgba(255,255,255,0.8)';
   locateBtn.style.border = 'none';
   locateBtn.style.borderRadius = '8px';
