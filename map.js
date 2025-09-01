@@ -300,7 +300,7 @@ preloadTiles(osm, initialView.center, 3, 10);
     homeBtn.style.fontSize = '30px';
     homeBtn.style.width = '45px';
     homeBtn.style.height = '45px';
-    homeBtn.style.textAlign = 'left';
+    homeBtn.style.textAlign = 'center';
     homeBtn.style.display = 'block';
     homeBtn.style.background = 'white';
     homeBtn.style.borderRadius = '4px';
@@ -325,7 +325,7 @@ preloadTiles(osm, initialView.center, 3, 10);
     locateBtn.style.background = 'white';
     locateBtn.style.lineHeight = '50px';
     locateBtn.style.border = 'none';
-    locateBtn.style.borderRadius = '8px';
+    locateBtn.style.borderRadius = '4px';
 
     container.appendChild(locateBtn);
 
