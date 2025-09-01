@@ -214,6 +214,20 @@ document.addEventListener('DOMContentLoaded', () => {
   { name: "Zagabria", coords: [45.8150, 15.9819] } 
   ];
 
+  // --- Crea mappa ---
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: 3,
+    maxBounds: [
+      [-90, -180],
+      [90, 180]
+    ],
+    maxBoundsViscosity: 1.0
+  });
+
   // --- Crea etichette capitali cliccabili ---
   capitalsData.forEach(({ name, coords }) => {
     const label = L.marker(coords, {
@@ -230,20 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     labels.addLayer(label);
-  });
-
-  // --- Crea mappa ---
-  const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite],
-    zoomControl: true,
-    minZoom: 3,
-    maxBounds: [
-      [-90, -180],
-      [90, 180]
-    ],
-    maxBoundsViscosity: 1.0
   });
 
   // --- Aggiungi etichette alla mappa ---
