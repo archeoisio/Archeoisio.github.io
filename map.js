@@ -263,9 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const controlBox = L.control({ position: 'topright' });
   controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
-    container.style.marginTop = '10px';
-    container.style.background = 'transparent';
-    container.style.padding = '0';
 
     // Pulsante Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
