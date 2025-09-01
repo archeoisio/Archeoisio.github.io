@@ -48,23 +48,22 @@
   }
 
    /* Box pulsante Home+LOCATE */
-  .custom-home-box {
-    position: relative;       /* oppure absolute se vuoi fissarlo sulla mappa */
-    margin-top: 10px;
-    margin-right: 50px;       /* sposta il container a sinistra rispetto al bordo */
-    background: transparent;
-    padding: 0;
-    display: flex;
-    flex-direction: column;   /* se vuoi pulsanti uno sopra l'altro */
-    gap: 5px;                 /* distanza tra i pulsanti */
-    z-index: 1000;            /* assicurati sia sopra la mappa */
+ .custom-home-box {
+  position: absolute;      /* fissato sulla mappa */
+  top: 10px;               /* distanza dal bordo superiore */
+  right: 10px;             /* distanza dal bordo destro */
+  background: transparent; /* elimina sfondo */
+  padding: 0;
+  display: flex;
+  flex-direction: column;  /* pulsanti in colonna */
+  gap: 5px;                /* distanza verticale tra pulsanti */
+  z-index: 1000;           /* sopra la mappa */
 }
   
   .custom-home-button {
   width: 45px !important;
   height: 45px !important;
   display: flex !important;
-  margin-right: 10px !important;
   justify-content: center !important;
   align-items: center !important;
   font-size: 22px !important;   /* <- riduci un po' se l’icona è troppo grande */
@@ -75,20 +74,21 @@
   line-height: 1 !important;    /* evita spostamenti verticali */
   } 
   
-  /* Pulsante Locate */
-  .leaflet-control-locate a {
-  width: 45px !important;
-  height: 45px !important;
-  display: flex !important;
-  margin-right: 10px !important;
-  justify-content: center !important;
-  align-items: center !important;
-  font-size: 22px !important;   /* <- riduci un po' se l’icona è troppo grande */
-  background: white !important;
-  border-radius: 4px !important;
-  border: none !important;
-  padding: 0 !important;        /* elimina margini interni */
-  line-height: 1 !important;    /* evita spostamenti verticali */
+ /* Pulsanti Home e Locate */
+.custom-home-button,
+.leaflet-control-locate a {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  background: white;       /* pulsanti bianchi, container trasparente */
+  border-radius: 6px;      /* angoli arrotondati */
+  border: none;
+  padding: 0;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3); /* optional, per un leggero effetto */
 }
   
 </style>
