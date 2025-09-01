@@ -301,8 +301,8 @@ controlBox.onAdd = function(map) {
   homeBtn.style.lineHeight = '50px';
   homeBtn.style.textAlign = 'center';
   homeBtn.style.display = 'block';
-  homeBtn.style.background = 'rgba(255,255,255,0.8)';
-  homeBtn.style.borderRadius = '8px';
+  homeBtn.style.background = 'white';
+  homeBtn.style.borderRadius = '4px';
   homeBtn.style.marginBottom = '0';
 
   L.DomEvent.on(homeBtn, 'click', function(e) {
