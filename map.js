@@ -203,14 +203,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   ];
 
-  // --- Istanza mappa ---
   const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite, capitali],
-    zoomControl: true,
-    minZoom: 3
-  });
+  center: initialView.center,
+  zoom: initialView.zoom,
+  layers: [satellite, capitali],
+  zoomControl: true,
+  minZoom: 3,
+  maxBounds: [
+    [-90, -180], // angolo sud-ovest (lat, lon)
+    [90, 180]    // angolo nord-est (lat, lon)
+  ],
+  maxBoundsViscosity: 1.0 // impedisce di scorrere fuori dai limiti
+});
 
   // --- Precaricamento tiles ---
   satellite.addTo(map);
