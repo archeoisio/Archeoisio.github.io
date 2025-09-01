@@ -294,18 +294,7 @@ preloadTiles(osm, initialView.center, 3, 10);
 
     // Pulsante Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
-    homeBtn.href = '#';
-    homeBtn.innerHTML = '🏠';
-    homeBtn.title = "Torna alla vista iniziale";
-    homeBtn.style.fontSize = '30px';
-    homeBtn.style.width = '45px';
-    homeBtn.style.height = '45px';
-    homeBtn.style.textAlign = 'center';
-    homeBtn.style.display = 'block';
-    homeBtn.style.background = 'white';
-    homeBtn.style.borderRadius = '4px';
-    homeBtn.style.marginBottom = '3px';
-
+    
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
