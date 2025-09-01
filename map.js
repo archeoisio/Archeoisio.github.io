@@ -31,8 +31,8 @@ function preloadTiles(layer, center, minZoom, maxZoom) {
 }
 
 // Esempio di utilizzo
-preloadTiles(satellite, initialView.center, 3, 10);
-preloadTiles(osm, initialView.center, 3, 10);
+preloadTiles(satellite, initialView.center, 5, 18);
+preloadTiles(osm, initialView.center, 5, 18);
 
   // --- Overlay etichette ---
   const labels = L.layerGroup();
@@ -317,25 +317,15 @@ preloadTiles(osm, initialView.center, 3, 10);
     return container;
   };
   controlBox.addTo(map);
-  map.on('zoomend', () => {
-    const zoom = map.getZoom();
-    const labels = document.querySelectorAll('.capital-box');
-
 map.on('zoomend', () => {
   const zoom = map.getZoom();
-  const labels = document.querySelectorAll('.capital-box');
+  document.querySelectorAll('.capital-box').forEach(label => {
+    // font e padding proporzionali allo zoom
+    const fontSize = Math.max(6, 18 - (zoom - 3) * 1.2);       // mai sotto 6px
+    const verticalPadding = Math.max(1, 8 - (zoom - 3) * 0.5);
+    const horizontalPadding = Math.max(2, 16 - (zoom - 3) * 1);
 
-  labels.forEach(label => {
-    // dimensione del font proporzionale allo zoom (es. 5 → 12px, 18 → 8px)
-    const fontSize = Math.max(8, 18 - (zoom - 3) * 1.2); 
     label.style.fontSize = `${fontSize}px`;
-
-    // padding proporzionale (riduce al crescere dello zoom)
-    const verticalPadding = Math.max(2, 8 - (zoom - 3) * 0.5);
-    const horizontalPadding = Math.max(4, 16 - (zoom - 3) * 1);
     label.style.padding = `${verticalPadding}px ${horizontalPadding}px`;
   });
-});
-});
-});
 });
