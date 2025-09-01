@@ -351,3 +351,5 @@ preloadTiles(osm, initialView.center, 3, 10);
     label.style.padding = '4px 8px';
   }
 });
+});
+});
