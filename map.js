@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   satellite.addTo(map);
 
   // --- FlyTo iniziale ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 1 });
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0,25 });
 
   // --- Marker capitali con popup e lente ---
   capitalsData.forEach(({ name, coords }) => {
