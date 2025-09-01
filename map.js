@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     zoomIcon.addEventListener('click', () => {
       marker.closePopup();
-      map.flyTo(coords, 12, { animate: true, duration: 8, easeLinearity: 1 });
+      map.flyTo(coords, 14, { animate: true, duration: 8, easeLinearity: 1 });
     });
 
     marker.on('click', () => {
