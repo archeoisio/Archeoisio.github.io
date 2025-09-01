@@ -16,23 +16,20 @@ document.addEventListener('DOMContentLoaded', () => {
     { attribution: 'Tiles &copy; Esri', noWrap: true }
   );
 
-  // --- Precaricamento tiles dai livelli 5 a 18 ---
-  function preloadTiles(layer, center, minZoom, maxZoom) {
-    const tmpMap = L.map(document.createElement('div'), { attributionControl: false, zoomControl: false });
-    tmpMap.setView(center, minZoom);
-    layer.addTo(tmpMap);
-    for (let z = minZoom; z <= maxZoom; z++) {
-      tmpMap.setZoom(z); // forza il caricamento dei tiles a questo zoom
-    }
-    tmpMap.remove();
-  }
-
-  preloadTiles(satellite, initialView.center, 5, 18);
-  preloadTiles(osm, initialView.center, 5, 18);
+  // --- Mappa ---
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: 3,
+    maxBounds: [[-90, -180],[90, 180]],
+    maxBoundsViscosity: 1.0
+  });
 
   // --- Overlay etichette ---
   const labels = L.layerGroup();
-
+  
   const capitalsData = [
  { name: "Abu Dhabi", coords: [24.4539, 54.3773] },
   { name: "Abuja", coords: [9.0579, 7.4951] },
