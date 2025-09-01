@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
       icon: L.divIcon({
         className: 'capital-label',
         html: `<div class="capital-box">${name}</div>`,
-        iconAnchor: [50, 20]
+        iconAnchor: [50, 15]
       })
     });
 
