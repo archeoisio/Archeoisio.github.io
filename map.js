@@ -263,7 +263,7 @@ preloadTiles(osm, initialView.center, 3, 10);
   display: inline-block;      /* permette al div di adattarsi al contenuto */
   background: white;
   color: black;
-  font-size: 14px;
+  font-size: 10px;
   padding: 4px 8px;           /* spazio intorno al testo */
   border-radius: 6px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
@@ -323,17 +323,17 @@ preloadTiles(osm, initialView.center, 3, 10);
 
     labels.forEach(label => {
   if (zoom < 4) {
-    label.style.fontSize = '6px';
+    label.style.fontSize = '10px';
     label.style.padding = '2px 4px';
   } else if (zoom < 6) {
-    label.style.fontSize = '8px';
+    label.style.fontSize = '12px';
     label.style.padding = '3px 6px';
   } else if (zoom < 8) {
-    label.style.fontSize = '10px';
-    label.style.padding = '3px 6px';
-  } else {
     label.style.fontSize = '14px';
-    label.style.padding = '4px 8px';
+    label.style.padding = '6px 12px';
+  } else {
+    label.style.fontSize = '16px';
+    label.style.padding = '8px 16px';
   }
 });
 });
