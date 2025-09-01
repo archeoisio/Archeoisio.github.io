@@ -16,8 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { attribution: 'Tiles &copy; Esri', noWrap: true }
   );
 
-  // --- Overlay capitali ---
-  const capitali = L.layerGroup();
+  // --- Overlay etichette ---
   const labels = L.layerGroup();
 
   const capitalsData = [
@@ -202,38 +201,23 @@ document.addEventListener('DOMContentLoaded', () => {
   { name: "Zagabria", coords: [45.8150, 15.9819] } 
   ];
 
+// --- Crea etichette capitali ---
   capitalsData.forEach(({ name, coords }) => {
-  const label = L.marker(coords, {
-    icon: L.divIcon({
-      className: 'capital-label',
-      html: `<div class="capital-box">${name}</div>`,
-      iconAnchor: [50, 20] // regola la posizione della label
-    })
+    const label = L.marker(coords, {
+      icon: L.divIcon({
+        className: 'capital-label',
+        html: `<div class="capital-box">${name}</div>`,
+        iconAnchor: [50, 20] // regola la posizione della label
+      })
+    });
+    labels.addLayer(label);
   });
-  labels.addLayer(label);
-});
-  
-labels.addTo(map);
-  
-// --- CSS per i box ---
-const style = document.createElement('style');
-style.innerHTML = `
-  .capital-box {
-    background: white;
-    color: black;
-    font-size: 14px;
-    padding: 4px 8px;
-    border-radius: 6px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    white-space: nowrap;
-  }
-`;
-document.head.appendChild(style);
- 
+
+  // --- Crea mappa ---
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    layers: [satellite, capitali],
+    layers: [satellite],
     zoomControl: true,
     minZoom: 3,
     maxBounds: [
@@ -243,67 +227,34 @@ document.head.appendChild(style);
     maxBoundsViscosity: 1.0
   });
 
+  // --- Aggiungi layer etichette alla mappa ---
+  labels.addTo(map);
+
   // --- Precaricamento tiles ---
   satellite.addTo(map);
 
-  // --- FlyTo iniziale (veloce) ---
+  // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 0.25, easeLinearity: 1 });
 
-  // --- Marker capitali con popup e lente ---
-  capitalsData.forEach(({ name, coords }) => {
-    const marker = L.marker(coords).addTo(capitali);
-
-    const popupContent = document.createElement('div');
-    popupContent.style.display = 'flex';
-    popupContent.style.justifyContent = 'space-between';
-    popupContent.style.alignItems = 'center';
-    popupContent.style.width = '120px';
-
-    const nameSpan = document.createElement('span');
-    nameSpan.textContent = name;
-
-    const zoomIcon = document.createElement('span');
-    zoomIcon.innerHTML = '🔍';
-    zoomIcon.style.cursor = 'pointer';
-    zoomIcon.style.fontSize = '18px';
-
-    popupContent.appendChild(nameSpan);
-    popupContent.appendChild(zoomIcon);
-
-    marker.bindPopup(popupContent);
-
-    zoomIcon.addEventListener('click', () => {
-      marker.closePopup();
-      map.flyTo(coords, 14, { animate: true, duration: 0.25, easeLinearity: 1 });
-    });
-
-    marker.on('click', () => {
-      marker.openPopup();
-    });
-
-    // Etichetta testuale (visibile solo a zoom >= 16)
-    const label = L.marker(coords, {
-      icon: L.divIcon({
-        className: 'text-label',
-        html: `<span style="font-size:14px; color:white; text-shadow:1px 1px 2px black;">${name}</span>`
-      })
-    });
-    labels.addLayer(label);
-  });
-
-  // --- Mostra/nascondi etichette in base allo zoom ---
-  map.on('zoomend', () => {
-    if (map.getZoom() >= 16) {
-      map.addLayer(labels);
-    } else {
-      map.removeLayer(labels);
+  // --- CSS per le etichette ---
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .capital-box {
+      background: white;
+      color: black;
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      white-space: nowrap;
     }
-  });
+  `;
+  document.head.appendChild(style);
 
   // --- SWITCHER layer ---
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Capitali": capitali },
+    { "Etichette capitali": labels },
     { collapsed: true }
   ).addTo(map);
 
@@ -330,12 +281,11 @@ document.head.appendChild(style);
     homeBtn.style.display = 'block';
     homeBtn.style.background = 'white';
     homeBtn.style.borderRadius = '4px';
-    homeBtn.style.marginBottom = '0';
+    homeBtn.style.marginBottom = '5px';
 
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.closePopup();
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 0.25, easeLinearity: 1 });
     });
 
