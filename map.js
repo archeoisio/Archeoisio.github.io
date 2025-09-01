@@ -214,52 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
   { name: "Zagabria", coords: [45.8150, 15.9819] } 
   ];
 
-  document.addEventListener('DOMContentLoaded', () => {
-  const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [50, 10], zoom: 5 };
-  const desktopView = { center: [49, 30], zoom: 5 };
-  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
-  const initialView = isMobile ? mobileView : desktopView;
-
-  // --- Layer base ---
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    noWrap: true
-  });
-
-  const satellite = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: 'Tiles &copy; Esri', noWrap: true }
-  );
-
-  // --- Precaricamento tiles dai livelli 5 a 18 ---
-  function preloadTiles(layer, center, minZoom, maxZoom) {
-    const tmpMap = L.map(document.createElement('div'), { attributionControl: false, zoomControl: false });
-    tmpMap.setView(center, minZoom);
-    layer.addTo(tmpMap);
-    for (let z = minZoom; z <= maxZoom; z++) {
-      tmpMap.setZoom(z); // forza il caricamento dei tiles a questo zoom
-    }
-    tmpMap.remove();
-  }
-
-  preloadTiles(satellite, initialView.center, 5, 18);
-  preloadTiles(osm, initialView.center, 5, 18);
-
-  // --- Overlay etichette ---
-  const labels = L.layerGroup();
-
-  const capitalsData = [
-    { name: "Abu Dhabi", coords: [24.4539, 54.3773] },
-    { name: "Abuja", coords: [9.0579, 7.4951] },
-    { name: "Accra", coords: [5.6037, -0.1870] },
-    { name: "Addis Abeba", coords: [9.0300, 38.7400] },
-    { name: "Algeri", coords: [36.7538, 3.0588] },
-    { name: "Amman", coords: [31.9454, 35.9284] },
-    { name: "Amsterdam", coords: [52.3676, 4.9041] },
-    // ... aggiungi tutte le altre capitali
-  ];
-
   // --- Crea etichette capitali cliccabili ---
   capitalsData.forEach(({ name, coords }) => {
     const label = L.marker(coords, {
