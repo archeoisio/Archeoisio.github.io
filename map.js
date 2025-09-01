@@ -332,8 +332,8 @@ preloadTiles(osm, initialView.center, 3, 10);
     label.style.fontSize = '14px';
     label.style.padding = '6px 12px';
   } else {
-    label.style.fontSize = '16px';
-    label.style.padding = '8px 16px';
+    label.style.fontSize = '10px';
+    label.style.padding = '2px 4px';
   }
 });
 });
