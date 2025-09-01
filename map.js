@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     label.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 2, easeLinearity: 0.25 });
+      map.flyTo(coords, 14, { animate: true, duration: 5, easeLinearity: 0.25 });
     });
 
     labels.addLayer(label);
@@ -253,7 +253,7 @@ map.on('zoom', updateLabels);
 updateLabels();
 
   // --- FlyTo iniziale ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2, easeLinearity: 0.25 });
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
 
   // --- Layer switcher ---
   L.control.layers(
