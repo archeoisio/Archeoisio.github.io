@@ -253,7 +253,7 @@ map.on('zoom', updateLabels);
 updateLabels();
 
   // --- FlyTo iniziale ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10, easeLinearity: 0.25 });
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
 
   // --- Layer switcher ---
   L.control.layers(
@@ -275,7 +275,7 @@ updateLabels();
     L.DomEvent.on(homeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2, easeLinearity: 0.25 });
+      map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 5, easeLinearity: 0.25 });
     });
 
     // Pulsante Locate
