@@ -259,16 +259,19 @@ preloadTiles(osm, initialView.center, 3, 10);
   // --- CSS etichette ---
   const style = document.createElement('style');
   style.innerHTML = `
-    .capital-box {
-      background: white;
-      color: black;
-      font-size: 14px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-      white-space: nowrap;
-      cursor: pointer;
-    }
+   .capital-box {
+  display: inline-block;      /* permette al div di adattarsi al contenuto */
+  background: white;
+  color: black;
+  font-size: 14px;
+  padding: 4px 8px;           /* spazio intorno al testo */
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  white-space: nowrap;         /* impedisce al testo di andare a capo */
+  cursor: pointer;
+  min-width: fit-content;      /* il box non sarà mai più piccolo del testo */
+  text-align: center;          /* centra il testo dentro il box */
+}
   `;
   document.head.appendChild(style);
 
