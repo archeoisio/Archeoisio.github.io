@@ -324,6 +324,7 @@ preloadTiles(osm, initialView.center, 3, 10);
     locateBtn.style.width = '45px';
     locateBtn.style.height = '45px';
     locateBtn.style.background = 'white';
+    locateBtn.style.lineHeight = '50px';
     locateBtn.style.border = 'none';
     locateBtn.style.borderRadius = '8px';
 
