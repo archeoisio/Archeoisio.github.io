@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Overlay capitali ---
   const capitali = L.layerGroup();
-  const labels   = L.layerGroup();
 
   const capitalsData = [
  { name: "Abu Dhabi", coords: [24.4539, 54.3773] },
@@ -202,6 +201,31 @@ document.addEventListener('DOMContentLoaded', () => {
   { name: "Zagabria", coords: [45.8150, 15.9819] } 
   ];
 
+  capitalsData.forEach(({ name, coords }) => {
+  const label = L.marker(coords, {
+    icon: L.divIcon({
+      className: 'capital-label',
+      html: `<div class="capital-box">${name}</div>`,
+      iconAnchor: [50, 20] // centra il box (da regolare a piacere)
+    })
+  });
+  capitali.addLayer(label);
+});
+
+// --- CSS per i box ---
+const style = document.createElement('style');
+style.innerHTML = `
+  .capital-box {
+    background: white;
+    color: black;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    white-space: nowrap;
+  }
+`;
+document.head.appendChild(style);
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
