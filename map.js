@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   satellite.addTo(map);
 
   // --- FlyTo iniziale ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0,25 });
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
 
   // --- Marker capitali con popup e lente ---
   capitalsData.forEach(({ name, coords }) => {
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     zoomIcon.addEventListener('click', () => {
       marker.closePopup();
-      map.flyTo(coords, 14, { animate: true, duration: 5, easeLinearity: 0,25 });
+      map.flyTo(coords, 14, { animate: true, duration: 5, easeLinearity: 0.25 });
     });
 
     marker.on('click', () => {
