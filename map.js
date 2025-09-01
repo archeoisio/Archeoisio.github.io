@@ -292,14 +292,36 @@ document.addEventListener('DOMContentLoaded', () => {
   controlBox.addTo(map);
 
   // --- Ridimensionamento etichette in base allo zoom ---
-  map.on('zoomend', () => {
-    const zoom = map.getZoom();
-    document.querySelectorAll('.capital-box').forEach(label => {
-      const fontSize = Math.max(6, 18 - (zoom - 3) * 1.2);       
-      const verticalPadding = Math.max(1, 8 - (zoom - 3) * 0.5);
-      const horizontalPadding = Math.max(2, 16 - (zoom - 3) * 1);
-      label.style.fontSize = `${fontSize}px`;
-      label.style.padding = `${verticalPadding}px ${horizontalPadding}px`;
-    });
+ map.on('zoomend', () => {
+  const zoom = map.getZoom();
+  const minZoom = 5;
+  const maxZoom = 12;
+  const minFont = 6;
+  const maxFont = 18;
+  const minPadding = 2;
+  const maxPadding = 8;
+
+  document.querySelectorAll('.capital-box').forEach(label => {
+    // Font interpolato
+    let fontSize;
+    if (zoom <= minZoom) {
+      fontSize = minFont;
+    } else if (zoom >= maxZoom) {
+      fontSize = maxFont;
+    } else {
+      fontSize = minFont + (zoom - minZoom) / (maxZoom - minZoom) * (maxFont - minFont);
+    }
+    label.style.fontSize = `${fontSize}px`;
+
+    // Padding interpolato
+    let padding;
+    if (zoom <= minZoom) {
+      padding = minPadding;
+    } else if (zoom >= maxZoom) {
+      padding = maxPadding;
+    } else {
+      padding = minPadding + (zoom - minZoom) / (maxZoom - minZoom) * (maxPadding - minPadding);
+    }
+    label.style.padding = `${padding}px ${padding * 2}px`; // verticale px, orizzontale più largo
   });
 });
