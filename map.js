@@ -303,7 +303,7 @@ controlBox.onAdd = function(map) {
   homeBtn.style.display = 'block';
   homeBtn.style.background = 'rgba(255,255,255,0.8)';
   homeBtn.style.borderRadius = '8px';
-  homeBtn.style.marginBottom = '5px';
+  homeBtn.style.marginBottom = '0';
 
   L.DomEvent.on(homeBtn, 'click', function(e) {
     L.DomEvent.stopPropagation(e);
