@@ -278,7 +278,7 @@ preloadTiles(osm, initialView.center, 3, 10);
   // --- SWITCHER layer ---
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Etichette capitali": labels },
+    { "Capitali": labels },
     { collapsed: true }
   ).addTo(map);
 
@@ -305,7 +305,7 @@ preloadTiles(osm, initialView.center, 3, 10);
     homeBtn.style.display = 'block';
     homeBtn.style.background = 'white';
     homeBtn.style.borderRadius = '4px';
-    homeBtn.style.marginBottom = '5px';
+    homeBtn.style.marginBottom = '3px';
 
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
