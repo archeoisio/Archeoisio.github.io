@@ -287,7 +287,7 @@ preloadTiles(osm, initialView.center, 3, 10);
   controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
     container.style.marginTop = '10px';
-    container.style.marginRight = '4px';
+    container.style.marginRight = '50px';
     container.style.border = 'none';
     container.style.background = 'transparent';
     container.style.padding = '0';
