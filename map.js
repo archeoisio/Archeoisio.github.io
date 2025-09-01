@@ -16,6 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
     { attribution: 'Tiles &copy; Esri', noWrap: true }
   );
 
+  // --- Precaricamento tiles ad alta qualità ---
+  [satellite, osm].forEach(layer => {
+    layer.on('tileloadstart', e => {
+      // opzionale: log debug
+      console.log('Caricamento tile:', e.tile.src);
+    });
+    layer.on('load', () => {
+      console.log('Layer completamente caricato');
+    });
+  });
+
   // --- Overlay etichette ---
   const labels = L.layerGroup();
 
@@ -186,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
   { name: "Ulan Bator", coords: [47.8864, 106.9057] },
   { name: "Vaduz", coords: [47.1416, 9.5215] },
   { name: "Valletta", coords: [35.8997, 14.5146] },
-  { name: "Varsavia", coords: [52.2297, 21.0122] },
   { name: "Victoria", coords: [-4.6191, 55.4513] },
   { name: "Vienna", coords: [48.2082, 16.3738] },
   { name: "Vientiane", coords: [17.9757, 102.6331] },
@@ -201,23 +211,23 @@ document.addEventListener('DOMContentLoaded', () => {
   { name: "Zagabria", coords: [45.8150, 15.9819] } 
   ];
 
-// --- Crea etichette capitali ---
- capitalsData.forEach(({ name, coords }) => {
-  const label = L.marker(coords, {
-    icon: L.divIcon({
-      className: 'capital-label',
-      html: `<div class="capital-box">${name}</div>`,
-      iconAnchor: [50, 20] // regola la posizione della label
-    })
-  });
+// --- Crea etichette capitali cliccabili ---
+  capitalsData.forEach(({ name, coords }) => {
+    const label = L.marker(coords, {
+      icon: L.divIcon({
+        className: 'capital-label',
+        html: `<div class="capital-box">${name}</div>`,
+        iconAnchor: [50, 20]
+      })
+    });
 
-  // Evento click sulla label: flyTo sul marker a zoom 14
-  label.on('click', () => {
-    map.flyTo(coords, 14, { animate: true, duration: 0.25, easeLinearity: 1 });
-  });
+    // Evento click: flyTo sul marker a zoom 14
+    label.on('click', () => {
+      map.flyTo(coords, 14, { animate: true, duration: 0.25, easeLinearity: 1 });
+    });
 
-  labels.addLayer(label);
-});
+    labels.addLayer(label);
+  });
 
   // --- Crea mappa ---
   const map = L.map('map', {
@@ -233,16 +243,13 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0
   });
 
-  // --- Aggiungi layer etichette alla mappa ---
+  // --- Aggiungi etichette alla mappa ---
   labels.addTo(map);
-
-  // --- Precaricamento tiles ---
-  satellite.addTo(map);
 
   // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 0.25, easeLinearity: 1 });
 
-  // --- CSS per le etichette ---
+  // --- CSS etichette ---
   const style = document.createElement('style');
   style.innerHTML = `
     .capital-box {
@@ -253,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       border-radius: 6px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.3);
       white-space: nowrap;
+      cursor: pointer;
     }
   `;
   document.head.appendChild(style);
@@ -260,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- SWITCHER layer ---
   const layersControl = L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Capitali": labels },
+    { "Etichette capitali": labels },
     { collapsed: true }
   ).addTo(map);
 
