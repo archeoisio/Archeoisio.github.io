@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateLabels() {
     const zoom = map.getZoom();
     const minZoom = 5, maxZoom = 12;
-    const minFont = 8, maxFont = 18;
+    const minFont = 10, maxFont = 18;
     const minPadding = 4, maxPadding = 8;
 
     const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
