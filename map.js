@@ -211,22 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
   { name: "Zagabria", coords: [45.8150, 15.9819] } 
   ];
 
-  // --- Crea mappa ---
-  const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite],
-    zoomControl: true,
-    minZoom: 3,
-    maxBounds: [
-      [-90, -180],
-      [90, 180]
-    ],
-    maxBoundsViscosity: 1.0
-  });
-
-  // --- Crea etichette capitali cliccabili ---
-  capitalsData.forEach(({ name, coords }) => {
+   capitalsData.forEach(({ name, coords }) => {
     const label = L.marker(coords, {
       icon: L.divIcon({
         className: 'capital-label',
@@ -235,7 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     });
 
-    // Evento click: flyTo sul marker a zoom 14
     label.on('click', () => {
       map.flyTo(coords, 14, { animate: true, duration: 2, easeLinearity: 0.25 });
     });
@@ -243,14 +227,33 @@ document.addEventListener('DOMContentLoaded', () => {
     labels.addLayer(label);
   });
 
-  // --- Aggiungi etichette alla mappa ---
   labels.addTo(map);
+
+  // --- Aggiorna font/padding delle etichette in base allo zoom ---
+  function updateLabels() {
+    const zoom = map.getZoom();
+    const minZoom = 5, maxZoom = 12;
+    const minFont = 6, maxFont = 18;
+    const minPadding = 2, maxPadding = 8;
+
+    const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
+
+    document.querySelectorAll('.capital-box').forEach(label => {
+      const fontSize = minFont + factor * (maxFont - minFont);
+      const padding = minPadding + factor * (maxPadding - minPadding);
+      label.style.fontSize = `${fontSize}px`;
+      label.style.padding = `${padding}px ${padding*2}px`;
+    });
+  }
+
+  map.on('zoomend', updateLabels);
+  map.fire('zoomend'); // forza aggiornamento iniziale
 
   // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2, easeLinearity: 0.25 });
 
-  // --- SWITCHER layer ---
-  const layersControl = L.control.layers(
+  // --- Layer switcher ---
+  L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
     { "Capitali": labels },
     { collapsed: true }
@@ -269,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     homeBtn.href = '#';
     homeBtn.innerHTML = '🏠';
     homeBtn.title = "Torna alla vista iniziale";
-    L.DomEvent.on(homeBtn, 'click', function(e) {
+    L.DomEvent.on(homeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2, easeLinearity: 0.25 });
@@ -287,23 +290,4 @@ document.addEventListener('DOMContentLoaded', () => {
     return container;
   };
   controlBox.addTo(map);
-
-map.on('zoomend', () => {
-  const zoom = map.getZoom();
-
-  // Impostazioni min/max
-  const minZoom = 5, maxZoom = 12;      // zoom minimo e massimo considerato
-  const minFont = 6, maxFont = 18;      // font minimo e massimo
-  const minPadding = 2, maxPadding = 8; // padding verticale minimo e massimo
-
-  // Fattore normalizzato tra 0 e 1
-  const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
-
-  // Aggiorna tutte le etichette
-  document.querySelectorAll('.capital-box').forEach(label => {
-    const fontSize = minFont + factor * (maxFont - minFont);
-    const padding = minPadding + factor * (maxPadding - minPadding);
-    label.style.fontSize = `${fontSize}px`;
-    label.style.padding = `${padding}px ${padding*2}px`; // verticale px, orizzontale più largo
-  });
 });
