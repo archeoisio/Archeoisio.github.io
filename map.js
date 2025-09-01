@@ -232,9 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Aggiorna font/padding delle etichette in base allo zoom ---
   function updateLabels() {
     const zoom = map.getZoom();
-    const minZoom = 5, maxZoom = 12;
-    const minFont = 10, maxFont = 18;
-    const minPadding = 4, maxPadding = 8;
+    const minZoom = 5, maxZoom = 14;
+    const minFont = 8, maxFont = 10;
+    const minPadding = 2, maxPadding = 6;
 
     const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
 
