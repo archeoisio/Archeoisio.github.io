@@ -323,14 +323,14 @@ preloadTiles(osm, initialView.center, 3, 10);
 
     labels.forEach(label => {
   if (zoom < 4) {
-    label.style.fontSize = '10px';
-    label.style.padding = '2px 4px';
+    label.style.fontSize = '18px';
+    label.style.padding = '8px 16px';
   } else if (zoom < 6) {
     label.style.fontSize = '12px';
-    label.style.padding = '3px 6px';
-  } else if (zoom < 8) {
-    label.style.fontSize = '14px';
     label.style.padding = '6px 12px';
+  } else if (zoom < 8) {
+    label.style.fontSize = '10px';
+    label.style.padding = '2px 4px';
   } else {
     label.style.fontSize = '10px';
     label.style.padding = '2px 4px';
