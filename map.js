@@ -16,16 +16,23 @@ document.addEventListener('DOMContentLoaded', () => {
     { attribution: 'Tiles &copy; Esri', noWrap: true }
   );
 
-  // --- Precaricamento tiles ad alta qualità ---
-  [satellite, osm].forEach(layer => {
-    layer.on('tileloadstart', e => {
-      // opzionale: log debug
-      console.log('Caricamento tile:', e.tile.src);
-    });
-    layer.on('load', () => {
-      console.log('Layer completamente caricato');
-    });
-  });
+ // --- Precaricamento tiles dai livelli 5 a 18 ---
+function preloadTiles(layer, center, minZoom, maxZoom) {
+  const tmpMap = L.map(document.createElement('div'), { attributionControl: false, zoomControl: false });
+  tmpMap.setView(center, minZoom);
+  layer.addTo(tmpMap);
+
+  for (let z = minZoom; z <= maxZoom; z++) {
+    tmpMap.setZoom(z); // forza il caricamento dei tiles a questo zoom
+  }
+
+  // rimuovi il layer temporaneo
+  tmpMap.remove();
+}
+
+// Esempio di utilizzo
+preloadTiles(satellite, initialView.center, 3, 10);
+preloadTiles(osm, initialView.center, 3, 10);
 
   // --- Overlay etichette ---
   const labels = L.layerGroup();
