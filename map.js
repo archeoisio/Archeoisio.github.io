@@ -293,7 +293,7 @@ controlBox.onAdd = function(map) {
   // Pulsante Home
   const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
   homeBtn.href = '#';
-  homeBtn.innerHTML = '🗺️';
+  homeBtn.innerHTML = '🏠';
   homeBtn.title = "Torna alla vista iniziale";
   homeBtn.style.fontSize = '30px';       // Pulsante più grande
   homeBtn.style.width = '45px';
