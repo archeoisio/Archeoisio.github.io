@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Evento click: flyTo sul marker a zoom 14
     label.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 0.25, easeLinearity: 1 });
+      map.flyTo(coords, 14, { animate: true, duration: 2, easeLinearity: 0.25 });
     });
 
     labels.addLayer(label);
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
   labels.addTo(map);
 
   // --- FlyTo iniziale ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 0.25, easeLinearity: 1 });
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2, easeLinearity: 0.25 });
 
   // --- CSS etichette ---
   const style = document.createElement('style');
@@ -300,12 +300,12 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(homeBtn, 'click', function(e) {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 0.25, easeLinearity: 1 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true,  duration: 2, easeLinearity: 0.25 });
     });
 
     // Pulsante Locate
     const locateControl = L.control.locate({
-      flyTo: { duration: 0.25, easeLinearity: 1 },
+      flyTo: { duration: 2, easeLinearity: 0.25 },
       strings: { title: "Mostrami la mia posizione" },
       locateOptions: { enableHighAccuracy: true, watch: false }
     });
