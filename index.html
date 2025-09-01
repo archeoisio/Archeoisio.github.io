@@ -66,15 +66,16 @@
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  font-size: 22px !important;   /* <- riduci un po' se l’icona è troppo grande */
+  font-size: 22px !important;
   background: white !important;
   border-radius: 4px !important;
   border: none !important;
-  padding: 0 !important;        /* elimina margini interni */
-  line-height: 1 !important;    /* evita spostamenti verticali */
-  } 
+  padding: 0 !important;
+  margin: 0 !important;       /* elimina margini */
+  line-height: 1 !important;
+}
   
- /* PulsantE Locate */
+ /* Pulsante Locate */
 .leaflet-control-locate a {
   width: 50px !important;
   height: 50px !important;
@@ -82,20 +83,14 @@
   justify-content: center !important;
   align-items: center !important;
   font-size: 22px !important;
-  background: white !important;       /* pulsanti bianchi, container trasparente */
-  border-radius: 4px !important;     /* angoli arrotondati */
+  background: white !important;
+  border-radius: 4px !important;
   border: none !important;
   padding: 0 !important;
+  margin: 0 !important;       /* elimina margini */
   line-height: 1 !important;
-  }
-  
-  /* Azzeriamo margini e padding di tutti i controlli Leaflet */
-.leaflet-control {
-  margin: 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
 }
+  
 </style>
 </head>
 
