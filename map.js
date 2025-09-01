@@ -337,15 +337,17 @@ preloadTiles(osm, initialView.center, 3, 10);
     const labels = document.querySelectorAll('.capital-box');
 
     labels.forEach(label => {
-      if (zoom < 4) {
-        label.style.fontSize = '8px';
-      } else if (zoom < 6) {
-        label.style.fontSize = '10px';
-      } else if (zoom < 8) {
-        label.style.fontSize = '12px';
-      } else {
-        label.style.fontSize = '14px';
-      }
-    });
-  });
+  if (zoom < 4) {
+    label.style.fontSize = '6px';
+    label.style.padding = '2px 4px';
+  } else if (zoom < 6) {
+    label.style.fontSize = '8px';
+    label.style.padding = '3px 6px';
+  } else if (zoom < 8) {
+    label.style.fontSize = '10px';
+    label.style.padding = '3px 6px';
+  } else {
+    label.style.fontSize = '14px';
+    label.style.padding = '4px 8px';
+  }
 });
