@@ -312,14 +312,7 @@ preloadTiles(osm, initialView.center, 3, 10);
     });
     const locateBtn = locateControl.onAdd(map);
 
-    locateBtn.style.width = '45px';
-    locateBtn.style.height = '45px';
-    locateBtn.style.background = 'white';
-    locateBtn.style.lineHeight = '50px';
-    locateBtn.style.border = 'none';
-    locateBtn.style.borderRadius = '4px';
-
-    container.appendChild(locateBtn);
+     container.appendChild(locateBtn);
 
     return container;
   };
