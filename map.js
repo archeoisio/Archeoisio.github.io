@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const MOBILE_MAX_WIDTH = 767;
   const mobileView  = { center: [45, 10], zoom: 5 };
-  const desktopView = { center: [49, 30], zoom: 5 };
+  const desktopView = { center: [49, 30], zoom: 4 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
@@ -40,23 +40,19 @@ const map = L.map('map', {
 });
 
 // --- Aggiorna altezza mappa su resize/orientation ---
-function resizeMap() {
-  const mapEl = document.getElementById('map');
-  // usa visualViewport se disponibile, fallback a window.innerHeight
+function setVh() {
   const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  mapEl.style.height = vh + 'px';
-  map.invalidateSize(); // forza Leaflet a ridisegnare
+  document.documentElement.style.setProperty('--vh', vh + 'px');
+  if (map) map.invalidateSize();
 }
 
-// eventi di ridimensionamento/orientamento
-window.addEventListener('resize', resizeMap);
-window.addEventListener('orientationchange', resizeMap);
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', resizeMap);
-}
+// iniziale
+setVh();
 
-// imposta subito altezza iniziale corretta
-resizeMap();
+// eventi
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', setVh);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
   
   // --- Overlay etichette ---
   const labels = L.layerGroup();
