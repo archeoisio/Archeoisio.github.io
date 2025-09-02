@@ -18,7 +18,7 @@ const satellite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   { 
     attribution: 'Tiles &copy; Esri',
-    noWrap: true,
+    noWrap: false,
     updateWhenZooming: true,
     updateWhenIdle: false,
     keepBuffer: 5
