@@ -11,7 +11,7 @@ const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   noWrap: true,
   updateWhenZooming: true,   // aggiorna tiles anche durante zoom animati
   updateWhenIdle: false,     // non aspettare che la mappa sia ferma
-  keepBuffer: 5              // numero di tiles extra da mantenere nel buffer
+  keepBuffer: 2              // numero di tiles extra da mantenere nel buffer
 });
 
 const satellite = L.tileLayer(
@@ -51,7 +51,6 @@ window.addEventListener('orientationchange', resizeMap);
 
 // imposta subito dimensione corretta
 resizeMap();
-
 
 // --- Funzione per precaricare le tiles tra zoom 5 e 14 ---
 function preloadTiles(map, minZ = 5, maxZ = 14) {
