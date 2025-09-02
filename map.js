@@ -18,7 +18,7 @@ const satellite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   { 
     attribution: 'Tiles &copy; Esri',
-    noWrap: false,
+    noWrap: true,
     updateWhenZooming: true,
     updateWhenIdle: false,
     keepBuffer: 5
@@ -32,8 +32,8 @@ const map = L.map('map', {
   layers: [satellite],         // layer iniziale
   zoomControl: true,
   minZoom: 2,
-  maxBounds: [[-90, -160],[90, 200]],
-  maxBoundsViscosity: 1.0,
+  maxBounds: [[-90, -180],[90, 180]],
+  maxBoundsViscosity: 1.0,8
   scrollWheelZoom: true,
   wheelPxPerZoomLevel: 120,    // zoom più lento con rotella
   zoomSnap: 0.10               // zoom graduale
