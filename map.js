@@ -39,6 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
   zoomSnap: 0.10             // permette zoom più graduale
   });
 
+  // --- Aggiorna altezza mappa su resize/orientation ---
+function resizeMap() {
+  const mapEl = document.getElementById('map');
+  mapEl.style.height = window.innerHeight + 'px';
+  map.invalidateSize(); // forza Leaflet a ridisegnare
+}
+
+window.addEventListener('resize', resizeMap);
+window.addEventListener('orientationchange', resizeMap);
+
+// imposta subito dimensione corretta
+resizeMap();
   // --- Overlay etichette ---
   const labels = L.layerGroup();
   
