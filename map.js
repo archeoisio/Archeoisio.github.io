@@ -21,7 +21,7 @@ const satellite = L.tileLayer(
     noWrap: true,
     updateWhenZooming: true,
     updateWhenIdle: false,
-    keepBuffer: 5
+    keepBuffer: 2
   }
 );
 
