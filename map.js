@@ -33,7 +33,7 @@ const map = L.map('map', {
   zoomControl: true,
   minZoom: 2,
   maxBounds: [[-90, -180],[90, 180]],
-  maxBoundsViscosity: 1.0,8
+  maxBoundsViscosity: 1.0,
   scrollWheelZoom: true,
   wheelPxPerZoomLevel: 120,    // zoom più lento con rotella
   zoomSnap: 0.10               // zoom graduale
@@ -264,7 +264,7 @@ resizeMap();
 function updateLabels() {
   const zoom = map.getZoom();
   const minZoom = 5, maxZoom = 14;
-  const minFont = 10, maxFont = 10;
+  const minFont = 12, maxFont = 14;
   const minPadding = 3, maxPadding = 4;
 
   const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
