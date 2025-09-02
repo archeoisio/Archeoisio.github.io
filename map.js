@@ -53,7 +53,7 @@ window.addEventListener('orientationchange', resizeMap);
 resizeMap();
 
 // --- Funzione per precaricare le tiles tra zoom 5 e 14 ---
-function preloadTiles(map, minZ = 4, maxZ = 14) {
+function preloadTiles(map, minZ = 10, maxZ = 14) {
   const bounds = map.getBounds();
 
   for (let z = minZ; z <= maxZ; z++) {
