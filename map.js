@@ -7,14 +7,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Layer base ---
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    noWrap: true
-  });
+  attribution: '&copy; OpenStreetMap contributors',
+  noWrap: true,
+  updateWhenZooming: true,   // aggiorna tiles anche durante zoom animati
+  updateWhenIdle: false,     // non aspettare che la mappa sia ferma
+  keepBuffer: 5              // numero di tiles extra da mantenere nel buffer
+});
 
   const satellite = L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: 'Tiles &copy; Esri', noWrap: true }
-  );
+    { 
+    attribution: 'Tiles &copy; Esri',
+    noWrap: true,
+    updateWhenZooming: true,
+    updateWhenIdle: false,
+    keepBuffer: 5
+  }
+);
 
   // --- Mappa ---
   const map = L.map('map', {
