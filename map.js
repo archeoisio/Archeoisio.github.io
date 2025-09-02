@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialView = isMobile ? mobileView : desktopView;
 
   // --- Layer base ---
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors',
   noWrap: true,
   updateWhenZooming: true,   // aggiorna tiles anche durante zoom animati
@@ -14,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
   keepBuffer: 5              // numero di tiles extra da mantenere nel buffer
 });
 
-  const satellite = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { 
+const satellite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  { 
     attribution: 'Tiles &copy; Esri',
     noWrap: true,
     updateWhenZooming: true,
@@ -25,21 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 );
 
-  // --- Mappa ---
-  const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite],
-    zoomControl: true,
-    minZoom: 3,
-    maxBounds: [[-90, -180],[90, 180]],
-    maxBoundsViscosity: 1.0,
-    scrollWheelZoom: true,
-  wheelPxPerZoomLevel: 120,  // default 60, aumenta = zoom più lento
-  zoomSnap: 0.10             // permette zoom più graduale
-  });
+// --- Mappa ---
+const map = L.map('map', {
+  center: initialView.center,
+  zoom: initialView.zoom,
+  layers: [satellite],         // layer iniziale
+  zoomControl: true,
+  minZoom: 3,
+  maxBounds: [[-90, -180],[90, 180]],
+  maxBoundsViscosity: 1.0,
+  scrollWheelZoom: true,
+  wheelPxPerZoomLevel: 120,    // default 60, aumenta = zoom più lento
+  zoomSnap: 0.10               // permette zoom più graduale
+});
 
-  // --- Aggiorna altezza mappa su resize/orientation ---
+// --- Aggiorna altezza mappa su resize/orientation ---
 function resizeMap() {
   const mapEl = document.getElementById('map');
   mapEl.style.height = window.innerHeight + 'px';
@@ -51,6 +51,36 @@ window.addEventListener('orientationchange', resizeMap);
 
 // imposta subito dimensione corretta
 resizeMap();
+
+
+// --- Funzione per precaricare le tiles tra zoom 5 e 14 ---
+function preloadTiles(map, minZ = 5, maxZ = 14) {
+  const bounds = map.getBounds();
+
+  for (let z = minZ; z <= maxZ; z++) {
+    const tileBounds = L.bounds(
+      map.project(bounds.getNorthWest(), z),
+      map.project(bounds.getSouthEast(), z)
+    );
+
+    const tileSize = 256;
+    const minX = Math.floor(tileBounds.min.x / tileSize);
+    const maxX = Math.floor(tileBounds.max.x / tileSize);
+    const minY = Math.floor(tileBounds.min.y / tileSize);
+    const maxY = Math.floor(tileBounds.max.y / tileSize);
+
+    for (let x = minX; x <= maxX; x++) {
+      for (let y = minY; y <= maxY; y++) {
+        const img = new Image();
+        img.src = satellite.getTileUrl({ x, y, z });
+      }
+    }
+  }
+}
+
+// --- Precarica quando la mappa si muove o cambia zoom ---
+map.on('moveend zoomend', () => preloadTiles(map));
+  
   // --- Overlay etichette ---
   const labels = L.layerGroup();
   
