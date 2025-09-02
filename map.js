@@ -24,7 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomControl: true,
     minZoom: 3,
     maxBounds: [[-90, -180],[90, 180]],
-    maxBoundsViscosity: 1.0
+    maxBoundsViscosity: 1.0,
+    scrollWheelZoom: true,
+  wheelPxPerZoomLevel: 120,  // default 60, aumenta = zoom più lento
+  zoomSnap: 0.25             // permette zoom più graduale
   });
 
   // --- Overlay etichette ---
