@@ -35,23 +35,28 @@ const map = L.map('map', {
   maxBounds: [[-90, -160],[90, 200]],
   maxBoundsViscosity: 1.0,
   scrollWheelZoom: true,
-  wheelPxPerZoomLevel: 120,    // default 60, aumenta = zoom più lento
-  zoomSnap: 0.10               // permette zoom più graduale
+  wheelPxPerZoomLevel: 120,    // zoom più lento con rotella
+  zoomSnap: 0.10               // zoom graduale
 });
 
 // --- Aggiorna altezza mappa su resize/orientation ---
 function resizeMap() {
   const mapEl = document.getElementById('map');
-  mapEl.style.height = window.innerHeight + 'px';
+  // usa visualViewport se disponibile, fallback a window.innerHeight
+  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  mapEl.style.height = vh + 'px';
   map.invalidateSize(); // forza Leaflet a ridisegnare
 }
 
+// eventi di ridimensionamento/orientamento
 window.addEventListener('resize', resizeMap);
 window.addEventListener('orientationchange', resizeMap);
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', resizeMap);
+}
 
-// imposta subito dimensione corretta
+// imposta subito altezza iniziale corretta
 resizeMap();
-
   
   // --- Overlay etichette ---
   const labels = L.layerGroup();
@@ -247,7 +252,7 @@ resizeMap();
     });
 
     label.on('click', () => {
-      map.flyTo(coords, 14, { animate: true, duration: 5, easeLinearity: 0.25 });
+      map.flyTo(coords, 15, { animate: true, duration: 5, easeLinearity: 0.25 });
     });
 
     labels.addLayer(label);
