@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0,
     scrollWheelZoom: true,
   wheelPxPerZoomLevel: 120,  // default 60, aumenta = zoom più lento
-  zoomSnap: 0.25             // permette zoom più graduale
+  zoomSnap: 0.10             // permette zoom più graduale
   });
 
   // --- Overlay etichette ---
