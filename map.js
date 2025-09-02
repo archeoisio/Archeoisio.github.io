@@ -11,7 +11,7 @@ const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   noWrap: true,
   updateWhenZooming: true,   // aggiorna tiles anche durante zoom animati
   updateWhenIdle: false,     // non aspettare che la mappa sia ferma
-  keepBuffer: 2              // numero di tiles extra da mantenere nel buffer
+  keepBuffer: 3              // numero di tiles extra da mantenere nel buffer
 });
 
 const satellite = L.tileLayer(
@@ -21,7 +21,7 @@ const satellite = L.tileLayer(
     noWrap: true,
     updateWhenZooming: true,
     updateWhenIdle: false,
-    keepBuffer: 1
+    keepBuffer: 3
   }
 );
 
@@ -32,7 +32,7 @@ const map = L.map('map', {
   layers: [satellite],         // layer iniziale
   zoomControl: true,
   minZoom: 3,
-  maxBounds: [[-90, -180],[90, 180]],
+  maxBounds: [[-90, -160],[90, 200]],
   maxBoundsViscosity: 1.0,
   scrollWheelZoom: true,
   wheelPxPerZoomLevel: 120,    // default 60, aumenta = zoom più lento
