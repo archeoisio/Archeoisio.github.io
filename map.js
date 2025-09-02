@@ -264,8 +264,6 @@ function updateLabels() {
     const minPadding = 3, maxPadding = 4;
     const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
 
-  const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
-
   document.querySelectorAll('.capital-box').forEach(label => {
     const fontSize = minFont + factor * (maxFont - minFont);
     const padding = minPadding + factor * (maxPadding - minPadding);
