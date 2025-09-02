@@ -11,7 +11,7 @@ const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   noWrap: true,
   updateWhenZooming: true,   // aggiorna tiles anche durante zoom animati
   updateWhenIdle: false,     // non aspettare che la mappa sia ferma
-  keepBuffer: 3              // numero di tiles extra da mantenere nel buffer
+  keepBuffer: 5              // numero di tiles extra da mantenere nel buffer
 });
 
 const satellite = L.tileLayer(
@@ -21,7 +21,7 @@ const satellite = L.tileLayer(
     noWrap: true,
     updateWhenZooming: true,
     updateWhenIdle: false,
-    keepBuffer: 3
+    keepBuffer: 5
   }
 );
 
