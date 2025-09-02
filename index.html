@@ -20,10 +20,9 @@
     overflow: hidden; /* evita scroll indesiderati */
   }
 
-  /* Mappa a schermo intero */
-  #map {
-    width: 100%;
-    height: 100dvh; /* usa dynamic viewport per mobile */
+ #map {
+  width: 100%;
+  height: 100%; /* altezza gestita da JS */
   }
 .capital-box {
       display: inline-block;
@@ -118,5 +117,17 @@
 
   <!-- Il tuo script principale -->
   <script src="map.js"></script>
+  <script>
+function resizeMap() {
+  document.getElementById('map').style.height = window.innerHeight + 'px';
+}
+
+// al caricamento
+resizeMap();
+
+// quando cambia orientamento o ridimensionamento
+window.addEventListener('resize', resizeMap);
+window.addEventListener('orientationchange', resizeMap);
+</script>
 </body>
 </html>
