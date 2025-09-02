@@ -301,7 +301,7 @@ updateLabels();
     L.DomEvent.on(homeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 0.10 });
+      map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 1 });
     });
 
     // Pulsante Locate
