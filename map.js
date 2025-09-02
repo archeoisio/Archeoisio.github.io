@@ -31,7 +31,7 @@ const map = L.map('map', {
   zoom: initialView.zoom,
   layers: [satellite],         // layer iniziale
   zoomControl: true,
-  minZoom: 2.8,
+  minZoom: 2.9,
   maxBounds: [[-90, -180],[90, 180]],
   maxBoundsViscosity: 1.0,
   scrollWheelZoom: true,
