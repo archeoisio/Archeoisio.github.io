@@ -52,33 +52,6 @@ window.addEventListener('orientationchange', resizeMap);
 // imposta subito dimensione corretta
 resizeMap();
 
-// --- Funzione per precaricare le tiles tra zoom 5 e 14 ---
-function preloadTiles(map, minZ = 10, maxZ = 14) {
-  const bounds = map.getBounds();
-
-  for (let z = minZ; z <= maxZ; z++) {
-    const tileBounds = L.bounds(
-      map.project(bounds.getNorthWest(), z),
-      map.project(bounds.getSouthEast(), z)
-    );
-
-    const tileSize = 256;
-    const minX = Math.floor(tileBounds.min.x / tileSize);
-    const maxX = Math.floor(tileBounds.max.x / tileSize);
-    const minY = Math.floor(tileBounds.min.y / tileSize);
-    const maxY = Math.floor(tileBounds.max.y / tileSize);
-
-    for (let x = minX; x <= maxX; x++) {
-      for (let y = minY; y <= maxY; y++) {
-        const img = new Image();
-        img.src = satellite.getTileUrl({ x, y, z });
-      }
-    }
-  }
-}
-
-// --- Precarica quando la mappa si muove o cambia zoom ---
-map.on('moveend zoomend', () => preloadTiles(map));
   
   // --- Overlay etichette ---
   const labels = L.layerGroup();
