@@ -258,17 +258,38 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 
  // --- Aggiorna font/padding delle etichette in base allo zoom ---
 function updateLabels() {
- const zoom = map.getZoom();
-    const minZoom = 3, maxZoom = 14;
-    const minFont = 2, maxFont = 14;
-    const minPadding = 2, maxPadding = 20;
-    const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
+  const zoom = map.getZoom();
 
-  document.querySelectorAll('.capital-box').forEach(label => {
-    const fontSize = minFont + factor * (maxFont - minFont);
-    const padding = minPadding + factor * (maxPadding - minPadding);
-    label.style.fontSize = `${fontSize}px`;
-    label.style.padding = `${padding}px ${padding*2}px`;
+  // zoom "ancoraggi"
+  const zMin = 3, zMid = 5, zMax = 14;
+
+  // font corrispondenti
+  const fontAt3 = 6;
+  const fontAt5 = 12;
+  const fontAt14 = 14;
+
+  // padding corrispondenti
+  const padAt3 = 2;
+  const padAt5 = 4;
+  const padAt14 = 6;
+
+  let fontSize, padding;
+
+  if (zoom <= zMid) {
+    // da 3 → 5
+    const f = (zoom - zMin) / (zMid - zMin);
+    fontSize = fontAt3 + f * (fontAt5 - fontAt3);
+    padding  = padAt3  + f * (padAt5 - padAt3);
+  } else {
+    // da 5 → 14
+    const f = (zoom - zMid) / (zMax - zMid);
+    fontSize = fontAt5 + f * (fontAt14 - fontAt5);
+    padding  = padAt5  + f * (padAt14 - padAt5);
+  }
+
+  document.querySelectorAll('.capital-box').forEach(el => {
+    el.style.fontSize = `${fontSize}px`;
+    el.style.padding  = `${padding}px ${padding * 2}px`;
   });
 }
 
