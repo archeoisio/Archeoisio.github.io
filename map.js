@@ -260,8 +260,8 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 function updateLabels() {
  const zoom = map.getZoom();
     const minZoom = 5, maxZoom = 14;
-    const minFont = 10, maxFont = 10;
-    const minPadding = 3, maxPadding = 4;
+    const minFont = 10, maxFont = 14;
+    const minPadding = 6, maxPadding = 10;
     const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
 
   document.querySelectorAll('.capital-box').forEach(label => {
@@ -301,7 +301,7 @@ updateLabels();
     L.DomEvent.on(homeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 1 });
+      map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 0.25 });
     });
 
     // Pulsante Locate
