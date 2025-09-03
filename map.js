@@ -259,9 +259,9 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
  // --- Aggiorna font/padding delle etichette in base allo zoom ---
 function updateLabels() {
  const zoom = map.getZoom();
-    const minZoom = 5, maxZoom = 14;
-    const minFont = 10, maxFont = 14;
-    const minPadding = 6, maxPadding = 10;
+    const minZoom = 3, maxZoom = 14;
+    const minFont = 2, maxFont = 14;
+    const minPadding = 2, maxPadding = 20;
     const factor = Math.min(Math.max((zoom - minZoom) / (maxZoom - minZoom), 0), 1);
 
   document.querySelectorAll('.capital-box').forEach(label => {
