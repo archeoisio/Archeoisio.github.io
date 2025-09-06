@@ -3,7 +3,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaXNpbyIsImEiOiJjbWY3bnljcjIwZmwwMmpzNnNrMmdzM
 document.addEventListener('DOMContentLoaded', () => {
   const MOBILE_MAX_WIDTH = 767;
   const mobileView  = { center: [10, 45], zoom: 2 };
-  const desktopView = { center: [30, 45], zoom: 2.5 };
+ const desktopView = { center: [30, 45], zoom: 2.5 }; // lng, lat
   const isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
