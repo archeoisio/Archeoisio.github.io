@@ -1,9 +1,10 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiaXNpbyIsImEiOiJjbWY3bnljcjIwZmwwMmpzNnNrMmdzMWI0In0.HwYix6TI4UEGx3zh6Oq3HQ';
+mapboxgl.accessToken = 'pk.eyJ1IjoiaXNpbyIsImEiOiJjbWY3bnljcjIwZmwwMmpzNnNrMmdzMWI0In0.HwYix6TI4UEGx3zh6Oq3HQ';
 
 document.addEventListener('DOMContentLoaded', () => {
   const MOBILE_MAX_WIDTH = 767;
   const mobileView  = { center: [10, 45], zoom: 2 };
- const desktopView = { center: [30, 45], zoom: 2.5 }; // lng, lat
+  const desktopView = { center: [30, 45], zoom: 2.5 };
   const isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
@@ -15,9 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: initialView.zoom
   });
 
-  // Abilita illuminazione globale per effetto 3D
+  // Effetto 3D globo
   map.on('style.load', () => {
-    map.setFog({}); 
+    map.setFog({});
   });
 
   
@@ -224,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
     map.flyTo({ center: initialView.center, zoom: initialView.zoom, speed: 0.8 });
   });
 
-  // Pulsante Locate
+  // Controllo geolocalizzazione
   const geolocate = new mapboxgl.GeolocateControl({
     positionOptions: { enableHighAccuracy: true },
     trackUserLocation: false,
