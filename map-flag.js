@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-const southWest = L.latLng(-60, 160); // più a ovest di Nuku'alofa
-const northEast = L.latLng(80, -160); // più a est di Tuvalu
+const southWest = L.latLng(-90, 190); // più a ovest di Nuku'alofa
+const northEast = L.latLng(90, -190); // più a est di Tuvalu
 const maxBounds = L.latLngBounds(southWest, northEast);
   
   // --- Layer base ---
