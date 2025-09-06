@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-const southWest = L.latLng(-85, -Infinity);
-const northEast = L.latLng(85, Infinity);
+const southWest = L.latLng(-20, 170);  // appena a ovest di Nuku'alofa
+const northEast = L.latLng(-5, 180);
 const bounds = L.latLngBounds(southWest, northEast);
   
   // --- Layer base ---
@@ -38,7 +38,6 @@ const map = L.map('map', {
   worldCopyJump: true,
   maxBounds: bounds,
   maxBoundsViscosity: 1.0,
-  scrollWheelZoom: true,
   wheelPxPerZoomLevel: 120,
   zoomSnap: 0.1
 });
