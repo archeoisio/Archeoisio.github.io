@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-const southWest = L.latLng(-85, -180);
-const northEast = L.latLng(85, 180);
+const southWest = L.latLng(-85, -Infinity);
+const northEast = L.latLng(85, Infinity);
 const bounds = L.latLngBounds(southWest, northEast);
-
+  
   // --- Layer base ---
 const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors',
@@ -28,20 +28,19 @@ const satellite = L.tileLayer(
   }
 );
 
-// --- Mappa ---
 const map = L.map('map', {
   center: initialView.center,
   zoom: initialView.zoom,
-  layers: [satellite],        // layer iniziale
+  layers: [satellite],
   zoomControl: true,
   minZoom: 3,
-  maxZoom: 18,                // se vuoi, mantieni maxZoom
-  worldCopyJump: true,        // <-- ripete il mondo, niente bande grigie
+  maxZoom: 18,
+  worldCopyJump: true,
   maxBounds: bounds,
   maxBoundsViscosity: 1.0,
   scrollWheelZoom: true,
-  wheelPxPerZoomLevel: 120,   // zoom più lento con rotella
-  zoomSnap: 0.1               // zoom graduale
+  wheelPxPerZoomLevel: 120,
+  zoomSnap: 0.1
 });
 
 // --- Aggiorna altezza mappa su resize/orientation ---
