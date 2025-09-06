@@ -29,14 +29,14 @@ const satellite = L.tileLayer(
 const map = L.map('map', {
   center: initialView.center,
   zoom: initialView.zoom,
-  layers: [satellite],         // layer iniziale
+  layers: [satellite],        // layer iniziale
   zoomControl: true,
   minZoom: 3,
-  maxBounds: [[-90, -180],[90, 180]],
-  maxBoundsViscosity: 1.0,
+  maxZoom: 18,                // se vuoi, mantieni maxZoom
+  worldCopyJump: true,        // <-- ripete il mondo, niente bande grigie
   scrollWheelZoom: true,
-  wheelPxPerZoomLevel: 120,    // zoom più lento con rotella
-  zoomSnap: 0.10               // zoom graduale
+  wheelPxPerZoomLevel: 120,   // zoom più lento con rotella
+  zoomSnap: 0.1               // zoom graduale
 });
 
 // --- Aggiorna altezza mappa su resize/orientation ---
