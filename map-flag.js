@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Layer base ---
 const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors',
-  noWrap: true,
+  noWrap: false,
   updateWhenZooming: true,   // aggiorna tiles anche durante zoom animati
   updateWhenIdle: false,     // non aspettare che la mappa sia ferma
   keepBuffer: 5              // numero di tiles extra da mantenere nel buffer
@@ -18,7 +18,7 @@ const satellite = L.tileLayer(
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   { 
     attribution: 'Tiles &copy; Esri',
-    noWrap: true,
+    noWrap: false,
     updateWhenZooming: true,
     updateWhenIdle: false,
     keepBuffer: 5
@@ -34,6 +34,7 @@ const map = L.map('map', {
   minZoom: 3,
   maxZoom: 18,                // se vuoi, mantieni maxZoom
   worldCopyJump: true,        // <-- ripete il mondo, niente bande grigie
+  maxBoundsViscosity: 1.0,
   scrollWheelZoom: true,
   wheelPxPerZoomLevel: 120,   // zoom più lento con rotella
   zoomSnap: 0.1               // zoom graduale
