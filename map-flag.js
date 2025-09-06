@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
+const southWest = L.latLng(-85, -180);
+const northEast = L.latLng(85, 180);
+const bounds = L.latLngBounds(southWest, northEast);
 
   // --- Layer base ---
 const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -34,6 +37,7 @@ const map = L.map('map', {
   minZoom: 3,
   maxZoom: 18,                // se vuoi, mantieni maxZoom
   worldCopyJump: true,        // <-- ripete il mondo, niente bande grigie
+  maxBounds: bounds,
   maxBoundsViscosity: 1.0,
   scrollWheelZoom: true,
   wheelPxPerZoomLevel: 120,   // zoom più lento con rotella
