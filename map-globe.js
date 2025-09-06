@@ -1,4 +1,4 @@
-mapboxgl.accessToken = 'INSERISCI_LA_TUA_MAPBOX_KEY';
+mapboxgl.accessToken = 'pk.eyJ1IjoiaXNpbyIsImEiOiJjbWY3bnljcjIwZmwwMmpzNnNrMmdzMWI0In0.HwYix6TI4UEGx3zh6Oq3HQ';
 
 document.addEventListener('DOMContentLoaded', () => {
   const MOBILE_MAX_WIDTH = 767;
