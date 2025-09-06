@@ -4,9 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-const southWest = L.latLng(-20, 170);  // appena a ovest di Nuku'alofa
-const northEast = L.latLng(-5, 180);
-const bounds = L.latLngBounds(southWest, northEast);
+const southWest = L.latLng(-60, 160); // più a ovest di Nuku'alofa
+const northEast = L.latLng(80, -160); // più a est di Tuvalu
+const maxBounds = L.latLngBounds(southWest, northEast);
   
   // --- Layer base ---
 const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -28,6 +28,7 @@ const satellite = L.tileLayer(
   }
 );
 
+// Mappa
 const map = L.map('map', {
   center: initialView.center,
   zoom: initialView.zoom,
@@ -35,7 +36,8 @@ const map = L.map('map', {
   zoomControl: true,
   minZoom: 3,
   maxZoom: 18,
-  maxBounds: bounds,
+  worldCopyJump: true,     // mappa si ripete orizzontalmente
+  maxBounds: maxBounds,    // blocco soft confini
   maxBoundsViscosity: 1.0,
   wheelPxPerZoomLevel: 120,
   zoomSnap: 0.1
