@@ -35,7 +35,6 @@ const map = L.map('map', {
   zoomControl: true,
   minZoom: 3,
   maxZoom: 18,
-  worldCopyJump: true,
   maxBounds: bounds,
   maxBoundsViscosity: 1.0,
   wheelPxPerZoomLevel: 120,
