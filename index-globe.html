@@ -3,36 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Globo 3D Mapbox</title>
+<title>Globo Mapbox Minimal</title>
 <link href="https://api.mapbox.com/mapbox-gl-js/v2.22.0/mapbox-gl.css" rel="stylesheet">
 <style>
   html, body { margin:0; padding:0; height:100%; }
-  #map { position:fixed; top:0; left:0; width:100%; height:100%; }
-  .capital-box {
-    font-family: monospace;
-    font-weight: bold;
-    text-transform: uppercase;
-    background: rgba(255,255,255,0.8);
-    padding: 2px 4px;
-    border-radius: 3px;
-    color: #000;
-    white-space: nowrap;
-  }
-  .custom-home-btn {
-    position: absolute;
-    top: 10px; right: 10px;
-    width: 44px; height: 44px;
-    font-size: 25px;
-    background: white; border-radius: 4px; border: none;
-    display: flex; justify-content: center; align-items: center;
-    cursor: pointer; z-index: 10;
-  }
+  #map { width:100%; height:100%; }
 </style>
 </head>
 <body>
 
 <div id="map"></div>
-<button class="custom-home-btn" title="Torna alla vista iniziale">🏠</button>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.22.0/mapbox-gl.js"></script>
 <script>
@@ -47,44 +27,15 @@ const map = new mapboxgl.Map({
 });
 
 // Attiva effetto luce globale
-map.on('style.load', () => { map.setFog({}); });
-
-// Dati capitali (solo alcune per test)
-const capitals = [
-  { name: "Roma", coords: [12.4964, 41.9028] },
-  { name: "Parigi", coords: [2.3522, 48.8566] },
-  { name: "Londra", coords: [-0.1278, 51.5074] }
-];
-
-// Aggiungi marker
-capitals.forEach(c => {
-  const el = document.createElement('div');
-  el.className = 'capital-box';
-  el.textContent = c.name;
-
-  const marker = new mapboxgl.Marker({ element: el })
-    .setLngLat(c.coords)
-    .setPopup(new mapboxgl.Popup({ offset: 25 }).setText(c.name))
-    .addTo(map);
-
-  el.addEventListener('click', () => {
-    map.flyTo({ center: c.coords, zoom: 5, speed: 0.8 });
-    marker.togglePopup();
-  });
+map.on('style.load', () => {
+  map.setFog({});
 });
 
-// Pulsante Home
-document.querySelector('.custom-home-btn').addEventListener('click', () => {
-  map.flyTo({ center: [12.4964, 41.9028], zoom: 2, speed: 0.8 });
-});
-
-// Pulsante geolocate
-const geolocate = new mapboxgl.GeolocateControl({
-  positionOptions: { enableHighAccuracy: true },
-  trackUserLocation: true
-});
-map.addControl(geolocate, 'top-right');
-
+// Aggiungi un semplice marker su Roma
+new mapboxgl.Marker()
+  .setLngLat([12.4964, 41.9028])
+  .addTo(map);
 </script>
+
 </body>
 </html>
