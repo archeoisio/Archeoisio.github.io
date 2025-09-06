@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Globo 3D Mapbox</title>
 
 <!-- Mapbox CSS -->
@@ -21,7 +21,6 @@
     border-radius: 3px;
     color: #000;
     white-space: nowrap;
-    cursor: pointer;
   }
 
   .custom-home-btn {
@@ -43,7 +42,59 @@
 <!-- Mapbox JS -->
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.22.0/mapbox-gl.js'></script>
 
-<!-- Script principale -->
-<script src="map-globe.js"></script>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiaXNpbyIsImEiOiJjbWY3bnljcjIwZmwwMmpzNnNrMmdzMWI0In0.HwYix6TI4UEGx3zh6Oq3HQ';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const initialView = { center: [12.4964, 41.9028], zoom: 2.5 }; // Roma
+
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    projection: 'globe',
+    center: initialView.center,
+    zoom: initialView.zoom
+  });
+
+  map.on('style.load', () => { map.setFog({}); });
+
+  const capitalsData = [
+    { name: "Roma", coords: [12.4964, 41.9028] },
+    { name: "Parigi", coords: [2.3522, 48.8566] },
+    { name: "Londra", coords: [-0.1278, 51.5074] },
+    { name: "Berlino", coords: [13.4050, 52.5200] }
+  ];
+
+  capitalsData.forEach(({name, coords}) => {
+    const el = document.createElement('div');
+    el.className = 'capital-box';
+    el.textContent = name;
+
+    const marker = new mapboxgl.Marker({ element: el })
+      .setLngLat(coords)
+      .setPopup(new mapboxgl.Popup({ offset: 25 }).setText(name))
+      .addTo(map);
+
+    el.addEventListener('click', () => {
+      map.flyTo({ center: coords, zoom: 5, speed: 0.8 });
+      marker.togglePopup();
+    });
+  });
+
+  // Pulsante Home
+  const homeBtn = document.querySelector('.custom-home-btn');
+  homeBtn.addEventListener('click', () => {
+    map.flyTo({ center: initialView.center, zoom: initialView.zoom, speed: 0.8 });
+  });
+
+  // Pulsante Geolocate
+  const geolocate = new mapboxgl.GeolocateControl({
+    positionOptions: { enableHighAccuracy: true },
+    trackUserLocation: false,
+    showAccuracyCircle: true
+  });
+  map.addControl(geolocate, 'top-right');
+});
+</script>
 </body>
 </html>
