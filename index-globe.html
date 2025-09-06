@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Mappa Leaflet FLAG</title>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<!-- LocateControl CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
+
+<style>
+  /* Reset margini */
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* evita scroll indesiderati */
+  }
+
+#map {
+    position: fixed;    /* fissa la mappa al viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(var(--vh, 1vh) * 1);
+  }
+  
+.capital-box {
+   display: inline-block;
+  text-align: center;
+  font-family: 'ISOCPeur', monospace; /* se l’hai caricata, altrimenti sostituisci */
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #000;           /* colore testo */
+  background: rgba(255,255,255,0.8); /* opzionale, per vedere il box */
+  border-radius: 3px;    /* opzionale */
+  line-height: 1.2;      /* aiuta a centrare verticalmente */
+}
+  /* Container switcher */
+  .leaflet-top.leaflet-right .leaflet-control-layers {
+    background: white;
+    box-shadow: none !important;
+    border: none !important;
+    margin-right: 10px !important;
+    border-radius: 4px !important;
+    align-items: center !important;
+    z-index: 1000;           /* sopra la mappa */
+  }
+
+   /* Box home+LOCATE */
+ .custom-home-box {
+  position: relative;      /* fissato sulla mappa */
+  top: 0;               /* distanza dal bordo superiore */
+  right: 0;             /* distanza dal bordo destro */
+  background: transparent; /* elimina sfondo */
+  padding: 0;
+  border: none !important;
+  display: flex !important;
+  flex-direction: column;  /* pulsanti in colonna */
+  gap: 2px;                /* distanza verticale tra pulsanti */
+ 
+}
+   /* PulsantE HOME */
+  .custom-home-button {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 25px !important;
+  background: white !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;       /* elimina margini */
+  line-height: 1 !important;
+}
+  
+ /* Pulsante Locate */
+.leaflet-control-locate a {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 25px !important;
+  background: white !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;       /* elimina margini */
+  line-height: 1 !important;
+}
+ /* Contenitore Locate */
+ .leaflet-control-locate {
+  background: transparent !important; /* elimina sfondo */
+  border: none !important;            /* elimina bordo */
+  box-shadow: none !important;        /* elimina ombra */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+</style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+   <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- LocateControl JS -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
+
+  <!-- LabelTextCollision plugin -->
+  <script src="https://unpkg.com/leaflet-labeltextcollision"></script>
+
+  <!-- Il tuo script principale -->
+  <script src="map-globe.js"></script>
+
+</body>
+</html>
