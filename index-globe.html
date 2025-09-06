@@ -3,38 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Globo Mapbox Minimal</title>
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.22.0/mapbox-gl.css" rel="stylesheet">
+<title>Globo 3D Mapbox Minimal</title>
+
+<!-- Mapbox CSS -->
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.22.0/mapbox-gl.css" rel="stylesheet" />
+
 <style>
   html, body { margin:0; padding:0; height:100%; }
   #map { width:100%; height:100%; }
+
+  .capital-box {
+    font-family: monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.8);
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #000;
+    white-space: nowrap;
+  }
+
+  .mapboxgl-ctrl-top-right {
+    margin-top: 50px; /* lascia spazio al pulsante home se vuoi aggiungerlo */
+  }
 </style>
 </head>
 <body>
 
 <div id="map"></div>
 
+<!-- Mapbox JS -->
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.22.0/mapbox-gl.js"></script>
+
 <script>
-mapboxgl.accessToken = 'pk.eyJ1IjoiaXNpbyIsImEiOiJjbWY3bnljcjIwZmwwMmpzNnNrMmdzMWI0In0.HwYix6TI4UEGx3zh6Oq3HQ';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaXNpbyIsImEiOiJjbWY3bnljcjIwZmwwMmpzNnNrMmdzMWI0In0.HwYix6TI4UEGx3zh6Oq3HQ';
 
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/satellite-streets-v12',
-  projection: 'globe',
-  center: [12.4964, 41.9028], // Roma
-  zoom: 2
-});
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    projection: 'globe',
+    center: [12.4964, 41.9028], // Roma
+    zoom: 3
+  });
 
-// Attiva effetto luce globale
-map.on('style.load', () => {
-  map.setFog({});
-});
+  // Illumina il globo
+  map.on('style.load', () => {
+    map.setFog({});
+  });
 
-// Aggiungi un semplice marker su Roma
-new mapboxgl.Marker()
-  .setLngLat([12.4964, 41.9028])
-  .addTo(map);
+  // Marker su Roma
+  const romaMarker = new mapboxgl.Marker({ color: 'red' })
+    .setLngLat([12.4964, 41.9028])
+    .setPopup(new mapboxgl.Popup({ offset: 25 }).setText('Roma'))
+    .addTo(map);
+
+  // Pulsante Geolocate
+  const geolocate = new mapboxgl.GeolocateControl({
+    positionOptions: { enableHighAccuracy: true },
+    trackUserLocation: true,
+    showAccuracyCircle: true
+  });
+  map.addControl(geolocate, 'top-right');
 </script>
 
 </body>
