@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lastMarker = marker;
 
       document.getElementById('fly-btn').addEventListener('click', () => {
-        map.flyTo(coords, 8, { animate: true, duration: 2 });
+        map.flyTo(coords, 14, { animate: true, duration: 3 });
       });
     });
 
