@@ -434,10 +434,10 @@ document.getElementById('toggle-btn').addEventListener('click', () => {
   const box = document.getElementById('route-box');
   if (box.style.display === 'none' || box.style.display === '') {
     box.style.display = 'flex';
-    document.getElementById('toggle-btn').innerText = '⬅️ Nascondi';
+    document.getElementById('toggle-btn').innerText = '⬅️';
   } else {
     box.style.display = 'none';
-    document.getElementById('toggle-btn').innerText = '➡️ Indicazioni';
+    document.getElementById('toggle-btn').innerText = '➡️';
   }
 });
 
