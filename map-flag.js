@@ -4,63 +4,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [49, 30], zoom: 4 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-const southWest = L.latLng(-90, 190); // più a ovest di Nuku'alofa
-const northEast = L.latLng(90, -190); // più a est di Tuvalu
-const maxBounds = L.latLngBounds(southWest, northEast);
-  
+
+  const southWest = L.latLng(-90, 190);
+  const northEast = L.latLng(90, -190);
+  const maxBounds = L.latLngBounds(southWest, northEast);
+
   // --- Layer base ---
-const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors',
-  noWrap: false,
-  updateWhenZooming: true,   // aggiorna tiles anche durante zoom animati
-  updateWhenIdle: false,     // non aspettare che la mappa sia ferma
-  keepBuffer: 5              // numero di tiles extra da mantenere nel buffer
-});
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    noWrap: false
+  });
 
-const satellite = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  { 
-    attribution: 'Tiles &copy; Esri',
-    noWrap: false,
-    updateWhenZooming: true,
-    updateWhenIdle: false,
-    keepBuffer: 5
+  const satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Tiles &copy; Esri', noWrap: false }
+  );
+
+  // --- Mappa ---
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: 3,
+    maxZoom: 18,
+    worldCopyJump: true,
+    maxBounds: maxBounds,
+    maxBoundsViscosity: 1.0,
+    wheelPxPerZoomLevel: 120,
+    zoomSnap: 0.1
+  });
+
+  // --- Aggiorna altezza mappa su resize/orientation ---
+  function setVh() {
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    if (map) map.invalidateSize();
   }
-);
+  setVh();
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', setVh);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
 
-// Mappa
-const map = L.map('map', {
-  center: initialView.center,
-  zoom: initialView.zoom,
-  layers: [satellite],
-  zoomControl: true,
-  minZoom: 3,
-  maxZoom: 18,
-  worldCopyJump: true,     // mappa si ripete orizzontalmente
-  maxBounds: maxBounds,    // blocco soft confini
-  maxBoundsViscosity: 1.0,
-  wheelPxPerZoomLevel: 120,
-  zoomSnap: 0.1
-});
-
-// --- Aggiorna altezza mappa su resize/orientation ---
-function setVh() {
-  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  document.documentElement.style.setProperty('--vh', vh + 'px');
-  if (map) map.invalidateSize();
-}
-
-// iniziale
-setVh();
-
-// eventi
-window.addEventListener('resize', setVh);
-window.addEventListener('orientationchange', setVh);
-if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
-  
   // --- Overlay etichette ---
   const labels = L.layerGroup();
-  
+
+  // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
 { name: "Abuja", nation: "Nigeria", coords: [9.0579, 7.4951], flag: "🇳🇬" },
@@ -258,84 +247,137 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
 
-capitalsData.forEach(({ name, nation, coords, flag }) => {
-  const markerIcon = L.divIcon({
-    className: 'flag-icon',
-    html: `<div class="flag-box">${flag}</div>`,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16]
+document.addEventListener('DOMContentLoaded', () => {
+  const MOBILE_MAX_WIDTH = 767;
+  const mobileView  = { center: [45, 10], zoom: 4 };
+  const desktopView = { center: [49, 30], zoom: 4 };
+  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
+  const initialView = isMobile ? mobileView : desktopView;
+
+  const southWest = L.latLng(-90, 190);
+  const northEast = L.latLng(90, -190);
+  const maxBounds = L.latLngBounds(southWest, northEast);
+
+  // --- Layer base ---
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    noWrap: false
   });
 
-  const marker = L.marker(coords, { icon: markerIcon });
+  const satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Tiles &copy; Esri', noWrap: false }
+  );
 
-  marker.on('click', () => {
-    const panel = document.getElementById('info-panel');
-    const content = document.getElementById('info-content');
-    if (!panel || !content) return;
+  // --- Mappa ---
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: 3,
+    maxZoom: 18,
+    worldCopyJump: true,
+    maxBounds: maxBounds,
+    maxBoundsViscosity: 1.0,
+    wheelPxPerZoomLevel: 120,
+    zoomSnap: 0.1
+  });
 
-    if (lastMarker === marker) {
-      panel.style.display = 'none';
-      lastMarker = null;
-      return;
+  // --- Aggiorna altezza mappa su resize/orientation ---
+  function setVh() {
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    if (map) map.invalidateSize();
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', setVh);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
+
+  // --- Overlay etichette ---
+  const labels = L.layerGroup();
+
+  // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
+  const capitalsData = [
+    { name: "Rome", nation: "Italy", coords: [41.9028, 12.4964], flag: "🇮🇹" },
+    { name: "Paris", nation: "France", coords: [48.8566, 2.3522], flag: "🇫🇷" },
+    { name: "Berlin", nation: "Germany", coords: [52.5200, 13.4050], flag: "🇩🇪" }
+  ];
+
+  let lastMarker = null;
+
+  capitalsData.forEach(({ name, nation, coords, flag }) => {
+    const markerIcon = L.divIcon({
+      className: 'flag-icon',
+      html: `<div class="flag-box">${flag}</div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16]
+    });
+
+    const marker = L.marker(coords, { icon: markerIcon });
+
+    marker.on('click', () => {
+      const panel = document.getElementById('info-panel');
+      const content = document.getElementById('info-content');
+      if (!panel || !content) return;
+
+      // Se clicchi lo stesso marker → chiudi
+      if (lastMarker === marker) {
+        panel.style.display = 'none';
+        lastMarker = null;
+        return;
+      }
+
+      // Aggiorna contenuto con FlyTo e mostra pannello
+      content.innerHTML = `
+        <div style="font-size:24px;">${flag}</div>
+        <div style="font-size:18px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+          ${name} 
+          <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">🔍</button>
+        </div>
+        <div>${nation}</div>
+        <div>📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
+      `;
+      panel.style.display = 'block';
+      lastMarker = marker;
+
+      document.getElementById('fly-btn').addEventListener('click', () => {
+        map.flyTo(coords, 8, { animate: true, duration: 2 });
+      });
+    });
+
+    labels.addLayer(marker);
+  });
+
+  labels.addTo(map);
+
+  // --- Aggiorna font/padding etichette ---
+  function updateLabels() {
+    const zoom = map.getZoom();
+    const zMin = 3, zMid = 5, zMax = 14;
+    const fontAt3 = 6, fontAt5 = 12, fontAt14 = 14;
+    const padAt3 = 2, padAt5 = 4, padAt14 = 6;
+    let fontSize, padding;
+
+    if (zoom <= zMid) {
+      const f = (zoom - zMin) / (zMid - zMin);
+      fontSize = fontAt3 + f * (fontAt5 - fontAt3);
+      padding  = padAt3  + f * (padAt5 - padAt3);
+    } else {
+      const f = (zoom - zMid) / (zMax - zMid);
+      fontSize = fontAt5 + f * (fontAt14 - fontAt5);
+      padding  = padAt5 + f * (padAt14 - padAt5);
     }
 
-    content.innerHTML = `
-      <div style="font-size:24px;">${flag}</div>
-      <div style="font-size:18px;font-weight:bold;">${name}</div>
-      <div>${nation}</div>
-      <div>📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
-    `;
-    panel.style.display = 'block';
-    lastMarker = marker;
-  });
-
-  labels.addLayer(marker);
-});
-
-labels.addTo(map);
-
- // --- Aggiorna font/padding delle etichette in base allo zoom ---
-function updateLabels() {
-  const zoom = map.getZoom();
-
-  // zoom "ancoraggi"
-  const zMin = 3, zMid = 5, zMax = 14;
-
-  // font corrispondenti
-  const fontAt3 = 6;
-  const fontAt5 = 12;
-  const fontAt14 = 14;
-
-  // padding corrispondenti
-  const padAt3 = 2;
-  const padAt5 = 4;
-  const padAt14 = 6;
-
-  let fontSize, padding;
-
-  if (zoom <= zMid) {
-    // da 3 → 5
-    const f = (zoom - zMin) / (zMid - zMin);
-    fontSize = fontAt3 + f * (fontAt5 - fontAt3);
-    padding  = padAt3  + f * (padAt5 - padAt3);
-  } else {
-    // da 5 → 14
-    const f = (zoom - zMid) / (zMax - zMid);
-    fontSize = fontAt5 + f * (fontAt14 - fontAt5);
-    padding  = padAt5  + f * (padAt14 - padAt5);
+    document.querySelectorAll('.capital-box').forEach(el => {
+      el.style.fontSize = `${fontSize}px`;
+      el.style.padding  = `${padding}px ${padding * 2}px`;
+    });
   }
 
-  document.querySelectorAll('.capital-box').forEach(el => {
-    el.style.fontSize = `${fontSize}px`;
-    el.style.padding  = `${padding}px ${padding * 2}px`;
-  });
-}
-
-// Aggiorna etichette durante lo zoom (anche animato)
-map.on('zoom', updateLabels);
-
-// Aggiornamento iniziale
-updateLabels();
+  map.on('zoom', updateLabels);
+  updateLabels();
 
   // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
@@ -352,7 +394,6 @@ updateLabels();
   controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
 
-    // Pulsante Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🏠';
@@ -363,7 +404,6 @@ updateLabels();
       map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 0.25 });
     });
 
-    // Pulsante Locate
     const locateControl = L.control.locate({
       flyTo: { duration: 2, easeLinearity: 0.25 },
       strings: { title: "Mostrami la mia posizione" },
@@ -375,4 +415,6 @@ updateLabels();
     return container;
   };
   controlBox.addTo(map);
+
+
 });
