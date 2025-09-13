@@ -258,41 +258,44 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
 
- capitalsData.forEach(({ name, coords, flag }) => {
-  // Icona bandiera + label nascosta
- const markerIcon = L.divIcon({
-  className: 'flag-icon',
-  html: `
-    <div class="flag-box">${flag}</div>
-    <div class="capital-box" style="display:none;">${name}</div>
-  `,
-  iconSize: [32, 32],
-  iconAnchor: [16, 16]
-});
+ let lastMarker = null;
 
-  // Marker con bandiera
+capitalsData.forEach(({ name, nation, coords, flag }) => {
+  const markerIcon = L.divIcon({
+    className: 'flag-icon',
+    html: `<div class="flag-box">${flag}</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16]
+  });
+
   const marker = L.marker(coords, { icon: markerIcon });
 
-  // Popup con nome capitale
-  const popup = L.popup({
-    closeButton: false,
-    autoClose: false,
-    closeOnClick: false,
-    className: 'capital-popup'
-  }).setContent(`<div class="capital-box">${name}</div>`);
+  marker.on('click', () => {
+    const panel = document.getElementById('info-panel');
+    const content = document.getElementById('info-content');
+    if (!panel || !content) return;
 
-  // Toggle popup al click
-  // Toggle etichetta
-marker.on('click', () => {
-  const el = marker.getElement();
-  if (!el) return;
-  const label = el.querySelector('.capital-box');
-  if (!label) return;
-  label.style.display = label.style.display === 'none' ? 'block' : 'none';
-});
+    // Se clicchi lo stesso marker → chiudi
+    if (lastMarker === marker) {
+      panel.style.display = 'none';
+      lastMarker = null;
+      return;
+    }
+
+    // Aggiorna contenuto e mostra pannello
+    content.innerHTML = `
+      <div style="font-size:24px;">${flag}</div>
+      <div style="font-size:18px;font-weight:bold;">${name}</div>
+      <div>${nation}</div>
+      <div>📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
+    `;
+    panel.style.display = 'block';
+    lastMarker = marker;
+  });
 
   labels.addLayer(marker);
 });
+
 
   labels.addTo(map);
 
