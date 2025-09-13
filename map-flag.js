@@ -262,15 +262,12 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 
 capitalsData.forEach(({ name, coords, flag }) => {
   // Icona bandiera + label nascosta
-  const markerIcon = L.divIcon({
-    className: 'flag-icon',
-    html: `
-      <div class="flag-box">${flag}</div>
-      <div class="capital-box" style="display:none;">${name}</div>
-    `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16]
-  });
+ const markerIcon = L.divIcon({
+  className: 'flag-icon',
+  html: `<img src="flags/it.png" width="32" height="32">`,
+  iconSize: [32,32],
+  iconAnchor: [16,16]
+});
 
   const marker = L.marker(coords, { icon: markerIcon });
 
