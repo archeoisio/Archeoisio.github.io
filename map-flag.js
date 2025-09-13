@@ -368,4 +368,51 @@ const searchControl = L.Control.geocoder({
   controlBox.addTo(map);
 
 
+let control; // variabile globale per il routing control
+
+document.getElementById('route-btn').addEventListener('click', function () {
+  const start = document.getElementById('start').value;
+  const end = document.getElementById('end').value;
+
+  if (!start || !end) {
+    alert('Inserisci entrambi i punti.');
+    return;
+  }
+
+  // Geocodifica start e end usando Nominatim
+  Promise.all([
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${start}`).then(res => res.json()),
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${end}`).then(res => res.json())
+  ]).then(([startData, endData]) => {
+    if (!startData.length || !endData.length) {
+      alert('Impossibile trovare i luoghi inseriti.');
+      return;
+    }
+
+    const startLatLng = L.latLng(startData[0].lat, startData[0].lon);
+    const endLatLng = L.latLng(endData[0].lat, endData[0].lon);
+
+    if (control) {
+      control.setWaypoints([startLatLng, endLatLng]);
+    } else {
+      control = L.Routing.control({
+        waypoints: [startLatLng, endLatLng],
+        routeWhileDragging: false,
+        show: false,
+        createMarker: function () { return null; } // nessun marker personalizzato
+      }).addTo(map);
+    }
+
+  });
 });
+
+// Pulisci mappa
+document.getElementById('clear-btn').addEventListener('click', function () {
+  if (control) {
+    map.removeControl(control);
+    control = null;
+  }
+  document.getElementById('start').value = '';
+  document.getElementById('end').value = '';
+});
+
