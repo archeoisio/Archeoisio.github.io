@@ -323,7 +323,6 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Brussels", nation: "Belgium", coords: [50.8503, 4.3517], flag: "🇧🇪" }
 { name: "Bucharest", nation: "Romania", coords: [44.4268, 26.1025], flag: "🇷🇴" }
 { name: "Budapest", nation: "Hungary", coords: [47.4979, 19.0402], flag: "🇭🇺" }
-
   ];
 
    capitalsData.forEach(({ name, coords }) => {
