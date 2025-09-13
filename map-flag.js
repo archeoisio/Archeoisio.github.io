@@ -368,51 +368,66 @@ const searchControl = L.Control.geocoder({
   controlBox.addTo(map);
 
 
-let control; // variabile globale per il routing control
+  // --- Routing ---
+  let control; // variabile globale per il routing control
 
-document.getElementById('route-btn').addEventListener('click', function () {
-  const start = document.getElementById('start').value;
-  const end = document.getElementById('end').value;
+  document.getElementById('route-btn').addEventListener('click', async function () {
+    const start = document.getElementById('start').value.trim();
+    const end   = document.getElementById('end').value.trim();
 
-  if (!start || !end) {
-    alert('Inserisci entrambi i punti.');
-    return;
-  }
-
-  // Geocodifica start e end usando Nominatim
-  Promise.all([
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${start}`).then(res => res.json()),
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${end}`).then(res => res.json())
-  ]).then(([startData, endData]) => {
-    if (!startData.length || !endData.length) {
-      alert('Impossibile trovare i luoghi inseriti.');
+    if (!start || !end) {
+      alert('Inserisci entrambi i punti.');
       return;
     }
 
-    const startLatLng = L.latLng(startData[0].lat, startData[0].lon);
-    const endLatLng = L.latLng(endData[0].lat, endData[0].lon);
+    try {
+      const [startData, endData] = await Promise.all([
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, {
+          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+        }).then(res => res.json()),
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, {
+          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+        }).then(res => res.json())
+      ]);
 
-    if (control) {
-      control.setWaypoints([startLatLng, endLatLng]);
-    } else {
-      control = L.Routing.control({
-        waypoints: [startLatLng, endLatLng],
-        routeWhileDragging: false,
-        show: false,
-        createMarker: function () { return null; } // nessun marker personalizzato
-      }).addTo(map);
+      if (!startData.length || !endData.length) {
+        alert('Impossibile trovare i luoghi inseriti.');
+        return;
+      }
+
+      const startLatLng = L.latLng(parseFloat(startData[0].lat), parseFloat(startData[0].lon));
+      const endLatLng   = L.latLng(parseFloat(endData[0].lat), parseFloat(endData[0].lon));
+
+      if (control) {
+        control.setWaypoints([startLatLng, endLatLng]);
+      } else {
+        control = L.Routing.control({
+          waypoints: [startLatLng, endLatLng],
+          routeWhileDragging: false,
+          show: true, // visualizza pannello con info rotta
+          createMarker: () => null
+        }).addTo(map);
+      }
+
+      map.fitBounds(L.latLngBounds([startLatLng, endLatLng]), { padding: [50, 50] });
+
+    } catch (err) {
+      console.error(err);
+      alert('Errore nella geocodifica dei luoghi.');
     }
-
   });
-});
 
-// Pulisci mappa
-document.getElementById('clear-btn').addEventListener('click', function () {
-  if (control) {
-    map.removeControl(control);
-    control = null;
-  }
-  document.getElementById('start').value = '';
-  document.getElementById('end').value = '';
-});
+  // Pulisci mappa
+  document.getElementById('clear-btn').addEventListener('click', function () {
+    if (control) {
+      map.removeControl(control);
+      control = null;
+    }
+    document.getElementById('start').value = '';
+    document.getElementById('end').value = '';
+  });
 
+  // FlyTo iniziale
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+
+});
