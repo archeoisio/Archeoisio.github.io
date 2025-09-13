@@ -258,21 +258,7 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
 
- let lastMarker = null;
-
 capitalsData.forEach(({ name, nation, coords, flag }) => {
-  const markerIcon = L.divIcon({
-    className: 'flag-icon',
-    html: `<div class="flag-box">${flag}</div>`,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16]
-  });
-
- const marker = L.marker(coords, { icon: markerIcon });
-
-let lastMarker = null; // dichiara all'inizio, fuori dal ciclo forEach
-
-capitalsData.forEach(({ name, coords, flag, nation }) => {
   const markerIcon = L.divIcon({
     className: 'flag-icon',
     html: `<div class="flag-box">${flag}</div>`,
@@ -282,20 +268,17 @@ capitalsData.forEach(({ name, coords, flag, nation }) => {
 
   const marker = L.marker(coords, { icon: markerIcon });
 
-  // NUOVO CLICK HANDLER
   marker.on('click', () => {
     const panel = document.getElementById('info-panel');
     const content = document.getElementById('info-content');
     if (!panel || !content) return;
 
-    // Se clicchi lo stesso marker → chiudi
     if (lastMarker === marker) {
       panel.style.display = 'none';
       lastMarker = null;
       return;
     }
 
-    // Aggiorna contenuto e mostra pannello
     content.innerHTML = `
       <div style="font-size:24px;">${flag}</div>
       <div style="font-size:18px;font-weight:bold;">${name}</div>
