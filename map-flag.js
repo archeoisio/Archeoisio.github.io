@@ -283,32 +283,40 @@ capitalsData.forEach(({ name, coords, flag, nation }) => {
   const marker = L.marker(coords, { icon: markerIcon });
 
   // NUOVO CLICK HANDLER
-  marker.on('click', () => {
-    const panel = document.getElementById('info-panel');
-    const content = document.getElementById('info-content');
-    if (!panel || !content) return;
+ marker.on('click', () => {
+  const panel = document.getElementById('info-panel');
+  const content = document.getElementById('info-content');
+  if (!panel || !content) return;
 
-    // Se clicchi lo stesso marker → chiudi
-    if (lastMarker === marker) {
-      panel.style.display = 'none';
-      lastMarker = null;
-      return;
-    }
+  // Se clicchi lo stesso marker → chiudi
+  if (lastMarker === marker) {
+    panel.style.display = 'none';
+    lastMarker = null;
+    return;
+  }
 
-    // Aggiorna contenuto e mostra pannello
-    content.innerHTML = `
-      <div style="font-size:24px;">${flag}</div>
-      <div style="font-size:18px;font-weight:bold;">${name}</div>
-      <div>${nation}</div>
-      <div>📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
-    `;
-    panel.style.display = 'block';
-    lastMarker = marker;
+  // Aggiorna contenuto e mostra pannello con pulsante FlyTo
+  content.innerHTML = `
+    <div style="font-size:24px;">${flag}</div>
+    <div style="font-size:18px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+      ${name} 
+      <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">🔍</button>
+    </div>
+    <div>${nation}</div>
+    <div>📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
+  `;
+
+  // FlyTo al click sul bottone
+  document.getElementById('fly-btn').addEventListener('click', () => {
+    map.flyTo(coords, 8, {animate:true, duration:2});
   });
 
-  labels.addLayer(marker);
+  panel.style.display = 'block';
+  lastMarker = marker;
 });
 
+labels.addLayer(marker);
+  
 labels.addTo(map);
 
  // --- Aggiorna font/padding delle etichette in base allo zoom ---
