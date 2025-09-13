@@ -241,7 +241,7 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Vientiane", nation: "Laos", coords: [17.9757, 102.6331], flag: "🇱🇦" },
 { name: "Vilnius", nation: "Lithuania", coords: [54.6872, 25.2797], flag: "🇱🇹" },
 { name: "Warsaw", nation: "Poland", coords: [52.2297, 21.0122], flag: "🇵🇱" },
-{ name: "Washington, D.C.", nation: "United States", coords: [38.8951, -77.0364], flag: "🇺🇸" },
+{ name: "Washington D.C.", nation: "United States", coords: [38.8951, -77.0364], flag: "🇺🇸" },
 { name: "Wellington", nation: "New Zealand", coords: [-41.2865, 174.7762], flag: "🇳🇿" },
 { name: "Windhoek", nation: "Namibia", coords: [-22.5597, 17.0832], flag: "🇳🇦" },
 { name: "Yamoussoukro", nation: "Ivory Coast", coords: [6.8276, -5.2893], flag: "🇨🇮" },
