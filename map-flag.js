@@ -270,6 +270,19 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
 
   const marker = L.marker(coords, { icon: markerIcon });
 
+let lastMarker = null; // dichiara all'inizio, fuori dal ciclo forEach
+
+capitalsData.forEach(({ name, coords, flag, nation }) => {
+  const markerIcon = L.divIcon({
+    className: 'flag-icon',
+    html: `<div class="flag-box">${flag}</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16]
+  });
+
+  const marker = L.marker(coords, { icon: markerIcon });
+
+  // NUOVO CLICK HANDLER
   marker.on('click', () => {
     const panel = document.getElementById('info-panel');
     const content = document.getElementById('info-content');
@@ -296,8 +309,7 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
   labels.addLayer(marker);
 });
 
-
-  labels.addTo(map);
+labels.addTo(map);
 
  // --- Aggiorna font/padding delle etichette in base allo zoom ---
 function updateLabels() {
