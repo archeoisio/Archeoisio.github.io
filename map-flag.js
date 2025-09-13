@@ -260,21 +260,37 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
 
-   capitalsData.forEach(({ name, coords }) => {
-    const label = L.marker(coords, {
-      icon: L.divIcon({
-        className: 'capital-label',
-        html: `<div class="capital-box">${name}</div>`,
-        iconAnchor: [0, 0]
-      })
-    });
-
-    label.on('click', () => {
-      map.flyTo(coords, 15, { animate: true, duration: 5, easeLinearity: 0.25 });
-    });
-
-    labels.addLayer(label);
+   capitalsData.forEach(({ name, coords, flag }) => {
+  // Icona bandiera
+  const flagIcon = L.divIcon({
+    className: 'flag-icon',
+    html: `<div class="flag-box">${flag}</div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16] // centro dell'icona
   });
+
+  // Marker con bandiera
+  const marker = L.marker(coords, { icon: flagIcon });
+
+  // Popup con nome capitale
+  const popup = L.popup({
+    closeButton: false,
+    autoClose: false,
+    closeOnClick: false,
+    className: 'capital-popup'
+  }).setContent(`<div class="capital-box">${name}</div>`);
+
+  // Toggle popup al click
+  marker.on('click', () => {
+    if (marker.isPopupOpen()) {
+      marker.closePopup();
+    } else {
+      marker.bindPopup(popup).openPopup();
+    }
+  });
+
+  labels.addLayer(marker);
+});
 
   labels.addTo(map);
 
