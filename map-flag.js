@@ -254,28 +254,23 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Guatemala City", nation: "Guatemala", coords: [14.6349, -90.5069], flag: "🇬🇹" },
 { name: "Conakry", nation: "Guinea", coords: [9.5092, -13.7122], flag: "🇬🇳" },
 { name: "Kuala Lumpur", nation: "Malesia", coords: [3.1390, 101.6869], flag: "🇲🇾" },
-{ name: "Belmopan", nation: "Belize", coords: [17.2510, -88.7590], flag: "🇧🇿" },
-{ name: "Victoria", nation: "Seychelles", coords: [-4.6191, 55.4513], flag: "🇸🇨" },
 { name: "Juba", nation: "Sud Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
 
  capitalsData.forEach(({ name, coords, flag }) => {
   // Icona bandiera + label nascosta
-  const markerIcon = L.divIcon({
-    className: 'flag-icon',
-    html: `<div class="flag-box">${flag}</div>`,
-    html: `
-      <div class="flag-box">${flag}</div>
-      <div class="capital-box" style="display:none;">${name}</div>
-    `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16] // centro dell'icona
-    iconAnchor: [16, 16]
-  });
+ const markerIcon = L.divIcon({
+  className: 'flag-icon',
+  html: `
+    <div class="flag-box">${flag}</div>
+    <div class="capital-box" style="display:none;">${name}</div>
+  `,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16]
+});
 
   // Marker con bandiera
-  const marker = L.marker(coords, { icon: flagIcon });
   const marker = L.marker(coords, { icon: markerIcon });
 
   // Popup con nome capitale
@@ -288,21 +283,13 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 
   // Toggle popup al click
   // Toggle etichetta
-  marker.on('click', () => {
-    if (marker.isPopupOpen()) {
-      marker.closePopup();
-    const el = marker.getElement();
-    if (!el) return;
-    const label = el.querySelector('.capital-box');
-    if (!label) return;
-
-    if (label.style.display === 'none') {
-      label.style.display = 'block';
-    } else {
-      marker.bindPopup(popup).openPopup();
-      label.style.display = 'none';
-    }
-  });
+marker.on('click', () => {
+  const el = marker.getElement();
+  if (!el) return;
+  const label = el.querySelector('.capital-box');
+  if (!label) return;
+  label.style.display = label.style.display === 'none' ? 'block' : 'none';
+});
 
   labels.addLayer(marker);
 });
