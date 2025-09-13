@@ -247,63 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
-  const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [45, 10], zoom: 4 };
-  const desktopView = { center: [49, 30], zoom: 4 };
-  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
-  const initialView = isMobile ? mobileView : desktopView;
-
-  const southWest = L.latLng(-90, 190);
-  const northEast = L.latLng(90, -190);
-  const maxBounds = L.latLngBounds(southWest, northEast);
-
-  // --- Layer base ---
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    noWrap: false
-  });
-
-  const satellite = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: 'Tiles &copy; Esri', noWrap: false }
-  );
-
-  // --- Mappa ---
-  const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite],
-    zoomControl: true,
-    minZoom: 3,
-    maxZoom: 18,
-    worldCopyJump: true,
-    maxBounds: maxBounds,
-    maxBoundsViscosity: 1.0,
-    wheelPxPerZoomLevel: 120,
-    zoomSnap: 0.1
-  });
-
-  // --- Aggiorna altezza mappa su resize/orientation ---
-  function setVh() {
-    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-    if (map) map.invalidateSize();
-  }
-  setVh();
-  window.addEventListener('resize', setVh);
-  window.addEventListener('orientationchange', setVh);
-  if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
-
-  // --- Overlay etichette ---
-  const labels = L.layerGroup();
-
-  // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
-  const capitalsData = [
-    { name: "Rome", nation: "Italy", coords: [41.9028, 12.4964], flag: "🇮🇹" },
-    { name: "Paris", nation: "France", coords: [48.8566, 2.3522], flag: "🇫🇷" },
-    { name: "Berlin", nation: "Germany", coords: [52.5200, 13.4050], flag: "🇩🇪" }
-  ];
 
   let lastMarker = null;
 
