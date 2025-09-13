@@ -247,7 +247,7 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Yamoussoukro", nation: "Ivory Coast", coords: [6.8276, -5.2893], flag: "🇨🇮" },
 { name: "Yaoundé", nation: "Cameroon", coords: [3.8480, 11.5021], flag: "🇨🇲" },
 { name: "Yerevan", nation: "Armenia", coords: [40.1792, 44.4991], flag: "🇦🇲" },
-{ name: "Zagreb", nation: "Croatia", coords: [45.8150, 15.9819], flag: "🇭🇷" }?,
+{ name: "Zagreb", nation: "Croatia", coords: [45.8150, 15.9819], flag: "🇭🇷" },
 { name: "Saint John's", nation: "Antigua e Barbuda", coords: [17.1274, -61.8468], flag: "🇦🇬" },
 { name: "Hagatna", nation: "Guam", coords: [13.4750, 144.7500], flag: "🇬🇺" },
 { name: "St. George's", nation: "Grenada", coords: [12.0561, -61.7486], flag: "🇬🇩" },
