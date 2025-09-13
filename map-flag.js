@@ -429,5 +429,16 @@ const searchControl = L.Control.geocoder({
 
   // FlyTo iniziale
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+// Toggle box indicazioni
+document.getElementById('toggle-btn').addEventListener('click', () => {
+  const box = document.getElementById('route-box');
+  if (box.style.display === 'none' || box.style.display === '') {
+    box.style.display = 'flex';
+    document.getElementById('toggle-btn').innerText = '⬅️ Nascondi';
+  } else {
+    box.style.display = 'none';
+    document.getElementById('toggle-btn').innerText = '➡️ Indicazioni';
+  }
+});
 
 });
