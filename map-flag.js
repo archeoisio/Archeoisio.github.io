@@ -260,32 +260,31 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
 
-   capitalsData.forEach(({ name, coords, flag }) => {
-  // Icona bandiera
-  const flagIcon = L.divIcon({
+capitalsData.forEach(({ name, coords, flag }) => {
+  // Icona bandiera + label nascosta
+  const markerIcon = L.divIcon({
     className: 'flag-icon',
-    html: `<div class="flag-box">${flag}</div>`,
+    html: `
+      <div class="flag-box">${flag}</div>
+      <div class="capital-box" style="display:none;">${name}</div>
+    `,
     iconSize: [32, 32],
-    iconAnchor: [16, 16] // centro dell'icona
+    iconAnchor: [16, 16]
   });
 
-  // Marker con bandiera
-  const marker = L.marker(coords, { icon: flagIcon });
+  const marker = L.marker(coords, { icon: markerIcon });
 
-  // Popup con nome capitale
-  const popup = L.popup({
-    closeButton: false,
-    autoClose: false,
-    closeOnClick: false,
-    className: 'capital-popup'
-  }).setContent(`<div class="capital-box">${name}</div>`);
-
-  // Toggle popup al click
+  // Toggle etichetta
   marker.on('click', () => {
-    if (marker.isPopupOpen()) {
-      marker.closePopup();
+    const el = marker.getElement();
+    if (!el) return;
+    const label = el.querySelector('.capital-box');
+    if (!label) return;
+
+    if (label.style.display === 'none') {
+      label.style.display = 'block';
     } else {
-      marker.bindPopup(popup).openPopup();
+      label.style.display = 'none';
     }
   });
 
