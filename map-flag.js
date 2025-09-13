@@ -34,6 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1
   });
+  
+// Contenitore custom in basso a destra
+const searchControl = L.Control.geocoder({
+  defaultMarkGeocode: true,
+  collapsed: true, // <-- a scomparsa
+  placeholder: "Cerca...",
+  position: "bottomright" // <-- posizione
+}).addTo(map);
 
   // --- Aggiorna altezza mappa su resize/orientation ---
   function setVh() {
