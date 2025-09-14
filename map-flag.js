@@ -297,7 +297,7 @@ const searchControl = L.Control.geocoder({
           ${nation} ${flag}  </div>
         <div style="font-size:14px;font-weight:bold; color:white;">
     ${name}
-    <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:12px; padding:0; margin-left:4px;">🔍</button>
+    <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:14px; padding:0; margin-left:4px;">🔍</button>
   </div>
           `;
       panel.style.display = 'block';
