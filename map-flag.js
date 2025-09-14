@@ -211,7 +211,6 @@ const searchControl = L.Control.geocoder({
 { name: "Sofia", nation: "Bulgaria", coords: [42.6977, 23.3219], flag: "🇧🇬" },
 { name: "Stockholm", nation: "Sweden", coords: [59.3293, 18.0686], flag: "🇸🇪" },
 { name: "Suva", nation: "Fiji", coords: [-18.1416, 178.4419], flag: "🇫🇯" },
-{ name: "Taipei", nation: "Taiwan", coords: [25.0330, 121.5654], flag: "🇹🇼" },
 { name: "Tallinn", nation: "Estonia", coords: [59.4370, 24.7536], flag: "🇪🇪" },
 { name: "Tarawa Atoll", nation: "Kiribati", coords: [1.3278, 172.9770], flag: "🇰🇮" },
 { name: "Tashkent", nation: "Uzbekistan", coords: [41.2995, 69.2401], flag: "🇺🇿" },
