@@ -1,3 +1,4 @@
+@@ -1,227 +1,225 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -11,12 +12,6 @@
 <!-- LocateControl CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
 
-<!-- Leaflet Routing Machine CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-
-<!-- Control Geocoder CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-
 <style>
   /* Reset margini */
   html, body {
@@ -24,7 +19,6 @@
     padding: 0;
     height: 100%;
     overflow: hidden; /* evita scroll indesiderati */
-    overflow: hidden;
   }
 
   #map {
@@ -33,31 +27,6 @@
     left: 0;
     width: 100%;
     height: calc(var(--vh, 1vh) * 1);
-    height: 100%;
-  }
-
-  /* Route box */
-  #route-box {
-    position: absolute;
-    bottom: 40px;
-    right: 20px;
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  #route-box input {
-    padding: 5px;
-    font-size: 12px;
-  }
-  #route-box button {
-    padding: 6px;
-    font-size: 12px;
-    cursor: pointer;
   }
 #route-box {
   position: absolute;
@@ -82,23 +51,16 @@
   cursor: pointer;
 }
   /* Stile pannello info trasparente */
-
-  /* Info panel */
   #info-panel {
     display: none;
     position: absolute;
     bottom: 20px;
     left: 20px;
     max-width: 100px;
-    bottom: 40px;
-    left: 15px;
-    width: 150px;
     min-height: 80px;
     background: rgba(0,0,0,0.6);
-    background: rgba(0,0,0,0.5);
     color: white;
     padding: 5px;
-    padding: 10px;
     border-radius: 8px;
     font-family: sans-serif;
     font-size: 12px;
@@ -181,8 +143,6 @@
   }
 
   .leaflet-control-locate a {
-  /* Custom buttons */
-  .custom-home-button, .leaflet-control-locate a {
     width: 44px !important;
     height: 44px !important;
     display: flex !important;
@@ -195,7 +155,6 @@
     padding: 0 !important;
     margin: 0 !important;
     line-height: 1 !important;
-    cursor: pointer;
   }
 
   .leaflet-control-locate {
@@ -204,14 +163,6 @@
     box-shadow: none !important;
     margin: 0 !important;
     padding: 0 !important;
-  .custom-home-box {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    z-index: 1000;
   }
 </style>
 
@@ -219,10 +170,6 @@
 
 <body>
   <div id="map"></div>
-
-<div id="map"></div>
-
-<!-- Route box -->
 <div id="route-box">
   <input type="text" id="start" placeholder="Partenza" />
   <input type="text" id="end" placeholder="Arrivo" />
@@ -247,39 +194,26 @@
   ">
     <div id="info-content"></div>
   </div>
-  
-<!-- Info panel -->
-<div id="info-panel">
-  <div id="info-content"></div>
+  <div id="route-toggle" style="position:absolute; bottom:20px; right:20px; z-index:1000;">
+  <button id="toggle-btn" style="padding:6px 12px; font-size:14px; cursor:pointer;">➡️</button>
 </div>
+  
 
   <!-- Leaflet Routing Machine CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-<!-- Home + Locate + Toggle indicazioni -->
-<div class="custom-home-box">
-  <button id="home-btn" class="custom-home-button">🏠</button>
-  <div id="locate-btn" class="leaflet-control-locate"><a title="La mia posizione">📍</a></div>
-  <button id="toggle-btn" class="custom-home-button">➡️</button>
-</div>
 
 <!-- Leaflet JS (core) -->
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <!-- Leaflet Routing Machine JS -->
-<!-- Routing Machine JS -->
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
-<!-- LocateControl JS -->
-<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
   <!-- LocateControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
     <!-- LabelTextCollision plugin -->
   <script src="https://unpkg.com/leaflet-labeltextcollision"></script>
-<!-- LabelTextCollision plugin -->
-<script src="https://unpkg.com/leaflet-labeltextcollision"></script>
 
   <!-- Leaflet Control Geocoder -->
   <link
@@ -287,13 +221,9 @@
     href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
   />
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<!-- Leaflet Control Geocoder -->
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
   <!-- Il tuo script principale -->
   <script src="map-flag.js"></script>
-<!-- Script principale -->
-<script src="map-flag.js"></script>
 
 </body>
 </html>
