@@ -34,11 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1
   });
+  
 // Abilita zoom con rettangolo usando il tasto sinistro
 map.on('mousedown', function (e) {
   if (e.originalEvent.button === 0) { // solo click sinistro
-    map.dragging.disable(); // blocca pan
-    map.boxZoom.enable();   // abilita box zoom
+     map.boxZoom.begin(e); // forza apertura rettangolo
   }
 });
 
