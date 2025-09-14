@@ -405,7 +405,7 @@ controlBox.addTo(map);
     icon: L.divIcon({
       className: 'routing-marker',
       html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-      iconSize: [24,24],
+      iconSize: [20,20],
       iconAnchor: [12,12]
     })
   });
