@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomSnap: 0.1
   });
 
-// Contenitore custom in basso a destra
+// Contenitore custom in basso a sinistra
 const searchControl = L.Control.geocoder({
   defaultMarkGeocode: true,
   collapsed: true, // <-- a scomparsa
@@ -284,10 +284,10 @@ const searchControl = L.Control.geocoder({
       content.innerHTML = `
         <div style="font-size:24px;">${flag}</div>
         <div style="font-size:18px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
-          ${name} 
-          <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">🔍</button>
-        </div>
-        <div>${nation}</div>
+          ${nation} 
+          </div>
+        <div> <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">🔍</button> 
+        ${name}</div>
         <div>📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
       `;
       panel.style.display = 'block';
