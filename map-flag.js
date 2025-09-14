@@ -390,93 +390,83 @@ let searchMarkers = [];   // array per i marker creati
     return marker;
   }
 
-  // --- Comando ricerca indicazioni ---
- document.getElementById('route-btn').addEventListener('click', async function () {
-  const startInput = document.getElementById('start').value.trim();
-  const endInput = document.getElementById('end').value.trim();
-  if (!startInput || !endInput) {
-    alert("Inserisci sia la partenza che l'arrivo.");
+let control; // variabile globale
+
+document.getElementById('route-btn').addEventListener('click', async function () {
+  const start = document.getElementById('start').value.trim();
+  const end   = document.getElementById('end').value.trim();
+
+  if (!start || !end) {
+    alert('Inserisci entrambi i punti.');
     return;
   }
 
-  // Rimuove controllo routing precedente
-  if (control) { 
-    map.removeControl(control); 
-    control = null; 
-  }
-
-  // Rimuove marker precedenti
-  searchMarkers.forEach(marker => map.removeLayer(marker));
-  searchMarkers = [];
-  let markerCount = 1; // contatore numerico per marker
-
-  // Funzione per ottenere lat/lng da indirizzo o città
-  async function geocode(query) {
-    return new Promise((resolve, reject) => {
-      L.Control.Geocoder.nominatim().geocode(query, results => {
-        if (results && results.length > 0) resolve(results[0].center);
-        else reject("Nessun risultato trovato per: " + query);
-      });
-    });
-  }
-
   try {
-    const startLatLng = await geocode(startInput);
-    const endLatLng = await geocode(endInput);
+    // --- Geocodifica con Nominatim ---
+    const [startData, endData] = await Promise.all([
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`)
+        .then(res => res.json()),
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`)
+        .then(res => res.json())
+    ]);
 
-    // Crea il controllo routing con marker colorati e numerati
-    control = L.Routing.control({
-      waypoints: [startLatLng, endLatLng],
-      routeWhileDragging: true,
-      show: true,
-      createMarker: function(i, wp) {
-        const color = i === 0 ? 'green' : (i === 1 ? 'red' : 'blue');
-        const marker = L.marker(wp.latLng, {
-          draggable: true,
-          icon: L.divIcon({
-            className: 'routing-marker',
-            html: `<div style="
-              background:${color};
-              width:24px;
-              height:24px;
-              border-radius:50%;
-              border:2px solid white;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              color:white;
-              font-weight:bold;
-              font-size:12px;
-            ">${markerCount}</div>`,
-            iconSize: [24,24],
-            iconAnchor: [12,12]
-          })
-        });
-        markerCount++;
-        searchMarkers.push(marker); // salva marker per reset
-        return marker;
-      }
-    }).addTo(map);
+    if (!startData.length || !endData.length) {
+      alert("Impossibile trovare i luoghi inseriti.");
+      return;
+    }
 
-    // Zoom automatico sulla rotta
-    control.on('routesfound', function(e) {
-      const bounds = e.routes[0].bounds;
-      map.fitBounds(bounds, { padding: [50, 50] });
-    });
+    const startLatLng = L.latLng(startData[0].lat, startData[0].lon);
+    const endLatLng   = L.latLng(endData[0].lat, endData[0].lon);
 
-  } catch(err) {
-    alert(err);
+    // --- Routing Machine ---
+    if (control) {
+      control.setWaypoints([startLatLng, endLatLng]);
+    } else {
+      control = L.Routing.control({
+        waypoints: [startLatLng, endLatLng],
+        routeWhileDragging: false,
+        show: true,              // 👈 MOSTRA pannello indicazioni
+        collapsible: true,       // 👈 permette di ridurre/espandere
+        createMarker: function(i, wp, nWps) {
+          // Marker numerati progressivi con colori diversi
+          let color = i === 0 ? 'green' : i === nWps - 1 ? 'red' : 'blue';
+          return L.marker(wp.latLng, {
+            draggable: true,
+            icon: L.divIcon({
+              className: 'routing-marker',
+              html: `<div style="background:${color};width:24px;height:24px;
+                     border-radius:50%;border:2px solid white;text-align:center;
+                     line-height:24px;color:white;font-weight:bold;font-size:12px;">
+                     ${i+1}</div>`,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            })
+          });
+        }
+      }).addTo(map);
+
+      // 👇 Eventi per intercettare il risultato
+      control.on('routesfound', function(e) {
+        const route = e.routes[0];
+        console.log("Distanza:", (route.summary.totalDistance/1000).toFixed(1), "km");
+        console.log("Durata:", (route.summary.totalTime/3600).toFixed(1), "ore");
+      });
+    }
+
+    map.fitBounds(L.latLngBounds([startLatLng, endLatLng]), { padding: [50, 50] });
+
+  } catch (err) {
+    console.error(err);
+    alert("Errore nella geocodifica.");
   }
 });
 
-  // --- Reset / Clear map ---
-  document.getElementById('clear-btn').addEventListener('click', function () {
-    if (control) { map.removeControl(control); control = null; }
-    searchMarkers.forEach(marker => map.removeLayer(marker));
-    searchMarkers = [];
-    document.getElementById('start').value = '';
-    document.getElementById('end').value = '';
-  });
-
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+// --- Pulsante Reset ---
+document.getElementById('clear-btn').addEventListener('click', function () {
+  if (control) {
+    map.removeControl(control);
+    control = null;
+  }
+  document.getElementById('start').value = '';
+  document.getElementById('end').value = '';
 });
