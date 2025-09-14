@@ -344,6 +344,10 @@ controlBox.onAdd = function(map) {
   routeBtn.href = '#';
   routeBtn.innerHTML = '🗺️';
   routeBtn.title = "Mostra/Nascondi indicazioni";
+
+const routeBox = document.getElementById('route-box');
+if (routeBox) routeBox.style.display = 'none'; // scomparso di default
+  
   L.DomEvent.on(routeBtn, 'click', e => {
     L.DomEvent.stopPropagation(e);
     L.DomEvent.preventDefault(e);
@@ -433,14 +437,52 @@ document.getElementById('route-btn').addEventListener('click', async function ()
     if (control) {
       control.setWaypoints([startLatLng, endLatLng]);
     } else {
-      control = L.Routing.control({
-        waypoints: [startLatLng, endLatLng],
-        routeWhileDragging: false,
-        show: true,
-        createMarker: function(i, wp, nWps) {
-          let color = i === 0 ? 'green' : i === nWps - 1 ? 'red' : 'blue';
-          return addSearchMarker(wp.latLng, `Waypoint ${i+1}`, color);
-        }
+     control = L.Routing.control({
+  waypoints: [startLatLng, endLatLng],
+  routeWhileDragging: false,
+  show: true,
+  collapsible: true, // pannello a scomparsa
+  createMarker: function(i, wp, nWps) {
+    let color = i === 0 ? 'green' : i === nWps - 1 ? 'red' : 'blue';
+    return addSearchMarker(wp.latLng, `Tappa ${i+1}`, color);
+  },
+  formatters: {
+    distance: function(d) { return (d/1000).toFixed(1) + ' km'; }, // km solo
+    time: function(t) { return (t/3600).toFixed(1) + ' h'; }       // ore solo
+  },
+  plan: L.Routing.plan([startLatLng, endLatLng], {
+    createMarker: function(i, wp) {
+      let color = i === 0 ? 'green' : i === arguments[1].length - 1 ? 'red' : 'blue';
+      return addSearchMarker(wp.latLng, `Tappa ${i+1}`, color);
+    },
+    routeWhileDragging: false
+  }),
+  lineOptions: { addWaypoints: true },
+  router: L.Routing.osrmv1({ serviceUrl: 'https://router.project-osrm.org/route/v1' })
+}).addTo(map);
+
+// Aggiorna intestazione + distanza/tempo
+control.on('routesfound', function(e) {
+  const route = e.routes[0];
+  const summary = route.summary;
+  const container = control.getContainer();
+
+  // Intestazione
+  const startName = document.getElementById('start').value;
+  const endName = document.getElementById('end').value;
+  let header = container.querySelector('.leaflet-routing-header');
+  if (!header) {
+    header = L.DomUtil.create('div', 'leaflet-routing-header', container);
+    header.style.fontWeight = 'bold';
+    header.style.marginBottom = '4px';
+    container.prepend(header);
+  }
+  header.innerHTML = `${startName} → ${endName} <br> ${ (summary.totalDistance/1000).toFixed(1) } km, ${ (summary.totalTime/3600).toFixed(1) } h`;
+
+  // Limita passo-passo a max 5 indicazioni
+  const instr = container.querySelectorAll('.leaflet-routing-instruction');
+  instr.forEach((el,i) => { if(i>=5) el.style.display='none'; });
+});
       }).addTo(map);
     }
 
