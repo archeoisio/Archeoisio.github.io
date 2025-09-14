@@ -1,24 +1,61 @@
-// --- Inizializzazione mappa ---
-const map = L.map('map').setView([41.9028, 12.4964], 5); // Roma
+document.addEventListener('DOMContentLoaded', () => {
+  const MOBILE_MAX_WIDTH = 767;
+  const mobileView  = { center: [45, 10], zoom: 4 };
+  const desktopView = { center: [49, 30], zoom: 4 };
+  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
+  const initialView = isMobile ? mobileView : desktopView;
 
-// --- Layer di base ---
-const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OSM' });
-const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom:17, attribution:'© OpenTopoMap' });
-osm.addTo(map);
+  const southWest = L.latLng(-90, 190);
+  const northEast = L.latLng(90, -190);
+  const maxBounds = L.latLngBounds(southWest, northEast);
 
-// --- Layer switcher ---
-const baseMaps = { "OSM": osm, "Topographic": topo };
-L.control.layers(baseMaps, null, { position:'topright', collapsed:true }).addTo(map);
+  // --- Layer base ---
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    noWrap: false
+  });
 
-// --- Locate Control ---
-L.control.locate({ position:'topleft', strings:{title:"Mostra la tua posizione"} }).addTo(map);
+  const satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Tiles &copy; Esri', noWrap: false }
+  );
 
-// --- Pulsante Home ---
-document.getElementById('home-btn').addEventListener('click', () => { map.setView([41.9028,12.4964],5); });
+  // --- Mappa ---
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: 3,
+    maxZoom: 18,
+    worldCopyJump: true,
+    maxBounds: maxBounds,
+    maxBoundsViscosity: 1.0,
+    wheelPxPerZoomLevel: 120,
+    zoomSnap: 0.1
+  });
 
-// --- Info panel ---
-const infoPanel = document.getElementById('info-panel');
-const infoContent = document.getElementById('info-content');
+// Contenitore custom in basso a destra
+const searchControl = L.Control.geocoder({
+  defaultMarkGeocode: true,
+  collapsed: true, // <-- a scomparsa
+  placeholder: "Cerca...",
+  position: "bottomright" // <-- posizione
+}).addTo(map);
+
+  // --- Aggiorna altezza mappa su resize/orientation ---
+  function setVh() {
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    if (map) map.invalidateSize();
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', setVh);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
+
+  // --- Overlay etichette ---
+  const labels = L.layerGroup();
 
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
@@ -217,59 +254,191 @@ const infoContent = document.getElementById('info-content');
 { name: "Juba", nation: "Sud Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
-// --- Aggiunta marker con popup ---
-capitals.forEach(capital => {
-  const marker = L.marker([capital.lat, capital.lng], {
-    title: capital.name, // tooltip al passaggio
-  }).addTo(map);
 
-  marker.on('click', () => {
-    document.getElementById('info-panel').style.display = 'block';
-    document.getElementById('info-content').innerHTML = `
-      <strong>${capital.name}</strong><br>${capital.info}
-    `;
-  });
-});
 
-// --- Routing ---
-let control = null;
-const routeBtn = document.getElementById('route-btn');
-const clearBtn = document.getElementById('clear-btn');
-const startInput = document.getElementById('start');
-const endInput = document.getElementById('end');
+  let lastMarker = null;
 
-routeBtn.addEventListener('click', () => {
-  if (control) map.removeControl(control);
-  if (startInput.value && endInput.value) {
-    control = L.Routing.control({
-      waypoints: [],
-      routeWhileDragging: true,
-      geocoder: L.Control.Geocoder.nominatim()
-    }).addTo(map);
-    L.Control.Geocoder.nominatim().geocode(startInput.value, results => {
-      if (results.length>0) L.Control.Geocoder.nominatim().geocode(endInput.value, results2 => {
-        if (results2.length>0) {
-          control.setWaypoints([
-            L.latLng(results[0].center.lat, results[0].center.lng),
-            L.latLng(results2[0].center.lat, results2[0].center.lng)
-          ]);
-        }
+  capitalsData.forEach(({ name, nation, coords, flag }) => {
+    const markerIcon = L.divIcon({
+      className: 'flag-icon',
+      html: `<div class="flag-box">${flag}</div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16]
+    });
+
+    const marker = L.marker(coords, { icon: markerIcon });
+
+    marker.on('click', () => {
+      const panel = document.getElementById('info-panel');
+      const content = document.getElementById('info-content');
+      if (!panel || !content) return;
+
+      // Se clicchi lo stesso marker → chiudi
+      if (lastMarker === marker) {
+        panel.style.display = 'none';
+        lastMarker = null;
+        return;
+      }
+
+      // Aggiorna contenuto con FlyTo e mostra pannello
+      content.innerHTML = `
+        <div style="font-size:24px;">${flag}</div>
+        <div style="font-size:18px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+          ${name} 
+          <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">🔍</button>
+        </div>
+        <div>${nation}</div>
+        <div>📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
+      `;
+      panel.style.display = 'block';
+      lastMarker = marker;
+
+      document.getElementById('fly-btn').addEventListener('click', () => {
+        map.flyTo(coords, 14, { animate: true, duration: 3 });
       });
     });
+
+    labels.addLayer(marker);
+  });
+
+  labels.addTo(map);
+
+  // --- Aggiorna font/padding etichette ---
+  function updateLabels() {
+    const zoom = map.getZoom();
+    const zMin = 3, zMid = 5, zMax = 14;
+    const fontAt3 = 6, fontAt5 = 12, fontAt14 = 14;
+    const padAt3 = 2, padAt5 = 4, padAt14 = 6;
+    let fontSize, padding;
+
+    if (zoom <= zMid) {
+      const f = (zoom - zMin) / (zMid - zMin);
+      fontSize = fontAt3 + f * (fontAt5 - fontAt3);
+      padding  = padAt3  + f * (padAt5 - padAt3);
+    } else {
+      const f = (zoom - zMid) / (zMax - zMid);
+      fontSize = fontAt5 + f * (fontAt14 - fontAt5);
+      padding  = padAt5 + f * (padAt14 - padAt5);
+    }
+
+    document.querySelectorAll('.capital-box').forEach(el => {
+      el.style.fontSize = `${fontSize}px`;
+      el.style.padding  = `${padding}px ${padding * 2}px`;
+    });
+  }
+
+  map.on('zoom', updateLabels);
+  updateLabels();
+
+  // --- FlyTo iniziale ---
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
+
+  // --- Layer switcher ---
+  L.control.layers(
+    { "Satellite": satellite, "OpenStreetMap": osm },
+    { "Capitali": labels },
+    { collapsed: true }
+  ).addTo(map);
+
+  // --- Box Home + Locate ---
+  const controlBox = L.control({ position: 'topright' });
+  controlBox.onAdd = function(map) {
+    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+
+    const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+    homeBtn.href = '#';
+    homeBtn.innerHTML = '🏠';
+    homeBtn.title = "Torna alla vista iniziale";
+    L.DomEvent.on(homeBtn, 'click', e => {
+      L.DomEvent.stopPropagation(e);
+      L.DomEvent.preventDefault(e);
+      map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 0.25 });
+    });
+
+    const locateControl = L.control.locate({
+      flyTo: { duration: 2, easeLinearity: 0.25 },
+      strings: { title: "Mostrami la mia posizione" },
+      locateOptions: { enableHighAccuracy: true, watch: false }
+    });
+    const locateBtn = locateControl.onAdd(map);
+    container.appendChild(locateBtn);
+
+    return container;
+  };
+  controlBox.addTo(map);
+
+
+  // --- Routing ---
+  let control; // variabile globale per il routing control
+
+  document.getElementById('route-btn').addEventListener('click', async function () {
+    const start = document.getElementById('start').value.trim();
+    const end   = document.getElementById('end').value.trim();
+
+    if (!start || !end) {
+      alert('Inserisci entrambi i punti.');
+      return;
+    }
+
+    try {
+      const [startData, endData] = await Promise.all([
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, {
+          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+        }).then(res => res.json()),
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, {
+          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+        }).then(res => res.json())
+      ]);
+
+      if (!startData.length || !endData.length) {
+        alert('Impossibile trovare i luoghi inseriti.');
+        return;
+      }
+
+      const startLatLng = L.latLng(parseFloat(startData[0].lat), parseFloat(startData[0].lon));
+      const endLatLng   = L.latLng(parseFloat(endData[0].lat), parseFloat(endData[0].lon));
+
+      if (control) {
+        control.setWaypoints([startLatLng, endLatLng]);
+      } else {
+        control = L.Routing.control({
+          waypoints: [startLatLng, endLatLng],
+          routeWhileDragging: false,
+          show: true, // visualizza pannello con info rotta
+          createMarker: () => null
+        }).addTo(map);
+      }
+
+      map.fitBounds(L.latLngBounds([startLatLng, endLatLng]), { padding: [50, 50] });
+
+    } catch (err) {
+      console.error(err);
+      alert('Errore nella geocodifica dei luoghi.');
+    }
+  });
+
+  // Pulisci mappa
+  document.getElementById('clear-btn').addEventListener('click', function () {
+    if (control) {
+      map.removeControl(control);
+      control = null;
+    }
+    document.getElementById('start').value = '';
+    document.getElementById('end').value = '';
+  });
+
+  // FlyTo iniziale
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+// Toggle box indicazioni
+document.getElementById('toggle-btn').addEventListener('click', () => {
+  const box = document.getElementById('route-box');
+  if (box.style.display === 'none' || box.style.display === '') {
+    box.style.display = 'flex';
+    document.getElementById('toggle-btn').innerText = '⬅️ Nascondi';
+  } else {
+    box.style.display = 'none';
+    document.getElementById('toggle-btn').innerText = '➡️ Indicazioni';
   }
 });
 
-clearBtn.addEventListener('click', () => {
-  if (control) { map.removeControl(control); control=null; }
-  startInput.value=''; endInput.value='';
-});
-
-// --- Toggle box indicazioni ---
-const toggleBtn = document.getElementById('toggle-btn');
-const routeBox = document.getElementById('route-box');
-routeBox.style.display='none';
-toggleBtn.addEventListener('click', () => {
-  const isHidden = routeBox.style.display==='none' || routeBox.style.display===''; 
-  routeBox.style.display = isHidden ? 'flex' : 'none';
-  toggleBtn.innerText = isHidden ? '⬅️ Nascondi' : '➡️ Indicazioni';
 });
