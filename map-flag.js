@@ -5,11 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
-  const southWest = L.latLng(-90, 190);
-  const northEast = L.latLng(90, -190);
+  const southWest = L.latLng(-90, -180);
+  const northEast = L.latLng(90, 180);
   const maxBounds = L.latLngBounds(southWest, northEast);
 
-  // --- Layer base ---
+  // --- Base layers ---
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
     noWrap: false
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { attribution: 'Tiles &copy; Esri', noWrap: false }
   );
 
-  // --- Mappa ---
+  // --- Map ---
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
@@ -35,26 +35,26 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomSnap: 0.1
   });
 
-  // Contenitore custom in basso a destra
-  const searchControl = L.Control.geocoder({
+  // --- Geocoder ---
+  L.Control.geocoder({
     defaultMarkGeocode: true,
     collapsed: true,
     placeholder: "Cerca...",
     position: "bottomright"
   }).addTo(map);
 
-  // --- Aggiorna altezza mappa su resize/orientation ---
+  // --- Adjust viewport height ---
   function setVh() {
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
     document.documentElement.style.setProperty('--vh', vh + 'px');
-    map.invalidateSize();
+    if (map) map.invalidateSize();
   }
   setVh();
   window.addEventListener('resize', setVh);
   window.addEventListener('orientationchange', setVh);
   if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
 
-  // --- Overlay etichette ---
+  // --- Capital markers ---
   const labels = L.layerGroup();
 
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Juba", nation: "Sud Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
-let lastMarker = null;
+ let lastMarker = null;
 
   capitalsData.forEach(({ name, nation, coords, flag }) => {
     const markerIcon = L.divIcon({
@@ -265,7 +265,6 @@ let lastMarker = null;
     });
 
     const marker = L.marker(coords, { icon: markerIcon });
-
     marker.on('click', () => {
       const panel = document.getElementById('info-panel');
       const content = document.getElementById('info-content');
@@ -299,36 +298,6 @@ let lastMarker = null;
 
   labels.addTo(map);
 
-  // --- Aggiorna font/padding etichette ---
-  function updateLabels() {
-    const zoom = map.getZoom();
-    const zMin = 3, zMid = 5, zMax = 14;
-    const fontAt3 = 6, fontAt5 = 12, fontAt14 = 14;
-    const padAt3 = 2, padAt5 = 4, padAt14 = 6;
-    let fontSize, padding;
-
-    if (zoom <= zMid) {
-      const f = (zoom - zMin) / (zMid - zMin);
-      fontSize = fontAt3 + f * (fontAt5 - fontAt3);
-      padding  = padAt3  + f * (padAt5 - padAt3);
-    } else {
-      const f = (zoom - zMid) / (zMax - zMid);
-      fontSize = fontAt5 + f * (fontAt14 - fontAt5);
-      padding  = padAt5 + f * (padAt14 - padAt5);
-    }
-
-    document.querySelectorAll('.capital-box').forEach(el => {
-      el.style.fontSize = `${fontSize}px`;
-      el.style.padding  = `${padding}px ${padding * 2}px`;
-    });
-  }
-
-  map.on('zoom', updateLabels);
-  updateLabels();
-
-  // --- FlyTo iniziale ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
-
   // --- Layer switcher ---
   L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm },
@@ -336,7 +305,7 @@ let lastMarker = null;
     { collapsed: true }
   ).addTo(map);
 
-  // --- Box Home + Locate ---
+  // --- Home + Locate ---
   const controlBox = L.control({ position: 'topright' });
   controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
@@ -348,7 +317,7 @@ let lastMarker = null;
     L.DomEvent.on(homeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 0.25 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8, easeLinearity: 0.25 });
     });
 
     const locateControl = L.control.locate({
@@ -356,34 +325,40 @@ let lastMarker = null;
       strings: { title: "Mostrami la mia posizione" },
       locateOptions: { enableHighAccuracy: true, watch: false }
     });
-    const locateBtn = locateControl.onAdd(map);
-    container.appendChild(locateBtn);
+    container.appendChild(locateControl.onAdd(map));
 
     return container;
   };
   controlBox.addTo(map);
 
   // --- Routing ---
-  let control;
+  let control = null;
+  const startInput = document.getElementById('start');
+  const endInput = document.getElementById('end');
+  const routeBtn = document.getElementById('route-btn');
+  const clearBtn = document.getElementById('clear-btn');
 
-  document.getElementById('route-btn').addEventListener('click', async function () {
-    const start = document.getElementById('start').value.trim();
-    const end   = document.getElementById('end').value.trim();
-
+  routeBtn.addEventListener('click', async () => {
+    const start = startInput.value.trim();
+    const end = endInput.value.trim();
     if (!start || !end) { alert('Inserisci entrambi i punti.'); return; }
 
     try {
       const [startData, endData] = await Promise.all([
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, { headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" } }).then(res => res.json()),
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, { headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" } }).then(res => res.json())
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, {
+          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+        }).then(res => res.json()),
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, {
+          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+        }).then(res => res.json())
       ]);
 
       if (!startData.length || !endData.length) { alert('Impossibile trovare i luoghi inseriti.'); return; }
 
       const startLatLng = L.latLng(parseFloat(startData[0].lat), parseFloat(startData[0].lon));
-      const endLatLng   = L.latLng(parseFloat(endData[0].lat), parseFloat(endData[0].lon));
+      const endLatLng = L.latLng(parseFloat(endData[0].lat), parseFloat(endData[0].lon));
 
-      if (control) { control.setWaypoints([startLatLng, endLatLng]); }
+      if (control) control.setWaypoints([startLatLng, endLatLng]);
       else {
         control = L.Routing.control({
           waypoints: [startLatLng, endLatLng],
@@ -401,13 +376,13 @@ let lastMarker = null;
     }
   });
 
-  document.getElementById('clear-btn').addEventListener('click', function () {
+  clearBtn.addEventListener('click', () => {
     if (control) { map.removeControl(control); control = null; }
-    document.getElementById('start').value = '';
-    document.getElementById('end').value = '';
+    startInput.value = '';
+    endInput.value = '';
   });
 
-  // --- Toggle box indicazioni ---
+  // --- Toggle route box ---
   const toggleBtn = document.getElementById('toggle-btn');
   const routeBox = document.getElementById('route-box');
   routeBox.style.display = 'none';
@@ -418,4 +393,6 @@ let lastMarker = null;
     toggleBtn.innerText = isHidden ? '⬅️ Nascondi' : '➡️ Indicazioni';
   });
 
+  // --- Initial FlyTo ---
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
 });
