@@ -361,76 +361,113 @@ controlBox.addTo(map);
 
 
 
-  // --- Routing ---
-  let control; // variabile globale per il routing control
+// --- Variabili globali ---
+let control; // routing control
+let searchMarkers = []; // marker creati dal comando ricerca
 
-  document.getElementById('route-btn').addEventListener('click', async function () {
-    const start = document.getElementById('start').value.trim();
-    const end   = document.getElementById('end').value.trim();
-
-    if (!start || !end) {
-      alert('Inserisci entrambi i punti.');
-      return;
-    }
-
-    try {
-      const [startData, endData] = await Promise.all([
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, {
-          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
-        }).then(res => res.json()),
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, {
-          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
-        }).then(res => res.json())
-      ]);
-
-      if (!startData.length || !endData.length) {
-        alert('Impossibile trovare i luoghi inseriti.');
-        return;
-      }
-
-      const startLatLng = L.latLng(parseFloat(startData[0].lat), parseFloat(startData[0].lon));
-      const endLatLng   = L.latLng(parseFloat(endData[0].lat), parseFloat(endData[0].lon));
-
-      if (control) {
-        control.setWaypoints([startLatLng, endLatLng]);
-      } else {
-        control = L.Routing.control({
-           waypoints: [startLatLng, endLatLng],
-  routeWhileDragging: false,
-  show: true,
- createMarker: function(i, wp, nWps) {
-  let color = i === 0 ? 'green' : i === nWps - 1 ? 'red' : 'blue';
-  return L.marker(wp.latLng, {
+// Funzione per aggiungere marker con popup
+function addSearchMarker(latlng, name, color) {
+  const marker = L.marker(latlng, {
     draggable: true,
     icon: L.divIcon({
       className: 'routing-marker',
       html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-      iconSize: [20,20],
-      iconAnchor: [12,12]
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
     })
+  }).addTo(map);
+
+  marker.bindPopup(`
+    <div style="font-weight:bold; font-size:14px;">
+      ${name} 
+      <button style="margin-left:5px;">🔍</button>
+    </div>
+  `);
+
+  marker.on('popupopen', () => {
+    const btn = marker.getPopup().getElement().querySelector('button');
+    if (btn) {
+      btn.onclick = () => {
+        map.flyTo(latlng, 14, { animate: true, duration: 3 });
+      };
+    }
   });
+
+  searchMarkers.push(marker);
+  return marker;
 }
-        }).addTo(map);
-      }
 
-      map.fitBounds(L.latLngBounds([startLatLng, endLatLng]), { padding: [50, 50] });
+// --- Comando ricerca ---
+document.getElementById('route-btn').addEventListener('click', async function () {
+  const start = document.getElementById('start').value.trim();
+  const end   = document.getElementById('end').value.trim();
 
-    } catch (err) {
-      console.error(err);
-      alert('Errore nella geocodifica dei luoghi.');
+  if (!start || !end) {
+    alert('Inserisci entrambi i punti.');
+    return;
+  }
+
+  try {
+    const [startData, endData] = await Promise.all([
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, {
+        headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+      }).then(res => res.json()),
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, {
+        headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+      }).then(res => res.json())
+    ]);
+
+    if (!startData.length || !endData.length) {
+      alert('Impossibile trovare i luoghi inseriti.');
+      return;
     }
-  });
 
-  // Pulisci mappa
-  document.getElementById('clear-btn').addEventListener('click', function () {
+    const startLatLng = L.latLng(parseFloat(startData[0].lat), parseFloat(startData[0].lon));
+    const endLatLng   = L.latLng(parseFloat(endData[0].lat), parseFloat(endData[0].lon));
+
+    // Aggiungi marker start e end con popup
+    addSearchMarker(startLatLng, start, 'green');
+    addSearchMarker(endLatLng, end, 'red');
+
+    // Routing control
     if (control) {
-      map.removeControl(control);
-      control = null;
+      control.setWaypoints([startLatLng, endLatLng]);
+    } else {
+      control = L.Routing.control({
+        waypoints: [startLatLng, endLatLng],
+        routeWhileDragging: false,
+        show: true,
+        createMarker: function(i, wp, nWps) {
+          let color = i === 0 ? 'green' : i === nWps - 1 ? 'red' : 'blue';
+          return addSearchMarker(wp.latLng, `Waypoint ${i+1}`, color);
+        }
+      }).addTo(map);
     }
-    document.getElementById('start').value = '';
-    document.getElementById('end').value = '';
-  });
 
+    map.fitBounds(L.latLngBounds([startLatLng, endLatLng]), { padding: [50, 50] });
+
+  } catch (err) {
+    console.error(err);
+    alert('Errore nella geocodifica dei luoghi.');
+  }
+});
+
+// --- Reset / Clear map ---
+document.getElementById('clear-btn').addEventListener('click', function () {
+  // Rimuovi routing
+  if (control) {
+    map.removeControl(control);
+    control = null;
+  }
+
+  // Rimuovi tutti i marker creati dinamicamente (ricerca e routing)
+  searchMarkers.forEach(marker => map.removeLayer(marker));
+  searchMarkers = [];
+
+  // Pulisci input
+  document.getElementById('start').value = '';
+  document.getElementById('end').value = '';
+});
   // FlyTo iniziale
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
 
