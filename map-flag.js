@@ -390,8 +390,6 @@ let searchMarkers = [];   // array per i marker creati
     return marker;
   }
 
-let control; // variabile globale
-
 document.getElementById('route-btn').addEventListener('click', async function () {
   const start = document.getElementById('start').value.trim();
   const end   = document.getElementById('end').value.trim();
