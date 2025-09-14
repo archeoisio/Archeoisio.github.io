@@ -12,12 +12,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
 
 <style>
-  /* Reset margini */
   html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden; /* evita scroll indesiderati */
+    overflow: hidden;
   }
 
   #map {
@@ -27,73 +26,8 @@
     width: 100%;
     height: calc(var(--vh, 1vh) * 1);
   }
-#route-box {
-  position: absolute;
-  bottom: 50px;
-  right: 20px;
-  background: white;
-   width: 250px;          /* larghezza del box */
-  font-size: 12px;       /* dimensione del testo */
- padding: 5px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-#route-box input {
-  padding: 5px;
-  font-size: 12px;
-}
-#route-box button {
-  padding: 6px;
-  font-size: 12px;
-  cursor: pointer;
-}
-  /* Stile pannello info trasparente */
-  #info-panel {
-    display: none;
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    padding: 5px;
-    border-radius: 8px;
-    font-family: sans-serif;
-    font-size: 12px;
-    z-index: 1000;
-  }
 
-  #info-content {
-    /* contenuto interno */
-  }
-
-  .capital-box {
-    display: inline-block;
-    text-align: center;
-    font-family: 'ISOCPeur', monospace;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #000;
-    background: rgba(255,255,255,0.8);
-    border-radius: 3px;
-    line-height: 1.2;
-  }
-
-  /* Container switcher */
-  .leaflet-top.leaflet-right .leaflet-control-layers {
-    background: white;
-    box-shadow: none !important;
-    border: none !important;
-    margin-right: 10px !important;
-    border-radius: 4px !important;
-    align-items: center !important;
-    z-index: 1000;
-  }
-
-  /* Box home+LOCATE */
+  /* Box Home + Locate + Indicazioni */
   .custom-home-box {
     position: relative;
     top: 0;
@@ -103,126 +37,107 @@
     border: none !important;
     display: flex !important;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
+    z-index: 1000;
   }
 
-  .flag-box {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
-    line-height: 1;
+  .custom-home-button, .leaflet-control-locate a {
+    width: 44px !important;
+    height: 44px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 25px !important;
+    background: white !important;
+    border-radius: 4px !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
     cursor: pointer;
   }
 
-  .capital-popup .capital-box {
+  /* Box indicazioni sotto Locate */
+  #route-box {
+    display: none; /* inizialmente nascosto */
+    flex-direction: column;
+    background: rgba(255,255,255,0.9);
+    padding: 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+    font-family: sans-serif;
     font-size: 14px;
-    padding: 4px 8px;
-    background: white;
+    min-width: 180px;
+  }
+
+  #route-box input {
+    width: 100%;
+    margin-bottom: 4px;
+    padding: 4px;
+    font-size: 14px;
+  }
+
+  #route-box button {
+    width: 100%;
+    padding: 6px;
+    margin-top: 2px;
+    font-size: 14px;
+    border: none;
     border-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    background-color: #4285f4;
+    color: white;
+    cursor: pointer;
   }
 
-  .custom-home-button {
-    width: 44px !important;
-    height: 44px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    font-size: 25px !important;
-    background: white !important;
-    border-radius: 4px !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    line-height: 1 !important;
+  #route-box button#clear-btn {
+    background-color: #d9534f;
   }
 
-  .leaflet-control-locate a {
-    width: 44px !important;
-    height: 44px !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    font-size: 25px !important;
-    background: white !important;
-    border-radius: 4px !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    line-height: 1 !important;
-  }
-
-  .leaflet-control-locate {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-</style>
-
-</head>
-
-<body>
-  <div id="map"></div>
-
-  <div id="info-panel" style="
+  /* Info panel */
+  #info-panel {
     display: none;
     position: absolute;
-    bottom: 40px;
-    left: 15px;
-    width: 150px;
+    bottom: 20px;
+    left: 20px;
+    width: 250px;
     min-height: 80px;
     background: rgba(0,0,0,0.5);
     color: white;
     padding: 10px;
     border-radius: 8px;
     font-family: sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     z-index: 1000;
-  ">
-    <div id="info-content"></div>
-  </div>
-  <div id="route-toggle" style="position:absolute; bottom:20px; right:20px; z-index:1000;">
-  <button id="toggle-btn" style="padding:6px 12px; font-size:14px; cursor:pointer;">➡️</button>
+  }
+</style>
+</head>
+
+<body>
+<div id="map"></div>
+
+<!-- Box info generico -->
+<div id="info-panel">
+  <div id="info-content"></div>
 </div>
 
-<div id="route-box" style="display:none; position:absolute; bottom:60px; right:20px; background:white; padding:10px; border-radius:8px; box-shadow:0 0 5px rgba(0,0,0,0.2); z-index:1000; display:flex; flex-direction:column; gap:6px;">
+<!-- Box indicazioni (start/end + pulsanti) -->
+<div id="route-box">
   <input type="text" id="start" placeholder="Partenza" />
-  <input type="text" id="end" placeholder="Arrivo" />
-  <button id="route-btn">Calcola</button>
-  <button id="clear-btn">Pulisci</button>
+  <input type="text" id="end" placeholder="Destinazione" />
+  <button id="route-btn">Indicazioni</button>
+  <button id="clear-btn">Cancella</button>
 </div>
 
-  <!-- Leaflet Routing Machine CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-
-<!-- Leaflet JS (core) -->
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<!-- Leaflet Routing Machine JS -->
-<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-
-
-  <!-- LocateControl JS -->
-  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
-
-    <!-- LabelTextCollision plugin -->
-  <script src="https://unpkg.com/leaflet-labeltextcollision"></script>
-
-  <!-- Leaflet Control Geocoder -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
-  />
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-  <!-- Il tuo script principale -->
-  <script src="map-flag.js"></script>
-
+<!-- LocateControl JS -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
+<!-- LabelTextCollision plugin -->
+<script src="https://unpkg.com/leaflet-labeltextcollision"></script>
+<!-- Leaflet Control Geocoder -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<!-- Script principale -->
+<script src="map-flag.js"></script>
 </body>
 </html>
