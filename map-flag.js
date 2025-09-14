@@ -35,19 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomSnap: 0.1
   });
 
-// Contenitore custom in basso a destra
-const searchControl = L.Control.geocoder({
-  defaultMarkGeocode: true,
-  collapsed: true, // <-- a scomparsa
-  placeholder: "Cerca...",
-  position: "bottomright" // <-- posizione
-}).addTo(map);
+  // Contenitore custom in basso a destra
+  const searchControl = L.Control.geocoder({
+    defaultMarkGeocode: true,
+    collapsed: true,
+    placeholder: "Cerca...",
+    position: "bottomright"
+  }).addTo(map);
 
   // --- Aggiorna altezza mappa su resize/orientation ---
   function setVh() {
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
     document.documentElement.style.setProperty('--vh', vh + 'px');
-    if (map) map.invalidateSize();
+    map.invalidateSize();
   }
   setVh();
   window.addEventListener('resize', setVh);
@@ -254,9 +254,7 @@ const searchControl = L.Control.geocoder({
 { name: "Juba", nation: "Sud Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
-
-
-  let lastMarker = null;
+let lastMarker = null;
 
   capitalsData.forEach(({ name, nation, coords, flag }) => {
     const markerIcon = L.divIcon({
@@ -273,14 +271,12 @@ const searchControl = L.Control.geocoder({
       const content = document.getElementById('info-content');
       if (!panel || !content) return;
 
-      // Se clicchi lo stesso marker → chiudi
       if (lastMarker === marker) {
         panel.style.display = 'none';
         lastMarker = null;
         return;
       }
 
-      // Aggiorna contenuto con FlyTo e mostra pannello
       content.innerHTML = `
         <div style="font-size:24px;">${flag}</div>
         <div style="font-size:18px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
@@ -367,44 +363,32 @@ const searchControl = L.Control.geocoder({
   };
   controlBox.addTo(map);
 
-
   // --- Routing ---
-  let control; // variabile globale per il routing control
+  let control;
 
   document.getElementById('route-btn').addEventListener('click', async function () {
     const start = document.getElementById('start').value.trim();
     const end   = document.getElementById('end').value.trim();
 
-    if (!start || !end) {
-      alert('Inserisci entrambi i punti.');
-      return;
-    }
+    if (!start || !end) { alert('Inserisci entrambi i punti.'); return; }
 
     try {
       const [startData, endData] = await Promise.all([
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, {
-          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
-        }).then(res => res.json()),
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, {
-          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
-        }).then(res => res.json())
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, { headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" } }).then(res => res.json()),
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, { headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" } }).then(res => res.json())
       ]);
 
-      if (!startData.length || !endData.length) {
-        alert('Impossibile trovare i luoghi inseriti.');
-        return;
-      }
+      if (!startData.length || !endData.length) { alert('Impossibile trovare i luoghi inseriti.'); return; }
 
       const startLatLng = L.latLng(parseFloat(startData[0].lat), parseFloat(startData[0].lon));
       const endLatLng   = L.latLng(parseFloat(endData[0].lat), parseFloat(endData[0].lon));
 
-      if (control) {
-        control.setWaypoints([startLatLng, endLatLng]);
-      } else {
+      if (control) { control.setWaypoints([startLatLng, endLatLng]); }
+      else {
         control = L.Routing.control({
           waypoints: [startLatLng, endLatLng],
           routeWhileDragging: false,
-          show: true, // visualizza pannello con info rotta
+          show: true,
           createMarker: () => null
         }).addTo(map);
       }
@@ -417,30 +401,21 @@ const searchControl = L.Control.geocoder({
     }
   });
 
-  // Pulisci mappa
   document.getElementById('clear-btn').addEventListener('click', function () {
-    if (control) {
-      map.removeControl(control);
-      control = null;
-    }
+    if (control) { map.removeControl(control); control = null; }
     document.getElementById('start').value = '';
     document.getElementById('end').value = '';
   });
 
-  // FlyTo iniziale
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
-// Toggle box indicazioni
-document.getElementById('toggle-btn').addEventListener('click', () => {
-  const box = document.getElementById('route-box');
-  if (box.style.display === 'none' || box.style.display === '') {
-    box.style.display = 'flex';
-    document.getElementById('toggle-btn').innerText = '⬅️ Nascondi';
-    document.getElementById('toggle-btn').innerText = '⬅️';
-  } else {
-    box.style.display = 'none';
-    document.getElementById('toggle-btn').innerText = '➡️ Indicazioni';
-    document.getElementById('toggle-btn').innerText = '➡️';
-  }
-});
+  // --- Toggle box indicazioni ---
+  const toggleBtn = document.getElementById('toggle-btn');
+  const routeBox = document.getElementById('route-box');
+  routeBox.style.display = 'none';
+
+  toggleBtn.addEventListener('click', () => {
+    const isHidden = routeBox.style.display === 'none' || routeBox.style.display === '';
+    routeBox.style.display = isHidden ? 'flex' : 'none';
+    toggleBtn.innerText = isHidden ? '⬅️ Nascondi' : '➡️ Indicazioni';
+  });
 
 });
