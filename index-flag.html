@@ -18,10 +18,12 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
 <style>
+  /* Reset margini */
   html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+    overflow: hidden; /* evita scroll indesiderati */
     overflow: hidden;
   }
 
@@ -30,6 +32,7 @@
     top: 0;
     left: 0;
     width: 100%;
+    height: calc(var(--vh, 1vh) * 1);
     height: 100%;
   }
 
@@ -56,17 +59,45 @@
     font-size: 12px;
     cursor: pointer;
   }
+#route-box {
+  position: absolute;
+  bottom: 40px;
+  right: 20px;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+#route-box input {
+  padding: 5px;
+  font-size: 12px;
+}
+#route-box button {
+  padding: 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+  /* Stile pannello info trasparente */
 
   /* Info panel */
   #info-panel {
     display: none;
     position: absolute;
+    bottom: 20px;
+    left: 20px;
+    max-width: 100px;
     bottom: 40px;
     left: 15px;
     width: 150px;
     min-height: 80px;
+    background: rgba(0,0,0,0.6);
     background: rgba(0,0,0,0.5);
     color: white;
+    padding: 5px;
     padding: 10px;
     border-radius: 8px;
     font-family: sans-serif;
@@ -74,6 +105,82 @@
     z-index: 1000;
   }
 
+  #info-content {
+    /* contenuto interno */
+  }
+
+  .capital-box {
+    display: inline-block;
+    text-align: center;
+    font-family: 'ISOCPeur', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #000;
+    background: rgba(255,255,255,0.8);
+    border-radius: 3px;
+    line-height: 1.2;
+  }
+
+  /* Container switcher */
+  .leaflet-top.leaflet-right .leaflet-control-layers {
+    background: white;
+    box-shadow: none !important;
+    border: none !important;
+    margin-right: 10px !important;
+    border-radius: 4px !important;
+    align-items: center !important;
+    z-index: 1000;
+  }
+
+  /* Box home+LOCATE */
+  .custom-home-box {
+    position: relative;
+    top: 0;
+    right: 0;
+    background: transparent;
+    padding: 0;
+    border: none !important;
+    display: flex !important;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .flag-box {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .capital-popup .capital-box {
+    font-size: 14px;
+    padding: 4px 8px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+
+  .custom-home-button {
+    width: 44px !important;
+    height: 44px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 25px !important;
+    background: white !important;
+    border-radius: 4px !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+  }
+
+  .leaflet-control-locate a {
   /* Custom buttons */
   .custom-home-button, .leaflet-control-locate a {
     width: 44px !important;
@@ -91,6 +198,12 @@
     cursor: pointer;
   }
 
+  .leaflet-control-locate {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
   .custom-home-box {
     position: absolute;
     top: 10px;
@@ -103,7 +216,9 @@
 </style>
 
 </head>
+
 <body>
+  <div id="map"></div>
 
 <div id="map"></div>
 
@@ -115,11 +230,31 @@
   <button id="clear-btn">Reset</button>
 </div>
 
+  <div id="info-panel" style="
+    display: none;
+    position: absolute;
+    bottom: 40px;
+    left: 15px;
+    width: 150px;
+    min-height: 80px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: sans-serif;
+    font-size: 12px;
+    z-index: 1000;
+  ">
+    <div id="info-content"></div>
+  </div>
+  
 <!-- Info panel -->
 <div id="info-panel">
   <div id="info-content"></div>
 </div>
 
+  <!-- Leaflet Routing Machine CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 <!-- Home + Locate + Toggle indicazioni -->
 <div class="custom-home-box">
   <button id="home-btn" class="custom-home-button">🏠</button>
@@ -127,21 +262,36 @@
   <button id="toggle-btn" class="custom-home-button">➡️</button>
 </div>
 
+<!-- Leaflet JS (core) -->
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<!-- Leaflet Routing Machine JS -->
 <!-- Routing Machine JS -->
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
 <!-- LocateControl JS -->
 <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
 
+  <!-- LocateControl JS -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
+
+    <!-- LabelTextCollision plugin -->
+  <script src="https://unpkg.com/leaflet-labeltextcollision"></script>
 <!-- LabelTextCollision plugin -->
 <script src="https://unpkg.com/leaflet-labeltextcollision"></script>
 
+  <!-- Leaflet Control Geocoder -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
+  />
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 <!-- Leaflet Control Geocoder -->
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
+  <!-- Il tuo script principale -->
+  <script src="map-flag.js"></script>
 <!-- Script principale -->
 <script src="map-flag.js"></script>
 
