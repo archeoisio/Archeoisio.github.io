@@ -393,8 +393,82 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Comando ricerca indicazioni ---
   document.getElementById('route-btn').addEventListener('click', async function () {
-    // Stesso codice della versione completa...
-  });
+  const startInput = document.getElementById('start').value.trim();
+  const endInput = document.getElementById('end').value.trim();
+  if (!startInput || !endInput) {
+    alert("Inserisci sia la partenza che l'arrivo.");
+    return;
+  }
+
+  // Rimuove controllo routing precedente
+  if (control) { 
+    map.removeControl(control); 
+    control = null; 
+  }
+
+  // Rimuove marker precedenti
+  searchMarkers.forEach(marker => map.removeLayer(marker));
+  searchMarkers = [];
+  let markerCount = 1; // contatore numerico per marker
+
+  // Funzione per ottenere lat/lng da indirizzo o città
+  async function geocode(query) {
+    return new Promise((resolve, reject) => {
+      L.Control.Geocoder.nominatim().geocode(query, results => {
+        if (results && results.length > 0) resolve(results[0].center);
+        else reject("Nessun risultato trovato per: " + query);
+      });
+    });
+  }
+
+  try {
+    const startLatLng = await geocode(startInput);
+    const endLatLng = await geocode(endInput);
+
+    // Crea il controllo routing con marker colorati e numerati
+    control = L.Routing.control({
+      waypoints: [startLatLng, endLatLng],
+      routeWhileDragging: true,
+      show: true,
+      createMarker: function(i, wp) {
+        const color = i === 0 ? 'green' : (i === 1 ? 'red' : 'blue');
+        const marker = L.marker(wp.latLng, {
+          draggable: true,
+          icon: L.divIcon({
+            className: 'routing-marker',
+            html: `<div style="
+              background:${color};
+              width:24px;
+              height:24px;
+              border-radius:50%;
+              border:2px solid white;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              color:white;
+              font-weight:bold;
+              font-size:12px;
+            ">${markerCount}</div>`,
+            iconSize: [24,24],
+            iconAnchor: [12,12]
+          })
+        });
+        markerCount++;
+        searchMarkers.push(marker); // salva marker per reset
+        return marker;
+      }
+    }).addTo(map);
+
+    // Zoom automatico sulla rotta
+    control.on('routesfound', function(e) {
+      const bounds = e.routes[0].bounds;
+      map.fitBounds(bounds, { padding: [50, 50] });
+    });
+
+  } catch(err) {
+    alert(err);
+  }
+});
 
   // --- Reset / Clear map ---
   document.getElementById('clear-btn').addEventListener('click', function () {
