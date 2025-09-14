@@ -360,10 +360,6 @@ let searchMarkers = [];   // array per i marker creati
   };
   controlBox.addTo(map);
 
-  // --- Variabili globali ---
-  let control; 
-  let searchMarkers = [];
-
   // Funzione marker ricerca/routing
   function addSearchMarker(latlng, name, color) {
     const marker = L.marker(latlng, {
