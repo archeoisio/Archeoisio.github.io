@@ -33,7 +33,17 @@ document.addEventListener('DOMContentLoaded', () => {
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1
   });
+// Abilita zoom con rettangolo usando il tasto sinistro
+map.on('mousedown', function (e) {
+  if (e.originalEvent.button === 0) { // solo click sinistro
+    map.dragging.disable(); // blocca pan
+    map.boxZoom.enable();   // abilita box zoom
+  }
+});
 
+map.on('mouseup', function () {
+  map.dragging.enable();    // riabilita pan
+});
 // Contenitore custom in basso a sinistra
 const searchControl = L.Control.geocoder({
   defaultMarkGeocode: true,
@@ -283,13 +293,12 @@ const searchControl = L.Control.geocoder({
       // Aggiorna contenuto con FlyTo e mostra pannello
       content.innerHTML = `
           <div style="font-size:14px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
-          ${nation} 
-          </div>
+          ${nation} ${flag}  </div>
         <div style="font-size:12px;font-weight:bold; color:white;">
     ${name}
     <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:12px; padding:0; margin-left:4px;">🔍</button>
   </div>
-        <div style="font-size:12px;font-weight:bold; display:flex; justify-content:space-between; align-items:center; background:none; border:none; color:white">📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}, ${flag} </div>
+        <div style="font-size:12px;font-weight:bold; display:flex; justify-content:space-between; align-items:center; background:none; border:none; color:white">📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
       `;
       panel.style.display = 'block';
       lastMarker = marker;
