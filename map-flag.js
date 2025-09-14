@@ -395,67 +395,49 @@ document.getElementById('route-btn').addEventListener('click', async function ()
   const end   = document.getElementById('end').value.trim();
 
   if (!start || !end) {
-    alert('Inserisci entrambi i punti.');
+    alert("Inserisci sia punto di partenza che destinazione!");
     return;
   }
 
+  // Funzione di geocoding con Nominatim
+  async function geocode(query) {
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    if (data.length === 0) throw new Error(`Località non trovata: ${query}`);
+    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+  }
+
   try {
-    // --- Geocodifica con Nominatim ---
-    const [startData, endData] = await Promise.all([
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`)
-        .then(res => res.json()),
-      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`)
-        .then(res => res.json())
-    ]);
+    const startCoords = await geocode(start);
+    const endCoords   = await geocode(end);
 
-    if (!startData.length || !endData.length) {
-      alert("Impossibile trovare i luoghi inseriti.");
-      return;
-    }
+    // Pulisci vecchi marker se presenti
+    searchMarkers.forEach(m => map.removeLayer(m));
+    searchMarkers = [];
 
-    const startLatLng = L.latLng(startData[0].lat, startData[0].lon);
-    const endLatLng   = L.latLng(endData[0].lat, endData[0].lon);
+    // Aggiungi marker partenza e arrivo
+    const startMarker = addSearchMarker(startCoords, start, "green");
+    const endMarker   = addSearchMarker(endCoords, end, "red");
 
-    // --- Routing Machine ---
-    if (control) {
-      control.setWaypoints([startLatLng, endLatLng]);
-    } else {
-      control = L.Routing.control({
-        waypoints: [startLatLng, endLatLng],
-        routeWhileDragging: false,
-        show: true,              // 👈 MOSTRA pannello indicazioni
-        collapsible: true,       // 👈 permette di ridurre/espandere
-        createMarker: function(i, wp, nWps) {
-          // Marker numerati progressivi con colori diversi
-          let color = i === 0 ? 'green' : i === nWps - 1 ? 'red' : 'blue';
-          return L.marker(wp.latLng, {
-            draggable: true,
-            icon: L.divIcon({
-              className: 'routing-marker',
-              html: `<div style="background:${color};width:24px;height:24px;
-                     border-radius:50%;border:2px solid white;text-align:center;
-                     line-height:24px;color:white;font-weight:bold;font-size:12px;">
-                     ${i+1}</div>`,
-              iconSize: [24, 24],
-              iconAnchor: [12, 12]
-            })
-          });
-        }
-      }).addTo(map);
+    // Se esiste già un routing, lo rimuovo
+    if (control) map.removeControl(control);
 
-      // 👇 Eventi per intercettare il risultato
-      control.on('routesfound', function(e) {
-        const route = e.routes[0];
-        console.log("Distanza:", (route.summary.totalDistance/1000).toFixed(1), "km");
-        console.log("Durata:", (route.summary.totalTime/3600).toFixed(1), "ore");
-      });
-    }
+    // Routing (richiede leaflet-routing-machine + osrm)
+    control = L.Routing.control({
+      waypoints: [
+        L.latLng(startCoords[0], startCoords[1]),
+        L.latLng(endCoords[0], endCoords[1])
+      ],
+      routeWhileDragging: true,
+      show: false,
+      addWaypoints: false,
+      draggableWaypoints: true
+    }).addTo(map);
 
-    map.fitBounds(L.latLngBounds([startLatLng, endLatLng]), { padding: [50, 50] });
+    map.fitBounds([startCoords, endCoords], { padding: [50, 50] });
 
   } catch (err) {
-    console.error(err);
-    alert("Errore nella geocodifica.");
+    alert("Errore nel calcolo percorso: " + err.message);
   }
 });
 
