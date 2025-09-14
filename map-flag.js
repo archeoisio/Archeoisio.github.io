@@ -430,7 +430,7 @@ document.getElementById('route-btn').addEventListener('click', async function ()
       ],
       routeWhileDragging: true,
       show: false,
-      addWaypoints: false,
+      addWaypoints: true,
       draggableWaypoints: true
     }).addTo(map);
 
