@@ -399,23 +399,16 @@ controlBox.addTo(map);
   routeWhileDragging: false,
   show: true,
  createMarker: function(i, wp, nWps) {
-    let icon;
-
-    if (i === 0) {
-        // partenza: icona verde
-        icon = new L.Icon.Default({ className: 'leaflet-routing-icon-start' });
-    } else if (i === nWps - 1) {
-        // arrivo: icona rossa
-        icon = new L.Icon.Default({ className: 'leaflet-routing-icon-end' });
-    } else {
-        // waypoint intermedi: icona blu
-        icon = new L.Icon.Default({ className: 'leaflet-routing-icon-waypoint' });
-    }
-
-    return L.marker(wp.latLng, {
-        draggable: true,
-        icon: icon
-    });
+  let color = i === 0 ? 'green' : i === nWps - 1 ? 'red' : 'blue';
+  return L.marker(wp.latLng, {
+    draggable: true,
+    icon: L.divIcon({
+      className: 'routing-marker',
+      html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
+      iconSize: [24,24],
+      iconAnchor: [12,12]
+    })
+  });
 }
         }).addTo(map);
       }
