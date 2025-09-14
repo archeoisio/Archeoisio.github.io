@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: initialView.zoom,
     layers: [satellite],
     zoomControl: true,
+    boxZoom: true,
     minZoom: 2,
     maxZoom: 18,
     worldCopyJump: true,
