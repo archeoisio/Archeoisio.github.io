@@ -402,7 +402,6 @@ controlBox.addTo(map);
     return L.marker(wp.latLng, {
       draggable: true,
       icon: L.icon({
-        iconUrl: i === 0 ? 'markerA.png' : 'markerB.png', // icon personalizzate
         iconSize: [32, 32],
         iconAnchor: [16, 32]
       })
