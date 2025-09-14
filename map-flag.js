@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [50, 0], zoom: 4 };
+  const mobileView  = { center: [50, 50], zoom: 4 };
   const desktopView = { center: [45, 30], zoom: 4 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
@@ -246,7 +246,13 @@ const searchControl = L.Control.geocoder({
 { name: "Juba", nation: "Sud Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" },
 { name: "Tel Aviv", nation: "Israel", coords: [32.0853, 34.7818], flag: "🇮🇱" },
-{ name: "Ramallah", nation: "Palestine", coords: [31.8990, 35.2048], flag: "🇵🇸" }
+{ name: "Ramallah", nation: "Palestine", coords: [31.8990, 35.2048], flag: "🇵🇸" },
+{ name: "Havana", nation: "Cuba", coords: [23.1136, -82.3666], flag: "🇨🇺" },
+{ name: "Nur-Sultan", nation: "Kazakhstan", coords: [51.1694, 71.4491], flag: "🇰🇿" },
+{ name: "Yaren", nation: "Nauru", coords: [-0.5477, 166.9209], flag: "🇳🇷" },
+{ name: "Ngerulmud", nation: "Palau", coords: [7.5004, 134.6245], flag: "🇵🇼" },
+{ name: "Funafuti", nation: "Tuvalu", coords: [-8.5211, 179.1962], flag: "🇹🇻" },
+{ name: "Kyiv", nation: "Ukraine", coords: [50.4501, 30.5234], flag: "🇺🇦" }
     
 ];
 
