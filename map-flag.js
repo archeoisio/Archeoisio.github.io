@@ -340,31 +340,50 @@ const searchControl = L.Control.geocoder({
   ).addTo(map);
 
   // --- Box Home + Locate ---
-  const controlBox = L.control({ position: 'topright' });
-  controlBox.onAdd = function(map) {
-    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+ const controlBox = L.control({ position: 'topright' });
+controlBox.onAdd = function(map) {
+  const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
 
-    const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
-    homeBtn.href = '#';
-    homeBtn.innerHTML = '🏠';
-    homeBtn.title = "Torna alla vista iniziale";
-    L.DomEvent.on(homeBtn, 'click', e => {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 0.25 });
-    });
+  // --- Pulsante Home ---
+  const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+  homeBtn.href = '#';
+  homeBtn.innerHTML = '🏠';
+  homeBtn.title = "Torna alla vista iniziale";
+  L.DomEvent.on(homeBtn, 'click', e => {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    map.flyTo(initialView.center, initialView.zoom, {animate: true, duration: 8, easeLinearity: 0.25 });
+  });
 
-    const locateControl = L.control.locate({
-      flyTo: { duration: 2, easeLinearity: 0.25 },
-      strings: { title: "Mostrami la mia posizione" },
-      locateOptions: { enableHighAccuracy: true, watch: false }
-    });
-    const locateBtn = locateControl.onAdd(map);
-    container.appendChild(locateBtn);
+  // --- Pulsante Locate ---
+  const locateControl = L.control.locate({
+    flyTo: { duration: 2, easeLinearity: 0.25 },
+    strings: { title: "Mostrami la mia posizione" },
+    locateOptions: { enableHighAccuracy: true, watch: false }
+  });
+  const locateBtn = locateControl.onAdd(map);
+  container.appendChild(locateBtn);
 
-    return container;
-  };
-  controlBox.addTo(map);
+  // --- Pulsante Indicazioni ---
+  const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+  routeBtn.href = '#';
+  routeBtn.innerHTML = '🗺️';
+  routeBtn.title = "Mostra/Nascondi indicazioni";
+  L.DomEvent.on(routeBtn, 'click', e => {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    const box = document.getElementById('route-box');
+    if (box.style.display === 'none' || box.style.display === '') {
+      box.style.display = 'flex';
+    } else {
+      box.style.display = 'none';
+    }
+  });
+
+  return container;
+};
+controlBox.addTo(map);
+
 
 
   // --- Routing ---
