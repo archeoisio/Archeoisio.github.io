@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: initialView.zoom,
     layers: [satellite],
     zoomControl: true,
-    minZoom: 3,
+    minZoom: 2,
     maxZoom: 18,
     worldCopyJump: true,
     maxBounds: maxBounds,
-    maxBoundsViscosity: 1.0,
+    maxBoundsViscosity: 3.0,
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1
   });
