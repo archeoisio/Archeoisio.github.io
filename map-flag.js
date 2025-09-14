@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomSnap: 0.1
   });
 
+  let control;              // routing control
+let searchMarkers = [];   // array per i marker creati
+  
   // --- Controllo geocoding ---
   const searchControl = L.Control.geocoder({
     defaultMarkGeocode: true,
