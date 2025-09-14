@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [45, 20], zoom: 4 };
-  const desktopView = { center: [30, 30], zoom: 4 };
+  const mobileView  = { center: [60, 20], zoom: 4 };
+  const desktopView = { center: [20, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
