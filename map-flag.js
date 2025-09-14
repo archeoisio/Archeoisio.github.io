@@ -423,32 +423,41 @@ document.getElementById('route-btn').addEventListener('click', async function ()
 
     // Routing con marker fissi
     control = L.Routing.control({
-      waypoints: [
-        L.latLng(startCoords[0], startCoords[1]),
-        L.latLng(endCoords[0], endCoords[1])
-      ],
-      routeWhileDragging: false,
-      addWaypoints: false,
-      draggableWaypoints: false,
-      showAlternatives: false,
-      lineOptions: {
-        styles: [{ color: 'blue', weight: 5, opacity: 0.7 }]
-      },
-      createMarker: function(i, wp, nWps) {
-        let color = i === 0 ? 'green' : 'red'; // verde partenza, rosso arrivo
-        const marker = L.marker(wp.latLng, {
-          draggable: false,
-          icon: L.divIcon({
-            className: 'routing-marker',
-            html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
-          })
-        });
-        searchMarkers.push(marker); // così Reset li pulisce
-        return marker;
-      }
-    }).addTo(map);
+  waypoints: [
+    L.latLng(startCoords[0], startCoords[1]),
+    L.latLng(endCoords[0], endCoords[1])
+  ],
+  routeWhileDragging: true,     // permette di aggiornare la rotta se si trascina un waypoint blu
+  addWaypoints: true,           // permette di cliccare sulla linea per aggiungere waypoint
+  draggableWaypoints: true,     // solo per waypoint blu aggiunti
+  showAlternatives: false,
+  lineOptions: {
+    styles: [{ color: 'blue', weight: 5, opacity: 0.7 }]
+  },
+  createMarker: function(i, wp, nWps) {
+    let color;
+    if (i === 0) color = 'green';       // partenza
+    else if (i === nWps - 1) color = 'red'; // arrivo
+    else color = 'blue';                 // waypoint aggiuntivi
+
+    const marker = L.marker(wp.latLng, {
+      draggable: i !== 0 && i !== nWps - 1, // solo i blu sono trascinabili
+      icon: L.divIcon({
+        className: 'routing-marker',
+        html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      })
+    });
+
+    // popup personalizzato per tutti i marker
+    marker.bindPopup(`<div style="font-weight:bold;color:white;">${i===0?'Partenza':i===nWps-1?'Arrivo':'Waypoint'}</div>`);
+
+    searchMarkers.push(marker); // così Reset li pulisce tutti
+    return marker;
+  }
+}).addTo(map);
+
 
     map.fitBounds([startCoords, endCoords], { padding: [50, 50] });
 
