@@ -286,7 +286,7 @@ const searchControl = L.Control.geocoder({
         <div style="font-size:18px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
           ${nation} 
           </div>
-        <div style="font-size:14px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:14px;font-weight:bold; display:flex; justify-content:space-between; align-items:left;">
           ${name} 
           <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:14px;">🔍</button> 
         </div>
