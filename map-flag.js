@@ -204,7 +204,7 @@ const searchControl = L.Control.geocoder({
 { name: "Santiago", nation: "Chile", coords: [-33.4489, -70.6693], flag: "🇨🇱" },
 { name: "Santo Domingo", nation: "Dominican Republic", coords: [18.4861, -69.9312], flag: "🇩🇴" },
 { name: "São Tomé", nation: "São Tomé and Príncipe", coords: [0.3365, 6.7273], flag: "🇸🇹" },
-{ name: "Sarajevo", nation: "Bosnia and Herzegovina", coords: [43.8563, 18.4131], flag: "🇧🇦" },
+{ name: "Sarajevo", nation: "Bosnia and Herz.", coords: [43.8563, 18.4131], flag: "🇧🇦" },
 { name: "Seoul", nation: "South Korea", coords: [37.5665, 126.9780], flag: "🇰🇷" },
 { name: "Singapore", nation: "Singapore", coords: [1.3521, 103.8198], flag: "🇸🇬" },
 { name: "Skopje", nation: "North Macedonia", coords: [41.9981, 21.4254], flag: "🇲🇰" },
