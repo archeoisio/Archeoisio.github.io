@@ -27,7 +27,8 @@
     width: 100%;
     height: calc(var(--vh, 1vh) * 1);
   }
-#route-box {
+
+  #route-box {
   display: none;
   flex-direction: column;
   position: absolute;
@@ -95,7 +96,15 @@
     align-items: center !important;
     z-index: 1000;
   }
+.leaflet-routing-container {
+  width: 250px !important;
+  max-height: 300px !important;
+  font-size: 14px;
+}
 
+.leaflet-routing-container .leaflet-routing-toggle:after {
+  content: "⬇️"; /* icona personalizzata per minimizzare */
+}
   /* Box home+LOCATE */
   .custom-home-box {
     position: relative;
