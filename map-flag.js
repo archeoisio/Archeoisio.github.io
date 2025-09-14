@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Comando ricerca indicazioni ---
-  document.getElementById('route-btn').addEventListener('click', async function () {
+ document.getElementById('route-btn').addEventListener('click', async function () {
   const startInput = document.getElementById('start').value.trim();
   const endInput = document.getElementById('end').value.trim();
   if (!startInput || !endInput) {
