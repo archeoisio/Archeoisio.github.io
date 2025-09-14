@@ -398,15 +398,25 @@ controlBox.addTo(map);
            waypoints: [startLatLng, endLatLng],
   routeWhileDragging: false,
   show: true,
-  createMarker: function(i, wp, nWps) {
+ createMarker: function(i, wp, nWps) {
+    let icon;
+
+    if (i === 0) {
+        // partenza: icona verde
+        icon = new L.Icon.Default({ className: 'leaflet-routing-icon-start' });
+    } else if (i === nWps - 1) {
+        // arrivo: icona rossa
+        icon = new L.Icon.Default({ className: 'leaflet-routing-icon-end' });
+    } else {
+        // waypoint intermedi: icona blu
+        icon = new L.Icon.Default({ className: 'leaflet-routing-icon-waypoint' });
+    }
+
     return L.marker(wp.latLng, {
-      draggable: true,
-      icon: L.icon({
-        iconSize: [32, 32],
-        iconAnchor: [16, 32]
-      })
+        draggable: true,
+        icon: icon
     });
-  }
+}
         }).addTo(map);
       }
 
