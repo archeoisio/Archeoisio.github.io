@@ -390,6 +390,7 @@ let searchMarkers = [];   // array per i marker creati
     return marker;
   }
 
+// --- Pulsante Calcola ---
 document.getElementById('route-btn').addEventListener('click', async function () {
   const start = document.getElementById('start').value.trim();
   const end   = document.getElementById('end').value.trim();
@@ -399,7 +400,6 @@ document.getElementById('route-btn').addEventListener('click', async function ()
     return;
   }
 
-  // Funzione di geocoding con Nominatim
   async function geocode(query) {
     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
     const data = await res.json();
@@ -411,27 +411,43 @@ document.getElementById('route-btn').addEventListener('click', async function ()
     const startCoords = await geocode(start);
     const endCoords   = await geocode(end);
 
-    // Pulisci vecchi marker se presenti
+    // Rimuovi eventuali marker vecchi
     searchMarkers.forEach(m => map.removeLayer(m));
     searchMarkers = [];
 
-    // Aggiungi marker partenza e arrivo
-    const startMarker = addSearchMarker(startCoords, start, "green");
-    const endMarker   = addSearchMarker(endCoords, end, "red");
-
     // Se esiste già un routing, lo rimuovo
-    if (control) map.removeControl(control);
+    if (control) {
+      map.removeControl(control);
+      control = null;
+    }
 
-    // Routing (richiede leaflet-routing-machine + osrm)
+    // Routing con marker fissi
     control = L.Routing.control({
       waypoints: [
         L.latLng(startCoords[0], startCoords[1]),
         L.latLng(endCoords[0], endCoords[1])
       ],
-      routeWhileDragging: true,
-      show: false,
-      addWaypoints: true,
-      draggableWaypoints: true
+      routeWhileDragging: false,
+      addWaypoints: false,
+      draggableWaypoints: false,
+      showAlternatives: false,
+      lineOptions: {
+        styles: [{ color: 'blue', weight: 5, opacity: 0.7 }]
+      },
+      createMarker: function(i, wp, nWps) {
+        let color = i === 0 ? 'green' : 'red'; // verde partenza, rosso arrivo
+        const marker = L.marker(wp.latLng, {
+          draggable: false,
+          icon: L.divIcon({
+            className: 'routing-marker',
+            html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+          })
+        });
+        searchMarkers.push(marker); // così Reset li pulisce
+        return marker;
+      }
     }).addTo(map);
 
     map.fitBounds([startCoords, endCoords], { padding: [50, 50] });
@@ -447,7 +463,11 @@ document.getElementById('clear-btn').addEventListener('click', function () {
     map.removeControl(control);
     control = null;
   }
+
+  // Rimuovi TUTTI i marker (partenza, arrivo e ricerca)
+  searchMarkers.forEach(m => map.removeLayer(m));
+  searchMarkers = [];
+
   document.getElementById('start').value = '';
   document.getElementById('end').value = '';
-});
 });
