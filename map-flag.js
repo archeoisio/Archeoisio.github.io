@@ -304,32 +304,6 @@ const searchControl = L.Control.geocoder({
 
   labels.addTo(map);
 
-  // --- Aggiorna font/padding etichette ---
-  function updateLabels() {
-    const zoom = map.getZoom();
-    const zMin = 3, zMid = 5, zMax = 14;
-    const fontAt3 = 6, fontAt5 = 12, fontAt14 = 14;
-    const padAt3 = 2, padAt5 = 4, padAt14 = 6;
-    let fontSize, padding;
-
-    if (zoom <= zMid) {
-      const f = (zoom - zMin) / (zMid - zMin);
-      fontSize = fontAt3 + f * (fontAt5 - fontAt3);
-      padding  = padAt3  + f * (padAt5 - padAt3);
-    } else {
-      const f = (zoom - zMid) / (zMax - zMid);
-      fontSize = fontAt5 + f * (fontAt14 - fontAt5);
-      padding  = padAt5 + f * (padAt14 - padAt5);
-    }
-
-    document.querySelectorAll('.capital-box').forEach(el => {
-      el.style.fontSize = `${fontSize}px`;
-      el.style.padding  = `${padding}px ${padding * 2}px`;
-    });
-  }
-
-  map.on('zoom', updateLabels);
-  updateLabels();
 
   // --- FlyTo iniziale ---
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
@@ -449,16 +423,6 @@ controlBox.addTo(map);
 
   // FlyTo iniziale
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
-// Toggle box indicazioni
-document.getElementById('toggle-btn').addEventListener('click', () => {
-  const box = document.getElementById('route-box');
-  if (box.style.display === 'none' || box.style.display === '') {
-    box.style.display = 'flex';
-    document.getElementById('toggle-btn').innerText = '⬅️';
-  } else {
-    box.style.display = 'none';
-    document.getElementById('toggle-btn').innerText = '➡️';
-  }
-});
+
 
 });
