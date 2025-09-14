@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1
   });
-  
+
 // Contenitore custom in basso a destra
 const searchControl = L.Control.geocoder({
   defaultMarkGeocode: true,
@@ -259,6 +259,13 @@ const searchControl = L.Control.geocoder({
   let lastMarker = null;
 
   capitalsData.forEach(({ name, nation, coords, flag }) => {
+    const markerIcon = L.divIcon({
+      className: 'flag-icon',
+      html: `<div class="flag-box">${flag}</div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16]
+    });
+
     const markerIcon = L.divIcon({ className: 'flag-icon', html: `<div class="flag-box">${flag}</div>`, iconSize: [32, 32], iconAnchor: [16, 16] });
     const marker = L.marker(coords, { icon: markerIcon });
 
@@ -267,12 +274,15 @@ const searchControl = L.Control.geocoder({
       const content = document.getElementById('info-content');
       if (!panel || !content) return;
 
+      // Se clicchi lo stesso marker → chiudi
+      if (lastMarker === marker) {
       if (lastMarker === marker) { // chiudi se stesso
         panel.style.display = 'none';
         lastMarker = null;
         return;
       }
 
+      // Aggiorna contenuto con FlyTo e mostra pannello
       content.innerHTML = `
         <div style="font-size:24px;">${flag}</div>
         <div style="font-size:18px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
@@ -359,6 +369,7 @@ const searchControl = L.Control.geocoder({
   };
   controlBox.addTo(map);
 
+
   // --- Routing ---
   let control; // variabile globale per il routing control
   const routeBox = document.getElementById('route-box');
@@ -394,11 +405,18 @@ const searchControl = L.Control.geocoder({
 
     try {
       const [startData, endData] = await Promise.all([
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, {
+          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+        }).then(res => res.json()),
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, {
+          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
+        }).then(res => res.json())
         fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, { headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }}).then(res => res.json()),
         fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, { headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }}).then(res => res.json())
       ]);
 
       if (!startData.length || !endData.length) {
+        alert('Impossibile trovare i luoghi inseriti.');
                alert('Impossibile trovare i luoghi inseriti.');
         return;
       }
@@ -412,6 +430,7 @@ const searchControl = L.Control.geocoder({
         control = L.Routing.control({
           waypoints: [startLatLng, endLatLng],
           routeWhileDragging: false,
+          show: true, // visualizza pannello con info rotta
           show: true,
           createMarker: () => null
         }).addTo(map);
@@ -437,4 +456,16 @@ const searchControl = L.Control.geocoder({
 
   // FlyTo iniziale
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+// Toggle box indicazioni
+document.getElementById('toggle-btn').addEventListener('click', () => {
+  const box = document.getElementById('route-box');
+  if (box.style.display === 'none' || box.style.display === '') {
+    box.style.display = 'flex';
+    document.getElementById('toggle-btn').innerText = '⬅️';
+  } else {
+    box.style.display = 'none';
+    document.getElementById('toggle-btn').innerText = '➡️';
+  }
+});
+
 });
