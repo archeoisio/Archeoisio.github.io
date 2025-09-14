@@ -1,61 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [45, 10], zoom: 4 };
-  const desktopView = { center: [49, 30], zoom: 4 };
-  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
-  const initialView = isMobile ? mobileView : desktopView;
+// --- Inizializzazione mappa ---
+const map = L.map('map').setView([41.9028, 12.4964], 5); // Roma
 
-  const southWest = L.latLng(-90, -180);
-  const northEast = L.latLng(90, 180);
-  const maxBounds = L.latLngBounds(southWest, northEast);
+// --- Layer di base ---
+const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:19, attribution:'© OSM' });
+const topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom:17, attribution:'© OpenTopoMap' });
+osm.addTo(map);
 
-  // --- Base layers ---
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors',
-    noWrap: false
-  });
+// --- Layer switcher ---
+const baseMaps = { "OSM": osm, "Topographic": topo };
+L.control.layers(baseMaps, null, { position:'topright', collapsed:true }).addTo(map);
 
-  const satellite = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { attribution: 'Tiles &copy; Esri', noWrap: false }
-  );
+// --- Locate Control ---
+L.control.locate({ position:'topleft', strings:{title:"Mostra la tua posizione"} }).addTo(map);
 
-  // --- Map ---
-  const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite],
-    zoomControl: true,
-    minZoom: 3,
-    maxZoom: 18,
-    worldCopyJump: true,
-    maxBounds: maxBounds,
-    maxBoundsViscosity: 1.0,
-    wheelPxPerZoomLevel: 120,
-    zoomSnap: 0.1
-  });
+// --- Pulsante Home ---
+document.getElementById('home-btn').addEventListener('click', () => { map.setView([41.9028,12.4964],5); });
 
-  // --- Geocoder ---
-  L.Control.geocoder({
-    defaultMarkGeocode: true,
-    collapsed: true,
-    placeholder: "Cerca...",
-    position: "bottomright"
-  }).addTo(map);
-
-  // --- Adjust viewport height ---
-  function setVh() {
-    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-    if (map) map.invalidateSize();
-  }
-  setVh();
-  window.addEventListener('resize', setVh);
-  window.addEventListener('orientationchange', setVh);
-  if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
-
-  // --- Capital markers ---
-  const labels = L.layerGroup();
+// --- Info panel ---
+const infoPanel = document.getElementById('info-panel');
+const infoContent = document.getElementById('info-content');
 
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
@@ -254,145 +217,55 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Juba", nation: "Sud Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
- let lastMarker = null;
+// --- Aggiunta marker con popup ---
+capitals.forEach(cap => {
+  const marker = L.marker([cap.lat, cap.lng]).addTo(map);
+  marker.bindPopup(`<div class="capital-popup">${cap.name}</div>`);
+  marker.on('click', () => {
+    infoPanel.style.display = 'block';
+    infoContent.innerHTML = `<strong>${cap.name}</strong><br>${cap.info}`;
+  });
+});
 
-  capitalsData.forEach(({ name, nation, coords, flag }) => {
-    const markerIcon = L.divIcon({
-      className: 'flag-icon',
-      html: `<div class="flag-box">${flag}</div>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
-    });
+// --- Routing ---
+let control = null;
+const routeBtn = document.getElementById('route-btn');
+const clearBtn = document.getElementById('clear-btn');
+const startInput = document.getElementById('start');
+const endInput = document.getElementById('end');
 
-    const marker = L.marker(coords, { icon: markerIcon });
-    marker.on('click', () => {
-      const panel = document.getElementById('info-panel');
-      const content = document.getElementById('info-content');
-      if (!panel || !content) return;
-
-      if (lastMarker === marker) {
-        panel.style.display = 'none';
-        lastMarker = null;
-        return;
-      }
-
-      content.innerHTML = `
-        <div style="font-size:24px;">${flag}</div>
-        <div style="font-size:18px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
-          ${name} 
-          <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">🔍</button>
-        </div>
-        <div>${nation}</div>
-        <div>📍 ${coords[0].toFixed(2)}, ${coords[1].toFixed(2)}</div>
-      `;
-      panel.style.display = 'block';
-      lastMarker = marker;
-
-      document.getElementById('fly-btn').addEventListener('click', () => {
-        map.flyTo(coords, 14, { animate: true, duration: 3 });
+routeBtn.addEventListener('click', () => {
+  if (control) map.removeControl(control);
+  if (startInput.value && endInput.value) {
+    control = L.Routing.control({
+      waypoints: [],
+      routeWhileDragging: true,
+      geocoder: L.Control.Geocoder.nominatim()
+    }).addTo(map);
+    L.Control.Geocoder.nominatim().geocode(startInput.value, results => {
+      if (results.length>0) L.Control.Geocoder.nominatim().geocode(endInput.value, results2 => {
+        if (results2.length>0) {
+          control.setWaypoints([
+            L.latLng(results[0].center.lat, results[0].center.lng),
+            L.latLng(results2[0].center.lat, results2[0].center.lng)
+          ]);
+        }
       });
     });
+  }
+});
 
-    labels.addLayer(marker);
-  });
+clearBtn.addEventListener('click', () => {
+  if (control) { map.removeControl(control); control=null; }
+  startInput.value=''; endInput.value='';
+});
 
-  labels.addTo(map);
-
-  // --- Layer switcher ---
-  L.control.layers(
-    { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Capitali": labels },
-    { collapsed: true }
-  ).addTo(map);
-
-  // --- Home + Locate ---
-  const controlBox = L.control({ position: 'topright' });
-  controlBox.onAdd = function(map) {
-    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
-
-    const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
-    homeBtn.href = '#';
-    homeBtn.innerHTML = '🏠';
-    homeBtn.title = "Torna alla vista iniziale";
-    L.DomEvent.on(homeBtn, 'click', e => {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8, easeLinearity: 0.25 });
-    });
-
-    const locateControl = L.control.locate({
-      flyTo: { duration: 2, easeLinearity: 0.25 },
-      strings: { title: "Mostrami la mia posizione" },
-      locateOptions: { enableHighAccuracy: true, watch: false }
-    });
-    container.appendChild(locateControl.onAdd(map));
-
-    return container;
-  };
-  controlBox.addTo(map);
-
-  // --- Routing ---
-  let control = null;
-  const startInput = document.getElementById('start');
-  const endInput = document.getElementById('end');
-  const routeBtn = document.getElementById('route-btn');
-  const clearBtn = document.getElementById('clear-btn');
-
-  routeBtn.addEventListener('click', async () => {
-    const start = startInput.value.trim();
-    const end = endInput.value.trim();
-    if (!start || !end) { alert('Inserisci entrambi i punti.'); return; }
-
-    try {
-      const [startData, endData] = await Promise.all([
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(start)}`, {
-          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
-        }).then(res => res.json()),
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`, {
-          headers: { "Accept-Language": "it", "User-Agent": "LeafletRoutingExample" }
-        }).then(res => res.json())
-      ]);
-
-      if (!startData.length || !endData.length) { alert('Impossibile trovare i luoghi inseriti.'); return; }
-
-      const startLatLng = L.latLng(parseFloat(startData[0].lat), parseFloat(startData[0].lon));
-      const endLatLng = L.latLng(parseFloat(endData[0].lat), parseFloat(endData[0].lon));
-
-      if (control) control.setWaypoints([startLatLng, endLatLng]);
-      else {
-        control = L.Routing.control({
-          waypoints: [startLatLng, endLatLng],
-          routeWhileDragging: false,
-          show: true,
-          createMarker: () => null
-        }).addTo(map);
-      }
-
-      map.fitBounds(L.latLngBounds([startLatLng, endLatLng]), { padding: [50, 50] });
-
-    } catch (err) {
-      console.error(err);
-      alert('Errore nella geocodifica dei luoghi.');
-    }
-  });
-
-  clearBtn.addEventListener('click', () => {
-    if (control) { map.removeControl(control); control = null; }
-    startInput.value = '';
-    endInput.value = '';
-  });
-
-  // --- Toggle route box ---
-  const toggleBtn = document.getElementById('toggle-btn');
-  const routeBox = document.getElementById('route-box');
-  routeBox.style.display = 'none';
-
-  toggleBtn.addEventListener('click', () => {
-    const isHidden = routeBox.style.display === 'none' || routeBox.style.display === '';
-    routeBox.style.display = isHidden ? 'flex' : 'none';
-    toggleBtn.innerText = isHidden ? '⬅️ Nascondi' : '➡️ Indicazioni';
-  });
-
-  // --- Initial FlyTo ---
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+// --- Toggle box indicazioni ---
+const toggleBtn = document.getElementById('toggle-btn');
+const routeBox = document.getElementById('route-box');
+routeBox.style.display='none';
+toggleBtn.addEventListener('click', () => {
+  const isHidden = routeBox.style.display==='none' || routeBox.style.display===''; 
+  routeBox.style.display = isHidden ? 'flex' : 'none';
+  toggleBtn.innerText = isHidden ? '⬅️ Nascondi' : '➡️ Indicazioni';
 });
