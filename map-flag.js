@@ -40,7 +40,7 @@ const searchControl = L.Control.geocoder({
   defaultMarkGeocode: true,
   collapsed: true, // <-- a scomparsa
   placeholder: "Cerca...",
-  position: "bottomright" // <-- posizione
+  position: "bottomleft" // <-- posizione
 }).addTo(map);
 
   // --- Aggiorna altezza mappa su resize/orientation ---
@@ -254,7 +254,6 @@ const searchControl = L.Control.geocoder({
 { name: "Juba", nation: "Sud Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
-
 
   let lastMarker = null;
 
