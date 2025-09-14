@@ -283,7 +283,7 @@ const searchControl = L.Control.geocoder({
 
       // Aggiorna contenuto con FlyTo e mostra pannello
       content.innerHTML = `
-          <div style="font-size:14px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-size:15px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
           ${nation} ${flag}  </div>
         <div style="font-size:14px;font-weight:bold; color:white;">
     ${name}
