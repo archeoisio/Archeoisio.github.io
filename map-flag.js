@@ -218,12 +218,16 @@ const infoContent = document.getElementById('info-content');
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" }
 ];
 // --- Aggiunta marker con popup ---
-capitals.forEach(cap => {
-  const marker = L.marker([cap.lat, cap.lng]).addTo(map);
-  marker.bindPopup(`<div class="capital-popup">${cap.name}</div>`);
+capitals.forEach(capital => {
+  const marker = L.marker([capital.lat, capital.lng], {
+    title: capital.name, // tooltip al passaggio
+  }).addTo(map);
+
   marker.on('click', () => {
-    infoPanel.style.display = 'block';
-    infoContent.innerHTML = `<strong>${cap.name}</strong><br>${cap.info}`;
+    document.getElementById('info-panel').style.display = 'block';
+    document.getElementById('info-content').innerHTML = `
+      <strong>${capital.name}</strong><br>${capital.info}
+    `;
   });
 });
 
