@@ -30,21 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     maxZoom: 18,
     worldCopyJump: true,
     maxBounds: maxBounds,
-    maxBoundsViscosity: 3.0,
+    maxBoundsViscosity: 0.5,
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1
   });
   
-// Abilita zoom con rettangolo usando il tasto sinistro
-map.on('mousedown', function (e) {
-  if (e.originalEvent.button === 0) { // solo click sinistro
-     map.boxZoom.begin(e); // forza apertura rettangolo
-  }
-});
-
-map.on('mouseup', function () {
-  map.dragging.enable();    // riabilita pan
-});
 // Contenitore custom in basso a sinistra
 const searchControl = L.Control.geocoder({
   defaultMarkGeocode: true,
