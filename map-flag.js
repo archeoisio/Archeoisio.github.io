@@ -397,58 +397,38 @@ async function calculateRoute(start, end) {
       control = null; 
     }
 
-    // Crea nuovo controllo routing
-    control = L.Routing.control({
-      waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
-      routeWhileDragging: true,
-      addWaypoints: true,
-      draggableWaypoints: true,
-      showAlternatives: false,
-      lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
-      createMarker: function(i, wp, nWps) {
-        const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
-        const label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : 'Waypoint';
-        const marker = L.marker(wp.latLng, {
-          draggable: i !== 0 && i !== nWps - 1,
-          icon: L.divIcon({
-            className: 'routing-marker',
-            html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
-          })
-        });
-        marker.bindPopup(`<div style="font-weight:bold;color:white;">${label}</div>`);
-        searchMarkers.push(marker);
-        return marker;
-      }
-    }).addTo(map);
-
-    // Fit bounds e de-zoom automatico per mobile
-    map.fitBounds([startCoords, endCoords], { padding: [50, 50] });
-
-    // Dopo un piccolo delay, ritorna alla vista iniziale
-    setTimeout(() => {
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
-    }, 50);
-
-  } catch (err) { 
-    alert("Errore nel calcolo percorso: " + err.message); 
+  // Crea nuovo controllo routing
+control = L.Routing.control({
+  waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
+  routeWhileDragging: true,
+  addWaypoints: true,
+  draggableWaypoints: true,
+  showAlternatives: false,
+  lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
+  createMarker: function(i, wp, nWps) {
+    const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
+    const label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : 'Waypoint';
+    const marker = L.marker(wp.latLng, {
+      draggable: i !== 0 && i !== nWps - 1,
+      icon: L.divIcon({
+        className: 'routing-marker',
+        html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      })
+    });
+    marker.bindPopup(`<div style="font-weight:bold;color:white;">${label}</div>`);
+    searchMarkers.push(marker);
+    return marker;
   }
-}
+}).addTo(map);
 
-function resetRoute() {
-  if (control) { 
-    map.removeControl(control); 
-    control = null; 
-  }
-  searchMarkers.forEach(m => map.removeLayer(m));
-  searchMarkers = [];
-  document.getElementById('start').value = '';
-  document.getElementById('end').value = '';
-
-  // Riporta la mappa alla vista iniziale anche qui
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
-}
+// Zoom automatico su tutto il percorso
+control.on('routesfound', function(e) {
+  const route = e.routes[0];
+  const bounds = L.latLngBounds(route.coordinates);
+  map.fitBounds(bounds, { padding: [50, 50] });
+});
 
 // --- Event listener ---
 document.getElementById('route-btn').addEventListener('click', () => {
