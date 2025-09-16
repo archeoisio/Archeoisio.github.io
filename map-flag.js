@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     maxZoom: 18,
     worldCopyJump: true,
     maxBounds: maxBounds,
-    maxBoundsViscosity: 0.5,
+    maxBoundsViscosity: 1,
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1
   });
