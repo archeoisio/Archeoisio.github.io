@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [45, 40], zoom: 4 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-
   const southWest = L.latLng(-90, 190);
   const northEast = L.latLng(90, -190);
   const maxBounds = L.latLngBounds(southWest, northEast);
@@ -24,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     layers: [satellite],
     zoomControl: true,
     boxZoom: true,
-    minZoom: 3,
-    maxZoom: 18,
+     minZoom: isMobile ? 2 : 3,   // minZoom diverso per mobile e desktop
+     maxZoom: 18,
     worldCopyJump: true,
     maxBounds: maxBounds,
     maxBoundsViscosity: 1,
