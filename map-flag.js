@@ -481,7 +481,23 @@ document.getElementById('route-btn').addEventListener('click', () => {
 
 document.getElementById('clear-btn').addEventListener('click', resetRoute);
 
-// Pulizia iniziale input
-document.getElementById('start').value = '';
-document.getElementById('end').value = '';
+ // Pulizia iniziale input
+  document.getElementById('start').value = '';
+  document.getElementById('end').value = '';
+
+  // --- Blocca lo zoom/scroll automatico della mappa sugli input mobile ---
+  document.querySelectorAll('#start, #end').forEach(input => {
+    input.addEventListener('focus', e => {
+      e.preventDefault();
+      map.dragging.disable();
+      map.scrollWheelZoom.disable();
+      map.touchZoom.disable();
+    });
+
+    input.addEventListener('blur', e => {
+      map.dragging.enable();
+      map.scrollWheelZoom.enable();
+      map.touchZoom.enable();
+    });
+  });
 });
