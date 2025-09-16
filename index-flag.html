@@ -23,14 +23,14 @@
   margin: 0;
   padding: 0;
   height: 100%;
+  overflow: hidden; /* blocca scroll della pagina */
 }
 
 #map {
   width: 100%;
-  height: 100%;
-  position: relative;
+  height: calc(var(--vh, 1vh) * 100); /* altezza dinamica ma senza duplicazioni */
+  touch-action: none; /* previene zoom involontari su touch */
 }
-
   /* Box routing */
   #route-box {
     display: none;
