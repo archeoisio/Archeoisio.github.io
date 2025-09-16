@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBounds: maxBounds,
     maxBoundsViscosity: 1,
     wheelPxPerZoomLevel: 120,
-    zoomSnap: 0.1
+    zoomSnap: 0.1,
+     attributionControl: false   
   });
   
 // --- Controllo geocoding ---
