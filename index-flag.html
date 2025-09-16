@@ -123,7 +123,12 @@
 .leaflet-control-geocoder {
     margin-bottom: 15px !important; /* alza la barra di ricerca */
 }.
-  leaflet-control-layers-toggle {
+  @media (max-width: 767px) {
+  .leaflet-control-geocoder {
+    margin-bottom: 60px !important;  /* sposta la barra più in alto */
+    z-index: 1100 !important;        /* sopra altri controlli */
+  }
+  .leaflet-control-layers-toggle {
   width: 44px !important;
   height: 44px !important;
   line-height: 44px !important;
