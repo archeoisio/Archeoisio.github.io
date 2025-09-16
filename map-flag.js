@@ -58,20 +58,19 @@ function setVh() {
 // inizializza
 setVh();
 
-// eventi generali
-window.addEventListener('resize', setVh);
-window.addEventListener('orientationchange', setVh);
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', setVh);
-  window.visualViewport.addEventListener('scroll', setVh);
-}
-window.addEventListener('focus', setVh);
-window.addEventListener('blur', setVh);
+document.querySelectorAll('#start, #end').forEach(input => {
+  input.addEventListener('focus', e => {
+    e.preventDefault();
+    map.dragging.disable();
+    map.scrollWheelZoom.disable();
+    map.touchZoom.disable();
+  });
 
-// focus/blur degli input (utile per la tastiera mobile)
-document.querySelectorAll('input').forEach(input => {
-  input.addEventListener('focus', setVh);
-  input.addEventListener('blur', setVh);
+  input.addEventListener('blur', e => {
+    map.dragging.enable();
+    map.scrollWheelZoom.enable();
+    map.touchZoom.enable();
+  });
 });
 
   // --- Overlay capitali ---
@@ -378,27 +377,6 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
     const data = await res.json();
     if (data.length === 0) throw new Error(`Località non trovata: ${query}`);
     return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-  }
-
-  function addSearchMarker(latlng, name, color) {
-    const marker = L.marker(latlng, {
-      draggable: true,
-      icon: L.divIcon({
-        className: 'routing-marker',
-        html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
-      })
-    }).addTo(map);
-
-    marker.bindPopup(`<div style="font-weight:bold; font-size:14px;">${name} <button style="margin-left:5px;">🔍</button></div>`);
-    marker.on('popupopen', () => {
-      const btn = marker.getPopup().getElement().querySelector('button');
-      if (btn) btn.onclick = () => map.flyTo(latlng, 14, { animate: true, duration: 3 });
-    });
-
-    searchMarkers.push(marker);
-    return marker;
   }
 
 async function calculateRoute(start, end) {
