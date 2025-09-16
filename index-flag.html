@@ -91,7 +91,10 @@
     line-height: 1;
     cursor: pointer;
   }
-
+ .leaflet-control-geocoder {
+    z-index: 1100 !important; /* sopra altri controlli */
+    margin-bottom: 60px !important; /* sufficiente per mobile */
+  }
   /* Box home + LOCATE */
 .custom-home-box {
   position: relative;
@@ -103,8 +106,8 @@
   display: flex !important;
   flex-direction: column;
   gap: 4px;
+  
 }
-
  /* Custom home button */
 .custom-home-button {
   width: 44px !important;
@@ -119,10 +122,8 @@
   padding: 0 !important;
   margin: 0 !important;
   line-height: 1 !important;
-  
-}.leaflet-control-geocoder {
-    margin-bottom: 100px !important; /* sposta leggermente verso l’alto */
 }
+  
 /* Leaflet locate control button */
 .leaflet-control-locate a {
   width: 44px !important;
