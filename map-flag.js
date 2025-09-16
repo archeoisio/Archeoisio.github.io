@@ -415,12 +415,6 @@ L.DomEvent.on(routeBtn, 'click', e => {
 
   document.getElementById('clear-btn').addEventListener('click', resetRoute);
 
-  // --- Blocca zoom/scroll automatico input mobile ---
-  document.querySelectorAll('#start, #end').forEach(input => {
-    input.addEventListener('focus', e => { e.preventDefault(); map.dragging.disable(); map.scrollWheelZoom.disable(); map.touchZoom.disable(); });
-    input.addEventListener('blur', e => { map.dragging.enable(); map.scrollWheelZoom.enable(); map.touchZoom.enable(); });
-  });
-
   // Vista iniziale
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
 });
