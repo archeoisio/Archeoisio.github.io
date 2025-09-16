@@ -30,7 +30,10 @@
   width: 100%;
   height: calc(var(--vh, 1vh) * 100); /* altezza dinamica ma senza duplicazioni */
   touch-action: none; /* previene zoom involontari su touch */
-}
+  }
+    input, select, textarea, button {
+    font-size: 16px; /* iOS non zooma più se ≥16px */
+  }
   /* Box routing */
   #route-box {
     display: none;
