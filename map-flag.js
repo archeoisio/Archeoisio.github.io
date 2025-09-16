@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Controllo geocoding ---
 const searchControl = L.Control.geocoder({
     defaultMarkGeocode: true,
-    collapsed: !isMobile,  // COMPRESSO su desktop, SEMPRE aperto su mobile
+    collapsed: true,
     placeholder: "Cerca...",
     position: "bottomleft"
 }).addTo(map);
