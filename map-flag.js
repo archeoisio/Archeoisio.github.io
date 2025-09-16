@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
   
 // --- Controllo geocoding ---
 const searchControl = L.Control.geocoder({
-    defaultMarkGeocode: true,   // mostra un marker alla geocodifica
-    collapsed: true,            // controllo compresso di default
-    placeholder: "Cerca...",    // testo nel campo di ricerca
-    position: "bottomleft"      // posizione sulla mappa
+    defaultMarkGeocode: true,
+    collapsed: !isMobile,  // COMPRESSO su desktop, SEMPRE aperto su mobile
+    placeholder: "Cerca...",
+    position: "bottomleft"
 }).addTo(map);
   
   // --- Aggiorna altezza mappa ---
