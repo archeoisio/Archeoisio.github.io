@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomSnap: 0.1
   });
 
-  let control;              // routing control
-  let searchMarkers = [];   // array per i marker creati
+  let control;              
+  let searchMarkers = [];  
 
   // --- Controllo geocoding ---
   const searchControl = L.Control.geocoder({
@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Overlay etichette ---
   const labels = L.layerGroup();
+
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
@@ -256,7 +257,61 @@ document.addEventListener('DOMContentLoaded', () => {
     
 ];
 
-   // --- Box Home + Locate + Indicazioni ---
+ let lastMarker = null;
+
+  capitalsData.forEach(({ name, nation, coords, flag }) => {
+    const markerIcon = L.divIcon({
+      className: 'flag-icon',
+      html: `<div class="flag-box">${flag}</div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16]
+    });
+
+    const marker = L.marker(coords, { icon: markerIcon });
+
+    marker.on('click', () => {
+      const panel = document.getElementById('info-panel');
+      const content = document.getElementById('info-content');
+      if (!panel || !content) return;
+
+      if (lastMarker === marker) {
+        panel.style.display = 'none';
+        lastMarker = null;
+        return;
+      }
+
+      content.innerHTML = `
+        <div style="font-size:15px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+          ${nation} ${flag}
+        </div>
+        <div style="font-size:14px;font-weight:bold; color:white;">
+          ${name}
+          <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:14px; padding:0; margin-left:4px;">🔍</button>
+        </div>
+      `;
+      panel.style.display = 'block';
+      lastMarker = marker;
+
+      document.getElementById('fly-btn').addEventListener('click', () => {
+        map.flyTo(coords, 14, { animate: true, duration: 3 });
+      });
+    });
+
+    labels.addLayer(marker);
+  });
+
+  labels.addTo(map);
+
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
+
+  // --- Layer switcher ---
+  L.control.layers(
+    { "Satellite": satellite, "OpenStreetMap": osm },
+    { "Capitali": labels },
+    { collapsed: true }
+  ).addTo(map);
+
+  // --- Box Home + Locate + Indicazioni ---
   const controlBox = L.control({ position: 'topright' });
   controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
@@ -293,6 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
     L.DomEvent.on(routeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
+      if (!routeBox) return;
       routeBox.style.display = (routeBox.style.display === 'none' || routeBox.style.display === '') ? 'flex' : 'none';
     });
 
@@ -300,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   controlBox.addTo(map);
 
-  // Funzione marker ricerca/routing
+  // --- Funzione marker ricerca/routing ---
   function addSearchMarker(latlng, name, color) {
     const marker = L.marker(latlng, {
       draggable: true,
@@ -313,7 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
 
     marker.bindPopup(`<div style="font-weight:bold; font-size:14px;">${name} <button style="margin-left:5px;">🔍</button></div>`);
-
     marker.on('popupopen', () => {
       const btn = marker.getPopup().getElement().querySelector('button');
       if (btn) btn.onclick = () => map.flyTo(latlng, 14, { animate: true, duration: 3 });
@@ -323,11 +378,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return marker;
   }
 
-  // --- Pulsante Calcola ---
-  document.getElementById('route-btn').addEventListener('click', async function () {
+  // --- Calcola percorso ---
+  document.getElementById('route-btn').addEventListener('click', async function() {
     const start = document.getElementById('start').value.trim();
     const end   = document.getElementById('end').value.trim();
-
     if (!start || !end) { alert("Inserisci sia punto di partenza che destinazione!"); return; }
 
     async function geocode(query) {
@@ -341,52 +395,59 @@ document.addEventListener('DOMContentLoaded', () => {
       const startCoords = await geocode(start);
       const endCoords   = await geocode(end);
 
+      // Rimuovi vecchi marker e routing
       searchMarkers.forEach(m => map.removeLayer(m));
       searchMarkers = [];
-
       if (control) { map.removeControl(control); control = null; }
 
       control = L.Routing.control({
-        waypoints: [
-          L.latLng(startCoords[0], startCoords[1]),
-          L.latLng(endCoords[0], endCoords[1])
-        ],
+        waypoints: [ L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1]) ],
         routeWhileDragging: true,
         addWaypoints: true,
         draggableWaypoints: true,
         showAlternatives: false,
-        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
-        createMarker: function(i, wp, nWps) {
-          let color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
-          let label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : 'Waypoint';
-
-          const marker = L.marker(wp.latLng, {
-            draggable: i !== 0 && i !== nWps - 1,
-            icon: L.divIcon({
-              className: 'routing-marker',
-              html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-              iconSize: [24, 24],
-              iconAnchor: [12, 12]
-            })
-          });
-
-          marker.bindPopup(`<div style="font-weight:bold;color:white;">${label}</div>`);
-          searchMarkers.push(marker);
-          return marker;
-        }
+        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] }
       }).addTo(map);
 
-      map.fitBounds([startCoords, endCoords], { padding: [50,50] });
+      map.fitBounds([startCoords, endCoords], { padding: [50, 50] });
 
-    } catch (err) { alert("Errore nel calcolo percorso: " + err.message); }
+      // --- Mostra pannello con max 5 indicazioni ---
+      const routeBox = document.getElementById('route-box');
+      routeBox.classList.remove('minimized');
+      routeBox.innerHTML = `
+        <div class="route-header">
+          Indicazioni
+          <button id="minimize-btn" style="background:none;border:none;color:white;font-size:16px;cursor:pointer;">—</button>
+        </div>
+        <div id="route-instructions"></div>
+      `;
+      routeBox.style.display = 'flex';
+      const instructionsContainer = document.getElementById('route-instructions');
+
+      control.on('routesfound', function(e) {
+        instructionsContainer.innerHTML = '';
+        const steps = e.routes[0].instructions.slice(0, 5);
+        steps.forEach((step, idx) => {
+          const div = document.createElement('div');
+          div.className = 'route-instruction';
+          div.textContent = `${idx+1}. ${step.text}`;
+          instructionsContainer.appendChild(div);
+        });
+      });
+         // --- Pulsante minimizza/espandi ---
+      document.getElementById('minimize-btn').addEventListener('click', () => {
+        if (routeBox.classList.contains('minimized')) {
+          routeBox.classList.remove('minimized');
+          document.getElementById('minimize-btn').textContent = '—';
+        } else {
+          routeBox.classList.add('minimized');
+          document.getElementById('minimize-btn').textContent = '+';
+        }
+      });
+
+    } catch (err) {
+      alert(err.message);
+    }
   });
 
-  // --- Pulsante Reset ---
-  document.getElementById('clear-btn').addEventListener('click', function () {
-    if (control) { map.removeControl(control); control = null; }
-    searchMarkers.forEach(m => map.removeLayer(m));
-    searchMarkers = [];
-    document.getElementById('start').value = '';
-    document.getElementById('end').value = '';
-  });
 });
