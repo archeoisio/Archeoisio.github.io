@@ -32,7 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1
   });
-
+  
+// --- Controllo geocoding ---
+const searchControl = L.Control.geocoder({
+    defaultMarkGeocode: true,   // mostra un marker alla geocodifica
+    collapsed: true,            // controllo compresso di default
+    placeholder: "Cerca...",    // testo nel campo di ricerca
+    position: "bottomleft"      // posizione sulla mappa
+}).addTo(map);
+  
   // --- Aggiorna altezza mappa ---
   function setVh() {
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
