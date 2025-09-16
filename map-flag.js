@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomSnap: 0.1,
      attributionControl: false   
   });
-  
+
 // --- Controllo geocoding ---
 const searchControl = L.Control.geocoder({
     defaultMarkGeocode: true,
@@ -40,45 +40,46 @@ const searchControl = L.Control.geocoder({
     placeholder: "Cerca...",
     position: "bottomleft"
 }).addTo(map);
-  
+
 function setVh() {
-  // Altezza visibile viewport
   const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
   document.documentElement.style.setProperty('--vh', vh + 'px');
 
-  // Aggiorna dimensioni mappa Leaflet dopo breve ritardo
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 50);
+  // Forza altezza container mappa
+  const mapEl = document.getElementById('map');
+  if (mapEl) mapEl.style.height = vh + 'px';
+
+  // Aggiorna dimensioni Leaflet con piccolo ritardo
+  if (window.map) {
+    setTimeout(() => map.invalidateSize(), 100);
+  }
 }
 
 // inizializza
 setVh();
 
-// eventi principali
+// eventi generali
 window.addEventListener('resize', setVh);
 window.addEventListener('orientationchange', setVh);
-
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', setVh);
   window.visualViewport.addEventListener('scroll', setVh);
 }
+window.addEventListener('focus', setVh);
+window.addEventListener('blur', setVh);
 
-// blocca zoom su input
+// focus/blur degli input (utile per la tastiera mobile)
 document.querySelectorAll('input').forEach(input => {
-  input.addEventListener('focus', e => {
-    setVh();
-    setTimeout(() => { map.invalidateSize(); }, 50);
-  });
+  input.addEventListener('focus', setVh);
   input.addEventListener('blur', setVh);
 });
-  
+
   // --- Overlay capitali ---
   const labels = L.layerGroup();
   let lastMarker = null;
   let searchMarkers = [];
   let control = null;
-  
+
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
