@@ -388,7 +388,7 @@ L.DomEvent.on(routeBtn, 'click', e => {
   // FlyToBounds con durata in secondi
   map.flyToBounds(bounds, {
     padding: [50, 50],
-    duration: 3  // durata in secondi
+    duration: 10  // durata in secondi
   });
 });
 
