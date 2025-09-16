@@ -44,36 +44,35 @@ function setVh() {
   const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
   document.documentElement.style.setProperty('--vh', vh + 'px');
 
-  // Ritardo breve per Leaflet, così la tastiera è già aperta/chiusa
-  setTimeout(() => {
-    map.invalidateSize();
-  }, 100);
+  // Forza altezza container mappa
+  const mapEl = document.getElementById('map');
+  if (mapEl) mapEl.style.height = vh + 'px';
+
+  // Aggiorna dimensioni Leaflet con piccolo ritardo
+  if (window.map) {
+    setTimeout(() => map.invalidateSize(), 100);
+  }
 }
 
 // inizializza
 setVh();
-  
-// eventi
-window.addEventListener('resize', setVh);
-window.addEventListener('orientationchange', setVh);
-if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
-window.addEventListener('focus', setVh);
-window.addEventListener('blur', setVh);
-  
-  // eventi principali per mobile
-window.addEventListener('resize', setVh);
-window.addEventListener('orientationchange', setVh);
 
+// eventi generali
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', setVh);
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', setVh);
   window.visualViewport.addEventListener('scroll', setVh);
 }
+window.addEventListener('focus', setVh);
+window.addEventListener('blur', setVh);
 
-// Quando un input riceve focus/blur
+// focus/blur degli input (utile per la tastiera mobile)
 document.querySelectorAll('input').forEach(input => {
   input.addEventListener('focus', setVh);
   input.addEventListener('blur', setVh);
 });
+  
   // --- Overlay capitali ---
   const labels = L.layerGroup();
   let lastMarker = null;
