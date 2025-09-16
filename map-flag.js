@@ -40,15 +40,19 @@ const searchControl = L.Control.geocoder({
     position: "bottomleft"
 }).addTo(map);
   
-  function setVh() {
+function setVh() {
   const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
   document.documentElement.style.setProperty('--vh', vh + 'px');
-  if (window.map) map.invalidateSize(); // aggiorna dimensioni mappa Leaflet
+
+  // Ritardo breve per Leaflet, così la tastiera è già aperta/chiusa
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 100);
 }
 
 // inizializza
 setVh();
-
+  
 // eventi
 window.addEventListener('resize', setVh);
 window.addEventListener('orientationchange', setVh);
@@ -56,6 +60,20 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', setV
 window.addEventListener('focus', setVh);
 window.addEventListener('blur', setVh);
   
+  // eventi principali per mobile
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', setVh);
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', setVh);
+  window.visualViewport.addEventListener('scroll', setVh);
+}
+
+// Quando un input riceve focus/blur
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('focus', setVh);
+  input.addEventListener('blur', setVh);
+});
   // --- Overlay capitali ---
   const labels = L.layerGroup();
   let lastMarker = null;
