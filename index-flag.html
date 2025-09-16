@@ -19,7 +19,7 @@
 
 <style>
   html, body { margin:0; padding:0; height:100%; overflow:hidden; }
-  #map { position: fixed; top:0; left:0; width:100%; height:calc(var(--vh,1vh) * 1); }
+  #map { position: fixed; top:0; left:0; width:100%; height:100%; }
 
   /* Box routing */
   #route-box {
@@ -28,7 +28,7 @@
     position: absolute;
     top: 80px;
     right: 60px;
-    max-width: 150px;
+    width: 250px;
     min-height: 40px;
     background: white;
     padding: 10px;
@@ -36,9 +36,49 @@
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
     z-index: 1000;
     gap: 6px;
+    font-family: sans-serif;
+    font-size: 14px;
   }
-  #route-box input { padding: 5px; font-size: 12px; }
-  #route-box button { padding: 6px; font-size: 12px; cursor: pointer; }
+  #route-box input {
+    padding: 5px;
+    font-size: 12px;
+    width: 100%;
+  }
+  #route-box button {
+    padding: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    width: 100%;
+  }
+  #route-box.minimized {
+    height: 30px;
+    overflow: hidden;
+    padding: 5px 10px;
+  }
+
+  /* Header del route-box */
+  .route-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    background: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  #route-instructions {
+    overflow-y: auto;
+    max-height: 200px;
+  }
+  .route-instruction {
+    margin: 4px 0;
+    padding: 4px;
+    border-bottom: 1px solid #ddd;
+    font-size: 13px;
+  }
 
   /* Pannello info */
   #info-panel {
@@ -137,6 +177,7 @@
     <input type="text" id="end" placeholder="Arrivo" />
     <button id="route-btn">Calcola</button>
     <button id="clear-btn">Reset</button>
+    <div id="route-instructions"></div>
   </div>
 
   <!-- Leaflet JS -->
