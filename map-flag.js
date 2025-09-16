@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   let control;              // routing control
-let searchMarkers = [];   // array per i marker creati
-  
+  let searchMarkers = [];   // array per i marker creati
+
   // --- Controllo geocoding ---
   const searchControl = L.Control.geocoder({
     defaultMarkGeocode: true,
@@ -256,61 +256,7 @@ let searchMarkers = [];   // array per i marker creati
     
 ];
 
- let lastMarker = null;
-
-  capitalsData.forEach(({ name, nation, coords, flag }) => {
-    const markerIcon = L.divIcon({
-      className: 'flag-icon',
-      html: `<div class="flag-box">${flag}</div>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
-    });
-
-    const marker = L.marker(coords, { icon: markerIcon });
-
-    marker.on('click', () => {
-      const panel = document.getElementById('info-panel');
-      const content = document.getElementById('info-content');
-      if (!panel || !content) return;
-
-      if (lastMarker === marker) {
-        panel.style.display = 'none';
-        lastMarker = null;
-        return;
-      }
-
-      content.innerHTML = `
-        <div style="font-size:15px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
-          ${nation} ${flag}
-        </div>
-        <div style="font-size:14px;font-weight:bold; color:white;">
-          ${name}
-          <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:14px; padding:0; margin-left:4px;">🔍</button>
-        </div>
-      `;
-      panel.style.display = 'block';
-      lastMarker = marker;
-
-      document.getElementById('fly-btn').addEventListener('click', () => {
-        map.flyTo(coords, 14, { animate: true, duration: 3 });
-      });
-    });
-
-    labels.addLayer(marker);
-  });
-
-  labels.addTo(map);
-
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
-
-  // --- Layer switcher ---
-  L.control.layers(
-    { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Capitali": labels },
-    { collapsed: true }
-  ).addTo(map);
-
-  // --- Box Home + Locate + Indicazioni ---
+   // --- Box Home + Locate + Indicazioni ---
   const controlBox = L.control({ position: 'topright' });
   controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
@@ -341,19 +287,13 @@ let searchMarkers = [];   // array per i marker creati
     routeBtn.innerHTML = '🗺️';
     routeBtn.title = "Mostra/Nascondi indicazioni";
 
-    // --- Scomparsa default route-box ---
     const routeBox = document.getElementById('route-box');
     if (routeBox) routeBox.style.display = 'none';
 
     L.DomEvent.on(routeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      const box = document.getElementById('route-box');
-      if (box.style.display === 'none' || box.style.display === '') {
-        box.style.display = 'flex';
-      } else {
-        box.style.display = 'none';
-      }
+      routeBox.style.display = (routeBox.style.display === 'none' || routeBox.style.display === '') ? 'flex' : 'none';
     });
 
     return container;
@@ -372,112 +312,81 @@ let searchMarkers = [];   // array per i marker creati
       })
     }).addTo(map);
 
-    marker.bindPopup(`
-      <div style="font-weight:bold; font-size:14px;">
-        ${name} 
-        <button style="margin-left:5px;">🔍</button>
-      </div>
-    `);
+    marker.bindPopup(`<div style="font-weight:bold; font-size:14px;">${name} <button style="margin-left:5px;">🔍</button></div>`);
 
     marker.on('popupopen', () => {
       const btn = marker.getPopup().getElement().querySelector('button');
-      if (btn) {
-        btn.onclick = () => map.flyTo(latlng, 14, { animate: true, duration: 3 });
-      }
+      if (btn) btn.onclick = () => map.flyTo(latlng, 14, { animate: true, duration: 3 });
     });
 
     searchMarkers.push(marker);
     return marker;
   }
 
-// --- Pulsante Calcola ---
-document.getElementById('route-btn').addEventListener('click', async function () {
-  const start = document.getElementById('start').value.trim();
-  const end   = document.getElementById('end').value.trim();
+  // --- Pulsante Calcola ---
+  document.getElementById('route-btn').addEventListener('click', async function () {
+    const start = document.getElementById('start').value.trim();
+    const end   = document.getElementById('end').value.trim();
 
-  if (!start || !end) {
-    alert("Inserisci sia punto di partenza che destinazione!");
-    return;
-  }
+    if (!start || !end) { alert("Inserisci sia punto di partenza che destinazione!"); return; }
 
-  async function geocode(query) {
-    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
-    const data = await res.json();
-    if (data.length === 0) throw new Error(`Località non trovata: ${query}`);
-    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-  }
-
-  try {
-    const startCoords = await geocode(start);
-    const endCoords   = await geocode(end);
-
-    // Rimuovi eventuali marker vecchi
-    searchMarkers.forEach(m => map.removeLayer(m));
-    searchMarkers = [];
-
-    // Se esiste già un routing, lo rimuovo
-    if (control) {
-      map.removeControl(control);
-      control = null;
+    async function geocode(query) {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      if (data.length === 0) throw new Error(`Località non trovata: ${query}`);
+      return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
     }
 
-    // Routing con marker fissi
-    control = L.Routing.control({
-  waypoints: [
-    L.latLng(startCoords[0], startCoords[1]),
-    L.latLng(endCoords[0], endCoords[1])
-  ],
-  routeWhileDragging: true,     // permette di aggiornare la rotta se si trascina un waypoint blu
-  addWaypoints: true,           // permette di cliccare sulla linea per aggiungere waypoint
-  draggableWaypoints: true,     // solo per waypoint blu aggiunti
-  showAlternatives: false,
-  lineOptions: {
-    styles: [{ color: 'blue', weight: 5, opacity: 0.7 }]
-  },
-  createMarker: function(i, wp, nWps) {
-    let color;
-    if (i === 0) color = 'green';       // partenza
-    else if (i === nWps - 1) color = 'red'; // arrivo
-    else color = 'blue';                 // waypoint aggiuntivi
+    try {
+      const startCoords = await geocode(start);
+      const endCoords   = await geocode(end);
 
-    const marker = L.marker(wp.latLng, {
-      draggable: i !== 0 && i !== nWps - 1, // solo i blu sono trascinabili
-      icon: L.divIcon({
-        className: 'routing-marker',
-        html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
-      })
-    });
+      searchMarkers.forEach(m => map.removeLayer(m));
+      searchMarkers = [];
 
-    // popup personalizzato per tutti i marker
-    marker.bindPopup(`<div style="font-weight:bold;color:white;">${i===0?'Partenza':i===nWps-1?'Arrivo':'Waypoint'}</div>`);
+      if (control) { map.removeControl(control); control = null; }
 
-    searchMarkers.push(marker); // così Reset li pulisce tutti
-    return marker;
-  }
-}).addTo(map);
+      control = L.Routing.control({
+        waypoints: [
+          L.latLng(startCoords[0], startCoords[1]),
+          L.latLng(endCoords[0], endCoords[1])
+        ],
+        routeWhileDragging: true,
+        addWaypoints: true,
+        draggableWaypoints: true,
+        showAlternatives: false,
+        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
+        createMarker: function(i, wp, nWps) {
+          let color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
+          let label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : 'Waypoint';
 
+          const marker = L.marker(wp.latLng, {
+            draggable: i !== 0 && i !== nWps - 1,
+            icon: L.divIcon({
+              className: 'routing-marker',
+              html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            })
+          });
 
-    map.fitBounds([startCoords, endCoords], { padding: [50, 50] });
+          marker.bindPopup(`<div style="font-weight:bold;color:white;">${label}</div>`);
+          searchMarkers.push(marker);
+          return marker;
+        }
+      }).addTo(map);
 
-  } catch (err) {
-    alert("Errore nel calcolo percorso: " + err.message);
-  }
-});
+      map.fitBounds([startCoords, endCoords], { padding: [50,50] });
 
-// --- Pulsante Reset ---
-document.getElementById('clear-btn').addEventListener('click', function () {
-  if (control) {
-    map.removeControl(control);
-    control = null;
-  }
+    } catch (err) { alert("Errore nel calcolo percorso: " + err.message); }
+  });
 
-  // Rimuovi TUTTI i marker (partenza, arrivo e ricerca)
-  searchMarkers.forEach(m => map.removeLayer(m));
-  searchMarkers = [];
-
-  document.getElementById('start').value = '';
-  document.getElementById('end').value = '';
-});
+  // --- Pulsante Reset ---
+  document.getElementById('clear-btn').addEventListener('click', function () {
+    if (control) { map.removeControl(control); control = null; }
+    searchMarkers.forEach(m => map.removeLayer(m));
+    searchMarkers = [];
+    document.getElementById('start').value = '';
+    document.getElementById('end').value = '';
+  });
 });
