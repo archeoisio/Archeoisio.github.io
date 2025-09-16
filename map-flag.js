@@ -326,12 +326,14 @@ document.addEventListener('DOMContentLoaded', () => {
     routeBtn.innerHTML = '🗺️';
     routeBtn.title = "Mostra/Nascondi indicazioni";
     const routeBox = document.getElementById('route-box');
-    if (routeBox) routeBox.style.display = 'none';
-    L.DomEvent.on(routeBtn, 'click', e => {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      if (routeBox) routeBox.style.display = (routeBox.style.display === 'none' || routeBox.style.display === '') ? 'flex' : 'none';
-    });
+if (routeBox) routeBox.style.display = 'none';
+L.DomEvent.on(routeBtn, 'click', e => {
+  L.DomEvent.stopPropagation(e);
+  L.DomEvent.preventDefault(e);
+  if (routeBox) routeBox.style.display === 'none' || routeBox.style.display === '' 
+      ? routeBox.style.display = 'flex' 
+      : routeBox.style.display = 'none';
+});
 
     return container;
   };
