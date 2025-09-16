@@ -64,10 +64,10 @@
   #info-panel {
     display: none;
     position: absolute;
-    bottom: 80px;
+    bottom: 70px;
     left: 10px;
     max-width: 180px;
-    min-height: 80px;
+    min-height: 60px;
     background: rgba(0,0,0,0.8);
     color: white;
     padding: 10px;
@@ -92,56 +92,65 @@
     cursor: pointer;
   }
 
-  .custom-home-box {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
+  /* Box home + LOCATE */
+.custom-home-box {
+  position: relative;
+  top: 0;
+  right: 0;
+  background: transparent;
+  padding: 0;
+  border: none !important;
+  display: flex !important;
+  flex-direction: column;
+  gap: 2px;
+}
 
-  .custom-home-button {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px;
-    background: white;
-    border-radius: 4px;
-    border: none;
-    padding: 0;
-    margin: 0;
-    line-height: 1;
-    cursor: pointer;
-  }
+ /* Custom home button */
+.custom-home-button {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 25px !important;
+  background: white !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+}
 
-  .leaflet-control-locate a {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px;
-    background: white;
-    border-radius: 4px;
-    border: none;
-    padding: 0;
-    margin: 0;
-    line-height: 1;
-  }
+/* Leaflet locate control button */
+.leaflet-control-locate a {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 25px !important;
+  background: white !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+}
 
-  .leaflet-control-locate {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
+/* Leaflet locate container */
+.leaflet-control-locate {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 
   /* Routing Machine custom */
   .leaflet-routing-container {
     width: 250px !important;
     max-height: 150px !important;
-    overflow-y: auto;
+    overflow-y: none;
     font-size: 14px;
     background: white;
     padding: 8px;
