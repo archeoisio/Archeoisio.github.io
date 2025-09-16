@@ -40,17 +40,22 @@ const searchControl = L.Control.geocoder({
     position: "bottomleft"
 }).addTo(map);
   
-  // --- Aggiorna altezza mappa ---
   function setVh() {
-    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-    map.invalidateSize();
-  }
-  setVh();
-  window.addEventListener('resize', setVh);
-  window.addEventListener('orientationchange', setVh);
-  if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
+  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.documentElement.style.setProperty('--vh', vh + 'px');
+  if (window.map) map.invalidateSize(); // aggiorna dimensioni mappa Leaflet
+}
 
+// inizializza
+setVh();
+
+// eventi
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', setVh);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', setVh);
+window.addEventListener('focus', setVh);
+window.addEventListener('blur', setVh);
+  
   // --- Overlay capitali ---
   const labels = L.layerGroup();
   let lastMarker = null;
