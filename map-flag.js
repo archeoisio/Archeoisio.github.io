@@ -42,35 +42,34 @@ const searchControl = L.Control.geocoder({
 }).addTo(map);
   
 function setVh() {
+  // Altezza visibile viewport
   const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
   document.documentElement.style.setProperty('--vh', vh + 'px');
 
-  // Forza altezza container mappa
-  const mapEl = document.getElementById('map');
-  if (mapEl) mapEl.style.height = vh + 'px';
-
-  // Aggiorna dimensioni Leaflet con piccolo ritardo
-  if (window.map) {
-    setTimeout(() => map.invalidateSize(), 100);
-  }
+  // Aggiorna dimensioni mappa Leaflet dopo breve ritardo
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 50);
 }
 
 // inizializza
 setVh();
 
-// eventi generali
+// eventi principali
 window.addEventListener('resize', setVh);
 window.addEventListener('orientationchange', setVh);
+
 if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', setVh);
   window.visualViewport.addEventListener('scroll', setVh);
 }
-window.addEventListener('focus', setVh);
-window.addEventListener('blur', setVh);
 
-// focus/blur degli input (utile per la tastiera mobile)
+// blocca zoom su input
 document.querySelectorAll('input').forEach(input => {
-  input.addEventListener('focus', setVh);
+  input.addEventListener('focus', e => {
+    setVh();
+    setTimeout(() => { map.invalidateSize(); }, 50);
+  });
   input.addEventListener('blur', setVh);
 });
   
