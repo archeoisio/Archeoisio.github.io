@@ -255,70 +255,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
-  // --- Configurazioni viewport ---
-  const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [50, 22], zoom: 4 };
-  const desktopView = { center: [45, 40], zoom: 4 };
-  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
-  const initialView = isMobile ? mobileView : desktopView;
-
-  const southWest = L.latLng(-90, -180);
-  const northEast = L.latLng(90, 180);
-  const maxBounds = L.latLngBounds(southWest, northEast);
-
-  // --- Layer base ---
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { noWrap: false });
-  const satellite = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { noWrap: false }
-  );
-
-  // --- Mappa ---
-  const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite],
-    zoomControl: true,
-    minZoom: isMobile ? 2 : 3,
-    maxZoom: 18,
-    worldCopyJump: true,
-    maxBounds: maxBounds,
-    maxBoundsViscosity: 1,
-    wheelPxPerZoomLevel: 120,
-    zoomSnap: 0.1,
-    attributionControl: false
-  });
-
-  // --- Controllo geocoding ---
-  L.Control.geocoder({ defaultMarkGeocode: true, collapsed: true, placeholder: "Cerca...", position: "bottomleft" }).addTo(map);
-
-  // --- Funzione per altezza viewport ---
-  function setVh() {
-    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-    const mapEl = document.getElementById('map');
-    if (mapEl) mapEl.style.height = vh + 'px';
-    setTimeout(() => map.invalidateSize(), 100);
-  }
-  setVh();
-  window.addEventListener('resize', setVh);
-  window.addEventListener('orientationchange', setVh);
-
-  // --- Overlay capitali ---
-  const labels = L.layerGroup();
-  let lastMarker = null;
-  let searchMarkers = [];
-  let control = null;
-
-  const capitalsData = [
-    { name: "Rome", nation: "Italy", coords: [41.9028, 12.4964], flag: "🇮🇹" },
-    { name: "Paris", nation: "France", coords: [48.8566, 2.3522], flag: "🇫🇷" },
-    { name: "Berlin", nation: "Germany", coords: [52.5200, 13.4050], flag: "🇩🇪" },
-    { name: "Madrid", nation: "Spain", coords: [40.4168, -3.7038], flag: "🇪🇸" }
-    // ... aggiungi tutte le altre capitali
-  ];
-
   capitalsData.forEach(({ name, nation, coords, flag }) => {
     const marker = L.marker(coords, {
       icon: L.divIcon({
@@ -479,5 +415,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Vista iniziale
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2
+  });
 });
