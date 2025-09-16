@@ -379,11 +379,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }).addTo(map);
 
       // Zoom automatico sul percorso
-      control.on('routesfound', e => {
-        const route = e.routes[0];
-        const bounds = L.latLngBounds(route.coordinates);
-        map.fitBounds(bounds, { padding: [50, 50] });
-      });
+     control.on('routesfound', e => {
+  const route = e.routes[0];
+  const bounds = L.latLngBounds(route.coordinates);
+
+  // FlyToBounds con durata in secondi
+  map.flyToBounds(bounds, {
+    padding: [50, 50],
+    duration: 3  // durata in secondi
+  });
+});
 
     } catch (err) {
       alert("Errore nel calcolo percorso: " + err.message);
