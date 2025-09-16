@@ -5,8 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const desktopView = { center: [45, 40], zoom: 4 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
-  const southWest = L.latLng(-90, 190);
-  const northEast = L.latLng(90, -190);
+
+  const southWest = L.latLng(-90, -180);
+  const northEast = L.latLng(90, 180);
   const maxBounds = L.latLngBounds(southWest, northEast);
 
   // --- Layer base ---
@@ -22,62 +23,37 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: initialView.zoom,
     layers: [satellite],
     zoomControl: true,
-    boxZoom: true,
-     minZoom: isMobile ? 2 : 3,   // minZoom diverso per mobile e desktop
-     maxZoom: 18,
+    minZoom: isMobile ? 2 : 3,
+    maxZoom: 18,
     worldCopyJump: true,
     maxBounds: maxBounds,
     maxBoundsViscosity: 1,
     wheelPxPerZoomLevel: 120,
     zoomSnap: 0.1,
-     attributionControl: false   
+    attributionControl: false
   });
 
-// --- Controllo geocoding ---
-const searchControl = L.Control.geocoder({
-    defaultMarkGeocode: true,
-    collapsed: true,
-    placeholder: "Cerca...",
-    position: "bottomleft"
-}).addTo(map);
+  // --- Controllo geocoding ---
+  L.Control.geocoder({ defaultMarkGeocode: true, collapsed: true, placeholder: "Cerca...", position: "bottomleft" }).addTo(map);
 
-function setVh() {
-  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  document.documentElement.style.setProperty('--vh', vh + 'px');
-
-  // Forza altezza container mappa
-  const mapEl = document.getElementById('map');
-  if (mapEl) mapEl.style.height = vh + 'px';
-
-  // Aggiorna dimensioni Leaflet con piccolo ritardo
-  if (window.map) {
+  // --- Funzione per altezza viewport ---
+  function setVh() {
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    const mapEl = document.getElementById('map');
+    if (mapEl) mapEl.style.height = vh + 'px';
     setTimeout(() => map.invalidateSize(), 100);
   }
-}
-
-// inizializza
-setVh();
-
-document.querySelectorAll('#start, #end').forEach(input => {
-  input.addEventListener('focus', e => {
-    e.preventDefault();
-    map.dragging.disable();
-    map.scrollWheelZoom.disable();
-    map.touchZoom.disable();
-  });
-
-  input.addEventListener('blur', e => {
-    map.dragging.enable();
-    map.scrollWheelZoom.enable();
-    map.touchZoom.enable();
-  });
-});
+  setVh();
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', setVh);
 
   // --- Overlay capitali ---
   const labels = L.layerGroup();
   let lastMarker = null;
   let searchMarkers = [];
   let control = null;
+
 
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
@@ -279,15 +255,80 @@ document.querySelectorAll('#start, #end').forEach(input => {
 
 ];
 
-capitalsData.forEach(({ name, nation, coords, flag }) => {
-    const markerIcon = L.divIcon({
-      className: 'flag-icon',
-      html: `<div class="flag-box">${flag}</div>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16]
+document.addEventListener('DOMContentLoaded', () => {
+  // --- Configurazioni viewport ---
+  const MOBILE_MAX_WIDTH = 767;
+  const mobileView  = { center: [50, 22], zoom: 4 };
+  const desktopView = { center: [45, 40], zoom: 4 };
+  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
+  const initialView = isMobile ? mobileView : desktopView;
+
+  const southWest = L.latLng(-90, -180);
+  const northEast = L.latLng(90, 180);
+  const maxBounds = L.latLngBounds(southWest, northEast);
+
+  // --- Layer base ---
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { noWrap: false });
+  const satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { noWrap: false }
+  );
+
+  // --- Mappa ---
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    layers: [satellite],
+    zoomControl: true,
+    minZoom: isMobile ? 2 : 3,
+    maxZoom: 18,
+    worldCopyJump: true,
+    maxBounds: maxBounds,
+    maxBoundsViscosity: 1,
+    wheelPxPerZoomLevel: 120,
+    zoomSnap: 0.1,
+    attributionControl: false
+  });
+
+  // --- Controllo geocoding ---
+  L.Control.geocoder({ defaultMarkGeocode: true, collapsed: true, placeholder: "Cerca...", position: "bottomleft" }).addTo(map);
+
+  // --- Funzione per altezza viewport ---
+  function setVh() {
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    const mapEl = document.getElementById('map');
+    if (mapEl) mapEl.style.height = vh + 'px';
+    setTimeout(() => map.invalidateSize(), 100);
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', setVh);
+
+  // --- Overlay capitali ---
+  const labels = L.layerGroup();
+  let lastMarker = null;
+  let searchMarkers = [];
+  let control = null;
+
+  const capitalsData = [
+    { name: "Rome", nation: "Italy", coords: [41.9028, 12.4964], flag: "🇮🇹" },
+    { name: "Paris", nation: "France", coords: [48.8566, 2.3522], flag: "🇫🇷" },
+    { name: "Berlin", nation: "Germany", coords: [52.5200, 13.4050], flag: "🇩🇪" },
+    { name: "Madrid", nation: "Spain", coords: [40.4168, -3.7038], flag: "🇪🇸" }
+    // ... aggiungi tutte le altre capitali
+  ];
+
+  capitalsData.forEach(({ name, nation, coords, flag }) => {
+    const marker = L.marker(coords, {
+      icon: L.divIcon({
+        className: 'flag-icon',
+        html: `<div class="flag-box">${flag}</div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+      })
     });
 
-    const marker = L.marker(coords, { icon: markerIcon });
     marker.on('click', () => {
       const panel = document.getElementById('info-panel');
       const content = document.getElementById('info-content');
@@ -320,14 +361,8 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
   });
   labels.addTo(map);
 
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5, easeLinearity: 0.25 });
-
   // --- Layer switcher ---
-  L.control.layers(
-    { "Satellite": satellite, "OpenStreetMap": osm },
-    { "Capitali": labels },
-    { collapsed: true }
-  ).addTo(map);
+  L.control.layers({ "Satellite": satellite, "OpenStreetMap": osm }, { "Capitali": labels }, { collapsed: true }).addTo(map);
 
   // --- Controlli Home, Locate, Routing ---
   const controlBox = L.control({ position: 'topright' });
@@ -342,25 +377,20 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
     L.DomEvent.on(homeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8, easeLinearity: 0.25 });
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
     });
 
     // Locate
-    const locateControl = L.control.locate({
-      flyTo: { duration: 2, easeLinearity: 0.25 },
-      strings: { title: "Mostrami la mia posizione" },
-      locateOptions: { enableHighAccuracy: true, watch: false }
-    });
+    const locateControl = L.control.locate({ flyTo: { duration: 2 }, strings: { title: "Mostrami la mia posizione" }, locateOptions: { enableHighAccuracy: true } });
     container.appendChild(locateControl.onAdd(map));
 
-    // Indicazioni
+    // Routing
     const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     routeBtn.href = '#';
     routeBtn.innerHTML = '🗺️';
     routeBtn.title = "Mostra/Nascondi indicazioni";
     const routeBox = document.getElementById('route-box');
     if (routeBox) routeBox.style.display = 'none';
-
     L.DomEvent.on(routeBtn, 'click', e => {
       L.DomEvent.stopPropagation(e);
       L.DomEvent.preventDefault(e);
@@ -371,7 +401,7 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
   };
   controlBox.addTo(map);
 
-  // --- Funzioni utili ---
+  // --- Funzioni utility ---
   async function geocode(query) {
     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
     const data = await res.json();
@@ -379,83 +409,75 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
     return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
   }
 
-async function calculateRoute(start, end) {
-  if (!start || !end) { 
-    alert("Inserisci sia punto di partenza che destinazione!"); 
-    return; 
+  async function calculateRoute(start, end) {
+    if (!start || !end) { alert("Inserisci sia punto di partenza che destinazione!"); return; }
+
+    try {
+      const startCoords = await geocode(start);
+      const endCoords = await geocode(end);
+
+      // Rimuove vecchi marker e controllo routing
+      searchMarkers.forEach(m => map.removeLayer(m));
+      searchMarkers = [];
+      if (control) { map.removeControl(control); control = null; }
+
+      // Nuovo controllo routing
+      control = L.Routing.control({
+        waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
+        routeWhileDragging: true,
+        addWaypoints: true,
+        draggableWaypoints: true,
+        showAlternatives: false,
+        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
+        createMarker: function(i, wp, nWps) {
+          const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
+          const label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : 'Waypoint';
+          const marker = L.marker(wp.latLng, {
+            draggable: i !== 0 && i !== nWps-1,
+            icon: L.divIcon({ className: 'routing-marker', html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`, iconSize: [24,24], iconAnchor:[12,12] })
+          });
+          marker.bindPopup(`<div style="font-weight:bold;color:white;">${label}</div>`);
+          searchMarkers.push(marker);
+          return marker;
+        }
+      }).addTo(map);
+
+      // Zoom automatico sul percorso
+      control.on('routesfound', e => {
+        const route = e.routes[0];
+        const bounds = L.latLngBounds(route.coordinates);
+        map.fitBounds(bounds, { padding: [50, 50] });
+      });
+
+    } catch (err) {
+      alert("Errore nel calcolo percorso: " + err.message);
+    }
   }
 
-  try {
-    const startCoords = await geocode(start);
-    const endCoords = await geocode(end);
-
-    // Rimuove vecchi marker e controllo routing
+  function resetRoute() {
+    if (control) { map.removeControl(control); control = null; }
     searchMarkers.forEach(m => map.removeLayer(m));
     searchMarkers = [];
-    if (control) { 
-      map.removeControl(control); 
-      control = null; 
-    }
-
-  // Crea nuovo controllo routing
-control = L.Routing.control({
-  waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
-  routeWhileDragging: true,
-  addWaypoints: true,
-  draggableWaypoints: true,
-  showAlternatives: false,
-  lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
-  createMarker: function(i, wp, nWps) {
-    const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
-    const label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : 'Waypoint';
-    const marker = L.marker(wp.latLng, {
-      draggable: i !== 0 && i !== nWps - 1,
-      icon: L.divIcon({
-        className: 'routing-marker',
-        html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
-      })
-    });
-    marker.bindPopup(`<div style="font-weight:bold;color:white;">${label}</div>`);
-    searchMarkers.push(marker);
-    return marker;
+    document.getElementById('start').value = '';
+    document.getElementById('end').value = '';
+    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
   }
-}).addTo(map);
 
-// Zoom automatico su tutto il percorso
-control.on('routesfound', function(e) {
-  const route = e.routes[0];
-  const bounds = L.latLngBounds(route.coordinates);
-  map.fitBounds(bounds, { padding: [50, 50] });
-});
-
-// --- Event listener ---
-document.getElementById('route-btn').addEventListener('click', () => {
-  const start = document.getElementById('start').value.trim();
-  const end = document.getElementById('end').value.trim();
-  calculateRoute(start, end);
-});
-
-document.getElementById('clear-btn').addEventListener('click', resetRoute);
-
- // Pulizia iniziale input
-  document.getElementById('start').value = '';
-  document.getElementById('end').value = '';
-
-  // --- Blocca lo zoom/scroll automatico della mappa sugli input mobile ---
-  document.querySelectorAll('#start, #end').forEach(input => {
-    input.addEventListener('focus', e => {
-      e.preventDefault();
-      map.dragging.disable();
-      map.scrollWheelZoom.disable();
-      map.touchZoom.disable();
-    });
-
-    input.addEventListener('blur', e => {
-      map.dragging.enable();
-      map.scrollWheelZoom.enable();
-      map.touchZoom.enable();
-    });
+  // --- Event listener ---
+  document.getElementById('route-btn').addEventListener('click', async () => {
+    const start = document.getElementById('start').value.trim();
+    const end = document.getElementById('end').value.trim();
+    await calculateRoute(start, end);
   });
+
+  document.getElementById('clear-btn').addEventListener('click', resetRoute);
+
+  // --- Blocca zoom/scroll automatico input mobile ---
+  document.querySelectorAll('#start, #end').forEach(input => {
+    input.addEventListener('focus', e => { e.preventDefault(); map.dragging.disable(); map.scrollWheelZoom.disable(); map.touchZoom.disable(); });
+    input.addEventListener('blur', e => { map.dragging.enable(); map.scrollWheelZoom.enable(); map.touchZoom.enable(); });
+  });
+
+  // Vista iniziale
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
 });
