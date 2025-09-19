@@ -337,7 +337,10 @@ controlBox.onAdd = function(map) {
     startInput.placeholder = 'Partenza';
    startInput.style.marginLeft = '-2px';
     startInput.style.marginBottom = '4px';
-    startInput.style.width = '95%';
+    startInput.style.width = '95%';       // larghezza di default
+   startInput.style.maxWidth = '140px';  // larghezza massima in pixel
+
+  
     routeBox.appendChild(startInput);
 
     const endInput = document.createElement('input');
@@ -345,7 +348,8 @@ controlBox.onAdd = function(map) {
     endInput.placeholder = 'Destinazione';
     endInput.style.marginLeft = '-2px';
     endInput.style.marginBottom = '4px';
-    endInput.style.width = '95%';
+   endInput.style.width = '95%';
+endInput.style.maxWidth = '140px';
     routeBox.appendChild(endInput);
 
   const buttonRow = document.createElement('div');
