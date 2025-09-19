@@ -358,7 +358,7 @@ blueBoxControl.onAdd = function(map) {
   container.style.justifyContent = 'center';
   container.style.color = 'white';
   container.style.fontWeight = 'bold';
-  container.style.marginTop = '20px';   // distanza dall'alto
+  container.style.marginTop = '21px';   // distanza dall'alto
   container.style.marginRight = '60px'; // distanza dal bordo destro / allineamento pulsanti esistenti
   container.innerHTML = "BOX BLU";
 
