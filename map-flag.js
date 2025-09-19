@@ -301,48 +301,97 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Layer switcher ---
   L.control.layers({ "Satellite": satellite, "OpenStreetMap": osm }, { "Capitali": labels }, { collapsed: true }).addTo(map);
 
-  // --- Controlli Home, Locate, Routing ---
-  const controlBox = L.control({ position: 'topright' });
-  controlBox.onAdd = function(map) {
-    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+// --- Controlli Home, Locate, Routing a due colonne ---
+const controlBox = L.control({ position: 'topright' });
+
+controlBox.onAdd = function(map) {
+    const container = L.DomUtil.create('div', 'custom-control-box leaflet-bar');
+
+    // Stile container principale
+    container.style.display = 'flex';
+    container.style.background = 'transparent';
+    container.style.padding = '5px';
+    container.style.alignItems = 'flex-start';
+
+    // --- Colonna sinistra: box routing ---
+    const routeBox = L.DomUtil.create('div', '', container);
+    routeBox.id = 'route-box';
+    routeBox.style.display = 'flex';
+    routeBox.style.flexDirection = 'column';
+    routeBox.style.background = '#007bff'; // blu elettrico
+    routeBox.style.color = 'white';
+    routeBox.style.padding = '8px';
+    routeBox.style.borderRadius = '5px';
+    routeBox.style.width = '160px';
+    routeBox.style.marginRight = '8px'; // spazio tra colonne
+    routeBox.style.boxSizing = 'border-box';
+
+    // Inputs e pulsanti routing
+    const startInput = document.createElement('input');
+    startInput.id = 'start';
+    startInput.placeholder = 'Partenza';
+    startInput.style.marginBottom = '4px';
+    startInput.style.width = '100%';
+    routeBox.appendChild(startInput);
+
+    const endInput = document.createElement('input');
+    endInput.id = 'end';
+    endInput.placeholder = 'Destinazione';
+    endInput.style.marginBottom = '4px';
+    endInput.style.width = '100%';
+    routeBox.appendChild(endInput);
+
+    const calcBtn = document.createElement('button');
+    calcBtn.id = 'route-btn';
+    calcBtn.innerText = 'Calcola percorso';
+    calcBtn.style.marginBottom = '4px';
+    routeBox.appendChild(calcBtn);
+
+    const clearBtn = document.createElement('button');
+    clearBtn.id = 'clear-btn';
+    clearBtn.innerText = 'Reset';
+    routeBox.appendChild(clearBtn);
+
+    // --- Colonna destra: pulsanti verticali ---
+    const btnCol = L.DomUtil.create('div', '', container);
+    btnCol.style.display = 'flex';
+    btnCol.style.flexDirection = 'column';
+    btnCol.style.gap = '5px';
 
     // Home
-    const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+    const homeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
     homeBtn.href = '#';
     homeBtn.innerHTML = '🏠';
     homeBtn.title = "Torna alla vista iniziale";
     L.DomEvent.on(homeBtn, 'click', e => {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
     });
 
     // Locate
-    const locateControl = L.control.locate({ flyTo: { duration: 2 }, strings: { title: "Mostrami la mia posizione" }, locateOptions: { enableHighAccuracy: true } });
-    container.appendChild(locateControl.onAdd(map));
+    const locateControl = L.control.locate({
+        flyTo: { duration: 2 },
+        strings: { title: "Mostrami la mia posizione" },
+        locateOptions: { enableHighAccuracy: true }
+    });
+    btnCol.appendChild(locateControl.onAdd(map));
 
-    // Routing
-    const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+    // Routing button (toggle visibilità box route)
+    const routeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
     routeBtn.href = '#';
     routeBtn.innerHTML = '🗺️';
     routeBtn.title = "Mostra/Nascondi indicazioni";
-    const routeBox = document.getElementById('route-box');
-if (routeBox) routeBox.style.display = 'none';
-L.DomEvent.on(routeBtn, 'click', e => {
-  L.DomEvent.stopPropagation(e);
-  L.DomEvent.preventDefault(e);
-  if (!routeBox) return;
-
-  if (routeBox.style.display === 'none' || routeBox.style.display === '') {
-    routeBox.style.display = 'flex';
-  } else {
-    routeBox.style.display = 'none';
-  }
-});
+    L.DomEvent.on(routeBtn, 'click', e => {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+        routeBox.style.display = (routeBox.style.display === 'none') ? 'flex' : 'none';
+    });
 
     return container;
-  };
-  controlBox.addTo(map);
+};
+
+controlBox.addTo(map);
 
 // --- Nuovo Control Box Blu elettrico ---
 const blueBoxControl = L.control({ position: 'topright' });
