@@ -262,8 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
         html: `<div class="flag-box">${flag}</div>`,
         iconSize: [32, 32],
         iconAnchor: [16, 16]
-      })
-    });
+  }),
+  zIndexOffset: 1000 // molto alto, per essere sopra gli altri marker
+});
 
     marker.on('click', () => {
       const panel = document.getElementById('info-panel');
