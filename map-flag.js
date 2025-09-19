@@ -335,7 +335,7 @@ controlBox.onAdd = function(map) {
     const startInput = document.createElement('input');
     startInput.id = 'start';
     startInput.placeholder = 'Partenza';
-   startInput.style.marginRight = '-4px';
+   startInput.style.marginLeft = '-4px';
     startInput.style.marginBottom = '4px';
     startInput.style.width = '95%';
     routeBox.appendChild(startInput);
@@ -343,7 +343,7 @@ controlBox.onAdd = function(map) {
     const endInput = document.createElement('input');
     endInput.id = 'end';
     endInput.placeholder = 'Destinazione';
-    endInput.style.marginRight = '-4px';
+    endInput.style.marginLeft = '-4px';
     endInput.style.marginBottom = '4px';
     endInput.style.width = '95%';
     routeBox.appendChild(endInput);
@@ -358,7 +358,7 @@ calcBtn.id = 'route-btn';
 calcBtn.innerText = 'Calcola';
 calcBtn.style.flex = '1'; // occupa metà della riga
 calcBtn.style.minWidth = '0'; // importante per mobile
-  calcBtn.style.marginRight = '-4px';
+  calcBtn.style.marginLeft = '-4px';
 calcBtn.style.display = 'flex';
 calcBtn.style.alignItems = 'center';
 calcBtn.style.justifyContent = 'center';
