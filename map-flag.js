@@ -332,27 +332,37 @@ controlBox.onAdd = function(map) {
     startInput.id = 'start';
     startInput.placeholder = 'Partenza';
     startInput.style.marginBottom = '4px';
-    startInput.style.width = '100%';
+    startInput.style.width = '150px';
     routeBox.appendChild(startInput);
 
     const endInput = document.createElement('input');
     endInput.id = 'end';
     endInput.placeholder = 'Destinazione';
     endInput.style.marginBottom = '4px';
-    endInput.style.width = '100%';
+    endInput.style.width = '150px';
     routeBox.appendChild(endInput);
 
-    const calcBtn = document.createElement('button');
-    calcBtn.id = 'route-btn';
-    calcBtn.innerText = 'Calcola percorso';
-    calcBtn.style.marginBottom = '4px';
-    routeBox.appendChild(calcBtn);
+  const buttonRow = document.createElement('div');
+buttonRow.style.display = 'flex';
+buttonRow.style.gap = '4px'; // spazio tra i bottoni
 
-    const clearBtn = document.createElement('button');
-    clearBtn.id = 'clear-btn';
-    clearBtn.innerText = 'Reset';
-    routeBox.appendChild(clearBtn);
+// Calcola
+const calcBtn = document.createElement('button');
+calcBtn.id = 'route-btn';
+calcBtn.innerText = 'Calcola';
+calcBtn.style.flex = '1'; // occupa metà della riga
+buttonRow.appendChild(calcBtn);
 
+// Reset
+const clearBtn = document.createElement('button');
+clearBtn.id = 'clear-btn';
+clearBtn.innerText = 'Reset';
+clearBtn.style.flex = '1'; // occupa metà della riga
+buttonRow.appendChild(clearBtn);
+
+// aggiungi i bottoni al routeBox
+routeBox.appendChild(buttonRow);
+  
     // --- Colonna destra: pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
     btnCol.style.display = 'flex';
