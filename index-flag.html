@@ -34,7 +34,7 @@
     input, select, textarea, button {
     font-size: 16px; /* iOS non zooma più se ≥16px */
   }
-  /* Box routing */
+  /* Box  */
   #route-box {
     display: none;
     flex-direction: column;
@@ -163,7 +163,13 @@
   border-radius: 4px;      /* bordi leggermente arrotondati */
   box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* ombra leggera */
 }
-
+.leaflet-routing-toggle {
+    position: absolute;   /* importante */
+    top: 80px;            /* distanza dall’alto del container */
+    right: 10px;          /* distanza da destra */
+    left: auto;           /* resettare se necessario */
+    z-index: 10000;       /* sopra altri elementi */
+}
 /* Mobile */
 @media (max-width: 767px) {
   .leaflet-routing-container {
