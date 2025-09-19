@@ -301,48 +301,47 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
   L.control.layers({ "Satellite": satellite, "OpenStreetMap": osm }, { "Capitali": labels }, { collapsed: true }).addTo(map);
 
   // --- Controlli Home + RouteBox nel container ---
-  const controlBox = L.control({ position: 'topright' });
+ const controlBox = L.control({ position: 'topright' });
 controlBox.onAdd = function(map) {
   const container = L.DomUtil.create('div', 'custom-control-box leaflet-bar');
   container.style.display = 'flex';
   container.style.flexDirection = 'column';
-  container.style.alignItems = 'flex-start';
-  container.style.gap = '4px';
+  container.style.alignItems = 'stretch'; // pulsanti uguali larghezza
+  container.style.gap = '2px';
 
   // --- Home ---
-  const homeBtn = L.DomUtil.create('a', 'custom-btn', container);
+  const homeBtn = L.DomUtil.create('a', 'custom-btn leaflet-bar-part', container);
   homeBtn.href = '#';
   homeBtn.innerHTML = '🏠';
   homeBtn.title = "Torna alla vista iniziale";
+  homeBtn.style.textAlign = 'center';
   L.DomEvent.on(homeBtn, 'click', e => {
     L.DomEvent.stopPropagation(e);
     L.DomEvent.preventDefault(e);
     map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
   });
 
-  // --- Locate ---
-  const locateBtn = L.DomUtil.create('a', 'custom-btn', container);
-  locateBtn.href = '#';
-  locateBtn.innerHTML = '📍';
-  locateBtn.title = "Mostra posizione attuale";
-  L.DomEvent.on(locateBtn, 'click', e => {
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    map.locate({ setView: true, maxZoom: 16 });
+  // --- Locate (plugin originale) ---
+  const locateControl = L.control.locate({
+    flyTo: { duration: 2 },
+    strings: { title: "Mostrami la mia posizione" }
   });
+  const locateBtn = locateControl.onAdd(map); // prendo il bottone originale
+  container.appendChild(locateBtn);
 
   // --- RouteBox toggle ---
-  const routeBtn = L.DomUtil.create('a', 'custom-btn', container);
+  const routeBtn = L.DomUtil.create('a', 'custom-btn leaflet-bar-part', container);
   routeBtn.href = '#';
   routeBtn.innerHTML = '🗺️';
   routeBtn.title = "Mostra/Nascondi indicazioni";
+  routeBtn.style.textAlign = 'center';
 
   const routeBox = document.getElementById('route-box');
   if (routeBox) {
-    container.appendChild(routeBox);
     routeBox.style.display = 'none';
-    routeBox.style.flexDirection = 'column';
     routeBox.style.marginTop = '4px';
+    routeBox.style.width = '200px'; // o la larghezza che vuoi
+    container.appendChild(routeBox);
   }
 
   L.DomEvent.on(routeBtn, 'click', e => {
