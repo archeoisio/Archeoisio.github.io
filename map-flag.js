@@ -309,7 +309,7 @@ controlBox.onAdd = function(map) {
 
     // Stile container principale
     container.style.display = 'flex';
-    container.style.marginTop = '50px';
+    container.style.marginTop = '10px';
     container.style.background = 'transparent';
     container.style.padding = '5px';
     container.style.border = 'none';
