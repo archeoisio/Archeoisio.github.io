@@ -327,7 +327,7 @@ controlBox.onAdd = function(map) {
     routeBox.style.border = 'none';
     routeBox.style.padding = '8px';
     routeBox.style.borderRadius = '5px';
-    routeBox.style.width = '130px';
+    routeBox.style.width = '150px';
     routeBox.style.boxSizing = 'border-box';
 
     // Inputs e pulsanti routing
