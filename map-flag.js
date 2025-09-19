@@ -344,6 +344,30 @@ L.DomEvent.on(routeBtn, 'click', e => {
   };
   controlBox.addTo(map);
 
+  // --- Nuovo Control Box Blu elettrico ---
+const blueBoxControl = L.control({ position: 'topright' });
+blueBoxControl.onAdd = function(map) {
+  // Creiamo un container simile a quello dei pulsanti
+  const container = L.DomUtil.create('div', 'custom-blue-box leaflet-bar');
+
+  // Stile del container
+  container.style.width = '200px';
+  container.style.height = '44px';      // stessa altezza dei pulsanti
+  container.style.backgroundColor = '#007bff'; // blu elettrico
+  container.style.borderRadius = '4px';
+  container.style.display = 'flex';
+  container.style.alignItems = 'center';
+  container.style.justifyContent = 'center';
+  container.style.color = 'white';
+  container.style.fontWeight = 'bold';
+  container.style.marginRight = '50px'; // spostato a sinistra dei pulsanti esistenti
+  container.innerHTML = "BOX BLU";
+
+  return container;
+};
+blueBoxControl.addTo(map);
+
+
   // --- Funzioni utility ---
   async function geocode(query) {
     const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
