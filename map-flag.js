@@ -33,8 +33,19 @@ document.addEventListener('DOMContentLoaded', () => {
     attributionControl: false
   });
 
-  // --- Controllo geocoding ---
-  L.Control.geocoder({ defaultMarkGeocode: true, collapsed: false, placeholder: "Cerca...", position: 'bottomright'}).addTo(map);
+// --- Controllo geocoding ---
+const geocoderControl = L.Control.geocoder({
+    defaultMarkGeocode: true,
+    collapsed: true,       // sempre aperto
+    placeholder: "Cerca...",
+    position: 'bottomright' // posizione in basso a destra
+}).addTo(map);
+
+// Imposta larghezza del campo di input
+const geocoderInput = geocoderControl.getContainer().querySelector('input');
+geocoderInput.style.width = '200px';    // lunghezza iniziale
+geocoderInput.style.maxWidth = '200px'; // larghezza massima
+geocoderInput.style.minWidth = '150px'; // larghezza minima (utile per mobile)
 
   // --- Funzione per altezza viewport ---
   function setVh() {
