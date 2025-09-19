@@ -330,9 +330,13 @@ if (routeBox) routeBox.style.display = 'none';
 L.DomEvent.on(routeBtn, 'click', e => {
   L.DomEvent.stopPropagation(e);
   L.DomEvent.preventDefault(e);
-  if (routeBox) routeBox.style.display === 'none' || routeBox.style.display === '' 
-      ? routeBox.style.display = 'flex' 
-      : routeBox.style.display = 'none';
+  if (!routeBox) return;
+
+  if (routeBox.style.display === 'none' || routeBox.style.display === '') {
+    routeBox.style.display = 'flex';
+  } else {
+    routeBox.style.display = 'none';
+  }
 });
 
     return container;
@@ -369,16 +373,28 @@ L.DomEvent.on(routeBtn, 'click', e => {
          show: false,
         lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
         createMarker: function(i, wp, nWps) {
-          const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
-          const label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : 'Waypoint';
-          const marker = L.marker(wp.latLng, {
-            draggable: i !== 0 && i !== nWps-1,
-            icon: L.divIcon({ className: 'routing-marker', html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`, iconSize: [24,24], iconAnchor:[12,12] })
-          });
-          marker.bindPopup(`<div style="font-weight:bold;color:white;">${label}</div>`);
-          searchMarkers.push(marker);
-          return marker;
-        }
+  const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
+  let label;
+  if (i === 0) label = 'Partenza';
+  else if (i === nWps-1) label = 'Arrivo';
+  else label = `Waypoint ${i}`; // numerazione progressiva
+
+  const marker = L.marker(wp.latLng, {
+    draggable: i !== 0 && i !== nWps-1,
+    icon: L.divIcon({
+      className: 'routing-marker',
+      html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
+    })
+  });
+
+  // Qui il popup classico
+  marker.bindPopup(`<b>${label}</b>`);
+
+  searchMarkers.push(marker);
+  return marker;
+}
       }).addTo(map);
 
       // Zoom automatico sul percorso
