@@ -18,49 +18,24 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
 <style>
-  /* Reset margini e dimensioni */
   html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden; /* blocca scroll della pagina */
-}
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
 
-#map {
-  width: 100%;
-  height: calc(var(--vh, 1vh) * 100); /* altezza dinamica ma senza duplicazioni */
-  touch-action: none; /* previene zoom involontari su touch */
+  #map {
+    width: 100%;
+    height: calc(var(--vh, 1vh) * 100);
+    touch-action: none;
   }
-    input, select, textarea, button {
-    font-size: 16px; /* iOS non zooma più se ≥16px */
-  }
-  /* Box  */
-  #route-box {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 50px !important;
-    right: 60px;
-    max-width: 110px;
-    min-height: 45px;
-    background: white;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    z-index: 1000;
-    gap: 6px;
-  }
-  #route-box input {
-    padding: 5px;
-    font-size: 12px;
-  }
-  #route-box button {
-    padding: 6px;
+
+  input, select, textarea, button {
     font-size: 16px;
-    cursor: pointer;
   }
 
-  /* Box info trasparente */
+  /* Box info */
   #info-panel {
     display: none;
     position: absolute;
@@ -79,7 +54,34 @@
 
   #info-content { }
 
-  /* Flag e pulsanti personalizzati */
+  /* Box routing */
+  #route-box {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 50px;
+    right: 60px;
+    max-width: 110px;
+    min-height: 45px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+    gap: 6px;
+  }
+
+  #route-box input {
+    padding: 5px;
+    font-size: 12px;
+  }
+  #route-box button {
+    padding: 6px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* Flag marker */
   .flag-box {
     width: 32px;
     height: 32px;
@@ -87,99 +89,79 @@
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
-    line-height: 1;
     cursor: pointer;
   }
- .leaflet-control-geocoder {
-    z-index: 2000 !important; /* sopra altri controlli */
+
+  /* Pulsanti top-right */
+  .custom-home-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: transparent;
+    padding: 0;
+    border: none;
+  }
+
+  .custom-home-button, .leaflet-control-locate a {
+    width: 44px !important;
+    height: 44px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 25px !important;
+    background: white !important;
+    border-radius: 4px !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    cursor: pointer;
+  }
+
+  .leaflet-control-locate {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Routing Machine */
+  .leaflet-routing-container {
+    width: 210px;
+    max-height: 150px;
+    overflow: hidden;
+    font-size: 14px;
+    background: white;
+    padding: 8px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .leaflet-routing-toggle {
+    position: absolute;
+    top: 80px;
+    right: 10px;
+    z-index: 10000;
+  }
+
+  /* Geocoder */
+  .leaflet-control-geocoder {
+    z-index: 2000 !important;
     margin-bottom: 0;
   }
-  /* Box home + LOCATE */
-.custom-home-box {
-  position: relative;
-  top: -8px;
-  right: 2px;
-  background: transparent;
-  padding: 0;
-  border: none !important;
-  display: flex !important;
-  flex-direction: column;
-  gap: 4px;
-  
-}
- /* Custom home button */
-.custom-home-button {
-  width: 44px !important;
-  height: 44px !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  font-size: 25px !important;
-  background: white !important;
-  border-radius: 4px !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  line-height: 1 !important;
-}
-  
-/* Leaflet locate control button */
-.leaflet-control-locate a {
-  width: 44px !important;
-  height: 44px !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  font-size: 25px !important;
-  background: white !important;
-  border-radius: 4px !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  line-height: 1 !important;
-}
 
-/* Leaflet locate container */
-.leaflet-control-locate {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-  /* Routing Machine custom */
- .leaflet-routing-container {
-  width: 210px;
-  max-height: 150px;
-  overflow-y: hidden;        /* scroll verticale */
-  overflow-x: hidden;      /* niente overflow orizzontale */
-  font-size: 14px;
-  background: white;
-  padding: 8px;
-  box-sizing: border-box;
-  word-wrap: break-word;   /* spezza parole troppo lunghe */
-  border-radius: 4px;      /* bordi leggermente arrotondati */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* ombra leggera */
-}
-.leaflet-routing-toggle {
-    position: absolute;   /* importante */
-    top: 80px;            /* distanza dall’alto del container */
-    right: 10px;          /* distanza da destra */
-    left: auto;           /* resettare se necessario */
-    z-index: 10000;       /* sopra altri elementi */
-}
-/* Mobile */
-@media (max-width: 767px) {
-  .leaflet-routing-container {
-    width: 90%;             /* quasi tutta la larghezza dello schermo */
-    max-height: 200px;      /* un po' più alto su mobile */
-    font-size: 13px;        /* testo leggermente più piccolo */
-    padding: 6px;
+  /* Mobile */
+  @media (max-width: 767px) {
+    .leaflet-routing-container {
+      width: 90%;
+      max-height: 200px;
+      font-size: 13px;
+      padding: 6px;
+    }
   }
-}
-
 </style>
 </head>
 
@@ -202,7 +184,7 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Leaflet Routing Machine JS -->
+  <!-- Routing Machine JS -->
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
   <!-- LocateControl JS -->
