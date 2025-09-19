@@ -311,12 +311,13 @@ controlBox.onAdd = function(map) {
     container.style.display = 'flex';
     container.style.background = 'transparent';
     container.style.padding = '5px';
+   routeBox.style.border = 'none';
     container.style.alignItems = 'flex-start';
 
     // --- Colonna sinistra: box routing ---
     const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
-    routeBox.style.display = 'flex';
+    routeBox.style.display = 'none';
     routeBox.style.flexDirection = 'column';
     routeBox.style.background = '#007bff'; // blu elettrico
     routeBox.style.color = 'white';
