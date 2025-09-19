@@ -303,7 +303,7 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
 const controlBox = L.control({ position: 'topright' });
 
 controlBox.onAdd = function(map) {
-  const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+  const container = L.DomUtil.create('div', 'custom-home-box');
 
   // --- Pulsante Home ---
   const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
