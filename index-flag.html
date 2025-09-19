@@ -72,18 +72,15 @@
   }
 
 .custom-home-box {
-  position: relative;
+  position: relative;  /* fondamentale */
   top: -8px;
   right: 2px;
-  background: transparent;
-  padding: 0;
-  border: none !important;
   display: flex;
   flex-direction: column;
   gap: 4px;
   z-index: 1500;
-  min-width: 120px; /* abbastanza per i pulsanti + route-box */
 }
+  
   .custom-home-button {
     width: 44px;
     height: 44px;
@@ -129,15 +126,16 @@
   display: none;
   position: absolute;
   top: 0;               /* allinea in alto con i pulsanti */
-  right: 100%;           /* a sinistra dei pulsanti */
-  margin-right: 8px;     /* piccolo distacco dai pulsanti */
-  width: 110px;          /* dimensione originale */
+  left: -120px;         /* sposta il box a sinistra dei pulsanti */
+  width: 110px;         /* dimensione originale */
   min-height: 45px;
   background: white;
+  border: 1px solid black; /* bordo come prima */
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0,0,0,0.2);
   z-index: 2000;
+  display: flex;
   flex-direction: column;
   gap: 6px;
 }
