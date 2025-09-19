@@ -335,14 +335,14 @@ controlBox.onAdd = function(map) {
     startInput.id = 'start';
     startInput.placeholder = 'Partenza';
     startInput.style.marginBottom = '4px';
-    startInput.style.width = '90%';
+    startInput.style.width = '95%';
     routeBox.appendChild(startInput);
 
     const endInput = document.createElement('input');
     endInput.id = 'end';
     endInput.placeholder = 'Destinazione';
     endInput.style.marginBottom = '4px';
-    endInput.style.width = '90%';
+    endInput.style.width = '95%';
     routeBox.appendChild(endInput);
 
   const buttonRow = document.createElement('div');
