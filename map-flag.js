@@ -36,16 +36,24 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Controllo geocoding ---
 const geocoderControl = L.Control.geocoder({
     defaultMarkGeocode: true,
-    collapsed: false,       // sempre aperto
+    collapsed: true,          // collapsed true, si apre al click
     placeholder: "Cerca...",
-    position: 'bottomright' // posizione in basso a destra
+    position: 'bottomright'   // posizione in basso a destra
 }).addTo(map);
+
+// Forza apertura al click su mobile
+const geocoderContainer = geocoderControl.getContainer();
+geocoderContainer.style.zIndex = 2000;   // sopra altri controlli
+geocoderContainer.style.touchAction = 'auto'; // permette click/touch
+
+// Assicurati che il campo input sia visibile quando si apre
+geocoderContainer.querySelector('input').style.width = '150px';
 
 // Imposta larghezza del campo di input
 const geocoderInput = geocoderControl.getContainer().querySelector('input');
-geocoderInput.style.width = '200px';    // lunghezza iniziale
-geocoderInput.style.maxWidth = '200px'; // larghezza massima
-geocoderInput.style.minWidth = '150px'; // larghezza minima (utile per mobile)
+geocoderInput.style.width = '200px';
+geocoderInput.style.maxWidth = '200px';
+geocoderInput.style.minWidth = '150px';
 
   // --- Funzione per altezza viewport ---
   function setVh() {
