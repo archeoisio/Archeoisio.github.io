@@ -352,7 +352,7 @@ blueBoxControl.onAdd = function(map) {
 
   // Stile del container
   container.style.width = '150px';
-  container.style.height = '44px';      // stessa altezza dei pulsanti
+  container.style.height = '100px';      // stessa altezza dei pulsanti
   container.style.backgroundColor = '#007bff'; // blu elettrico
   container.style.borderRadius = '4px';
   container.style.display = 'flex';
