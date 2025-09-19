@@ -300,47 +300,64 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
   // --- Layer switcher ---
   L.control.layers({ "Satellite": satellite, "OpenStreetMap": osm }, { "Capitali": labels }, { collapsed: true }).addTo(map);
 
-  // --- Controlli Home + RouteBox nel container ---
 const controlBox = L.control({ position: 'topright' });
-  controlBox.onAdd = function(map) {
-    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
 
-    // Home
-    const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
-    homeBtn.href = '#';
-    homeBtn.innerHTML = '🏠';
-    homeBtn.title = "Torna alla vista iniziale";
-    L.DomEvent.on(homeBtn, 'click', e => {
-      L.DomEvent.stopPropagation(e);
-      L.DomEvent.preventDefault(e);
-      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
-    });
+controlBox.onAdd = function(map) {
+  const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
 
-    // Locate
-    const locateControl = L.control.locate({ flyTo: { duration: 2 }, strings: { title: "Mostrami la mia posizione" }, locateOptions: { enableHighAccuracy: true } });
-    container.appendChild(locateControl.onAdd(map));
-    // Routing
-    const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
-    routeBtn.href = '#';
-    routeBtn.innerHTML = '🗺️';
-    routeBtn.title = "Mostra/Nascondi indicazioni";
-    const routeBox = document.getElementById('route-box');
-if (routeBox) routeBox.style.display = 'none';
-L.DomEvent.on(routeBtn, 'click', e => {
-  L.DomEvent.stopPropagation(e);
-  L.DomEvent.preventDefault(e);
-  if (!routeBox) return;
+  // --- Pulsante Home ---
+  const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+  homeBtn.href = '#';
+  homeBtn.innerHTML = '🏠';
+  homeBtn.title = "Torna alla vista iniziale";
+  L.DomEvent.on(homeBtn, 'click', e => {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+  });
 
-  if (routeBox.style.display === 'none' || routeBox.style.display === '') {
-    routeBox.style.display = 'flex';
-  } else {
-    routeBox.style.display = 'none';
-  }
-});
+  // --- Pulsante Locate ---
+  const locateControl = L.control.locate({ 
+    flyTo: { duration: 2 }, 
+    strings: { title: "Mostrami la mia posizione" }, 
+    locateOptions: { enableHighAccuracy: true } 
+  });
+  container.appendChild(locateControl.onAdd(map));
 
-    return container;
-  };
-  controlBox.addTo(map);
+  // --- Pulsante Routing ---
+  const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+  routeBtn.href = '#';
+  routeBtn.innerHTML = '🗺️';
+  routeBtn.title = "Mostra/Nascondi indicazioni";
+
+  // --- RouteBox dentro il container ---
+  const routeBox = L.DomUtil.create('div', 'route-box', container);
+  routeBox.style.display = 'none';          // nascosto inizialmente
+  routeBox.style.flexDirection = 'column';  // verticale
+  routeBox.style.marginTop = '4px';
+  routeBox.style.background = 'rgba(0,0,0,0.7)';
+  routeBox.style.padding = '6px';
+  routeBox.style.borderRadius = '6px';
+
+  // Contenuto del route-box
+  routeBox.innerHTML = `
+    <input id="start" placeholder="Partenza" style="margin-bottom:4px;">
+    <input id="end" placeholder="Destinazione" style="margin-bottom:4px;">
+    <button id="route-btn">Calcola</button>
+    <button id="clear-btn">Cancella</button>
+  `;
+
+  // Toggle al click sul pulsante Routing
+  L.DomEvent.on(routeBtn, 'click', e => {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    routeBox.style.display = (routeBox.style.display === 'none' || routeBox.style.display === '') ? 'flex' : 'none';
+  });
+
+  return container;
+};
+
+controlBox.addTo(map);
 
   // --- Funzioni utility ---
   async function geocode(query) {
