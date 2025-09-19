@@ -352,27 +352,28 @@ controlBox.onAdd = function(map) {
 buttonRow.style.display = 'flex';
 buttonRow.style.gap = '4px'; // spazio tra i bottoni
 
-// Calcola
+// Pulsante Calcola
 const calcBtn = document.createElement('button');
 calcBtn.id = 'route-btn';
 calcBtn.innerText = 'Calcola';
-calcBtn.style.flex = '1'; // occupa metà della riga
+calcBtn.style.flex = '1';
 calcBtn.style.minWidth = '0'; // importante per mobile
-  calcBtn.style.marginLeft = '-2px';
 calcBtn.style.display = 'flex';
 calcBtn.style.alignItems = 'center';
 calcBtn.style.justifyContent = 'center';
+calcBtn.style.borderRadius = '8px'; // angoli smussati
 buttonRow.appendChild(calcBtn);
 
-// Reset
+// Pulsante Reset
 const clearBtn = document.createElement('button');
 clearBtn.id = 'clear-btn';
 clearBtn.innerText = 'Reset';
-clearBtn.style.flex = '1'; // occupa metà della riga
+clearBtn.style.flex = '1';
+clearBtn.style.minWidth = '0'; // importante per mobile
 clearBtn.style.display = 'flex';
 clearBtn.style.alignItems = 'center';
 clearBtn.style.justifyContent = 'center';
-clearBtn.style.minWidth = '0'; // importante per mobile
+clearBtn.style.borderRadius = '8px'; // angoli smussati
 buttonRow.appendChild(clearBtn);
 
 // aggiungi i bottoni al routeBox
