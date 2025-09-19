@@ -354,7 +354,10 @@ const calcBtn = document.createElement('button');
 calcBtn.id = 'route-btn';
 calcBtn.innerText = 'Calcola';
 calcBtn.style.flex = '1'; // occupa metà della riga
-  calcBtn.style.minWidth = '0'; // importante per mobile
+calcBtn.style.minWidth = '0'; // importante per mobile
+calcBtn.style.display = 'flex';
+calcBtn.style.alignItems = 'center';
+calcBtn.style.justifyContent = 'center';
 buttonRow.appendChild(calcBtn);
 
 // Reset
@@ -362,7 +365,10 @@ const clearBtn = document.createElement('button');
 clearBtn.id = 'clear-btn';
 clearBtn.innerText = 'Reset';
 clearBtn.style.flex = '1'; // occupa metà della riga
-  clearBtn.style.minWidth = '0'; // importante per mobile
+clearBtn.style.display = 'flex';
+clearBtn.style.alignItems = 'center';
+clearBtn.style.justifyContent = 'center';
+clearBtn.style.minWidth = '0'; // importante per mobile
 buttonRow.appendChild(clearBtn);
 
 // aggiungi i bottoni al routeBox
