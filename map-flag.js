@@ -303,7 +303,7 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
 const controlBox = L.control({ position: 'topright' });
 
 controlBox.onAdd = function(map) {
- const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+  const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
 
   // --- Pulsante Home ---
   const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
@@ -332,6 +332,12 @@ controlBox.onAdd = function(map) {
 
   // --- RouteBox dentro il container ---
   const routeBox = L.DomUtil.create('div', 'route-box', container);
+  routeBox.style.display = 'none';          // nascosto inizialmente
+  routeBox.style.flexDirection = 'column';  // verticale
+  routeBox.style.marginTop = '4px';
+  routeBox.style.background = 'rgba(0,0,0,0.7)';
+  routeBox.style.padding = '6px';
+  routeBox.style.borderRadius = '6px';
 
   // Contenuto del route-box
   routeBox.innerHTML = `
