@@ -351,7 +351,7 @@ blueBoxControl.onAdd = function(map) {
   const container = L.DomUtil.create('div', 'custom-blue-box leaflet-bar');
 
   // Stile del container
-  container.style.width = '200px';
+  container.style.width = '150px';
   container.style.height = '44px';      // stessa altezza dei pulsanti
   container.style.backgroundColor = '#007bff'; // blu elettrico
   container.style.borderRadius = '4px';
