@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Configurazioni viewport ---
   const MOBILE_MAX_WIDTH = 767;
   const mobileView  = { center: [50, 22], zoom: 4 };
-  const desktopView = { center: [45, 40], zoom: 5 };
+  const desktopView = { center: [45, 40], zoom: 4 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastMarker = null;
   let searchMarkers = [];
   let control = null;
+
 
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
@@ -254,16 +255,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ];
 
-capitalsData.forEach(({ name, nation, coords, flag }) => {
+  capitalsData.forEach(({ name, nation, coords, flag }) => {
     const marker = L.marker(coords, {
       icon: L.divIcon({
         className: 'flag-icon',
         html: `<div class="flag-box">${flag}</div>`,
         iconSize: [32, 32],
         iconAnchor: [16, 16]
-      }),
-      zIndexOffset: 1000
-    });
+  }),
+  zIndexOffset: 1000 // molto alto, per essere sopra gli altri marker
+});
 
     marker.on('click', () => {
       const panel = document.getElementById('info-panel');
@@ -300,58 +301,48 @@ capitalsData.forEach(({ name, nation, coords, flag }) => {
   // --- Layer switcher ---
   L.control.layers({ "Satellite": satellite, "OpenStreetMap": osm }, { "Capitali": labels }, { collapsed: true }).addTo(map);
 
-const controlBox = L.control({ position: 'topright' });
+  // --- Controlli Home, Locate, Routing ---
+  const controlBox = L.control({ position: 'topright' });
+  controlBox.onAdd = function(map) {
+    const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
 
-controlBox.onAdd = function(map) {
-  const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+    // Home
+    const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+    homeBtn.href = '#';
+    homeBtn.innerHTML = '🏠';
+    homeBtn.title = "Torna alla vista iniziale";
+    L.DomEvent.on(homeBtn, 'click', e => {
+      L.DomEvent.stopPropagation(e);
+      L.DomEvent.preventDefault(e);
+      map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+    });
 
-  // --- Pulsante Home ---
-  const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
-  homeBtn.href = '#';
-  homeBtn.innerHTML = '🏠';
-  homeBtn.title = "Torna alla vista iniziale";
-  L.DomEvent.on(homeBtn, 'click', e => {
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
-  });
+    // Locate
+    const locateControl = L.control.locate({ flyTo: { duration: 2 }, strings: { title: "Mostrami la mia posizione" }, locateOptions: { enableHighAccuracy: true } });
+    container.appendChild(locateControl.onAdd(map));
 
-  // --- Pulsante Locate ---
-  const locateControl = L.control.locate({ 
-    flyTo: { duration: 2 }, 
-    strings: { title: "Mostrami la mia posizione" }, 
-    locateOptions: { enableHighAccuracy: true } 
-  });
-  container.appendChild(locateControl.onAdd(map));
+    // Routing
+    const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+    routeBtn.href = '#';
+    routeBtn.innerHTML = '🗺️';
+    routeBtn.title = "Mostra/Nascondi indicazioni";
+    const routeBox = document.getElementById('route-box');
+if (routeBox) routeBox.style.display = 'none';
+L.DomEvent.on(routeBtn, 'click', e => {
+  L.DomEvent.stopPropagation(e);
+  L.DomEvent.preventDefault(e);
+  if (!routeBox) return;
 
-  // --- Pulsante Routing ---
-  const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
-  routeBtn.href = '#';
-  routeBtn.innerHTML = '🗺️';
-  routeBtn.title = "Mostra/Nascondi indicazioni";
+  if (routeBox.style.display === 'none' || routeBox.style.display === '') {
+    routeBox.style.display = 'flex';
+  } else {
+    routeBox.style.display = 'none';
+  }
+});
 
-  // --- RouteBox dentro il container ---
-  const routeBox = L.DomUtil.create('div', 'route-box', container);
-
-  // Contenuto del route-box
-  routeBox.innerHTML = `
-    <input id="start" placeholder="Partenza" style="margin-bottom:4px;">
-    <input id="end" placeholder="Destinazione" style="margin-bottom:4px;">
-    <button id="route-btn">Calcola</button>
-    <button id="clear-btn">Cancella</button>
-  `;
-
-  // Toggle al click sul pulsante Routing
-  L.DomEvent.on(routeBtn, 'click', e => {
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    routeBox.style.display = (routeBox.style.display === 'none' || routeBox.style.display === '') ? 'flex' : 'none';
-  });
-
-  return container;
-};
-
-controlBox.addTo(map);
+    return container;
+  };
+  controlBox.addTo(map);
 
   // --- Funzioni utility ---
   async function geocode(query) {
