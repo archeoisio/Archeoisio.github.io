@@ -125,15 +125,19 @@
   }
 
   /* Route box inside container */
-  .route-box {
-    display: none;
-    flex-direction: column;
-    margin-top: 4px;
-    background: rgba(255,255,255,0.95);
-    padding: 6px;
-    border-radius: 6px;
-    gap: 6px;
-  }
+  #route-box {
+  display: none;
+  flex-direction: column;
+  position: absolute; /* relativo al container dei pulsanti */
+  top: 0;             /* allineato in alto ai pulsanti */
+  right: 100%;        /* subito a sinistra del container */
+  margin-right: 8px;  /* spazio tra box e pulsanti */
+  background: white;
+  padding: 6px;
+  border-radius: 6px;
+  gap: 6px;
+  z-index: 2000;
+}
 
   .route-box input {
     padding: 5px;
