@@ -319,7 +319,7 @@ controlBox.onAdd = function(map) {
     // --- Colonna sinistra: box routing ---
     const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
-    routeBox.style.display = 'flex';
+    routeBox.style.display = 'none';
     routeBox.style.flexDirection = 'column';
    routeBox.style.marginTop = '48px';
    routeBox.style.marginRight = '7px';  
