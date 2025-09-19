@@ -54,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let searchMarkers = [];
   let control = null;
 
-
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
@@ -255,16 +254,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ];
 
-  capitalsData.forEach(({ name, nation, coords, flag }) => {
+capitalsData.forEach(({ name, nation, coords, flag }) => {
     const marker = L.marker(coords, {
       icon: L.divIcon({
         className: 'flag-icon',
         html: `<div class="flag-box">${flag}</div>`,
         iconSize: [32, 32],
         iconAnchor: [16, 16]
-  }),
-  zIndexOffset: 1000 // molto alto, per essere sopra gli altri marker
-});
+      }),
+      zIndexOffset: 1000
+    });
 
     marker.on('click', () => {
       const panel = document.getElementById('info-panel');
@@ -301,10 +300,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Layer switcher ---
   L.control.layers({ "Satellite": satellite, "OpenStreetMap": osm }, { "Capitali": labels }, { collapsed: true }).addTo(map);
 
-  // --- Controlli Home, Locate, Routing ---
+  // --- Controlli Home + RouteBox nel container ---
   const controlBox = L.control({ position: 'topright' });
   controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-home-box leaflet-bar');
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.alignItems = 'flex-start';
+    container.style.gap = '4px';
 
     // Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', container);
@@ -317,28 +320,27 @@ document.addEventListener('DOMContentLoaded', () => {
       map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
     });
 
-    // Locate
-    const locateControl = L.control.locate({ flyTo: { duration: 2 }, strings: { title: "Mostrami la mia posizione" }, locateOptions: { enableHighAccuracy: true } });
-    container.appendChild(locateControl.onAdd(map));
-
-    // Routing
+    // Route button
     const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
     routeBtn.href = '#';
     routeBtn.innerHTML = '🗺️';
     routeBtn.title = "Mostra/Nascondi indicazioni";
-    const routeBox = document.getElementById('route-box');
-if (routeBox) routeBox.style.display = 'none';
-L.DomEvent.on(routeBtn, 'click', e => {
-  L.DomEvent.stopPropagation(e);
-  L.DomEvent.preventDefault(e);
-  if (!routeBox) return;
 
-  if (routeBox.style.display === 'none' || routeBox.style.display === '') {
-    routeBox.style.display = 'flex';
-  } else {
-    routeBox.style.display = 'none';
-  }
-});
+    // Appendo route-box dentro container
+    const routeBox = document.getElementById('route-box');
+    if (routeBox) {
+      container.appendChild(routeBox);
+      routeBox.style.display = 'none';
+      routeBox.style.flexDirection = 'column';
+      routeBox.style.marginTop = '4px';
+    }
+
+    L.DomEvent.on(routeBtn, 'click', e => {
+      L.DomEvent.stopPropagation(e);
+      L.DomEvent.preventDefault(e);
+      if (!routeBox) return;
+      routeBox.style.display = routeBox.style.display === 'none' ? 'flex' : 'none';
+    });
 
     return container;
   };
@@ -359,56 +361,41 @@ L.DomEvent.on(routeBtn, 'click', e => {
       const startCoords = await geocode(start);
       const endCoords = await geocode(end);
 
-      // Rimuove vecchi marker e controllo routing
       searchMarkers.forEach(m => map.removeLayer(m));
       searchMarkers = [];
       if (control) { map.removeControl(control); control = null; }
 
-      // Nuovo controllo routing
       control = L.Routing.control({
         waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
         routeWhileDragging: true,
         addWaypoints: true,
         draggableWaypoints: true,
         showAlternatives: false,
-         show: false,
+        show: false,
         lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
         createMarker: function(i, wp, nWps) {
-  const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
-  let label;
-  if (i === 0) label = 'Partenza';
-  else if (i === nWps-1) label = 'Arrivo';
-  else label = `Waypoint ${i}`; // numerazione progressiva
-
-  const marker = L.marker(wp.latLng, {
-    draggable: i !== 0 && i !== nWps-1,
-    icon: L.divIcon({
-      className: 'routing-marker',
-      html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
-    })
-  });
-
-  // Qui il popup classico
-  marker.bindPopup(`<b>${label}</b>`);
-
-  searchMarkers.push(marker);
-  return marker;
-}
+          const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
+          let label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : `Waypoint ${i}`;
+          const marker = L.marker(wp.latLng, {
+            draggable: i !== 0 && i !== nWps-1,
+            icon: L.divIcon({
+              className: 'routing-marker',
+              html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            })
+          });
+          marker.bindPopup(`<b>${label}</b>`);
+          searchMarkers.push(marker);
+          return marker;
+        }
       }).addTo(map);
 
-      // Zoom automatico sul percorso
-     control.on('routesfound', e => {
-  const route = e.routes[0];
-  const bounds = L.latLngBounds(route.coordinates);
-
-  // FlyToBounds con durata in secondi
-  map.flyToBounds(bounds, {
-    padding: [50, 50],
-    duration: 5  // durata in secondi
-  });
-});
+      control.on('routesfound', e => {
+        const route = e.routes[0];
+        const bounds = L.latLngBounds(route.coordinates);
+        map.flyToBounds(bounds, { padding: [50, 50], duration: 5 });
+      });
 
     } catch (err) {
       alert("Errore nel calcolo percorso: " + err.message);
@@ -419,19 +406,25 @@ L.DomEvent.on(routeBtn, 'click', e => {
     if (control) { map.removeControl(control); control = null; }
     searchMarkers.forEach(m => map.removeLayer(m));
     searchMarkers = [];
-    document.getElementById('start').value = '';
-    document.getElementById('end').value = '';
+    const startInput = document.getElementById('start');
+    const endInput = document.getElementById('end');
+    if (startInput) startInput.value = '';
+    if (endInput) endInput.value = '';
     map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
   }
 
   // --- Event listener ---
-  document.getElementById('route-btn').addEventListener('click', async () => {
-    const start = document.getElementById('start').value.trim();
-    const end = document.getElementById('end').value.trim();
-    await calculateRoute(start, end);
-  });
+  const routeBtnEl = document.getElementById('route-btn');
+  if (routeBtnEl) {
+    routeBtnEl.addEventListener('click', async () => {
+      const start = document.getElementById('start').value.trim();
+      const end = document.getElementById('end').value.trim();
+      await calculateRoute(start, end);
+    });
+  }
 
-  document.getElementById('clear-btn').addEventListener('click', resetRoute);
+  const clearBtnEl = document.getElementById('clear-btn');
+  if (clearBtnEl) clearBtnEl.addEventListener('click', resetRoute);
 
   // Vista iniziale
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
