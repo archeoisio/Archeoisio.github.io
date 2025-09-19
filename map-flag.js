@@ -344,15 +344,13 @@ L.DomEvent.on(routeBtn, 'click', e => {
   };
   controlBox.addTo(map);
 
-  // --- Nuovo Control Box Blu elettrico ---
+// --- Nuovo Control Box Blu elettrico ---
 const blueBoxControl = L.control({ position: 'topright' });
 blueBoxControl.onAdd = function(map) {
-  // Creiamo un container simile a quello dei pulsanti
   const container = L.DomUtil.create('div', 'custom-blue-box leaflet-bar');
 
-  // Stile del container
-  container.style.width = '150px'!important;
-  container.style.height = '100px'!important;      // stessa altezza dei pulsanti
+  container.style.width = '150px';
+  container.style.height = '100px';
   container.style.backgroundColor = '#007bff'; // blu elettrico
   container.style.borderRadius = '4px';
   container.style.display = 'flex';
@@ -360,8 +358,8 @@ blueBoxControl.onAdd = function(map) {
   container.style.justifyContent = 'center';
   container.style.color = 'white';
   container.style.fontWeight = 'bold';
-  container.style.marginTop = '20px'!important!;   // distanza dall'alto
-  container.style.marginRight = '60px'!important!; // spostato a sinistra dei pulsanti esistenti
+  container.style.marginTop = '20px';   // distanza dall'alto
+  container.style.marginRight = '60px'; // distanza dal bordo destro / allineamento pulsanti esistenti
   container.innerHTML = "BOX BLU";
 
   return container;
