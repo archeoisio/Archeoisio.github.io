@@ -71,20 +71,19 @@
     margin-bottom: 0;
   }
 
-  /* Box home + LOCATE + Routing */
-  .custom-home-box {
-    position: relative;
-    top: -8px;
-    right: 2px;
-    background: transparent;
-    padding: 0;
-    border: none !important;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    z-index: 1500;
-  }
-
+.custom-home-box {
+  position: relative;
+  top: -8px;
+  right: 2px;
+  background: transparent;
+  padding: 0;
+  border: none !important;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1500;
+  min-width: 120px; /* abbastanza per i pulsanti + route-box */
+}
   .custom-home-button {
     width: 44px;
     height: 44px;
@@ -125,23 +124,23 @@
   }
 
   /* Route box inside container */
+/* Route box dentro il container, a sinistra dei pulsanti */
 #route-box {
   display: none;
-  flex-direction: column;
   position: absolute;
-  top: 0;
-  right: 100%;        /* a sinistra dei pulsanti */
-  margin-right: 8px;  /* distanza dai pulsanti */
-  max-width: 110px;   /* come prima */
-  min-height: 45px;   /* come prima */
-  padding: 10px;      /* come prima */
-  border-radius: 8px; /* come prima */
-  box-shadow: 0 0 5px rgba(0,0,0,0.2); /* come prima */
+  top: 0;               /* allinea in alto con i pulsanti */
+  right: 100%;           /* a sinistra dei pulsanti */
+  margin-right: 8px;     /* piccolo distacco dai pulsanti */
+  width: 110px;          /* dimensione originale */
+  min-height: 45px;
   background: white;
-  gap: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
   z-index: 2000;
+  flex-direction: column;
+  gap: 6px;
 }
-
   .route-box input {
     padding: 5px;
     font-size: 12px;
