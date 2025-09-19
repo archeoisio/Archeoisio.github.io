@@ -309,6 +309,7 @@ controlBox.onAdd = function(map) {
 
     // Stile container principale
     container.style.display = 'flex';
+    container.style.marginTop = '50px';
     container.style.background = 'transparent';
     container.style.padding = '5px';
     container.style.border = 'none';
@@ -325,7 +326,7 @@ controlBox.onAdd = function(map) {
     routeBox.style.padding = '8px';
     routeBox.style.borderRadius = '5px';
     routeBox.style.width = '160px';
-    routeBox.style.marginRight = '8px'; // spazio tra colonne
+    routeBox.routeBox.style.boxSizing = 'border-box';spazio tra colonne
     routeBox.style.boxSizing = 'border-box';
 
     // Inputs e pulsanti routing
