@@ -319,11 +319,11 @@ controlBox.onAdd = function(map) {
     // --- Colonna sinistra: box routing ---
     const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
-   routeBox.style.marginTop = '120px';  // distanza dal top della mappa 
+   routeBox.style.marginTop = '60px';  // distanza dal top della mappa 
   routeBox.style.width = '150px';
     routeBox.style.display = 'none';
     routeBox.style.flexDirection = 'column';
-    routeBox.style.background = 'rgba(0,0,0,0.8)';
+    routeBox.style.background = 'transparent';
     routeBox.style.color = 'white';
     routeBox.style.border = 'none';
     routeBox.style.padding = '8px';
