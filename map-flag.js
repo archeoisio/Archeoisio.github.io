@@ -317,7 +317,7 @@ controlBox.onAdd = function(map) {
     // --- Colonna sinistra: box routing ---
     const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
-    routeBox.style.display = 'none';
+    routeBox.style.display = 'flex';
     routeBox.style.flexDirection = 'column';
     routeBox.style.background = '#007bff'; // blu elettrico
     routeBox.style.color = 'white';
