@@ -38,7 +38,7 @@
   #route-box {
     display: none;
     flex-direction: column;
-    position: relative;
+    position: absolute;
     top: 30px !important;
     right: 60px;
     max-width: 110px;
@@ -172,7 +172,9 @@
     padding: 6px;
   }
 }
-
+ .leaflet-control-layers-expanded ~ #route-box {
+    top: 160px; /* regola in base all'altezza dello switcher */
+   }
 </style>
 </head>
 
