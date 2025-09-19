@@ -311,7 +311,7 @@ controlBox.onAdd = function(map) {
     container.style.display = 'flex';
     container.style.background = 'transparent';
     container.style.padding = '5px';
-   routeBox.style.border = 'none';
+    container.style.border = 'none';
     container.style.alignItems = 'flex-start';
 
     // --- Colonna sinistra: box routing ---
