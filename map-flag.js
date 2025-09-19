@@ -338,7 +338,7 @@ routeBox.style.background = 'rgba(0,0,0,0.8)';
    startInput.style.marginLeft = '-2px';
     startInput.style.marginBottom = '4px';
     startInput.style.width = '95%';       // larghezza di default
-   startInput.style.maxWidth = '140px';  // larghezza massima in pixel
+   startInput.style.maxWidth = '120px';  // larghezza massima in pixel
 
   
     routeBox.appendChild(startInput);
@@ -349,7 +349,7 @@ routeBox.style.background = 'rgba(0,0,0,0.8)';
     endInput.style.marginLeft = '-2px';
     endInput.style.marginBottom = '4px';
    endInput.style.width = '95%';
-endInput.style.maxWidth = '140px';
+endInput.style.maxWidth = '120px';
     routeBox.appendChild(endInput);
 
   const buttonRow = document.createElement('div');
