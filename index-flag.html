@@ -33,7 +33,7 @@
   }
 
   input, select, textarea, button {
-    font-size: 16px; /* iOS non zooma più se ≥16px */
+    font-size: 16px;
   }
 
   /* Box info trasparente */
@@ -53,8 +53,6 @@
     z-index: 1000;
   }
 
-  #info-content { }
-
   /* Flag marker */
   .flag-box {
     width: 32px;
@@ -71,19 +69,24 @@
     margin-bottom: 0;
   }
 
-.custom-home-box {
-  position: relative;  /* fondamentale */
-  top: -8px;
-  right: 2px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  z-index: 1500;
-}
-  
+  /* Container pulsanti + route-box */
+  .custom-home-box {
+    position: relative;  
+    top: -8px;
+    right: 2px;
+    display: flex;
+    flex-direction: row;     
+    align-items: flex-start; 
+    gap: 4px;
+    z-index: 1500;
+    width: 160px;            /* larghezza fissa: pulsanti + spazio per route-box */
+  }
+
+  /* Pulsanti home e locate */
   .custom-home-button {
     width: 44px;
     height: 44px;
+    flex-shrink: 0;          /* non si ridimensionano */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -120,32 +123,32 @@
     padding: 0 !important;
   }
 
-  /* Route box inside container */
-/* Route box dentro il container, a sinistra dei pulsanti */
-#route-box {
-  display: none;
-  position: absolute;
-  top: 0;               /* allinea in alto con i pulsanti */
-  left: -120px;         /* sposta il box a sinistra dei pulsanti */
-  width: 110px;         /* dimensione originale */
-  min-height: 45px;
-  background: white;
-  border: 1px solid black; /* bordo come prima */
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
-  z-index: 2000;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-  .route-box input {
-    padding: 5px;
-    font-size: 12px;
-    width: 100px;
+  /* Route box dentro il container, a sinistra dei pulsanti */
+  #route-box {
+    display: none;
+    position: absolute;      
+    top: 0;                  
+    left: -120px;            
+    width: 110px;            
+    min-height: 45px;
+    background: white;
+    border: 1px solid black; 
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 
-  .route-box button {
+  #route-box input {
+    padding: 5px;
+    font-size: 12px;
+    width: 100%;             
+  }
+
+  #route-box button {
     padding: 6px;
     font-size: 14px;
     cursor: pointer;
@@ -183,17 +186,39 @@
     <div id="info-content"></div>
   </div>
 
+  <!-- Container pulsanti + route-box -->
+  <div class="custom-home-box" id="home-box">
+    <!-- Route box -->
+    <div id="route-box">
+      <input type="text" id="start" placeholder="Partenza" />
+      <input type="text" id="end" placeholder="Arrivo" />
+      <button id="route-btn">Calcola</button>
+      <button id="clear-btn">Reset</button>
+    </div>
+
+    <!-- Pulsante home -->
+    <a href="#" class="custom-home-button" id="toggle-route" title="Mostra/Nascondi indicazioni">🗺️</a>
+    <!-- Pulsante locate (Leaflet Locate) sarà inserito tramite plugin -->
+  </div>
+
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- Leaflet Routing Machine JS -->
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-  <!-- LocateControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
-  <!-- LabelTextCollision plugin -->
   <script src="https://unpkg.com/leaflet-labeltextcollision"></script>
-  <!-- Leaflet Control Geocoder -->
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
   <!-- Script principale -->
-  <script src="map-flag.js"></script>
+  <script>
+    const routeBox = document.getElementById('route-box');
+    const toggleBtn = document.getElementById('toggle-route');
+
+    toggleBtn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!routeBox) return;
+      routeBox.style.display = (routeBox.style.display === 'flex') ? 'none' : 'flex';
+    });
+  </script>
 </body>
 </html>
