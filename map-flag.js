@@ -353,16 +353,16 @@ buttonRow.style.gap = '4px'; // spazio tra i bottoni
 const calcBtn = document.createElement('button');
 calcBtn.id = 'route-btn';
 calcBtn.innerText = 'Calcola';
-calcBtn.style.width = '90%';
 calcBtn.style.flex = '1'; // occupa metà della riga
+  calcBtn.style.minWidth = '0'; // importante per mobile
 buttonRow.appendChild(calcBtn);
 
 // Reset
 const clearBtn = document.createElement('button');
 clearBtn.id = 'clear-btn';
 clearBtn.innerText = 'Reset';
-clearBtn.style.width = '90%';
 clearBtn.style.flex = '1'; // occupa metà della riga
+  clearBtn.style.minWidth = '0'; // importante per mobile
 buttonRow.appendChild(clearBtn);
 
 // aggiungi i bottoni al routeBox
