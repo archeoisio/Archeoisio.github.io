@@ -335,10 +335,9 @@ routeBox.style.background = 'rgba(0,0,0,0.8)';
     const startInput = document.createElement('input');
     startInput.id = 'start';
     startInput.placeholder = 'Partenza';
-   startInput.style.marginLeft = '-2px';
     startInput.style.marginBottom = '4px';
-    startInput.style.width = '95%';       // larghezza di default
-   startInput.style.maxWidth = '120px';  // larghezza massima in pixel
+ startInput.style.width = '100%';
+startInput.style.boxSizing = 'border-box';
 
   
     routeBox.appendChild(startInput);
@@ -346,10 +345,9 @@ routeBox.style.background = 'rgba(0,0,0,0.8)';
     const endInput = document.createElement('input');
     endInput.id = 'end';
     endInput.placeholder = 'Destinazione';
-    endInput.style.marginLeft = '-2px';
     endInput.style.marginBottom = '4px';
-   endInput.style.width = '95%';
-endInput.style.maxWidth = '120px';
+   endInput.style.width = '100%';
+endInput.style.boxSizing = 'border-box';
     routeBox.appendChild(endInput);
 
   const buttonRow = document.createElement('div');
