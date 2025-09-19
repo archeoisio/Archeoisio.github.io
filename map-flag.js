@@ -309,7 +309,7 @@ controlBox.onAdd = function(map) {
 
     // Stile container principale
     container.style.display = 'flex';
-    container.style.marginTop = '-7px';
+    container.style.marginTop = '-6px';
     container.style.marginRight = '7px';
     container.style.background = 'transparent';
     container.style.padding = '5px';
@@ -336,14 +336,14 @@ controlBox.onAdd = function(map) {
     startInput.id = 'start';
     startInput.placeholder = 'Partenza';
     startInput.style.marginBottom = '4px';
-    startInput.style.width = '100%';
+    startInput.style.width = '95%';
     routeBox.appendChild(startInput);
 
     const endInput = document.createElement('input');
     endInput.id = 'end';
     endInput.placeholder = 'Destinazione';
     endInput.style.marginBottom = '4px';
-    endInput.style.width = '100%';
+    endInput.style.width = '95%';
     routeBox.appendChild(endInput);
 
   const buttonRow = document.createElement('div');
