@@ -318,7 +318,6 @@ const controlBox = L.control({ position: 'topright' });
 
     // Locate
     const locateControl = L.control.locate({ flyTo: { duration: 2 }, strings: { title: "Mostrami la mia posizione" }, locateOptions: { enableHighAccuracy: true } });
-    container.appendChild(locateControl.onAdd(map));
 
     // Routing
     const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
