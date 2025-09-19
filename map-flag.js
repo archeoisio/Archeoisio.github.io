@@ -320,6 +320,7 @@ controlBox.onAdd = function(map) {
     routeBox.style.flexDirection = 'column';
     routeBox.style.background = '#007bff'; // blu elettrico
     routeBox.style.color = 'white';
+  routeBox.style.border = 'none';
     routeBox.style.padding = '8px';
     routeBox.style.borderRadius = '5px';
     routeBox.style.width = '160px';
