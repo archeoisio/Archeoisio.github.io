@@ -310,7 +310,7 @@ controlBox.onAdd = function(map) {
     // Stile container principale
     container.style.display = 'flex';
     container.style.marginTop = '-10px';
-    container.style.marginRight = '0px';
+    container.style.marginRight = '5px';
     container.style.background = 'transparent';
     container.style.padding = '5px';
     container.style.border = 'none';
@@ -327,7 +327,7 @@ controlBox.onAdd = function(map) {
     routeBox.style.border = 'none';
     routeBox.style.padding = '8px';
     routeBox.style.borderRadius = '5px';
-    routeBox.style.width = '160px';
+    routeBox.style.width = '130px';
     routeBox.style.boxSizing = 'border-box';
 
     // Inputs e pulsanti routing
@@ -353,6 +353,7 @@ buttonRow.style.gap = '4px'; // spazio tra i bottoni
 const calcBtn = document.createElement('button');
 calcBtn.id = 'route-btn';
 calcBtn.innerText = 'Calcola';
+calcBtn.style.width = '90%';
 calcBtn.style.flex = '1'; // occupa metà della riga
 buttonRow.appendChild(calcBtn);
 
@@ -360,6 +361,7 @@ buttonRow.appendChild(calcBtn);
 const clearBtn = document.createElement('button');
 clearBtn.id = 'clear-btn';
 clearBtn.innerText = 'Reset';
+clearBtn.style.width = '90%';
 clearBtn.style.flex = '1'; // occupa metà della riga
 buttonRow.appendChild(clearBtn);
 
