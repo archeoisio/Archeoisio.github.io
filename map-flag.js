@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- Controllo geocoding ---
-  L.Control.geocoder({ defaultMarkGeocode: true, collapsed: true, placeholder: "Cerca...", position: "bottomleft" }).addTo(map);
+  L.Control.geocoder({ defaultMarkGeocode: true, collapsed: false, placeholder: "Cerca..."}).addTo(map);
 
   // --- Funzione per altezza viewport ---
   function setVh() {
@@ -315,7 +315,14 @@ controlBox.onAdd = function(map) {
     container.style.padding = '5px';
     container.style.border = 'none';
     container.style.alignItems = 'flex-start';
+ // --- Geocoder sopra gli input ---
+ const geocoderControl = L.Control.geocoder({
+    placeholder: 'Cerca luogo',
+    defaultMarkGeocode: false
+}).addTo(map);
 
+const geocoderContainer = geocoderControl.getContainer();
+geocoderContainer.style.marginBottom = '4px';
     // --- Colonna sinistra: box routing ---
     const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
