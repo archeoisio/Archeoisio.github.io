@@ -34,46 +34,7 @@
     input, select, textarea, button {
     font-size: 16px; /* iOS non zooma più se ≥16px */
   }
-  /* Box routing */
-  /* Box  */
- #route-box {
-  display: flex;
-  flex-direction: column; /* input sopra, bottoni sotto */
-  gap: 6px;
-  position: absolute;
-  top: 70px !important;
-  right: 60px;
-  width: 150px;
-  min-height: 45px;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
-  z-index: 1000;
-}
-
-/* input in colonna */
-#route-box input {
-  width: 100%;
-  padding: 6px;
-  font-size: 12px;
-  box-sizing: border-box;
-}
-
-/* contenitore bottoni */
-#route-box .button-row {
-  display: flex;
-  gap: 6px;
-}
-
-/* bottoni affiancati */
-#route-box .button-row button {
-  flex: 1; /* ciascun bottone occupa metà larghezza */
-  padding: 6px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
+ 
   /* Box info trasparente */
   #info-panel {
     display: none;
@@ -206,15 +167,6 @@
     <div id="info-content"></div>
   </div>
 
-  <!-- Box routing -->
-  <div id="route-box">
-  <input type="text" id="start" placeholder="Partenza" />
-  <input type="text" id="end" placeholder="Arrivo" />
-  <div class="button-row">
-    <button id="route-btn">Calcola</button>
-    <button id="clear-btn">Reset</button>
-  </div>
-</div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
