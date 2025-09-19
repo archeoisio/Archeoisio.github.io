@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Controllo geocoding ---
 const geocoderControl = L.Control.geocoder({
     defaultMarkGeocode: true,
-    collapsed: true,       // sempre aperto
+    collapsed: false,       // sempre aperto
     placeholder: "Cerca...",
     position: 'bottomright' // posizione in basso a destra
 }).addTo(map);
