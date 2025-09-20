@@ -114,7 +114,13 @@
   margin: 0 !important;
   line-height: 1 !important;
 }
-
+.leaflet-control-geocoder-results {
+    top: 0;      /* distanza dall'input */
+    left: 40px;        /* distanza da sinistra */
+    max-height: 20px;  /* altezza massima */
+    overflow-y: auto;   /* scroll verticale se tanti suggerimenti */
+    z-index: 3000;      /* sopra altri elementi */
+}
 /* Leaflet locate container */
 .leaflet-control-locate {
   background: transparent !important;
