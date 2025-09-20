@@ -51,7 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let searchMarkers = [];
   let control = null;
 
-  // --- Dati capitali ---
+
+  // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
 { name: "Abuja", nation: "Nigeria", coords: [9.0579, 7.4951], flag: "🇳🇬" },
@@ -251,16 +252,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ];
 
- capitalsData.forEach(({ name, nation, coords, flag }) => {
+  capitalsData.forEach(({ name, nation, coords, flag }) => {
     const marker = L.marker(coords, {
       icon: L.divIcon({
         className: 'flag-icon',
         html: `<div class="flag-box">${flag}</div>`,
         iconSize: [32, 32],
         iconAnchor: [16, 16]
-      }),
-      zIndexOffset: 1000
-    });
+  }),
+  zIndexOffset: 1000 // molto alto, per essere sopra gli altri marker
+});
 
     marker.on('click', () => {
       const panel = document.getElementById('info-panel');
@@ -292,201 +293,246 @@ document.addEventListener('DOMContentLoaded', () => {
 
     labels.addLayer(marker);
   });
-
   labels.addTo(map);
 
   // --- Layer switcher ---
   L.control.layers({ "Satellite": satellite, "OpenStreetMap": osm }, { "Capitali": labels }, { collapsed: true }).addTo(map);
 
-  // --- Custom Control ---
-  const CustomControl = L.Control.extend({
-    onAdd: function(map) {
-      const container = L.DomUtil.create('div', 'custom-control-container');
+// --- Controlli Home, Locate, Routing a due colonne ---
+const controlBox = L.control({ position: 'topright' });
 
-      // --- Route Box ---
-      const routeBox = L.DomUtil.create('div', '', container);
-      routeBox.style.display = 'flex';
-      routeBox.style.flexDirection = 'column';
-      routeBox.style.gap = '4px';
-      routeBox.style.width = '200px';
-      routeBox.style.padding = '8px';
-      routeBox.style.background = 'white';
-      routeBox.style.borderRadius = '8px';
-      routeBox.style.boxShadow = '0 2px 6px rgba(0,0,0,0.3)';
+controlBox.onAdd = function(map) {
+    const container = L.DomUtil.create('div', 'custom-control-box leaflet-bar');
 
-      // --- Geocoder ---
-      const geocoderControl = L.Control.geocoder({
-        defaultMarkGeocode: true,
-        collapsed: false,
-        placeholder: "Cerca..."
-      }).addTo(map);
+    // Stile container principale
+    container.style.display = 'flex';
+    container.style.marginTop = '-2px';
+    container.style.marginRight = '7px';
+    container.style.background = 'transparent';
+    container.style.padding = '5px';
+    container.style.border = 'none';
+    container.style.alignItems = 'flex-start';
 
-      const geocoderContainer = geocoderControl.getContainer();
-      geocoderContainer.style.zIndex = 2000;
-      geocoderContainer.style.touchAction = 'auto';
-      routeBox.appendChild(geocoderContainer);
+  // --- Colonna sinistra: box routing ---
 
-      const geocoderInput = geocoderContainer.querySelector('input');
-      geocoderInput.style.height = '20px';
-      geocoderInput.style.width = '100%';
-      geocoderInput.style.marginBottom = '4px';
-      geocoderInput.style.borderRadius = '5px';
-      geocoderInput.style.minWidth = '50px';
-      geocoderInput.style.boxSizing = 'border-box';
 
-      // --- Input routing ---
-      const startInput = document.createElement('input');
-      startInput.id = 'start';
-      startInput.placeholder = 'Partenza';
-      startInput.style.marginBottom = '4px';
-      startInput.style.width = '100%';
-      startInput.style.boxSizing = 'border-box';
-      routeBox.appendChild(startInput);
+  const routeBox = L.DomUtil.create('div', '', container);
+    routeBox.id = 'route-box';
+   routeBox.style.marginTop = '45px';  // distanza dal top della mappa 
+    routeBox.style.width = '150px';
+    routeBox.style.display = 'none';
+    routeBox.style.flexDirection = 'column';
+    routeBox.style.background = 'transparent';
+    routeBox.style.color = 'white';
+    routeBox.style.border = 'none';
+    routeBox.style.padding = '8px';
+    routeBox.style.borderRadius = '5px';
+    routeBox.style.boxSizing = 'border-box';
 
-      const endInput = document.createElement('input');
-      endInput.id = 'end';
-      endInput.placeholder = 'Destinazione';
-      endInput.style.marginBottom = '4px';
-      endInput.style.width = '100%';
-      endInput.style.boxSizing = 'border-box';
-      routeBox.appendChild(endInput);
+  // --- Controllo geocoding ---
+const geocoderControl = L.Control.geocoder({
+    defaultMarkGeocode: true,
+    collapsed: false,          // sempre visibile, necessario per mobile
+    placeholder: "Cerca...",
+   }).addTo(map);
 
-      // --- Pulsanti routing ---
-      const buttonRow = document.createElement('div');
-      buttonRow.style.display = 'flex';
-      buttonRow.style.gap = '4px';
+const geocoderContainer = geocoderControl.getContainer();
+geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
+geocoderContainer.style.touchAction = 'auto'; // permette click/touch
 
-      const calcBtn = document.createElement('button');
-      calcBtn.id = 'route-btn';
-      calcBtn.innerText = 'Calcola';
-      calcBtn.style.flex = '1';
-      calcBtn.style.minWidth = '0';
-      calcBtn.style.display = 'flex';
-      calcBtn.style.alignItems = 'center';
-      calcBtn.style.justifyContent = 'center';
-      calcBtn.style.borderRadius = '8px';
-      buttonRow.appendChild(calcBtn);
+const geocoderInput = geocoderContainer.querySelector('input');
+geocoderInput.style.height = '20px';
+geocoderInput.style.width = '100%';
+geocoderInput.style.marginBottom = '4px';
+geocoderInput.style.borderRadius = '5px';
+geocoderInput.style.minWidth = '50px';
+geocoderInput.style.boxSizing = 'border-box';
 
-      const clearBtn = document.createElement('button');
-      clearBtn.id = 'clear-btn';
-      clearBtn.innerText = 'Reset';
-      clearBtn.style.flex = '1';
-      clearBtn.style.minWidth = '0';
-      clearBtn.style.display = 'flex';
-      clearBtn.style.alignItems = 'center';
-      clearBtn.style.justifyContent = 'center';
-      clearBtn.style.borderRadius = '8px';
-      buttonRow.appendChild(clearBtn);
 
-      routeBox.appendChild(buttonRow);
+  // Appendi geocoder dentro routeBox
+routeBox.appendChild(geocoderContainer);
 
-      // --- Azioni bottoni ---
-      clearBtn.addEventListener('click', () => {
-        searchMarkers.forEach(m => map.removeLayer(m));
-        searchMarkers = [];
-        if (lastMarker) { map.removeLayer(lastMarker); lastMarker = null; }
-        if (control) { map.removeControl(control); control = null; }
-        startInput.value = '';
-        endInput.value = '';
-      });
+    // Inputs e pulsanti routing
+    const startInput = document.createElement('input');
+    startInput.id = 'start';
+    startInput.placeholder = 'Partenza';
+    startInput.style.marginBottom = '4px';
+ startInput.style.width = '100%';
+startInput.style.boxSizing = 'border-box';
 
-      calcBtn.addEventListener('click', async () => {
-        const start = startInput.value;
-        const end = endInput.value;
-        if (!start || !end) { alert("Inserisci sia punto di partenza che destinazione!"); return; }
 
-        try {
-          const geocode = async query => {
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
-            const data = await res.json();
-            if (data.length === 0) throw new Error(`Località non trovata: ${query}`);
-            return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-          };
+    routeBox.appendChild(startInput);
 
-          const startCoords = await geocode(start);
-          const endCoords = await geocode(end);
+    const endInput = document.createElement('input');
+    endInput.id = 'end';
+    endInput.placeholder = 'Destinazione';
+    endInput.style.marginBottom = '4px';
+   endInput.style.width = '100%';
+endInput.style.boxSizing = 'border-box';
+    routeBox.appendChild(endInput);
 
-          searchMarkers.forEach(m => map.removeLayer(m));
-          searchMarkers = [];
-          if (control) { map.removeControl(control); control = null; }
+  const buttonRow = document.createElement('div');
+buttonRow.style.display = 'flex';
+buttonRow.style.gap = '4px'; // spazio tra i bottoni
 
-          control = L.Routing.control({
-            waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
-            routeWhileDragging: true,
-            addWaypoints: true,
-            draggableWaypoints: true,
-            showAlternatives: false,
-            show: false,
-            lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
-            createMarker: function(i, wp, nWps) {
-              const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
-              let label = i === 0 ? 'Partenza' : i === nWps-1 ? 'Arrivo' : `Waypoint ${i}`;
-              const marker = L.marker(wp.latLng, {
-                draggable: i !== 0 && i !== nWps-1,
-                icon: L.divIcon({
-                  className: 'routing-marker',
-                  html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-                  iconSize: [24, 24],
-                  iconAnchor: [12, 12]
-                })
-              });
-              marker.bindPopup(`<b>${label}</b>`);
-              searchMarkers.push(marker);
-              return marker;
-            }
-          }).addTo(map);
+// Pulsante Calcola
+const calcBtn = document.createElement('button');
+calcBtn.id = 'route-btn';
+calcBtn.innerText = 'Calcola';
+calcBtn.style.flex = '1';
+calcBtn.style.minWidth = '0'; // importante per mobile
+calcBtn.style.display = 'flex';
+calcBtn.style.alignItems = 'center';
+calcBtn.style.justifyContent = 'center';
+calcBtn.style.borderRadius = '8px'; // angoli smussati
+buttonRow.appendChild(calcBtn);
 
-          control.on('routesfound', e => {
-            const route = e.routes[0];
-            const bounds = L.latLngBounds(route.coordinates);
-            map.flyToBounds(bounds, { padding: [50,50], duration: 5 });
-          });
+// Pulsante Reset
+const clearBtn = document.createElement('button');
+clearBtn.id = 'clear-btn';
+clearBtn.innerText = 'Reset';
+clearBtn.style.flex = '1';
+clearBtn.style.minWidth = '0'; // importante per mobile
+  clearBtn.style.display = 'flex';
+clearBtn.style.alignItems = 'center';
+clearBtn.style.justifyContent = 'center';
+clearBtn.style.borderRadius = '8px'; // angoli smussati
+  buttonRow.appendChild(clearBtn);
+// aggiungi i bottoni al routeBox
+routeBox.appendChild(buttonRow);
+  // --- Colonna destra: pulsanti verticali ---
+    const btnCol = L.DomUtil.create('div', '', container);
+    btnCol.style.display = 'flex';
+    btnCol.style.flexDirection = 'column';
+    btnCol.style.gap = '5px';
 
-        } catch (err) {
-          alert("Errore nel calcolo percorso: " + err.message);
-        }
-      });
-
-      // --- Colonna pulsanti ---
-      const btnCol = L.DomUtil.create('div', '', container);
-      btnCol.style.display = 'flex';
-      btnCol.style.flexDirection = 'column';
-      btnCol.style.gap = '5px';
-
-      // Home
-      const homeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
-      homeBtn.href = '#';
-      homeBtn.innerHTML = '🏠';
-      homeBtn.title = "Torna alla vista iniziale";
-      L.DomEvent.on(homeBtn, 'click', e => {
+    // Home
+    const homeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
+    homeBtn.href = '#';
+    homeBtn.innerHTML = '🏠';
+    homeBtn.title = "Torna alla vista iniziale";
+    L.DomEvent.on(homeBtn, 'click', e => {
         L.DomEvent.stopPropagation(e);
         L.DomEvent.preventDefault(e);
         map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
-      });
+    });
 
-      // Locate
-      const locateControl = L.control.locate({
+    // Locate
+    const locateControl = L.control.locate({
         flyTo: { duration: 2 },
         strings: { title: "Mostrami la mia posizione" },
         locateOptions: { enableHighAccuracy: true }
-      });
-      btnCol.appendChild(locateControl.onAdd(map));
+    });
+    btnCol.appendChild(locateControl.onAdd(map));
 
-      // Toggle route box
-      const routeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
-      routeBtn.href = '#';
-      routeBtn.innerHTML = '🗺️';
-      routeBtn.title = "Mostra/Nascondi indicazioni";
-      L.DomEvent.on(routeBtn, 'click', e => {
+    // Routing button (toggle visibilità box route)
+    const routeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
+    routeBtn.href = '#';
+    routeBtn.innerHTML = '🗺️';
+    routeBtn.title = "Mostra/Nascondi indicazioni";
+    L.DomEvent.on(routeBtn, 'click', e => {
         L.DomEvent.stopPropagation(e);
         L.DomEvent.preventDefault(e);
         routeBox.style.display = (routeBox.style.display === 'none') ? 'flex' : 'none';
-      });
+    });
 
-      return container;
-    }
+    return container;
+};
+
+controlBox.addTo(map);
+
+  // --- Funzioni utility ---
+  async function geocode(query) {
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    if (data.length === 0) throw new Error(`Località non trovata: ${query}`);
+    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+  }
+
+  async function calculateRoute(start, end) {
+    if (!start || !end) { alert("Inserisci sia punto di partenza che destinazione!"); return; }
+
+    try {
+      const startCoords = await geocode(start);
+      const endCoords = await geocode(end);
+
+      // Rimuove vecchi marker e controllo routing
+      searchMarkers.forEach(m => map.removeLayer(m));
+      searchMarkers = [];
+      if (control) { map.removeControl(control); control = null; }
+
+      // Nuovo controllo routing
+      control = L.Routing.control({
+        waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
+        routeWhileDragging: true,
+        addWaypoints: true,
+        draggableWaypoints: true,
+        showAlternatives: false,
+         show: false,
+        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
+        createMarker: function(i, wp, nWps) {
+  const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
+  let label;
+  if (i === 0) label = 'Partenza';
+  else if (i === nWps-1) label = 'Arrivo';
+  else label = `Waypoint ${i}`; // numerazione progressiva
+
+  const marker = L.marker(wp.latLng, {
+    draggable: i !== 0 && i !== nWps-1,
+    icon: L.divIcon({
+      className: 'routing-marker',
+      html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12]
+    })
   });
 
-  const customControl = new CustomControl({ position: 'topright' });
-  customControl.addTo(map);
+  // Qui il popup classico
+  marker.bindPopup(`<b>${label}</b>`);
+
+  searchMarkers.push(marker);
+  return marker;
+}
+      }).addTo(map);
+
+      // Zoom automatico sul percorso
+     control.on('routesfound', e => {
+  const route = e.routes[0];
+  const bounds = L.latLngBounds(route.coordinates);
+
+  // FlyToBounds con durata in secondi
+  map.flyToBounds(bounds, {
+    padding: [50, 50],
+    duration: 5  // durata in secondi
+  });
 });
+
+    } catch (err) {
+      alert("Errore nel calcolo percorso: " + err.message);
+    }
+  }
+
+  function resetRoute() {
+    if (control) { map.removeControl(control); control = null; }
+    searchMarkers.forEach(m => map.removeLayer(m));
+    searchMarkers = [];
+    document.getElementById('start').value = '';
+    document.getElementById('end').value = '';
+    
+    // Ripristina la vista iniziale
+    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
+  }
+
+  // --- Event listener ---
+  document.getElementById('route-btn').addEventListener('click', async () => {
+    const start = document.getElementById('start').value.trim();
+    const end = document.getElementById('end').value.trim();
+    await calculateRoute(start, end);
+  });
+
+  document.getElementById('clear-btn').addEventListener('click', resetRoute);
+
+  // Vista iniziale
+  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+});
+}
