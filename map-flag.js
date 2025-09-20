@@ -339,7 +339,9 @@ const geocoderControl = L.Control.geocoder({
 geocoderControl.on('markgeocode', function(e) {
     const resultsEl = document.querySelector('.leaflet-control-geocoder-results');
     if (resultsEl) {
+        // Forza i suggerimenti a comparire a sinistra dell'input
         resultsEl.style.left = '0px';
+        resultsEl.style.right = 'auto';
         resultsEl.style.transform = 'none';
     }
 });
@@ -414,6 +416,7 @@ clearBtn.style.borderRadius = '8px'; // angoli smussati
   buttonRow.appendChild(clearBtn);
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
+  
   // --- Colonna destra: pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
     btnCol.style.display = 'flex';
