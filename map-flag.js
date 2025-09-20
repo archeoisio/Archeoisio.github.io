@@ -389,7 +389,8 @@ calcBtn.style.minWidth = '0'; // importante per mobile
 calcBtn.style.display = 'flex';
 calcBtn.style.alignItems = 'center';
 calcBtn.style.justifyContent = 'center';
-calcBtn.buttonRow.appendChild(calcBtn);
+
+buttonRow.appendChild(calcBtn);
 
 // Pulsante Reset
 const clearBtn = document.createElement('button');
