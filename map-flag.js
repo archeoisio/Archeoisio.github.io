@@ -378,14 +378,17 @@ clearBtn.style.borderRadius = '8px'; // angoli smussati
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
   
-  // --- Controllo geocoding ---
+ // --- Geocoder semplice ---
 const geocoderControl = L.Control.geocoder({
-    defaultMarkGeocode: true,
-    collapsed: true,          // sempre visibile, necessario per mobile
+    collapsed: false,           // input sempre visibile
     placeholder: "Cerca...",
-   }).addTo(map);
-  
-  // Appendi geocoder dentro routeBox
+    defaultMarkGeocode: true
+}).addTo(map);
+
+// Prendi il container del geocoder
+const geocoderContainer = geocoderControl.getContainer();
+
+// Appendi il geocoder dentro routeBox
 routeBox.appendChild(geocoderContainer);
   
   // --- Colonna destra: pulsanti verticali ---
