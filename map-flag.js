@@ -319,8 +319,8 @@ controlBox.onAdd = function(map) {
   const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
    routeBox.style.marginTop = '45px';  // distanza dal top della mappa 
-    routeBox.style.minWidth = '200px'; // o 250px per mobile
-    routeBox.style.flexShrink = '0';   // evita che si restringarouteBox.style.display = 'none';
+    routeBox.style.width = '150px';
+    routeBox.style.display = 'none';
     routeBox.style.flexDirection = 'column';
     routeBox.style.background = 'transparent';
     routeBox.style.color = 'white';
