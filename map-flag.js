@@ -341,6 +341,7 @@ geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
   geocoderContainer.style.display = 'flex';
 geocoderContainer.style.flexWrap = 'nowrap';
+geocoderContainer.borderRadius = '8px'; // angoli smussati
 geocoderContainer.style.alignItems = 'center';
 
 
@@ -348,7 +349,6 @@ const geocoderInput = geocoderContainer.querySelector('input');
 geocoderInput.style.height = '15px';
 geocoderInput.style.width = '120px';
 geocoderInput.style.marginBottom = '4px';
-geocoderInput.style.borderRadius = '5px';
 geocoderInput.style.minWidth = '75px';
 geocoderInput.style.boxSizing = 'border-box';
 geocoderInput.style.flex = '1';
@@ -389,8 +389,7 @@ calcBtn.style.minWidth = '0'; // importante per mobile
 calcBtn.style.display = 'flex';
 calcBtn.style.alignItems = 'center';
 calcBtn.style.justifyContent = 'center';
-calcBtn.style.borderRadius = '8px'; // angoli smussati
-buttonRow.appendChild(calcBtn);
+calcBtn.buttonRow.appendChild(calcBtn);
 
 // Pulsante Reset
 const clearBtn = document.createElement('button');
