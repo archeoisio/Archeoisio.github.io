@@ -339,10 +339,12 @@ const geocoderControl = L.Control.geocoder({
 const geocoderContainer = geocoderControl.getContainer();
 geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
+geocoderInput.style.width = '100%';
 
 const geocoderInput = geocoderContainer.querySelector('input');
 geocoderInput.style.height = '20px';
 geocoderInput.style.width = '100%';
+geocoderContainer.style.display = 'flex';
 geocoderInput.style.marginBottom = '4px';
 geocoderInput.style.borderRadius = '5px';
 geocoderInput.style.minWidth = '50px';
