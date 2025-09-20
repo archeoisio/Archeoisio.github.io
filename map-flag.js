@@ -372,8 +372,9 @@ clearBtn.innerText = 'Reset';
 clearBtn.style.flex = '1';
 clearBtn.style.minWidth = '0'; // importante per mobile
   clearBtn.style.display = 'flex';
-clearBtn.style.alignItems = 'center';
+clearBtn.style.alignItems = 'flex-end';
 clearBtn.style.justifyContent = 'center';
+clearBtn.style.marginBottom = '15px';
 clearBtn.style.borderRadius = '8px'; // angoli smussati
   buttonRow.appendChild(clearBtn);
 // aggiungi i bottoni al routeBox
@@ -386,28 +387,15 @@ const geocoderControl = L.Control.geocoder({
     placeholder: "Cerca...",
    }).addTo(map);
   
-geocoderControl.on('markgeocode', function(e) {
-   const resultsEl = document.querySelector('.leaflet-control-geocoder-results');
-    if (resultsEl) {
-        }
 });
   
 const geocoderContainer = geocoderControl.getContainer();
 geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
-geocoderContainer.style.display = 'flex';
-geocoderContainer.style.flexWrap = 'nowrap';
 geocoderContainer.style.borderRadius = '8px'; // angoli smussati
-geocoderContainer.style.alignItems = 'center';
+geocoderContainer.style.alignItems = 'right';
   
 const geocoderInput = geocoderContainer.querySelector('input');
-geocoderInput.style.height = '20px';
-geocoderInput.style.width = '200px';
-geocoderInput.style.marginBottom = '4px';
-geocoderInput.style.minWidth = '75px';
-geocoderInput.style.boxSizing = 'border-box';
-geocoderInput.style.flex = '1';
-
 
   // Appendi geocoder dentro routeBox
 routeBox.appendChild(geocoderContainer);
