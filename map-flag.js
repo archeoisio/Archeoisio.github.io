@@ -341,6 +341,7 @@ geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
 
 const geocoderInput = geocoderContainer.querySelector('input');
+geocoderInput.style.height = '20px';
 geocoderInput.style.width = '100%';
 geocoderInput.style.marginBottom = '4px';
 geocoderInput.style.borderRadius = '5px';
@@ -391,16 +392,43 @@ const clearBtn = document.createElement('button');
 clearBtn.id = 'clear-btn';
 clearBtn.innerText = 'Reset';
 clearBtn.style.flex = '1';
-clearBtn.style.minWidth = '0'; // importante per mobile
+clearBtn.style.minWidth = '0'; 
 clearBtn.style.display = 'flex';
 clearBtn.style.alignItems = 'center';
 clearBtn.style.justifyContent = 'center';
-clearBtn.style.borderRadius = '8px'; // angoli smussati
+clearBtn.style.borderRadius = '8px';
+
 buttonRow.appendChild(clearBtn);
+
+L.DomEvent.on(clearBtn, 'click', e => {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+
+    // Rimuove i marker del routing
+    if (control) {
+        map.removeControl(control);
+        control = null;
+    }
+
+    // Rimuove i marker del geocoder
+    if (searchMarkers && searchMarkers.length > 0) {
+        searchMarkers.forEach(m => map.removeLayer(m));
+        searchMarkers = [];
+    }
+
+    // Pulisce i campi input
+    startInput.value = '';
+    endInput.value = '';
+    
+    // Reimposta vista iniziale
+    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
+});
 
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
   
+ document.getElementById('clear-btn').addEventListener('click', resetRoute);
+ 
     // --- Colonna destra: pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
     btnCol.style.display = 'flex';
@@ -513,24 +541,24 @@ controlBox.addTo(map);
     }
   }
 
-  function resetRoute() {
-    if (control) { map.removeControl(control); control = null; }
-    searchMarkers.forEach(m => map.removeLayer(m));
-    searchMarkers = [];
+  // --- Funzione di reset ---
+function resetRoute() {
+    // Rimuove il controllo routing se presente
+    if (control) { 
+        map.removeControl(control); 
+        control = null; 
+    }
+
+    // Rimuove tutti i marker creati dal geocoder o dal routing
+    if (searchMarkers && searchMarkers.length > 0) {
+        searchMarkers.forEach(m => map.removeLayer(m));
+        searchMarkers = [];
+    }
+
+    // Pulisce i campi input
     document.getElementById('start').value = '';
     document.getElementById('end').value = '';
+    
+    // Ripristina la vista iniziale
     map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
-  }
-
-  // --- Event listener ---
-  document.getElementById('route-btn').addEventListener('click', async () => {
-    const start = document.getElementById('start').value.trim();
-    const end = document.getElementById('end').value.trim();
-    await calculateRoute(start, end);
-  });
-
-  document.getElementById('clear-btn').addEventListener('click', resetRoute);
-
-  // Vista iniziale
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
-});
+}
