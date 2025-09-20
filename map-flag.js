@@ -336,29 +336,23 @@ const geocoderControl = L.Control.geocoder({
     placeholder: "Cerca...",
    }).addTo(map);
   
-// Forza risultati e "x" a comparire a sinistra
-function forceGeocoderLeft() {
-    const resultsEl = document.querySelector('.leaflet-control-geocoder-results');
+geocoderControl.on('markgeocode', function(e) {
+   const resultsEl = document.querySelector('.leaflet-control-geocoder-results');
     if (resultsEl) {
+        // Forza i suggerimenti a comparire a sinistra dell'input
         resultsEl.style.left = '0px';
         resultsEl.style.right = 'auto';
         resultsEl.style.transform = 'none';
-        resultsEl.style.textAlign = 'left';
-    }
-    const clearBtn = document.querySelector('.leaflet-control-geocoder-clear');
-    if (clearBtn) {
-        clearBtn.style.right = 'auto';
-        clearBtn.style.left = '0px';
-    }
-}
-
-// Applica al primo rendering
-forceGeocoderLeft();
-
-// Applica anche quando cambiano i suggerimenti o comparirà la "x"
-const observer = new MutationObserver(forceGeocoderLeft);
-observer.observe(document.body, { childList: true, subtree: true });
+         }
+});
   
+const geocoderContainer = geocoderControl.getContainer();
+geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
+geocoderContainer.style.touchAction = 'auto'; // permette click/touch
+  geocoderContainer.style.display = 'flex';
+geocoderContainer.style.flexWrap = 'nowrap';
+geocoderContainer.style.borderRadius = '8px'; // angoli smussati
+geocoderContainer.style.alignItems = 'center';
 const geocoderInput = geocoderContainer.querySelector('input');
 geocoderInput.style.height = '15px';
 geocoderInput.style.width = '150px';
@@ -420,7 +414,7 @@ clearBtn.style.borderRadius = '8px'; // angoli smussati
   buttonRow.appendChild(clearBtn);
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
-  
+
   // --- Colonna destra: pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
     btnCol.style.display = 'flex';
@@ -539,7 +533,7 @@ controlBox.addTo(map);
     searchMarkers = [];
     document.getElementById('start').value = '';
     document.getElementById('end').value = '';
-    
+
     // Ripristina la vista iniziale
     map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
   }
