@@ -314,6 +314,21 @@ controlBox.onAdd = function(map) {
     container.style.alignItems = 'flex-start';
  
   // --- Colonna sinistra: box routing ---
+
+  
+  const routeBox = L.DomUtil.create('div', '', container);
+    routeBox.id = 'route-box';
+   routeBox.style.marginTop = '45px';  // distanza dal top della mappa 
+    routeBox.style.width = '150px';
+    routeBox.style.display = 'none';
+    routeBox.style.flexDirection = 'column';
+    routeBox.style.background = 'transparent';
+    routeBox.style.color = 'white';
+    routeBox.style.border = 'none';
+    routeBox.style.padding = '8px';
+    routeBox.style.borderRadius = '5px';
+    routeBox.style.boxSizing = 'border-box';
+  
   // --- Controllo geocoding ---
 const geocoderControl = L.Control.geocoder({
     defaultMarkGeocode: true,
@@ -330,19 +345,9 @@ geocoderInput.style.width = '15px';
 geocoderInput.style.maxWidth = '150px';
 geocoderInput.style.minWidth = '50px';
   
-  const routeBox = L.DomUtil.create('div', '', container);
-    routeBox.id = 'route-box';
-   routeBox.style.marginTop = '45px';  // distanza dal top della mappa 
-    routeBox.style.width = '150px';
-    routeBox.style.display = 'none';
-    routeBox.style.flexDirection = 'column';
-    routeBox.style.background = 'transparent';
-    routeBox.style.color = 'white';
-    routeBox.style.border = 'none';
-    routeBox.style.padding = '8px';
-    routeBox.style.borderRadius = '5px';
-    routeBox.style.boxSizing = 'border-box';
-
+  // Appendi geocoder dentro routeBox
+routeBox.appendChild(geocoderContainer);
+  
     // Inputs e pulsanti routing
     const startInput = document.createElement('input');
     startInput.id = 'start';
