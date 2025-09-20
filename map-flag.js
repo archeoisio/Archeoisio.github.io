@@ -373,7 +373,6 @@ clearBtn.style.flex = '1';
 clearBtn.style.minWidth = '0'; // importante per mobile
   clearBtn.style.display = 'flex';
 clearBtn.style.justifyContent = 'center';
-clearBtn.style.marginBottom = '15px';
 clearBtn.style.borderRadius = '8px'; // angoli smussati
   buttonRow.appendChild(clearBtn);
 // aggiungi i bottoni al routeBox
@@ -386,15 +385,9 @@ const geocoderControl = L.Control.geocoder({
     placeholder: "Cerca...",
    }).addTo(map);
   
-const geocoderContainer = geocoderControl.getContainer();
-geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
-geocoderContainer.style.touchAction = 'auto'; // permette click/touch
-geocoderContainer.style.borderRadius = '8px'; // angoli smussati
-  
-const geocoderInput = geocoderContainer.querySelector('input');
-
   // Appendi geocoder dentro routeBox
 routeBox.appendChild(geocoderContainer);
+  
   // --- Colonna destra: pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
     btnCol.style.display = 'flex';
