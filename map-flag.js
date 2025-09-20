@@ -347,7 +347,7 @@ geocoderContainer.style.alignItems = 'center';
 
 const geocoderInput = geocoderContainer.querySelector('input');
 geocoderInput.style.height = '15px';
-geocoderInput.style.width = '120px';
+geocoderInput.style.width = '150px';
 geocoderInput.style.marginBottom = '4px';
 geocoderInput.style.minWidth = '75px';
 geocoderInput.style.boxSizing = 'border-box';
@@ -387,6 +387,7 @@ calcBtn.innerText = 'Calcola';
 calcBtn.style.flex = '1';
 calcBtn.style.minWidth = '0'; // importante per mobile
 calcBtn.style.display = 'flex';
+calcBtn.style.borderRadius = '8px'; // angoli smussati
 calcBtn.style.alignItems = 'center';
 calcBtn.style.justifyContent = 'center';
 
