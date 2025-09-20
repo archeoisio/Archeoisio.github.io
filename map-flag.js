@@ -426,8 +426,6 @@ L.DomEvent.on(clearBtn, 'click', e => {
 
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
-  
- document.getElementById('clear-btn').addEventListener('click', resetRoute);
  
     // --- Colonna destra: pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
