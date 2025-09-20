@@ -382,30 +382,27 @@ routeBox.appendChild(buttonRow);
   // --- Controllo geocoding ---
 const geocoderControl = L.Control.geocoder({
     defaultMarkGeocode: true,
-    collapsed: false,          // sempre visibile, necessario per mobile
+    collapsed: true,          // sempre visibile, necessario per mobile
     placeholder: "Cerca...",
    }).addTo(map);
   
 geocoderControl.on('markgeocode', function(e) {
    const resultsEl = document.querySelector('.leaflet-control-geocoder-results');
     if (resultsEl) {
-        // Forza i suggerimenti a comparire a sinistra dell'input
-        resultsEl.style.left = '0px';
-        resultsEl.style.right = 'auto';
-        resultsEl.style.transform = 'none';
-         }
+        }
 });
   
 const geocoderContainer = geocoderControl.getContainer();
 geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
-  geocoderContainer.style.display = 'flex';
+geocoderContainer.style.display = 'flex';
 geocoderContainer.style.flexWrap = 'nowrap';
 geocoderContainer.style.borderRadius = '8px'; // angoli smussati
 geocoderContainer.style.alignItems = 'center';
+  
 const geocoderInput = geocoderContainer.querySelector('input');
-geocoderInput.style.height = '15px';
-geocoderInput.style.width = '150px';
+geocoderInput.style.height = '20px';
+geocoderInput.style.width = '200px';
 geocoderInput.style.marginBottom = '4px';
 geocoderInput.style.minWidth = '75px';
 geocoderInput.style.boxSizing = 'border-box';
