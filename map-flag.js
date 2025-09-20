@@ -319,8 +319,7 @@ const geocoderControl = L.Control.geocoder({
     defaultMarkGeocode: true,
     collapsed: false,          // sempre visibile, necessario per mobile
     placeholder: "Cerca...",
-    position: 'bottomright'    // posizione in basso a destra
-}).addTo(map);
+   }).addTo(map);
 
 const geocoderContainer = geocoderControl.getContainer();
 geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
