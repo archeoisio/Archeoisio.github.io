@@ -329,42 +329,6 @@ controlBox.onAdd = function(map) {
     routeBox.style.borderRadius = '5px';
     routeBox.style.boxSizing = 'border-box';
 
-  // --- Controllo geocoding ---
-const geocoderControl = L.Control.geocoder({
-    defaultMarkGeocode: true,
-    collapsed: false,          // sempre visibile, necessario per mobile
-    placeholder: "Cerca...",
-   }).addTo(map);
-  
-geocoderControl.on('markgeocode', function(e) {
-   const resultsEl = document.querySelector('.leaflet-control-geocoder-results');
-    if (resultsEl) {
-        // Forza i suggerimenti a comparire a sinistra dell'input
-        resultsEl.style.left = '0px';
-        resultsEl.style.right = 'auto';
-        resultsEl.style.transform = 'none';
-         }
-});
-  
-const geocoderContainer = geocoderControl.getContainer();
-geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
-geocoderContainer.style.touchAction = 'auto'; // permette click/touch
-  geocoderContainer.style.display = 'flex';
-geocoderContainer.style.flexWrap = 'nowrap';
-geocoderContainer.style.borderRadius = '8px'; // angoli smussati
-geocoderContainer.style.alignItems = 'center';
-const geocoderInput = geocoderContainer.querySelector('input');
-geocoderInput.style.height = '15px';
-geocoderInput.style.width = '150px';
-geocoderInput.style.marginBottom = '4px';
-geocoderInput.style.minWidth = '75px';
-geocoderInput.style.boxSizing = 'border-box';
-geocoderInput.style.flex = '1';
-
-
-  // Appendi geocoder dentro routeBox
-routeBox.appendChild(geocoderContainer);
-
     // Inputs e pulsanti routing
     const startInput = document.createElement('input');
     startInput.id = 'start';
@@ -414,7 +378,42 @@ clearBtn.style.borderRadius = '8px'; // angoli smussati
   buttonRow.appendChild(clearBtn);
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
+  
+  // --- Controllo geocoding ---
+const geocoderControl = L.Control.geocoder({
+    defaultMarkGeocode: true,
+    collapsed: false,          // sempre visibile, necessario per mobile
+    placeholder: "Cerca...",
+   }).addTo(map);
+  
+geocoderControl.on('markgeocode', function(e) {
+   const resultsEl = document.querySelector('.leaflet-control-geocoder-results');
+    if (resultsEl) {
+        // Forza i suggerimenti a comparire a sinistra dell'input
+        resultsEl.style.left = '0px';
+        resultsEl.style.right = 'auto';
+        resultsEl.style.transform = 'none';
+         }
+});
+  
+const geocoderContainer = geocoderControl.getContainer();
+geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
+geocoderContainer.style.touchAction = 'auto'; // permette click/touch
+  geocoderContainer.style.display = 'flex';
+geocoderContainer.style.flexWrap = 'nowrap';
+geocoderContainer.style.borderRadius = '8px'; // angoli smussati
+geocoderContainer.style.alignItems = 'center';
+const geocoderInput = geocoderContainer.querySelector('input');
+geocoderInput.style.height = '15px';
+geocoderInput.style.width = '150px';
+geocoderInput.style.marginBottom = '4px';
+geocoderInput.style.minWidth = '75px';
+geocoderInput.style.boxSizing = 'border-box';
+geocoderInput.style.flex = '1';
 
+
+  // Appendi geocoder dentro routeBox
+routeBox.appendChild(geocoderContainer);
   // --- Colonna destra: pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
     btnCol.style.display = 'flex';
