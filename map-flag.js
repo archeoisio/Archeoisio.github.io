@@ -345,11 +345,11 @@ geocoderContainer.style.alignItems = 'center';
 
 
 const geocoderInput = geocoderContainer.querySelector('input');
-geocoderInput.style.height = '20px';
-geocoderInput.style.width = '100%';
+geocoderInput.style.height = '15px';
+geocoderInput.style.width = '120px';
 geocoderInput.style.marginBottom = '4px';
 geocoderInput.style.borderRadius = '5px';
-geocoderInput.style.minWidth = '50px';
+geocoderInput.style.minWidth = '75px';
 geocoderInput.style.boxSizing = 'border-box';
 geocoderInput.style.flex = '1';
 
