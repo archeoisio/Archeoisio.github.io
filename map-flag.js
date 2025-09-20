@@ -372,7 +372,6 @@ clearBtn.innerText = 'Reset';
 clearBtn.style.flex = '1';
 clearBtn.style.minWidth = '0'; // importante per mobile
   clearBtn.style.display = 'flex';
-clearBtn.style.alignItems = 'flex-end';
 clearBtn.style.justifyContent = 'center';
 clearBtn.style.marginBottom = '15px';
 clearBtn.style.borderRadius = '8px'; // angoli smussati
@@ -387,13 +386,10 @@ const geocoderControl = L.Control.geocoder({
     placeholder: "Cerca...",
    }).addTo(map);
   
-});
-  
 const geocoderContainer = geocoderControl.getContainer();
 geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
 geocoderContainer.style.borderRadius = '8px'; // angoli smussati
-geocoderContainer.style.alignItems = 'right';
   
 const geocoderInput = geocoderContainer.querySelector('input');
 
