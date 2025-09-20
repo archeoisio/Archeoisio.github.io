@@ -114,13 +114,14 @@
   margin: 0 !important;
   line-height: 1 !important;
 }
-.leaflet-control-geocoder .leaflet-control-geocoder-results {
-    top: 0 !important;          /* distanza dall'input */
-    left: 50 !important;            /* distanza da sinistra */
-    max-height: 50px !important;  /* altezza massima */
-    overflow-y: auto !important;   /* scroll verticale se tanti suggerimenti */
-    width: 100px !important;       /* larghezza */
-    z-index: 3000 !important;      /* sopra altri elementi */
+.leaflet-control-geocoder-results {
+    position: absolute;      /* necessario */
+    top: 100%;               /* subito sotto l'input */
+    left: 0 !important;                 /* allinea a sinistra dell'input */
+    max-height: 50px;       /* puoi regolare altezza */
+    overflow-y: auto;        /* scroll se tanti risultati */
+    z-index: 3000;
+    min-width: 150px;        /* larghezza minima */
 }
 /* Leaflet locate container */
 .leaflet-control-locate {
