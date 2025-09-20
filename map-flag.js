@@ -380,7 +380,7 @@ routeBox.appendChild(buttonRow);
   
  // --- Geocoder semplice ---
 const geocoderControl = L.Control.geocoder({
-    collapsed: false,           // input sempre visibile
+    collapsed: true,           // input sempre visibile
     placeholder: "Cerca...",
     defaultMarkGeocode: true
 }).addTo(map);
