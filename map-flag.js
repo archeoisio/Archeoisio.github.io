@@ -341,9 +341,12 @@ geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
 
 const geocoderInput = geocoderContainer.querySelector('input');
-geocoderInput.style.width = '150px';
+geocoderInput.style.width = '100%';
+geocoderInput.style.marginBottom = '4px';
 geocoderInput.style.borderRadius = '5px';
 geocoderInput.style.minWidth = '50px';
+geocoderInput.style.boxSizing = 'border-box';
+
   
   // Appendi geocoder dentro routeBox
 routeBox.appendChild(geocoderContainer);
