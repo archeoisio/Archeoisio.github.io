@@ -339,6 +339,9 @@ const geocoderControl = L.Control.geocoder({
 const geocoderContainer = geocoderControl.getContainer();
 geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
+  geocoderContainer.style.display = 'flex';
+geocoderContainer.style.flexWrap = 'nowrap';
+geocoderContainer.style.alignItems = 'center';
 
 
 const geocoderInput = geocoderContainer.querySelector('input');
@@ -348,6 +351,7 @@ geocoderInput.style.marginBottom = '4px';
 geocoderInput.style.borderRadius = '5px';
 geocoderInput.style.minWidth = '50px';
 geocoderInput.style.boxSizing = 'border-box';
+geocoderInput.style.flex = '1';
 
 
   // Appendi geocoder dentro routeBox
