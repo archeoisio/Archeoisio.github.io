@@ -33,23 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     attributionControl: false
   });
 
-// --- Controllo geocoding ---
-const geocoderControl = L.Control.geocoder({
-    defaultMarkGeocode: true,
-    collapsed: false,          // sempre visibile, necessario per mobile
-    placeholder: "Cerca...",
-    position: 'bottomright'    // posizione in basso a destra
-}).addTo(map);
-
-const geocoderContainer = geocoderControl.getContainer();
-geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
-geocoderContainer.style.touchAction = 'auto'; // permette click/touch
-
-const geocoderInput = geocoderContainer.querySelector('input');
-geocoderInput.style.width = '200px';
-geocoderInput.style.maxWidth = '200px';
-geocoderInput.style.minWidth = '150px';
-
   // --- Funzione per altezza viewport ---
   function setVh() {
     const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
@@ -331,7 +314,24 @@ controlBox.onAdd = function(map) {
     container.style.alignItems = 'flex-start';
  
   // --- Colonna sinistra: box routing ---
-    const routeBox = L.DomUtil.create('div', '', container);
+  // --- Controllo geocoding ---
+const geocoderControl = L.Control.geocoder({
+    defaultMarkGeocode: true,
+    collapsed: false,          // sempre visibile, necessario per mobile
+    placeholder: "Cerca...",
+    position: 'bottomright'    // posizione in basso a destra
+}).addTo(map);
+
+const geocoderContainer = geocoderControl.getContainer();
+geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
+geocoderContainer.style.touchAction = 'auto'; // permette click/touch
+
+const geocoderInput = geocoderContainer.querySelector('input');
+geocoderInput.style.width = '15px';
+geocoderInput.style.maxWidth = '150px';
+geocoderInput.style.minWidth = '50px';
+  
+  const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
    routeBox.style.marginTop = '45px';  // distanza dal top della mappa 
     routeBox.style.width = '150px';
