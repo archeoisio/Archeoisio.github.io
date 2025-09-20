@@ -400,29 +400,30 @@ clearBtn.style.borderRadius = '8px';
 
 buttonRow.appendChild(clearBtn);
 
-L.DomEvent.on(clearBtn, 'click', e => {
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
+  // Azione Reset
+clearBtn.addEventListener('click', () => {
+  // Rimuovi marker della ricerca
+  searchMarkers.forEach(m => map.removeLayer(m));
+  searchMarkers = [];
 
-    // Rimuove i marker del routing
-    if (control) {
-        map.removeControl(control);
-        control = null;
-    }
+  // Rimuovi ultimo marker selezionato
+  if (lastMarker) {
+    map.removeLayer(lastMarker);
+    lastMarker = null;
+  }
 
-    // Rimuove i marker del geocoder
-    if (searchMarkers && searchMarkers.length > 0) {
-        searchMarkers.forEach(m => map.removeLayer(m));
-        searchMarkers = [];
-    }
+  // Rimuovi eventuale route
+  if (control) {
+    map.removeControl(control);
+    control = null;
+  }
 
-    // Pulisce i campi input
-    startInput.value = '';
-    endInput.value = '';
-    
-    // Reimposta vista iniziale
-    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
-});
+  // Svuota input routing
+  startInput.value = '';
+  endInput.value = '';
+
+  });
+
 
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
