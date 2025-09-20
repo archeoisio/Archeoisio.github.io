@@ -335,13 +335,21 @@ const geocoderControl = L.Control.geocoder({
     collapsed: false,          // sempre visibile, necessario per mobile
     placeholder: "Cerca...",
    }).addTo(map);
-
+  
+geocoderControl.on('markgeocode', function(e) {
+    const resultsEl = document.querySelector('.leaflet-control-geocoder-results');
+    if (resultsEl) {
+        resultsEl.style.left = '0px';
+        resultsEl.style.transform = 'none';
+    }
+});
+  
 const geocoderContainer = geocoderControl.getContainer();
 geocoderContainer.style.zIndex = 2000;       // sopra altri controlli
 geocoderContainer.style.touchAction = 'auto'; // permette click/touch
   geocoderContainer.style.display = 'flex';
 geocoderContainer.style.flexWrap = 'nowrap';
-geocoderContainer.borderRadius = '8px'; // angoli smussati
+geocoderContainer.style.borderRadius = '8px'; // angoli smussati
 geocoderContainer.style.alignItems = 'center';
 
 
