@@ -133,18 +133,19 @@
 }
 
   /* Routing Machine custom */
- .leaflet-routing-container {
+.leaflet-routing-container {
   width: 210px;
   max-height: 150px;
-  overflow-y: hidden;        /* scroll verticale */
-  overflow-x: hidden;      /* niente overflow orizzontale */
+  overflow-y: auto;       /* ✅ permette lo scroll e mostra la X */
+  overflow-x: visible;    /* ✅ consente alla X di essere visibile */
   font-size: 14px;
   background: white;
   padding: 8px;
   box-sizing: border-box;
-  word-wrap: break-word;   /* spezza parole troppo lunghe */
-  border-radius: 4px;      /* bordi leggermente arrotondati */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* ombra leggera */
+  word-wrap: break-word;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  position: relative;     /* ✅ assicura che la X si posizioni correttamente */
 }
 
 .leaflet-routing-toggle {
