@@ -136,8 +136,7 @@
 .leaflet-routing-container {
   width: 210px;
   max-height: 150px;
-  overflow-y: hidden;   /* solo verticale */
-  overflow-x: hidden; /* niente barra orizzontale */
+  overflow: visible;   /* solo verticale */
   font-size: 14px;
   background: white;
   padding: 8px;
@@ -148,16 +147,6 @@
   position: relative; /* per posizionare eventuale X */
 }
 
-.leaflet-routing-toggle {
-      position: absolute;
-  top: 60px;           /* distanza dall'alto */
-  right: 10px;         /* distanza da destra */
-  z-index: 10000 !important; /* sopra tutto */
-  background: white;
-  border-radius: 6px;
-  padding: 5px;
-  cursor: pointer;
-  
 /* Mobile */
 @media (max-width: 767px) {
   .leaflet-routing-container {
