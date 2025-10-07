@@ -156,6 +156,28 @@
     font-size: 13px;        /* testo leggermente più piccolo */
     padding: 6px;
   }
+
+  /* Forza il toggle del routing ad essere sempre visibile e cliccabile */
+.leaflet-routing-container .leaflet-routing-collapse-btn,
+.leaflet-routing-container .leaflet-routing-toggle {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 5000 !important; /* sopra il contenitore */
+  background: white !important;
+  border-radius: 6px !important;
+  padding: 5px !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Assicura che il contenitore non blocchi il click */
+.leaflet-routing-container {
+  position: relative !important;
+  z-index: 1000 !important; /* sotto il toggle */
+  overflow: visible !important; /* lascia visibile il toggle */
+}
 }
 
 </style>
