@@ -148,12 +148,15 @@
 }
 
 .leaflet-routing-toggle {
-    position: absolute;   /* importante */
-    top: 500px;            /* distanza dall’alto del container */
-    right: 10px;          /* distanza da destra */
-    left: auto;           /* resettare se necessario */
-    z-index: 10000;       /* sopra altri elementi */
-}
+      position: absolute;
+  top: 80px;           /* distanza dall'alto */
+  right: 10px;         /* distanza da destra */
+  z-index: 10000 !important; /* sopra tutto */
+  background: white;
+  border-radius: 6px;
+  padding: 5px;
+  cursor: pointer;
+  
 /* Mobile */
 @media (max-width: 767px) {
   .leaflet-routing-container {
