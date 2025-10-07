@@ -459,8 +459,6 @@ controlBox.addTo(map);
         addWaypoints: true,
         draggableWaypoints: true,
         showAlternatives: false,
-         show: true,
-        collapsed: false,
         lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }]
         },
         
