@@ -455,6 +455,7 @@ controlBox.addTo(map);
       // Nuovo controllo routing
       control = L.Routing.control({
         waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
+        show: false,
         routeWhileDragging: true,
         addWaypoints: true,
         draggableWaypoints: true,
