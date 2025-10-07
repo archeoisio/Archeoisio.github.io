@@ -460,7 +460,10 @@ controlBox.addTo(map);
         draggableWaypoints: true,
         showAlternatives: false,
          show: true,
-        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
+        collapsed: true,
+        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }]
+        },
+        
         createMarker: function(i, wp, nWps) {
   const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
   let label;
