@@ -488,12 +488,6 @@ controlBox.addTo(map);
 }
       }).addTo(map);
 
-// --- Forza il comportamento "collapsible" anche su desktop ---
-const routingContainer = document.querySelector('.leaflet-routing-container');
-if (routingContainer) {
-  routingContainer.classList.add('leaflet-routing-collapsible');
-  routingContainer.classList.remove('leaflet-routing-container-hide');
-}
       // Zoom automatico sul percorso
      control.on('routesfound', e => {
   const route = e.routes[0];
