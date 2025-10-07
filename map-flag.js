@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+adocument.addEventListener('DOMContentLoaded', () => {
   // --- Configurazioni viewport ---
   const MOBILE_MAX_WIDTH = 767;
   const mobileView  = { center: [50, 22], zoom: 4 };
@@ -459,7 +459,7 @@ controlBox.addTo(map);
         addWaypoints: true,
         draggableWaypoints: true,
         showAlternatives: false,
-         show: false,
+         show: true,
         lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
         createMarker: function(i, wp, nWps) {
   const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
@@ -486,6 +486,12 @@ controlBox.addTo(map);
 }
       }).addTo(map);
 
+// --- Forza il comportamento "collapsible" anche su desktop ---
+const routingContainer = document.querySelector('.leaflet-routing-container');
+if (routingContainer) {
+  routingContainer.classList.add('leaflet-routing-collapsible');
+  routingContainer.classList.remove('leaflet-routing-container-hide');
+}
       // Zoom automatico sul percorso
      control.on('routesfound', e => {
   const route = e.routes[0];
