@@ -119,7 +119,7 @@
     left: 0 !important;                 /* allinea a sinistra dell'input */
     max-height: 50px;       /* puoi regolare altezza */
     overflow-y: auto;        /* scroll se tanti risultati */
-    z-index: 1000;
+    z-index: 5;
     min-width: 150px;        /* larghezza minima */
 }
 /* Leaflet locate container */
@@ -145,7 +145,7 @@
   position: relative; /* per posizionare eventuale X */
   background: white;  /* bianco normale, niente rosso */
   border: none;
-  z-index: 1000;      /* sotto il toggle */
+  z-index: 5;      /* sotto il toggle */
 }
 
 /* Mobile */
@@ -157,13 +157,6 @@
     padding: 6px;
   }
   
-/* Assicura che il toggle resti cliccabile e sopra il pannello */
-.leaflet-routing-container {
-  overflow: visible !important;
-  z-index: 1000 !important;  /* sotto al toggle */
-  position: relative !important;
-}
-
 .leaflet-routing-collapse-btn,
 .leaflet-routing-toggle {
   position: absolute !important;
