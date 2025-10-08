@@ -155,27 +155,26 @@
     font-size: 13px;        /* testo leggermente più piccolo */
     padding: 6px;
   }
+  
+/* Assicura che il toggle resti cliccabile e sopra il pannello */
+.leaflet-routing-container {
+  overflow: visible !important;
+  z-index: 1000 !important;  /* sotto al toggle */
+  position: relative !important;
+}
 
-  /* Forza il toggle del routing ad essere sempre visibile e cliccabile */
-.leaflet-routing-container .leaflet-routing-collapse-btn,
-.leaflet-routing-container .leaflet-routing-toggle {
+.leaflet-routing-collapse-btn,
+.leaflet-routing-toggle {
   position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
-  z-index: 99999 !important; /* MASSIMO z-index per metterlo sopra tutto */
+  top: 12px !important;
+  right: 12px !important;
+  z-index: 10005 !important; /* sopra tutto */
   background: white !important;
   border-radius: 6px !important;
   padding: 5px !important;
   cursor: pointer !important;
-  opacity: 1 !important;
   pointer-events: auto !important;
-}
-
-/* Assicura che il contenitore non blocchi il click */
-.leaflet-routing-container {
-  position: relative !important;
-  z-index: 1000 !important; /* sotto il toggle */
-  overflow: visible !important; /* lascia visibile il toggle */
+  opacity: 1 !important;
 }
 }
 
