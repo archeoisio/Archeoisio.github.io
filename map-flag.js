@@ -459,7 +459,7 @@ controlBox.addTo(map);
         addWaypoints: true,
         draggableWaypoints: true,
         showAlternatives: false,
-        show: true,
+        show: false,
         lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
         createMarker: function(i, wp, nWps) {
   const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
