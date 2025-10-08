@@ -318,7 +318,7 @@ controlBox.onAdd = function(map) {
 
   const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
-   routeBox.style.marginTop = '5px';  // distanza dal top della mappa 
+   routeBox.style.marginTop = '20px';  // distanza dal top della mappa 
     routeBox.style.width = '150px';
     routeBox.style.display = 'none';
     routeBox.style.flexDirection = 'column';
@@ -377,7 +377,7 @@ clearBtn.style.borderRadius = '8px'; // angoli smussati
   buttonRow.appendChild(clearBtn);
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
-  
+
  // --- Geocoder semplice ---
 const geocoderControl = L.Control.geocoder({
     collapsed: true,           // input sempre visibile
@@ -390,7 +390,7 @@ const geocoderContainer = geocoderControl.getContainer();
 
 // Appendi il geocoder dentro routeBox
 routeBox.appendChild(geocoderContainer);
-  
+
   // --- Colonna destra: pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
     btnCol.style.display = 'flex';
@@ -455,14 +455,12 @@ controlBox.addTo(map);
       // Nuovo controllo routing
       control = L.Routing.control({
         waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
-        show: false,
         routeWhileDragging: true,
         addWaypoints: true,
         draggableWaypoints: true,
         showAlternatives: false,
-        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }]
-        },
-        
+        show: true,
+        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
         createMarker: function(i, wp, nWps) {
   const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
   let label;
@@ -487,27 +485,13 @@ controlBox.addTo(map);
   return marker;
 }
       }).addTo(map);
-      
-// Sposta il toggle fuori dal container per renderlo indipendente
-control.on('routesfound', () => {
-  const toggle = document.querySelector('.leaflet-routing-collapse-btn, .leaflet-routing-toggle');
-  if (toggle && !document.getElementById('map').contains(toggle)) {
-    document.getElementById('map').appendChild(toggle);
-  }
 
-  // Imposta lo stile (posizione, visibilità)
-  Object.assign(toggle.style, {
-    position: 'absolute',
-    top: '60px',
-    right: '10px',
-    zIndex: '10010',
-    background: 'white',
-    borderRadius: '6px',
-    padding: '5px',
-    cursor: 'pointer',
-    pointerEvents: 'auto',
-  });
-});
+// --- Forza il comportamento "collapsible" anche su desktop ---
+const routingContainer = document.querySelector('.leaflet-routing-container');
+if (routingContainer) {
+  routingContainer.classList.add('leaflet-routing-collapsible');
+  routingContainer.classList.remove('leaflet-routing-container-hide');
+}
       // Zoom automatico sul percorso
      control.on('routesfound', e => {
   const route = e.routes[0];
