@@ -135,7 +135,7 @@
 .leaflet-routing-container {
   width: 210px;
   max-height: 150px;
-  overflow: visible;   /* solo verticale */
+  overflow: visible;   /* lascia visibile il toggle */
   font-size: 14px;
   padding: 8px;
   box-sizing: border-box;
@@ -143,8 +143,9 @@
   border-radius: 4px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   position: relative; /* per posizionare eventuale X */
-  background: rgba(255, 0, 0, 0.3) !important; /* rosso trasparente per vedere il box */
-  border: 1px solid red !important;
+  background: white;  /* bianco normale, niente rosso */
+  border: none;
+  z-index: 1000;      /* sotto il toggle */
 }
 
 /* Mobile */
@@ -166,12 +167,12 @@
 .leaflet-routing-collapse-btn,
 .leaflet-routing-toggle {
   position: absolute !important;
-  top: 12px !important;
-  right: 12px !important;
-  z-index: 10005 !important; /* sopra tutto */
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 9999 !important; /* sopra tutto */
   background: white !important;
   border-radius: 6px !important;
-  padding: 5px !important;
+  padding: 5px 8px !important;
   cursor: pointer !important;
   pointer-events: auto !important;
   opacity: 1 !important;
