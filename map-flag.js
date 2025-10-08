@@ -487,7 +487,27 @@ controlBox.addTo(map);
   return marker;
 }
       }).addTo(map);
+      
+// Sposta il toggle fuori dal container per renderlo indipendente
+control.on('routesfound', () => {
+  const toggle = document.querySelector('.leaflet-routing-collapse-btn, .leaflet-routing-toggle');
+  if (toggle && !document.getElementById('map').contains(toggle)) {
+    document.getElementById('map').appendChild(toggle);
+  }
 
+  // Imposta lo stile (posizione, visibilità)
+  Object.assign(toggle.style, {
+    position: 'absolute',
+    top: '60px',
+    right: '10px',
+    zIndex: '10010',
+    background: 'white',
+    borderRadius: '6px',
+    padding: '5px',
+    cursor: 'pointer',
+    pointerEvents: 'auto',
+  });
+});
       // Zoom automatico sul percorso
      control.on('routesfound', e => {
   const route = e.routes[0];
