@@ -740,8 +740,8 @@ map.on('click', () => {
 const heartsLayer = L.layerGroup();
 
 const specialPlaces = [
-  { name: "Uppsala", coords: [59.8586, 17.6389], info: "Città universitaria in Svezia" },
-  { name: "Atene", coords: [37.9838, 23.7275], info: "Cuore della Grecia antica" }
+  { name: "Uppsala", coords: [59.8586, 17.6389], info: "2021/2022" },
+  { name: "Atene", coords: [37.9838, 23.7275], info: "2017/2018" }
 ];
 
 // Icona personalizzata con il cuore
@@ -753,7 +753,10 @@ const heartIcon = L.divIcon({
 });
 
 specialPlaces.forEach(place => {
-  const marker = L.marker(place.coords, { icon: heartIcon });
+  const marker = L.marker(place.coords, { 
+    icon: heartIcon,
+    zIndexOffset: 2000 // <--- Valore molto alto per stare sopra tutto
+  });
   
   marker.bindPopup(`
     <div style="text-align:center;">
@@ -763,7 +766,7 @@ specialPlaces.forEach(place => {
   `);
   
   heartsLayer.addLayer(marker);
-}); 
+});
 
   // --- Layer switcher ---
 
