@@ -335,7 +335,7 @@ specialPlaces.forEach(place => {
     const customIcon = L.divIcon({
         className: 'custom-heart-icon',
         html: `<div class="heart-emoji" style="font-size: 24px;">${categoryIcon}</div>`,
-        iconSize: [30, 30],
+        iconSize: [25, 25],
         iconAnchor: [15, 15]
     });
 
@@ -492,11 +492,11 @@ heartsListBox.style.overflowY = 'auto';
 
             const flyBtn = document.createElement('button');
             flyBtn.innerText = 'Vola';
-            flyBtn.style.fontSize = '10px';
+            flyBtn.style.fontSize = '12px';
             flyBtn.style.cursor = 'pointer';
             flyBtn.onclick = (e) => {
                 e.stopPropagation(); // Evita di chiudere il menu cliccando il bottone
-                map.flyTo(p.coords, 14, {animate: true, duration: 5});
+                map.flyTo(p.coords, 18, {animate: true, duration: 5});
             };
             
             row.appendChild(flyBtn);
