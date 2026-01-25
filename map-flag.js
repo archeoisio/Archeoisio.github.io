@@ -295,35 +295,47 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   labels.addTo(map);
 
-  // --- LAYER 2: CONFINI NAZIONI (NUOVO CODICE CORRETTO) ---
+  // --- LAYER 2: CONFINI NAZIONI ---
   const bordersLayer = L.layerGroup();
   const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
 
   fetch(bordersUrl)
-    .then(r => { 
-        if(!r.ok) throw new Error(r.status); 
-        return r.json(); 
-    })
+    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(data => {
-      const geoJsonLayer = L.geoJSON(data, {
-        interactive: false, // Il mouse passa attraverso i confini
+      
+      // --- FIX DATI ---
+      data.features.forEach(feature => {
+        // Applichiamo la modifica SOLO alle nazioni "problematiche"
+        // RUS (Russia), FJI (Fiji), TON (Tonga), WSM (Samoa), NZL (Nuova Zelanda)
+        const fixList = ['RUS', 'FJI', 'TON', 'WSM', 'NZL'];
         
-        // MODIFICA 2: Trucco per spostare la Russia orientale a destra
-        coordsToLatLng: function (coords) {
-            let lng = coords[0];
-            let lat = coords[1];
-            // Se siamo nell'estremo ovest (coord negativa) ma a Nord (Russia)
-            // Se è Russia estremo est (Nord) OPPURE Isole del Pacifico (Sud e Ovest)
-if ( (coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -170 && coord[1] < 0) ) {
-    coord[0] += 360; 
-}
-            }
-            return L.latLng(lat, lng);
-        },
+        if (fixList.includes(feature.properties.ADM0_A3)) {
+            
+            const fixRing = (ring) => {
+                ring.forEach(coord => {
+                    // TUA SOLUZIONE ESTESA:
+                    // Se è Russia oltre lo stretto di Bering (> 60 Nord)
+                    // OPPURE se sono isole del pacifico (< 0 Sud e molto a Ovest)
+                    if ( (coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -165 && coord[1] < 0) ) {
+                        coord[0] += 360;
+                    }
+                });
+            };
 
+            if (feature.geometry.type === 'MultiPolygon') {
+                feature.geometry.coordinates.forEach(polygon => polygon.forEach(ring => fixRing(ring)));
+            } else if (feature.geometry.type === 'Polygon') {
+                feature.geometry.coordinates.forEach(ring => fixRing(ring));
+            }
+        }
+      });
+      // ----------------
+
+      const geoJsonLayer = L.geoJSON(data, {
+        interactive: false,
         style: {
           color: '#4a90e2', 
-          weight: 1, 
+          weight: 1,       // Se metti 0 la riga verticale sparisce, ma perdi i confini
           fillColor: '#4a90e2', 
           fillOpacity: 0.1
         }
@@ -332,8 +344,7 @@ if ( (coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -170 && coord[1] < 0) )
     })
     .catch(err => console.error("Errore caricamento confini:", err));
   
-  // Aggiunge i confini alla mappa all'avvio
-  bordersLayer.addTo(map)
+  bordersLayer.addTo(map);
   
   // --- Layer switcher ---
 L.control.layers(
