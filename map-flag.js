@@ -232,61 +232,64 @@ document.addEventListener('DOMContentLoaded', () => {
 ];
 
     // --- 4. CARICAMENTO CONFINI (GEOJSON) + POP-UP ---
-    const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
-    
-    fetch(bordersUrl)
-        .then(r => r.json())
-        .then(data => {
-            const geoJsonLayer = L.geoJSON(data, {
-                style: { color: '#4a90e2', weight: 1, fillOpacity: 0 },
-                onEachFeature: (feature, layer) => {
-                   layer.on('click', (e) => {
-    L.DomEvent.stopPropagation(e);
-    
-    // Reset stile precedente
-    if (selectedLayer) geoJsonLayer.resetStyle(selectedLayer);
-    layer.setStyle({ fillOpacity: 0, color: '#ff0000', weight: 2 });
-    selectedLayer = layer;
+  const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
 
-    const nationName = feature.properties.NAME;
-    
-    // PAIRING con il tuo elenco capitalsData
-    const myData = capitalsData.find(c => c.nation === nationName);
-    
-    const panel = document.getElementById('info-panel');
-    const content = document.getElementById('info-content');
-    
-    if (panel && content) {
-        // --- RECUPERO DATI DAL TUO ELENCO ---
-        // Se myData esiste, prendiamo tutto da lì:
-        const flag = myData ? myData.flag : "🏳️";
-        
-        // RECUPERO NOME CAPITALE: usiamo il campo "name" del tuo oggetto
-        const capitalName = myData ? myData.name : "Non in elenco";
+fetch(bordersUrl)
+    .then(r => r.json())
+    .then(data => {
+        const geoJsonLayer = L.geoJSON(data, {
+            style: { 
+                color: '#4a90e2', 
+                weight: 1, 
+                fillOpacity: 0 
+            },
+            onEachFeature: (feature, layer) => {
+                layer.on('click', (e) => {
+                    L.DomEvent.stopPropagation(e);
 
-        content.innerHTML = `
-            <div style="font-size:16px; font-weight:bold; color:white;">${nationName} ${flag}</div>
-            <div style="font-size:14px; margin-top:5px; color:white;">Capitale: <b style="color:#ffeb3b;">${capitalName}</b></div>
-            <button id="fly-to-cap" style="width:100%; margin-top:10px; cursor:pointer; background:white; color:black; border:none; padding:8px; border-radius:4px; font-weight:bold;">
-                ✈️ Vola sulla Capitale
-            </button>
-        `;
-        panel.style.display = 'block';
+                    if (selectedLayer) {
+                        geoJsonLayer.resetStyle(selectedLayer);
+                    }
 
-        // GESTIONE VOLO (Usa sempre le tue coordinate dal campo myData.coords)
-        document.getElementById('fly-to-cap').onclick = () => {
-            if (myData && myData.coords) {
-                map.flyTo(myData.coords, 10, { animate: true, duration: 3 });
-            } else {
-                // Fallback se la nazione non è nel tuo elenco
-                map.flyTo(e.latlng, 8, { animate: true, duration: 3 });
+                    layer.setStyle({ 
+                        color: '#ff0000', 
+                        weight: 3, 
+                        fillOpacity: 0 
+                    });
+
+                    layer.bringToFront();
+                    selectedLayer = layer;
+
+                    const nationName = feature.properties.NAME;
+                    const myData = capitalsData.find(c => c.nation === nationName);
+                    const panel = document.getElementById('info-panel');
+                    const content = document.getElementById('info-content');
+
+                    if (panel && content) {
+                        const flag = myData ? myData.flag : "🏳️";
+                        const capitalName = myData ? myData.name : "Non in elenco";
+
+                        content.innerHTML = `
+                            <div style="font-size:16px; font-weight:bold; color:white;">${nationName} ${flag}</div>
+                            <div style="font-size:14px; margin-top:5px; color:white;">Capitale: <b style="color:#ffeb3b;">${capitalName}</b></div>
+                            <button id="fly-to-cap" style="width:100%; margin-top:10px; cursor:pointer; background:white; color:black; border:none; padding:8px; border-radius:4px; font-weight:bold;">
+                                ✈️ Vola sulla Capitale
+                            </button>
+                        `;
+                        panel.style.display = 'block';
+
+                        document.getElementById('fly-to-cap').onclick = () => {
+                            if (myData && myData.coords) {
+                                map.flyTo(myData.coords, 10, { animate: true, duration: 3 });
+                            } else {
+                                map.flyTo(e.latlng, 8, { animate: true, duration: 3 });
+                            }
+                        };
+                    }
+                });
             }
-        };
-    }
-});
-                }
-            }).addTo(bordersLayer);
-        });
+        }).addTo(bordersLayer);
+    });
 
   // --- 5. CUORI ❤️ (Marker dinamici per tipologia) ---
 
