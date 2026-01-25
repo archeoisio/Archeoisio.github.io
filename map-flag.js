@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Kyiv", nation: "Ukraine", coords: [50.4501, 30.5234], flag: "🇺🇦" }
 ];
  const specialPlaces = [
-    { name: "Uppsala", type: "case", nation: "Svezia", coords: [59.8586, 17.6389], info: "Città universitaria.", flag: "🇸🇪" },
+    { name: "Uppsala", type: "case", nation: "Svezia", coords: [59.862514043172986, 17.65992409050815], info: "Frodegatan 33E Settembre 2022/Gennaio 2023", flag: "🇸🇪" },
     { name: "Atene", type: "case", nation: "Grecia", coords: [37.9838, 23.7275], info: "Culla della civiltà.", flag: "🇬🇷" },
     { name: "Portofino", type: "mare", nation: "Italia", coords: [44.3039, 9.2091], info: "Borgo ligure.", flag: "🇮🇹" },
     { name: "Baita Mia", type: "città", nation: "Italia", coords: [46.5, 11.5], info: "Casa in montagna.", flag: "🏠" }
