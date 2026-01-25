@@ -280,6 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     labels.addLayer(marker);
   });
   labels.addTo(map);
+  
 // --- LAYER 2: CONFINI NAZIONI (Corretto e Interattivo) ---
 const bordersLayer = L.layerGroup();
 const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
@@ -432,6 +433,7 @@ controlBox.onAdd = function(map) {
     container.style.padding = '5px';
     container.style.border = 'none';
     container.style.alignItems = 'flex-start';
+  
   // --- Colonna sinistra: box routing ---
   const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
@@ -445,6 +447,7 @@ controlBox.onAdd = function(map) {
     routeBox.style.padding = '8px';
     routeBox.style.borderRadius = '5px';
     routeBox.style.boxSizing = 'border-box';
+  
     // Inputs e pulsanti routing
     const startInput = document.createElement('input');
     startInput.id = 'start';
@@ -463,6 +466,7 @@ endInput.style.boxSizing = 'border-box';
   const buttonRow = document.createElement('div');
 buttonRow.style.display = 'flex';
 buttonRow.style.gap = '4px'; // spazio tra i bottoni
+  
 // Pulsante Calcola
 const calcBtn = document.createElement('button');
 calcBtn.id = 'route-btn';
@@ -474,6 +478,7 @@ calcBtn.style.borderRadius = '8px'; // angoli smussati
 calcBtn.style.alignItems = 'center';
 calcBtn.style.justifyContent = 'center';
 buttonRow.appendChild(calcBtn);
+  
 // Pulsante Reset
 const clearBtn = document.createElement('button');
 clearBtn.id = 'clear-btn';
@@ -486,14 +491,35 @@ clearBtn.style.borderRadius = '8px'; // angoli smussati
   buttonRow.appendChild(clearBtn);
 // aggiungi i bottoni al routeBox
 routeBox.appendChild(buttonRow);
+
+  const heartsListBox = L.DomUtil.create('div', '', leftCol);
+    heartsListBox.id = 'hearts-list-box';
+    
+    specialPlaces.forEach(place => {
+        const item = L.DomUtil.create('div', 'heart-item', heartsListBox);
+        item.innerHTML = `<span>${place.flag} ${place.name}</span>`;
+        
+        const flyBtn = L.DomUtil.create('button', 'fly-to-heart', item);
+        flyBtn.innerText = 'Vola';
+        
+        L.DomEvent.on(flyBtn, 'click', (e) => {
+            L.DomEvent.stopPropagation(e);
+            map.flyTo(place.coords, 12, { animate: true, duration: 2 });
+            // Apriamo il popup automaticamente dopo il volo
+            setTimeout(() => place.marker.openPopup(), 2000);
+        });
+    });
+  
  // --- Geocoder semplice ---
 const geocoderControl = L.Control.geocoder({
     collapsed: true,           // input sempre visibile
     placeholder: "Cerca...",
     defaultMarkGeocode: true
 }).addTo(map);
+  
 // Prendi il container del geocoder
 const geocoderContainer = geocoderControl.getContainer();
+  
 // Appendi il geocoder dentro routeBox
 routeBox.appendChild(geocoderContainer);
   // --- Colonna destra: pulsanti verticali ---
@@ -501,6 +527,7 @@ routeBox.appendChild(geocoderContainer);
     btnCol.style.display = 'flex';
     btnCol.style.flexDirection = 'column';
     btnCol.style.gap = '5px';
+  
     // Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
     homeBtn.href = '#';
@@ -511,6 +538,7 @@ routeBox.appendChild(geocoderContainer);
         L.DomEvent.preventDefault(e);
         map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
     });
+  
     // Locate
     const locateControl = L.control.locate({
         flyTo: { duration: 2 },
@@ -518,6 +546,7 @@ routeBox.appendChild(geocoderContainer);
         locateOptions: { enableHighAccuracy: true }
     });
     btnCol.appendChild(locateControl.onAdd(map));
+  
     // Routing button (toggle visibilità box route)
     const routeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
     routeBtn.href = '#';
@@ -527,6 +556,21 @@ routeBox.appendChild(geocoderContainer);
         L.DomEvent.stopPropagation(e);
         L.DomEvent.preventDefault(e);
         routeBox.style.display = (routeBox.style.display === 'none') ? 'flex' : 'none';
+    });
+
+  const heartBtn = L.DomUtil.create('a', 'custom-heart-button', btnCol);
+    heartBtn.href = '#';
+    heartBtn.innerHTML = '❤️';
+    heartBtn.title = "Lista luoghi del cuore";
+    
+    L.DomEvent.on(heartBtn, 'click', e => {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+        // Toggle visibilità: se apro cuori, chiudo routing e viceversa
+        const rBox = document.getElementById('route-box');
+        if(rBox) rBox.style.display = 'none';
+        
+        heartsListBox.style.display = (heartsListBox.style.display === 'none') ? 'flex' : 'none';
     });
     return container;
 };
