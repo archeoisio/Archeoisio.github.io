@@ -563,7 +563,7 @@ controlBox.addTo(map);
             if (control) map.removeControl(control);
             control = L.Routing.control({
                 waypoints: [L.latLng(s[0], s[1]), L.latLng(e[0], e[1])],
-                show: false
+                show: true
             }).addTo(map);
         } catch(err) { alert("Località non trovata"); }
     }
