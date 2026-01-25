@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-
+    const capitalsLayer = L.layerGroup().addTo(map);
+    
     // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
     const labels = L.layerGroup();
     const heartsLayer = L.layerGroup().addTo(map);
@@ -230,7 +231,30 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Portofino", type: "mare", nation: "Italia", coords: [44.3039, 9.2091], info: "Borgo ligure.", flag: "🇮🇹" },
     { name: "Baita Mia", type: "città", nation: "Italia", coords: [46.5, 11.5], info: "Casa in montagna.", flag: "🏠" }
 ];
+    
+capitalsData.forEach(cap => {
+    // Icona personalizzata: Punto + Nome
+    const capIcon = L.divIcon({
+        className: 'capital-marker',
+        html: `
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div style="width: 8px; height: 8px; background: white; border: 2px solid #4a90e2; border-radius: 50%;"></div>
+                <div style="color: white; font-size: 11px; font-weight: bold; text-shadow: 1px 1px 2px black; margin-top: 2px; white-space: nowrap;">
+                    ${cap.name}
+                </div>
+            </div>
+        `,
+        iconSize: [10, 10],
+        iconAnchor: [5, 5]
+    });
 
+    const marker = L.marker(cap.coords, { icon: capIcon });
+    
+    // Popup opzionale al click sul nome
+    marker.bindPopup(`<b>${cap.name}</b><br>${cap.nation} ${cap.flag}`);
+    
+    capitalsLayer.addLayer(marker);
+});
     // --- 4. CARICAMENTO CONFINI (GEOJSON) + POP-UP ---
   const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
 
@@ -341,7 +365,7 @@ specialPlaces.forEach(place => {
     // --- 7. CONTROLLI INTERFACCIA (TOP-RIGHT) ---
 
       // Switcher Layer Base
-    L.control.layers({"Satellite": satellite, "OSM": osm}, {"❤️ Cuori": heartsLayer, "Nazioni": bordersLayer}).addTo(map); 
+    L.control.layers({"Satellite": satellite, "OSM": osm}, {"Nazioni": bordersLayer, "Capitali": capitalsLayer,"❤️": heartsLayer }).addTo(map); 
     
   // --- Controlli Home, Locate, Routing e Cuori a due colonne ---
 const controlBox = L.control({ position: 'topright' });
