@@ -1,10 +1,3 @@
-Hai ragione, nella pulizia precedente ho rimosso involontariamente la logica che agganciava i pulsanti fisici del tuo HTML agli eventi JavaScript.
-
-Ecco il codice integrale e ripristinato. Ho mantenuto la struttura a due colonne che avevi creato, assicurandomi che ogni ID (route-btn, clear-btn, home-btn, ecc.) sia collegato correttamente alle funzioni.
-
-File map-flag.js (Sostituisci tutto)
-JavaScript
-
 document.addEventListener('DOMContentLoaded', () => {
     // --- 1. CONFIGURAZIONI E VIEWPORT ---
     const MOBILE_MAX_WIDTH = 767;
