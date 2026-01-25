@@ -423,13 +423,6 @@ L.control.layers(
   
 // --- Controlli Home, Locate, Routing a due colonne ---
 const controlBox = L.control({ position: 'topright' });
-Capisco perfettamente la frustrazione. Il problema è nato da un errore di riferimento: nel codice che hai postato stavi cercando di appendere la lista dei cuori a una variabile leftCol che non era stata definita all'interno della funzione onAdd. Quando il codice incontra un errore del genere, "muore" e non disegna più nulla nel contenitore dei pulsanti.
-
-Ecco il codice sistemato e testato per far apparire tutti i pulsanti (Casa, Posizione, Mappa e Cuore) e far funzionare il pannello dei cuori correttamente.
-
-Sostituisci interamente la funzione controlBox.onAdd con questa:
-JavaScript
-
 controlBox.onAdd = function(map) {
   const container = L.DomUtil.create('div', 'custom-control-box leaflet-bar');
 
