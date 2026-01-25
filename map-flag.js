@@ -295,50 +295,78 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   labels.addTo(map);
 
-// --- LAYER 2: CONFINI NAZIONI (Corretto) ---
-  const bordersLayer = L.layerGroup();
-  const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
+// --- LAYER 2: CONFINI NAZIONI (Corretto e Interattivo) ---
+const bordersLayer = L.layerGroup();
+const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
 
-  fetch(bordersUrl)
-    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
-    .then(data => {
-      
-      // Ciclo su ogni nazione presente nel file GeoJSON
-      data.features.forEach(feature => {
-        
-        const fixRing = (ring) => {
-          ring.forEach(coord => {
-            // Fix per Russia (Siberia) e Isole del Pacifico (Tonga/Samoa)
-            // Se sono molto a ovest, le spostiamo matematicamente a destra
-            if ((coord[0] < -168.5 && coord[1] > 60);
-            }
+let selectedLayer = null; // Memorizza la nazione selezionata
+
+fetch(bordersUrl)
+  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+  .then(data => {
+    data.features.forEach(feature => {
+      const fixRing = (ring) => {
+        ring.forEach(coord => {
+          // Errore corretto: rimosso ";" e aggiunta logica += 360
+          if ((coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -165 && coord[1] < 0)) {
+            coord[0] += 360;
+          }
+        });
+      };
+
+      if (feature.geometry.type === 'MultiPolygon') {
+        feature.geometry.coordinates.forEach(polygon => polygon.forEach(ring => fixRing(ring)));
+      } else if (feature.geometry.type === 'Polygon') {
+        feature.geometry.coordinates.forEach(ring => fixRing(ring));
+      }
+    });
+
+    const geoJsonLayer = L.geoJSON(data, {
+      interactive: true, // Deve essere true per poter cliccare le nazioni
+      style: {
+        color: '#4a90e2',
+        weight: 1,
+        fillColor: '#4a90e2',
+        fillOpacity: 0.1
+      },
+      onEachFeature: (feature, layer) => {
+        layer.on('click', (e) => {
+          L.DomEvent.stopPropagation(e); // Impedisce al click di passare alla mappa sotto
+
+          // Se c'era una nazione rossa, la riportiamo al colore originale
+          if (selectedLayer) {
+            geoJsonLayer.resetStyle(selectedLayer);
+          }
+
+          // Coloriamo la nazione attuale di ROSSO
+          layer.setStyle({
+            fillColor: '#ff0000',
+            fillOpacity: 0.5,
+            color: '#ff0000',
+            weight: 2
           });
-        };
 
-        // Applichiamo il fix alla geometria
-        if (feature.geometry.type === 'MultiPolygon') {
-          feature.geometry.coordinates.forEach(polygon => polygon.forEach(ring => fixRing(ring)));
-        } else if (feature.geometry.type === 'Polygon') {
-          feature.geometry.coordinates.forEach(ring => fixRing(ring));
-        }
-      });
+          selectedLayer = layer;
+        });
+      }
+    });
 
-      // Creazione del layer grafico
-      const geoJsonLayer = L.geoJSON(data, {
-        interactive: false, // Messo a false come da tua ultima versione
-        style: {
-          color: '#4a90e2', 
-          weight: 1, 
-          fillColor: '#4a90e2', 
-          fillOpacity: 0.1
-        }
-      });
-      
-      bordersLayer.addLayer(geoJsonLayer);
-    })
-    .catch(err => console.error("Errore caricamento confini:", err));
-  
-  bordersLayer.addTo(map);
+    bordersLayer.addLayer(geoJsonLayer);
+  })
+  .catch(err => console.error("Errore caricamento confini:", err));
+
+bordersLayer.addTo(map);
+
+// Click sulla mappa (spazio vuoto) per deselezionare la nazione
+map.on('click', () => {
+  if (selectedLayer) {
+    // Qui serve accedere al layer geojson per resettare
+    bordersLayer.eachLayer(l => {
+        if(l.resetStyle) l.resetStyle(selectedLayer);
+    });
+    selectedLayer = null;
+  }
+});
   
   // --- Layer switcher ---
 L.control.layers(
