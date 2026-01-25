@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Uppsala", type: "case", nation: "Svezia", coords: [59.8586, 17.6389], info: "Città universitaria.", flag: "🇸🇪" },
     { name: "Atene", type: "case", nation: "Grecia", coords: [37.9838, 23.7275], info: "Culla della civiltà.", flag: "🇬🇷" },
     { name: "Portofino", type: "mare", nation: "Italia", coords: [44.3039, 9.2091], info: "Borgo ligure.", flag: "🇮🇹" },
-    { name: "Baita Mia", type: "case", nation: "Italia", coords: [46.5, 11.5], info: "Casa in montagna.", flag: "🏠" }
+    { name: "Baita Mia", type: "città", nation: "Italia", coords: [46.5, 11.5], info: "Casa in montagna.", flag: "🏠" }
 ];
 
     // --- 4. CARICAMENTO CONFINI (GEOJSON) + POP-UP ---
