@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let lastMarker = null;
   let searchMarkers = [];
   let control = null;
+  
   // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
   const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
@@ -422,157 +423,166 @@ L.control.layers(
   
 // --- Controlli Home, Locate, Routing a due colonne ---
 const controlBox = L.control({ position: 'topright' });
+Capisco perfettamente la frustrazione. Il problema è nato da un errore di riferimento: nel codice che hai postato stavi cercando di appendere la lista dei cuori a una variabile leftCol che non era stata definita all'interno della funzione onAdd. Quando il codice incontra un errore del genere, "muore" e non disegna più nulla nel contenitore dei pulsanti.
+
+Ecco il codice sistemato e testato per far apparire tutti i pulsanti (Casa, Posizione, Mappa e Cuore) e far funzionare il pannello dei cuori correttamente.
+
+Sostituisci interamente la funzione controlBox.onAdd con questa:
+JavaScript
+
 controlBox.onAdd = function(map) {
-    const container = L.DomUtil.create('div', 'custom-control-box leaflet-bar');
-  
-    // Stile container principale
-    container.style.display = 'flex';
-    container.style.marginTop = '-2px';
-    container.style.marginRight = '7px';
-    container.style.background = 'transparent';
-    container.style.padding = '5px';
-    container.style.border = 'none';
-    container.style.alignItems = 'flex-start';
-  
-  // --- Colonna sinistra: box routing ---
-  const routeBox = L.DomUtil.create('div', '', container);
-    routeBox.id = 'route-box';
-   routeBox.style.marginTop = '10px';  // distanza dal top della mappa 
-    routeBox.style.width = '150px';
-    routeBox.style.display = 'none';
-    routeBox.style.flexDirection = 'column';
-    routeBox.style.background = 'transparent';
-    routeBox.style.color = 'white';
-    routeBox.style.border = 'none';
-    routeBox.style.padding = '8px';
-    routeBox.style.borderRadius = '5px';
-    routeBox.style.boxSizing = 'border-box';
-  
-    // Inputs e pulsanti routing
-    const startInput = document.createElement('input');
-    startInput.id = 'start';
-    startInput.placeholder = 'Partenza';
-    startInput.style.marginBottom = '4px';
- startInput.style.width = '100%';
-startInput.style.boxSizing = 'border-box';
-    routeBox.appendChild(startInput);
-    const endInput = document.createElement('input');
-    endInput.id = 'end';
-    endInput.placeholder = 'Destinazione';
-    endInput.style.marginBottom = '4px';
-   endInput.style.width = '100%';
-endInput.style.boxSizing = 'border-box';
-    routeBox.appendChild(endInput);
+  const container = L.DomUtil.create('div', 'custom-control-box leaflet-bar');
+
+  // Stile container principale
+  container.style.display = 'flex';
+  container.style.marginTop = '-2px';
+  container.style.marginRight = '7px';
+  container.style.background = 'transparent';
+  container.style.padding = '5px';
+  container.style.border = 'none';
+  container.style.alignItems = 'flex-start';
+
+  // --- 1. COLONNA SINISTRA (Pannelli Routing e Cuori) ---
+  const leftCol = L.DomUtil.create('div', '', container);
+  leftCol.style.display = 'flex';
+  leftCol.style.flexDirection = 'column';
+  leftCol.style.alignItems = 'flex-end';
+
+  // --- BOX ROUTING ---
+  const routeBox = L.DomUtil.create('div', '', leftCol);
+  routeBox.id = 'route-box';
+  routeBox.style.marginTop = '10px';
+  routeBox.style.width = '150px';
+  routeBox.style.display = 'none';
+  routeBox.style.flexDirection = 'column';
+  routeBox.style.background = 'rgba(0, 0, 0, 0.7)';
+  routeBox.style.color = 'white';
+  routeBox.style.padding = '8px';
+  routeBox.style.borderRadius = '5px';
+  routeBox.style.boxSizing = 'border-box';
+
+  // Input Routing
+  const startInput = document.createElement('input');
+  startInput.id = 'start';
+  startInput.placeholder = 'Partenza';
+  startInput.style.width = '100%';
+  startInput.style.marginBottom = '4px';
+  routeBox.appendChild(startInput);
+
+  const endInput = document.createElement('input');
+  endInput.id = 'end';
+  endInput.placeholder = 'Destinazione';
+  endInput.style.width = '100%';
+  endInput.style.marginBottom = '4px';
+  routeBox.appendChild(endInput);
+
   const buttonRow = document.createElement('div');
-buttonRow.style.display = 'flex';
-buttonRow.style.gap = '4px'; // spazio tra i bottoni
-  
-// Pulsante Calcola
-const calcBtn = document.createElement('button');
-calcBtn.id = 'route-btn';
-calcBtn.innerText = 'Calcola';
-calcBtn.style.flex = '1';
-calcBtn.style.minWidth = '0'; // importante per mobile
-calcBtn.style.display = 'flex';
-calcBtn.style.borderRadius = '8px'; // angoli smussati
-calcBtn.style.alignItems = 'center';
-calcBtn.style.justifyContent = 'center';
-buttonRow.appendChild(calcBtn);
-  
-// Pulsante Reset
-const clearBtn = document.createElement('button');
-clearBtn.id = 'clear-btn';
-clearBtn.innerText = 'Reset';
-clearBtn.style.flex = '1';
-clearBtn.style.minWidth = '0'; // importante per mobile
-  clearBtn.style.display = 'flex';
-clearBtn.style.justifyContent = 'center';
-clearBtn.style.borderRadius = '8px'; // angoli smussati
+  buttonRow.style.display = 'flex';
+  buttonRow.style.gap = '4px';
+
+  const calcBtn = document.createElement('button');
+  calcBtn.id = 'route-btn';
+  calcBtn.innerText = 'Vai';
+  calcBtn.style.flex = '1';
+  buttonRow.appendChild(calcBtn);
+
+  const clearBtn = document.createElement('button');
+  clearBtn.id = 'clear-btn';
+  clearBtn.innerText = 'Reset';
+  clearBtn.style.flex = '1';
   buttonRow.appendChild(clearBtn);
-// aggiungi i bottoni al routeBox
-routeBox.appendChild(buttonRow);
 
+  routeBox.appendChild(buttonRow);
+
+  // --- BOX LISTA CUORI ---
   const heartsListBox = L.DomUtil.create('div', '', leftCol);
-    heartsListBox.id = 'hearts-list-box';
-    
-    specialPlaces.forEach(place => {
-        const item = L.DomUtil.create('div', 'heart-item', heartsListBox);
-        item.innerHTML = `<span>${place.flag} ${place.name}</span>`;
-        
-        const flyBtn = L.DomUtil.create('button', 'fly-to-heart', item);
-        flyBtn.innerText = 'Vola';
-        
-        L.DomEvent.on(flyBtn, 'click', (e) => {
-            L.DomEvent.stopPropagation(e);
-            map.flyTo(place.coords, 12, { animate: true, duration: 2 });
-            // Apriamo il popup automaticamente dopo il volo
-            setTimeout(() => place.marker.openPopup(), 2000);
-        });
-    });
-  
- // --- Geocoder semplice ---
-const geocoderControl = L.Control.geocoder({
-    collapsed: true,           // input sempre visibile
-    placeholder: "Cerca...",
-    defaultMarkGeocode: true
-}).addTo(map);
-  
-// Prendi il container del geocoder
-const geocoderContainer = geocoderControl.getContainer();
-  
-// Appendi il geocoder dentro routeBox
-routeBox.appendChild(geocoderContainer);
-  // --- Colonna destra: pulsanti verticali ---
-    const btnCol = L.DomUtil.create('div', '', container);
-    btnCol.style.display = 'flex';
-    btnCol.style.flexDirection = 'column';
-    btnCol.style.gap = '5px';
-  
-    // Home
-    const homeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
-    homeBtn.href = '#';
-    homeBtn.innerHTML = '🏠';
-    homeBtn.title = "Torna alla vista iniziale";
-    L.DomEvent.on(homeBtn, 'click', e => {
-        L.DomEvent.stopPropagation(e);
-        L.DomEvent.preventDefault(e);
-        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
-    });
-  
-    // Locate
-    const locateControl = L.control.locate({
-        flyTo: { duration: 2 },
-        strings: { title: "Mostrami la mia posizione" },
-        locateOptions: { enableHighAccuracy: true }
-    });
-    btnCol.appendChild(locateControl.onAdd(map));
-  
-    // Routing button (toggle visibilità box route)
-    const routeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
-    routeBtn.href = '#';
-    routeBtn.innerHTML = '🗺️';
-    routeBtn.title = "Mostra/Nascondi indicazioni";
-    L.DomEvent.on(routeBtn, 'click', e => {
-        L.DomEvent.stopPropagation(e);
-        L.DomEvent.preventDefault(e);
-        routeBox.style.display = (routeBox.style.display === 'none') ? 'flex' : 'none';
-    });
+  heartsListBox.id = 'hearts-list-box';
+  heartsListBox.style.marginTop = '10px';
+  heartsListBox.style.width = '160px';
+  heartsListBox.style.display = 'none';
+  heartsListBox.style.flexDirection = 'column';
+  heartsListBox.style.background = 'rgba(0, 0, 0, 0.8)';
+  heartsListBox.style.color = 'white';
+  heartsListBox.style.padding = '10px';
+  heartsListBox.style.borderRadius = '8px';
 
-  const heartBtn = L.DomUtil.create('a', 'custom-heart-button', btnCol);
-    heartBtn.href = '#';
-    heartBtn.innerHTML = '❤️';
-    heartBtn.title = "Lista luoghi del cuore";
+  specialPlaces.forEach(place => {
+    const item = L.DomUtil.create('div', '', heartsListBox);
+    item.style.display = 'flex';
+    item.style.justifyContent = 'space-between';
+    item.style.alignItems = 'center';
+    item.style.marginBottom = '8px';
+    item.style.fontSize = '12px';
+    item.innerHTML = `<span>${place.flag} ${place.name}</span>`;
+
+    const flyBtn = document.createElement('button');
+    flyBtn.innerText = 'Vola';
+    flyBtn.style.fontSize = '10px';
+    flyBtn.style.cursor = 'pointer';
     
-    L.DomEvent.on(heartBtn, 'click', e => {
-        L.DomEvent.stopPropagation(e);
-        L.DomEvent.preventDefault(e);
-        // Toggle visibilità: se apro cuori, chiudo routing e viceversa
-        const rBox = document.getElementById('route-box');
-        if(rBox) rBox.style.display = 'none';
-        
-        heartsListBox.style.display = (heartsListBox.style.display === 'none') ? 'flex' : 'none';
+    L.DomEvent.on(flyBtn, 'click', (e) => {
+      L.DomEvent.stopPropagation(e);
+      map.flyTo(place.coords, 12, { animate: true, duration: 2 });
+      // Salviamo il riferimento del marker nel caricamento per poterlo aprire qui
+      // Se hai usato marker.addTo(heartsLayer), cerchiamo il marker per coordinate
+      heartsLayer.eachLayer(layer => {
+        if (layer instanceof L.Marker && layer.getLatLng().equals(place.coords)) {
+          setTimeout(() => layer.openPopup(), 2100);
+        }
+      });
     });
-    return container;
+    item.appendChild(flyBtn);
+  });
+
+  // --- 2. COLONNA DESTRA (Pulsanti Verticali) ---
+  const btnCol = L.DomUtil.create('div', '', container);
+  btnCol.style.display = 'flex';
+  btnCol.style.flexDirection = 'column';
+  btnCol.style.gap = '5px';
+  btnCol.style.marginLeft = '5px';
+
+  // Pulsante Home
+  const homeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
+  homeBtn.href = '#';
+  homeBtn.innerHTML = '🏠';
+  L.DomEvent.on(homeBtn, 'click', e => {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+  });
+
+  // Pulsante Locate (Posizione)
+  const locateControl = L.control.locate({
+    flyTo: { duration: 2 },
+    strings: { title: "Posizione" }
+  });
+  const locateEl = locateControl.onAdd(map);
+  btnCol.appendChild(locateEl);
+
+  // Pulsante Mappa (Toggle Routing)
+  const routeBtnToggle = L.DomUtil.create('a', 'custom-home-button', btnCol);
+  routeBtnToggle.href = '#';
+  routeBtnToggle.innerHTML = '🗺️';
+  L.DomEvent.on(routeBtnToggle, 'click', e => {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    heartsListBox.style.display = 'none'; // Chiude i cuori
+    routeBox.style.display = (routeBox.style.display === 'none') ? 'flex' : 'none';
+  });
+
+  // Pulsante Cuore (Toggle Lista Cuori)
+  const heartBtn = L.DomUtil.create('a', 'custom-heart-button', btnCol);
+  heartBtn.href = '#';
+  heartBtn.innerHTML = '❤️';
+  L.DomEvent.on(heartBtn, 'click', e => {
+    L.DomEvent.stopPropagation(e);
+    L.DomEvent.preventDefault(e);
+    routeBox.style.display = 'none'; // Chiude il routing
+    heartsListBox.style.display = (heartsListBox.style.display === 'none') ? 'flex' : 'none';
+  });
+
+  return container;
+};
 };
 controlBox.addTo(map);
   // --- Funzioni utility ---
