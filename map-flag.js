@@ -233,25 +233,19 @@ document.addEventListener('DOMContentLoaded', () => {
 ];
     
 capitalsData.forEach(cap => {
-    // Icona personalizzata: Punto + Nome
     const capIcon = L.divIcon({
         className: 'capital-marker',
         html: `
-            <div style="display: flex; flex-direction: column; align-items: center;">
-                <div style="width: 8px; height: 8px; background: white; border: 2px solid #4a90e2; border-radius: 50%;"></div>
-                <div style="color: white; font-size: 11px; font-weight: bold; text-shadow: 1px 1px 2px black; margin-top: 2px; white-space: nowrap;">
+            <div style="display: flex; flex-direction: column; align-items: center; pointer-events: none;">
+                <div style="width: 6px; height: 6px; background: white; border: 1px solid #000; border-radius: 50%;"></div>
+                <div style="color: white; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 2px black; margin-top: 1px; white-space: nowrap;">
                     ${cap.name}
                 </div>
             </div>
         `,
-        iconSize: [10, 10],
-        iconAnchor: [5, 5]
+        iconSize: [0, 0], // Dimensioni neutre per non interferire con i click sulla mappa
+        iconAnchor: [0, 0]
     });
-
-    const marker = L.marker(cap.coords, { icon: capIcon });
-    
-    // Popup opzionale al click sul nome
-    marker.bindPopup(`<b>${cap.name}</b><br>${cap.nation} ${cap.flag}`);
     
     capitalsLayer.addLayer(marker);
 });
