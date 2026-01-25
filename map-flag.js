@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
-  const southWest = L.latLng(-90, -175);
+  const southWest = L.latLng(-90, -180);
   const northEast = L.latLng(90, 195);
   const maxBounds = L.latLngBounds(southWest, northEast);
 
