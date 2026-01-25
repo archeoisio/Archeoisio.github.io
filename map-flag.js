@@ -226,14 +226,16 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Kyiv", nation: "Ukraine", coords: [50.4501, 30.5234], flag: "🇺🇦" }
 ];
  const specialPlaces = [
-    { name: "Uppsala", type: "case", nation: "Svezia", coords: [59.862514043172986, 17.65992409050815], address: "Frodegatan 33E", date: "Settembre 2022/Gennaio 2023", flag: "🇸🇪" },
-    { name: "Ecce Homo", type: "case", nation: "Italia", coords: [59.862514043172986, 17.65992409050815], address: "", date: "FDB", flag: "🇮🇹" },
-    { name: "Laspro", type: "case", nation: "Italia", coords: [40.685508164571274, 14.767897013099008], address: "", date: "MM", flag: "🇮🇹" },
-    { name: "Fratte", type: "case", nation: "Italia", coords: [40.69672994658257, 14.77710915495002], address: "Via Francesco Spirito 51", date: "Settembre 2021/Novembre 2023", flag: "🇮🇹" },
-    { name: "Dipylou 8A", type: "case", nation: "Grecia", coords: [37.979367399856606, 23.72075051641102], info: "Atene, Monastiraki/Ceramico", flag: "🇬🇷" },
-    { name: "Rethymno", type: "case", nation: "Grecia", coords: [35.36987174693328, 24.473314364073172], info: "Αραμπατζόγλου, Creta", flag: "🇬🇷" },
-    { name: "Balos", type: "mare", nation: "Grecia", coords: [35.580276911058206, 23.590131576784163], info: "💩, Creta", flag: "🇬🇷" },
-    { name: "Baita Mia", type: "città", nation: "Italia", coords: [46.5, 11.5], info: "Casa in montagna.", flag: "🏠" }
+    { name: "Uppsala", type: "home", nation: "Svezia", coords: [59.862514043172986, 17.65992409050815], address: "Frodegatan 33E", date: "Settembre 2022/Gennaio 2023", flag: "🇸🇪" },
+    { name: "Ecce Homo", type: "home", nation: "Italia", coords: [40.84505106749316, 14.253687972830459], address: "", date: "FDB", flag: "🇮🇹" },
+    { name: "Laspro", type: "home", nation: "Italia", coords: [40.685508164571274, 14.767897013099008], address: "", date: "MM", flag: "🇮🇹" },
+    { name: "Fratte", type: "home", nation: "Italia", coords: [40.69672994658257, 14.77710915495002], address: "Via Francesco Spirito 51", date: "Settembre 2021/Novembre 2023", flag: "🇮🇹" },
+    { name: "Dipylou 8A", type: "home", nation: "Grecia", coords: [37.979367399856606, 23.72075051641102], info: "Atene, Monastiraki/Ceramico", date "Settembre 2017/Aprile 2018" flag: "🇬🇷" },
+    { name: "Rethymno", type: "home", nation: "Grecia", coords: [35.36987174693328, 24.473314364073172], info: "Αραμπατζόγλου, Creta", date: "Aprile/Giugno 2018" flag: "🇬🇷" },
+    { name: "Balos", type: "mare", nation: "Grecia", coords: [35.580276911058206, 23.590131576784163], info: "Agosto 2017 💩, Creta", flag: "🇬🇷" },
+    { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89403881175697, 11.044678599193777], info: "Ottobre 2016", flag: "🇮🇹" },
+    { name: "Piana del Lago", type: "viaggi", nation: "Italia", coords: [45.89403881175697, 11.044678599193777], info: "Basilicata", date: "Ferragosto 2021", flag: "🇮🇹" },
+    { name: "Baden-Baden", type: "viaggi", nation: "Germania", coords: [48.76311189146083, 8.242163002948708], info: "Terme, mercatini", date: "Novembre 2023", flag: "🇩🇪" },
 ];
     
 capitalsData.forEach(cap => {
@@ -323,9 +325,9 @@ fetch(bordersUrl)
 
 // Definiamo le icone per i marker (le stesse usate nella lista)
 const typeIcons = {
-    "case": "🏠",
+    "home": "🏠",
     "mare": "🏖️",
-    "città": "🏙️"
+    "viaggi": "🏞️"
 };
 
 specialPlaces.forEach(place => {
