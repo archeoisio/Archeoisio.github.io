@@ -304,7 +304,7 @@ fetch(bordersUrl)
 
                         document.getElementById('fly-to-cap').onclick = () => {
                             if (myData && myData.coords) {
-                                map.flyTo(myData.coords, 14, { animate: true, duration: 3 });
+                                map.flyTo(myData.coords, 18, { animate: true, duration: 5 });
                             } else {
                                 map.flyTo(e.latlng, 8, { animate: true, duration: 3 });
                             }
