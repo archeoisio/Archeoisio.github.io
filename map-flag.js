@@ -342,10 +342,9 @@ map.on('click', () => {
     selectedLayer = null;
   }
 });
-  // --- LAYER LUOGHI DEL CUORE (Uppsala e Atene) ---
+// --- LAYER LUOGHI DEL CUORE (Uppsala e Atene) ---
 const heartsLayer = L.layerGroup();
 
-// Dati specifici per i tuoi luoghi preferiti
 const specialPlaces = [
   { 
     name: "Uppsala", 
@@ -363,58 +362,48 @@ const specialPlaces = [
   }
 ];
 
-// Creazione dell'icona (la classe CSS 'custom-heart-icon' gestisce il battito in hover)
 const heartIcon = L.divIcon({
   className: 'custom-heart-icon',
   html: `<div class="heart-emoji">❤️</div>`,
   iconSize: [30, 30],
-  iconAnchor: [15, 15] // Centra il cuore esattamente sulle coordinate
+  iconAnchor: [15, 15] 
 });
 
 specialPlaces.forEach(place => {
-  // zIndexOffset: 3000 assicura che stiano SOPRA le capitali (che hanno 1000)
   const marker = L.marker(place.coords, { 
     icon: heartIcon,
     zIndexOffset: 3000 
   });
 
-  // Funzione di gestione Click (Mobile e Desktop)
+  // Configurazione Popup: il "toggle" è gestito automaticamente da Leaflet
+  marker.bindPopup(`
+    <div style="text-align:center; min-width: 150px;">
+      <div style="font-size:14px; font-weight:bold; color:#333;">
+        ${place.nation} ${place.flag}
+      </div>
+      <div style="font-size:16px; font-weight:bold; margin: 5px 0;">
+        ${place.name} ❤️
+      </div>
+      <div style="font-size:12px; color:#666; line-height:1.4;">
+        ${place.info}
+      </div>
+    </div>
+  `, {
+    closeButton: false, // Rimuove la "x" così l'utente è spinto a ricliccare il cuore
+    offset: L.point(0, -10) // Alza leggermente il popup sopra il cuore
+  });
+
+  // Gestione del click per prevenire conflitti con la mappa
   marker.on('click', (e) => {
-    // Impedisce al click di propagarsi alla mappa sotto
     L.DomEvent.stopPropagation(e);
-
-    const panel = document.getElementById('info-panel');
-    const content = document.getElementById('info-content');
-    
-    if (panel && content) {
-      content.innerHTML = `
-        <div style="font-size:15px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
-          ${place.nation} ${place.flag}
-        </div>
-        <div style="font-size:14px;font-weight:bold; color:white; margin-top:5px;">
-          ${place.name} ❤️
-        </div>
-        <div style="font-size:12px; color:rgba(255,255,255,0.9); margin-top:8px; line-height:1.4;">
-          ${place.info}
-        </div>
-        <button id="fly-heart-btn" style="background:rgba(255,255,255,0.2); border:1px solid white; color:white; border-radius:4px; padding:4px 8px; margin-top:10px; cursor:pointer; width:100%;">
-          🔍 Avvicinati
-        </button>
-      `;
-      panel.style.display = 'block';
-
-      // Bottone per volare sul punto (FlyTo)
-      document.getElementById('fly-heart-btn').addEventListener('click', () => {
-        map.flyTo(place.coords, 12, { animate: true, duration: 2.5 });
-      });
-    }
+    // Nota: Leaflet gestisce già il "apri/chiudi" se riclicchi sullo stesso marker
   });
 
   heartsLayer.addLayer(marker);
 });
 
-// Aggiungi il layer alla mappa globalmente
 heartsLayer.addTo(map);
+
   
   // --- Layer switcher ---
 L.control.layers(
@@ -425,7 +414,7 @@ L.control.layers(
   { 
     "Capitali": labels, 
     "Confini": bordersLayer,
-    "Luoghi del Cuore ❤️": heartsLayer // <--- Ora è nel menu e puoi accenderlo/spegnerlo
+    "❤️": heartsLayer // <--- Ora è nel menu e puoi accenderlo/spegnerlo
   }, 
   { collapsed: true }
 ).addTo(map);
