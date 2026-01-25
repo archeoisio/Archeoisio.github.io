@@ -342,17 +342,99 @@ map.on('click', () => {
     selectedLayer = null;
   }
 });
+  // --- LAYER LUOGHI DEL CUORE (Uppsala e Atene) ---
+const heartsLayer = L.layerGroup();
+
+// Dati specifici per i tuoi luoghi preferiti
+const specialPlaces = [
+  { 
+    name: "Uppsala", 
+    nation: "Svezia", 
+    coords: [59.8586, 17.6389], 
+    info: "Città universitaria e storica.",
+    flag: "🇸🇪" 
+  },
+  { 
+    name: "Atene", 
+    nation: "Grecia", 
+    coords: [37.9838, 23.7275], 
+    info: "Culla della civiltà occidentale.",
+    flag: "🇬🇷" 
+  }
+];
+
+// Creazione dell'icona (la classe CSS 'custom-heart-icon' gestisce il battito in hover)
+const heartIcon = L.divIcon({
+  className: 'custom-heart-icon',
+  html: `<div class="heart-emoji">❤️</div>`,
+  iconSize: [30, 30],
+  iconAnchor: [15, 15] // Centra il cuore esattamente sulle coordinate
+});
+
+specialPlaces.forEach(place => {
+  // zIndexOffset: 3000 assicura che stiano SOPRA le capitali (che hanno 1000)
+  const marker = L.marker(place.coords, { 
+    icon: heartIcon,
+    zIndexOffset: 3000 
+  });
+
+  // Funzione di gestione Click (Mobile e Desktop)
+  marker.on('click', (e) => {
+    // Impedisce al click di propagarsi alla mappa sotto
+    L.DomEvent.stopPropagation(e);
+
+    const panel = document.getElementById('info-panel');
+    const content = document.getElementById('info-content');
+    
+    if (panel && content) {
+      content.innerHTML = `
+        <div style="font-size:15px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+          ${place.nation} ${place.flag}
+        </div>
+        <div style="font-size:14px;font-weight:bold; color:white; margin-top:5px;">
+          ${place.name} ❤️
+        </div>
+        <div style="font-size:12px; color:rgba(255,255,255,0.9); margin-top:8px; line-height:1.4;">
+          ${place.info}
+        </div>
+        <button id="fly-heart-btn" style="background:rgba(255,255,255,0.2); border:1px solid white; color:white; border-radius:4px; padding:4px 8px; margin-top:10px; cursor:pointer; width:100%;">
+          🔍 Avvicinati
+        </button>
+      `;
+      panel.style.display = 'block';
+
+      // Bottone per volare sul punto (FlyTo)
+      document.getElementById('fly-heart-btn').addEventListener('click', () => {
+        map.flyTo(place.coords, 12, { animate: true, duration: 2.5 });
+      });
+    }
+  });
+
+  heartsLayer.addLayer(marker);
+});
+
+// Aggiungi il layer alla mappa globalmente
+heartsLayer.addTo(map);
   
   // --- Layer switcher ---
 L.control.layers(
-    { "Satellite": satellite, "OpenStreetMap": osm }, 
-    { "Capitali": labels, "Confini": bordersLayer }, // <--- Aggiunto qui
-    { collapsed: true }
+  { 
+    "Satellite": satellite, 
+    "OpenStreetMap": osm 
+  }, 
+  { 
+    "Capitali": labels, 
+    "Confini": bordersLayer,
+    "Luoghi del Cuore ❤️": heartsLayer // <--- Ora è nel menu e puoi accenderlo/spegnerlo
+  }, 
+  { collapsed: true }
 ).addTo(map);
+  
 // --- Controlli Home, Locate, Routing a due colonne ---
 const controlBox = L.control({ position: 'topright' });
 controlBox.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'custom-control-box leaflet-bar');
+  
     // Stile container principale
     container.style.display = 'flex';
     container.style.marginTop = '-2px';
