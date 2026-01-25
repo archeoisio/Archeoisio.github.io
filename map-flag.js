@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return container;
 };
-    };
+
     controlBox.addTo(map);
 
     // --- 8. LOGICA ROUTING (Geocoding + Routing Control) ---
