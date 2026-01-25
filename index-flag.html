@@ -178,18 +178,46 @@
     padding: 6px;
   }
 }
-  
-.custom-heart-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.2s;
-  cursor: pointer;
+  /* Definizione dell'animazione del battito */
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  15% { transform: scale(1.3); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.15); }
+  60% { transform: scale(1); }
 }
 
-.custom-heart-icon:hover {
-  transform: scale(1.3); /* Il cuore si ingrandisce quando ci passi sopra */
+.custom-heart-icon {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  /* Applica l'animazione: dura 1.5 secondi e si ripete all'infinito */
+  animation: heartBeat 1.5s infinite;
+  z-index: 2000 !important;
 }
+
+.heart-emoji {
+  font-size: 26px;
+  filter: drop-shadow(0 0 3px rgba(0,0,0,0.4));
+  cursor: pointer;
+}
+// Icona personalizzata con animazione
+const heartIcon = L.divIcon({
+  className: 'custom-heart-icon', // Questa classe attiva il CSS sopra
+  html: `<div class="heart-emoji">❤️</div>`,
+  iconSize: [30, 30],
+  iconAnchor: [15, 15]
+});
+
+specialPlaces.forEach(place => {
+  const marker = L.marker(place.coords, { 
+    icon: heartIcon,
+    zIndexOffset: 3000 // Valore altissimo per stare sopra le capitali (1000)
+  });
+  
+  marker.bindPopup(`<b>${place.name}</b><br>${place.info}`);
+  heartsLayer.addLayer(marker);
+});
 </style>
 </head>
 
