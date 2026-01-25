@@ -302,16 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch(bordersUrl)
     .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(data => {
-      
-      // --- FIX DATI ---
-      data.features.forEach(feature => {
-        // Applichiamo la modifica SOLO alle nazioni "problematiche"
-        // RUS (Russia), FJI (Fiji), TON (Tonga), WSM (Samoa), NZL (Nuova Zelanda)
-        const fixList = ['RUS', 'FJI', 'TON', 'WSM', 'NZL'];
-        
-        if (fixList.includes(feature.properties.ADM0_A3)) {
-            
-            const fixRing = (ring) => {
+                const fixRing = (ring) => {
                 ring.forEach(coord => {
                     // TUA SOLUZIONE ESTESA:
                     // Se è Russia oltre lo stretto di Bering (> 60 Nord)
