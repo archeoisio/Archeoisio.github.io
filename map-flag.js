@@ -583,7 +583,6 @@ const clearBtn = document.getElementById('clear-btn');
 if (clearBtn) {
     clearBtn.addEventListener('click', () => {
         resetRoute();
-    });
 
     // Altezza Viewport
     function setVh() {
