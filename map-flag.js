@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const initialView = isMobile ? mobileView : desktopView;
 
   const southWest = L.latLng(-90, -180);
-  const northEast = L.latLng(90, 220);
+  const northEast = L.latLng(90, 190);
   const maxBounds = L.latLngBounds(southWest, northEast);
 
   // --- Layer base ---
