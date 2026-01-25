@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const southWest = L.latLng(-70, -180);
 
-  const northEast = L.latLng(90, 193);
+  const northEast = L.latLng(80, 193);
 
   const maxBounds = L.latLngBounds(southWest, northEast);
 
