@@ -295,29 +295,47 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   labels.addTo(map);
 
- // --- NUOVO: Layer Confini Nazioni (Fonte Ufficiale GitHub) ---
+// --- NUOVO: Layer Confini Nazioni ---
   const bordersLayer = L.layerGroup();
-
+  // Usa il link che preferisci (GitHub o Cloudfront)
   const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
 
   fetch(bordersUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
+    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(data => {
       const geoJsonLayer = L.geoJSON(data, {
-        interactive: false, // Disabilita click/hover sui confini (il mouse passa attraverso)
+        interactive: false,
+        
+        // --- QUESTA È LA FUNZIONE CHE TI SERVE ---
+        coordsToLatLng: function (coords) {
+            let lng = coords[0];
+            let lat = coords[1];
+
+            // La Logica:
+            // La punta della Russia si trova tra -170 e -180.
+            // L'Alaska inizia circa a -168.
+            // Se la longitudine è minore di -169 (quindi più a ovest dell'Alaska)
+            // E la latitudine è alta (Russia), spostiamo tutto a destra (+360).
+            if (lng < -169 && lat > 60) { 
+                lng += 360; 
+            }
+            
+            return L.latLng(lat, lng);
+        },
+        // -----------------------------------------
+
         style: {
-          color: '#4a90e2',       // Colore bordo (azzurro)
-          weight: 1,              // Spessore
-          fillColor: '#4a90e2',   // Colore riempimento
-          fillOpacity: 0.1        // Molto trasparente
+          color: '#4a90e2', 
+          weight: 1, 
+          fillColor: '#4a90e2', 
+          fillOpacity: 0.1
         }
       });
       bordersLayer.addLayer(geoJsonLayer);
+    })
+    .catch(err => console.error("Errore confini:", err));
+
+  bordersLayer.addTo(map);
     })
     .catch(err => {
       console.error("Errore caricamento confini:", err);
