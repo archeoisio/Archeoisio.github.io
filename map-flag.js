@@ -565,6 +565,15 @@ controlBox.addTo(map);
                 waypoints: [L.latLng(s[0], s[1]), L.latLng(e[0], e[1])],
                 show: true
             }).addTo(map);
+
+            // --- SPOSTAMENTO SOTTO I BOTTONI ---
+      const routingContainer = control.getContainer();
+      const parent = routingContainer.parentNode;
+      if (parent) {
+          // AppendChild lo sposta fisicamente dopo il tuo controlBox
+          parent.appendChild(routingContainer);
+      }
+        
         } catch(err) { alert("Località non trovata"); }
     }
 
