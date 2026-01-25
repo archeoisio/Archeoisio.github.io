@@ -516,7 +516,7 @@ heartsListBox.style.overflowY = 'auto';
         locateOptions: { enableHighAccuracy: true }
     });
     btnCol.appendChild(locateControl.onAdd(map));
-
+});
     // Routing button (Mappa)
     const routeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
     routeBtn.href = '#';
