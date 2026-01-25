@@ -1267,4 +1267,3 @@ if (routingContainer) {
 
   map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
 
-});
