@@ -295,42 +295,46 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   labels.addTo(map);
 
-  // --- LAYER 2: CONFINI NAZIONI ---
+// --- LAYER 2: CONFINI NAZIONI (Corretto) ---
   const bordersLayer = L.layerGroup();
   const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
 
   fetch(bordersUrl)
     .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(data => {
-                const fixRing = (ring) => {
-                ring.forEach(coord => {
-                    // TUA SOLUZIONE ESTESA:
-                    // Se è Russia oltre lo stretto di Bering (> 60 Nord)
-                    // OPPURE se sono isole del pacifico (< 0 Sud e molto a Ovest)
-                    if ( (coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -165 && coord[1] < 0) ) {
-                        coord[0] += 360;
-                    }
-                });
-            };
-
-            if (feature.geometry.type === 'MultiPolygon') {
-                feature.geometry.coordinates.forEach(polygon => polygon.forEach(ring => fixRing(ring)));
-            } else if (feature.geometry.type === 'Polygon') {
-                feature.geometry.coordinates.forEach(ring => fixRing(ring));
+      
+      // Ciclo su ogni nazione presente nel file GeoJSON
+      data.features.forEach(feature => {
+        
+        const fixRing = (ring) => {
+          ring.forEach(coord => {
+            // Fix per Russia (Siberia) e Isole del Pacifico (Tonga/Samoa)
+            // Se sono molto a ovest, le spostiamo matematicamente a destra
+            if ((coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -165 && coord[1] < 0)) {
+              coord[0] += 360;
             }
+          });
+        };
+
+        // Applichiamo il fix alla geometria
+        if (feature.geometry.type === 'MultiPolygon') {
+          feature.geometry.coordinates.forEach(polygon => polygon.forEach(ring => fixRing(ring)));
+        } else if (feature.geometry.type === 'Polygon') {
+          feature.geometry.coordinates.forEach(ring => fixRing(ring));
         }
       });
-      // ----------------
 
+      // Creazione del layer grafico
       const geoJsonLayer = L.geoJSON(data, {
-        interactive: false,
+        interactive: false, // Messo a false come da tua ultima versione
         style: {
           color: '#4a90e2', 
-          weight: 1,       // Se metti 0 la riga verticale sparisce, ma perdi i confini
+          weight: 1, 
           fillColor: '#4a90e2', 
           fillOpacity: 0.1
         }
       });
+      
       bordersLayer.addLayer(geoJsonLayer);
     })
     .catch(err => console.error("Errore caricamento confini:", err));
