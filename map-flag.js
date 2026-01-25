@@ -225,9 +225,11 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Kyiv", nation: "Ukraine", coords: [50.4501, 30.5234], flag: "🇺🇦" }
 ];
  const specialPlaces = [
-        { name: "Uppsala", nation: "Svezia", coords: [59.8586, 17.6389], info: "Città universitaria.", flag: "🇸🇪" },
-        { name: "Atene", nation: "Grecia", coords: [37.9838, 23.7275], info: "Culla della civiltà.", flag: "🇬🇷" }
-    ];
+    { name: "Uppsala", type: "città", nation: "Svezia", coords: [59.8586, 17.6389], info: "Città universitaria.", flag: "🇸🇪" },
+    { name: "Atene", type: "città", nation: "Grecia", coords: [37.9838, 23.7275], info: "Culla della civiltà.", flag: "🇬🇷" },
+    { name: "Portofino", type: "mare", nation: "Italia", coords: [44.3039, 9.2091], info: "Borgo ligure.", flag: "🇮🇹" },
+    { name: "Baita Mia", type: "case", nation: "Italia", coords: [46.5, 11.5], info: "Casa in montagna.", flag: "🏠" }
+];
 
     // --- 4. CARICAMENTO CONFINI (GEOJSON) + POP-UP ---
     const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
@@ -286,18 +288,42 @@ document.addEventListener('DOMContentLoaded', () => {
             }).addTo(bordersLayer);
         });
 
-    // --- 5. CUORI ❤️ ---
-    const heartIcon = L.divIcon({
+  // --- 5. CUORI ❤️ (Marker dinamici per tipologia) ---
+
+// Definiamo le icone per i marker (le stesse usate nella lista)
+const typeIcons = {
+    "case": "🏠",
+    "mare": "🏖️",
+    "città": "🏙️"
+};
+
+specialPlaces.forEach(place => {
+    // Recuperiamo l'emoji corretta in base al tipo (se non trova il tipo, usa il cuore come backup)
+    const categoryIcon = typeIcons[place.type] || "❤️";
+
+    const customIcon = L.divIcon({
         className: 'custom-heart-icon',
-        html: `<div class="heart-emoji">❤️</div>`,
-        iconSize: [30, 30], iconAnchor: [15, 15]
+        html: `<div class="heart-emoji" style="font-size: 24px;">${categoryIcon}</div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
     });
 
-    specialPlaces.forEach(place => {
-        const marker = L.marker(place.coords, { icon: heartIcon, zIndexOffset: 3000 });
-        marker.bindPopup(`<div style="text-align:center;"><b>${place.name} ❤️</b><br>${place.info}</div>`);
-        heartsLayer.addLayer(marker);
+    const marker = L.marker(place.coords, { 
+        icon: customIcon, 
+        zIndexOffset: 3000 
     });
+
+    // Pop-up personalizzato con emoji e info
+    marker.bindPopup(`
+        <div style="text-align:center;">
+            <span style="font-size: 20px;">${categoryIcon}</span><br>
+            <b>${place.name}</b><br>
+            <i style="font-size: 12px; color: #666;">${place.info}</i>
+        </div>
+    `);
+
+    heartsLayer.addLayer(marker);
+});
 
     // --- 6. GESTIONE CLICK MAPPA (DESELEZIONE) ---
     map.on('click', () => {
@@ -383,37 +409,88 @@ controlBox.onAdd = function(map) {
 
     routeBox.appendChild(buttonRow);
 
-    // 2. Box Lista Cuori (Inizialmente nascosto)
-    const heartsListBox = L.DomUtil.create('div', '', leftCol);
-    heartsListBox.id = 'hearts-list-box';
-    heartsListBox.style.marginTop = '10px';
-    heartsListBox.style.width = '160px';
-    heartsListBox.style.display = 'none';
-    heartsListBox.style.flexDirection = 'column';
-    heartsListBox.style.background = 'rgba(0, 0, 0, 0.8)';
-    heartsListBox.style.color = 'white';
-    heartsListBox.style.padding = '10px';
-    heartsListBox.style.borderRadius = '8px';
+    // 2. Box Lista Cuori (Versione Accordion)
+const heartsListBox = L.DomUtil.create('div', '', leftCol);
+heartsListBox.id = 'hearts-list-box';
+heartsListBox.style.display = 'none';
+heartsListBox.style.marginTop = '10px';
+heartsListBox.style.background = 'rgba(0,0,0,0.85)';
+heartsListBox.style.padding = '8px';
+heartsListBox.style.borderRadius = '5px';
+heartsListBox.style.width = '190px';
+heartsListBox.style.maxHeight = '400px';
+heartsListBox.style.overflowY = 'auto';
 
-    specialPlaces.forEach(place => {
-        const item = L.DomUtil.create('div', '', heartsListBox);
-        item.style.display = 'flex';
-        item.style.justifyContent = 'space-between';
-        item.style.alignItems = 'center';
-        item.style.marginBottom = '8px';
-        item.style.fontSize = '12px';
-        item.innerHTML = `<span>${place.flag} ${place.name}</span>`;
+["case", "mare", "città"].forEach(category => {
+    const placesInCategory = specialPlaces.filter(p => p.type === category);
+    
+    if (placesInCategory.length > 0) {
+        // --- CONTENITORE CATEGORIA ---
+        const categoryWrapper = document.createElement('div');
+        categoryWrapper.style.marginBottom = '5px';
 
-        const flyBtn = document.createElement('button');
-        flyBtn.innerText = 'Vola';
-        flyBtn.style.fontSize = '10px';
-        flyBtn.style.cursor = 'pointer';
-        L.DomEvent.on(flyBtn, 'click', (e) => {
-            L.DomEvent.stopPropagation(e);
-            map.flyTo(place.coords, 12, { animate: true, duration: 2 });
+        // --- INTESTAZIONE (Il pulsante che espande/riduce) ---
+        const header = document.createElement('div');
+        header.style.cursor = 'pointer';
+        header.style.display = 'flex';
+        header.style.justifyContent = 'space-between';
+        header.style.alignItems = 'center';
+        header.style.padding = '5px';
+        header.style.background = 'rgba(255,255,255,0.1)';
+        header.style.borderRadius = '3px';
+        header.innerHTML = `
+            <span style="color: #ffeb3b; font-size: 13px; font-weight: bold;">
+                ${typeIcons[category]} ${category.toUpperCase()}
+            </span>
+            <span class="arrow" style="color: white; font-size: 10px;">►</span>
+        `;
+
+        // --- CONTENITORE LUOGHI (Inizialmente nascosto) ---
+        const listContent = document.createElement('div');
+        listContent.style.display = 'none'; // Nasconde i luoghi all'inizio
+        listContent.style.padding = '5px 0 5px 10px';
+
+        // Aggiungiamo i luoghi alla lista
+        placesInCategory.forEach(p => {
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.justifyContent = 'space-between';
+            row.style.alignItems = 'center';
+            row.style.marginBottom = '4px';
+            row.innerHTML = `<span style="font-size: 12px; color: white;">${p.flag} ${p.name}</span>`;
+
+            const flyBtn = document.createElement('button');
+            flyBtn.innerText = 'Vola';
+            flyBtn.style.fontSize = '10px';
+            flyBtn.style.cursor = 'pointer';
+            flyBtn.onclick = (e) => {
+                e.stopPropagation(); // Evita di chiudere il menu cliccando il bottone
+                map.flyTo(p.coords, 12, {animate: true, duration: 2});
+            };
+            
+            row.appendChild(flyBtn);
+            listContent.appendChild(row);
         });
-        item.appendChild(flyBtn);
-    });
+
+        // --- LOGICA CLICK (ESPANDI/RIDUCI) ---
+        header.onclick = () => {
+            const isHidden = listContent.style.display === 'none';
+            
+            // Opzionale: chiudi tutte le altre categorie prima di aprire questa
+            // heartsListBox.querySelectorAll('.category-content').forEach(el => el.style.display = 'none');
+            
+            listContent.style.display = isHidden ? 'block' : 'none';
+            header.querySelector('.arrow').innerHTML = isHidden ? '▼' : '►';
+        };
+
+        // Assegna una classe per l'eventuale chiusura automatica
+        listContent.className = 'category-content';
+
+        categoryWrapper.appendChild(header);
+        categoryWrapper.appendChild(listContent);
+        heartsListBox.appendChild(categoryWrapper);
+    }
+});
 
     // --- Colonna destra: Pulsanti verticali ---
     const btnCol = L.DomUtil.create('div', '', container);
