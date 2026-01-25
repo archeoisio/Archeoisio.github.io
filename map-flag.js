@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Configurazioni viewport ---
   const MOBILE_MAX_WIDTH = 767;
   const mobileView  = { center: [50, 22], zoom: 4 };
-  const desktopView = { center: [50, 40], zoom: 5 };
+  const desktopView = { center: [40, 40], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
@@ -295,8 +295,40 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   labels.addTo(map);
 
+  // --- NUOVO: Layer Confini Nazioni ---
+  const bordersLayer = L.layerGroup(); // Creiamo un contenitore vuoto
+
+  // Scarichiamo i dati dei confini
+  fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+    .then(response => response.json())
+    .then(data => {
+      const geoJsonLayer = L.geoJSON(data, {
+        style: function() {
+          return {
+            color: '#4a90e2',       // Colore bordo (azzurro)
+            weight: 1,              // Spessore sottile
+            fillColor: '#4a90e2',   // Colore riempimento
+            fillOpacity: 0.1        // Molto trasparente per vedere la mappa sotto
+          };
+        },
+        onEachFeature: function(feature, layer) {
+          // Mostra il nome della nazione se ci clicchi sopra
+          layer.bindPopup(feature.properties.name); 
+        }
+      });
+      bordersLayer.addLayer(geoJsonLayer);
+    })
+    .catch(err => console.error("Errore caricamento confini:", err));
+
+  // Aggiungiamo il layer alla mappa (opzionale: rimuovi questa riga se vuoi che sia spento all'avvio)
+  bordersLayer.addTo(map);
+  
   // --- Layer switcher ---
-  L.control.layers({ "Satellite": satellite, "OpenStreetMap": osm }, { "Capitali": labels }, { collapsed: true }).addTo(map);
+L.control.layers(
+    { "Satellite": satellite, "OpenStreetMap": osm }, 
+    { "Capitali": labels, "Confini Nazioni": bordersLayer }, // <--- Aggiunto qui
+    { collapsed: true }
+).addTo(map);
 
 // --- Controlli Home, Locate, Routing a due colonne ---
 const controlBox = L.control({ position: 'topright' });
