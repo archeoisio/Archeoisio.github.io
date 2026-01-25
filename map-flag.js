@@ -226,15 +226,15 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Kyiv", nation: "Ukraine", coords: [50.4501, 30.5234], flag: "🇺🇦" }
 ];
  const specialPlaces = [
-    { name: "Uppsala", type: "home", nation: "Svezia", coords: [59.862514043172986, 17.65992409050815], address: "Frodegatan 33E", date: "Settembre 2022/Gennaio 2023", flag: "🇸🇪" },
-    { name: "Ecce Homo", type: "home", nation: "Italia", coords: [40.84505106749316, 14.253687972830459], address: "", date: "FDB", flag: "🇮🇹" },
-    { name: "Laspro", type: "home", nation: "Italia", coords: [40.685508164571274, 14.767897013099008], address: "", date: "MM", flag: "🇮🇹" },
-    { name: "Fratte", type: "home", nation: "Italia", coords: [40.69672994658257, 14.77710915495002], address: "Via Francesco Spirito 51", date: "Settembre 2021/Novembre 2023", flag: "🇮🇹" },
+    { name: "Uppsala", type: "home", nation: "Svezia", coords: [59.862514043172986, 17.65992409050815], info: "Frodegatan 33E", date: "Settembre 2022/Gennaio 2023", flag: "🇸🇪" },
+    { name: "Ecce Homo", type: "home", nation: "Italia", coords: [40.84505106749316, 14.253687972830459], info: "", date: "FDB", flag: "🇮🇹" },
+    { name: "Laspro", type: "home", nation: "Italia", coords: [40.685508164571274, 14.767897013099008], info: "", date: "MM", flag: "🇮🇹" },
+    { name: "Fratte", type: "home", nation: "Italia", coords: [40.69672994658257, 14.77710915495002], info: "Via Francesco Spirito 51", date: "Settembre 2021/Novembre 2023", flag: "🇮🇹" },
     { name: "Dipylou 8A", type: "home", nation: "Grecia", coords: [37.979367399856606, 23.72075051641102], info: "Atene, Monastiraki/Ceramico", date: "Settembre 2017/Aprile 2018", flag: "🇬🇷" },
     { name: "Rethymno", type: "home", nation: "Grecia", coords: [35.36987174693328, 24.473314364073172], info: "Αραμπατζόγλου, Creta", date: "Aprile/Giugno 2018", flag: "🇬🇷" },
     { name: "Balos", type: "mare", nation: "Grecia", coords: [35.580276911058206, 23.590131576784163], info: "💩, Creta", date: "Agosto 2017", flag: "🇬🇷" },
-    { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89403881175697, 11.044678599193777], info: "Rassegna del Cinema Archeologico, da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
-    { name: "Piana del Lago", type: "viaggi", nation: "Italia", coords: [45.89403881175697, 11.044678599193777], info: "Basilicata", date: "Ferragosto 2021", flag: "🇮🇹" },
+    { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico, da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
+    { name: "Piana del Lago", type: "viaggi", nation: "Italia", coords: [40.47193226964949, 15.762858874330147], info: "Basilicata", date: "Ferragosto 2021", flag: "🇮🇹" },
     { name: "Baden-Baden", type: "viaggi", nation: "Germania", coords: [48.76311189146083, 8.242163002948708], info: "Terme, mercatini", date: "Novembre 2023", flag: "🇩🇪" },
 ];
     
@@ -346,14 +346,17 @@ specialPlaces.forEach(place => {
         zIndexOffset: 3000 
     });
 
-    // Pop-up personalizzato con emoji e info
-    marker.bindPopup(`
-        <div style="text-align:center;">
-            <span style="font-size: 20px;">${categoryIcon}</span><br>
-            <b>${place.name}</b><br>
-            <i style="font-size: 12px; color: #666;">${place.info}</i>
+    // Pop-up personalizzato
+marker.bindPopup(`
+    <div style="text-align:center; min-width: 150px; font-family: sans-serif;">
+        <span style="font-size: 20px;">${categoryIcon}</span><br>
+        <b style="font-size: 15px; color: #333;">${place.name}</b><br>
+        <div style="font-size: 13px; color: #555; margin: 4px 0;">${place.info}</div>
+        <div style="font-size: 11px; color: #4a90e2; font-weight: bold; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">
+            🗓️ ${place.date}
         </div>
-    `);
+    </div>
+`);
 
     heartsLayer.addLayer(marker);
 });
