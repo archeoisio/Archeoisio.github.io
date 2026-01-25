@@ -236,15 +236,21 @@ capitalsData.forEach(cap => {
     const capIcon = L.divIcon({
         className: 'capital-marker',
         html: `
-            <div style="display: flex; flex-direction: column; align-items: center; pointer-events: none;">
+            <div style="display: flex; flex-direction: column; align-items: center; pointer-events: none; transform: translate(-50%, -50%);">
                 <div style="width: 6px; height: 6px; background: white; border: 1px solid #000; border-radius: 50%;"></div>
                 <div style="color: white; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 2px black; margin-top: 1px; white-space: nowrap;">
                     ${cap.name}
                 </div>
             </div>
         `,
-        iconSize: [0, 0], // Dimensioni neutre per non interferire con i click sulla mappa
+        iconSize: [0, 0],
         iconAnchor: [0, 0]
+    });
+
+    // CREAZIONE DEL MARKER (Mancava questa parte)
+    const marker = L.marker(cap.coords, { 
+        icon: capIcon,
+        interactive: false 
     });
     
     capitalsLayer.addLayer(marker);
