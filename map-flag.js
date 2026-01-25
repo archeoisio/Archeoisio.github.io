@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let lat = coords[1];
             // Se siamo nell'estremo ovest (coord negativa) ma a Nord (Russia)
             // Escludiamo l'Alaska (che inizia circa a -168)
-            if (lng < -169 && lat > 60) { 
+            if (lng < -168 && lat > 60) { 
                 lng += 360; // Sposta matematicamente a destra (es. +191)
             }
             return L.latLng(lat, lng);
