@@ -18,31 +18,38 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
 <style>
- <style>
+  /* Reset totale e aggressivo */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
   html, body {
-    margin: 0;
-    padding: 0;
-    /* dvh è l'altezza dinamica reale: zero buchi bianchi */
-    height: 100dvh; 
-    width: 100vw;
-    overflow: hidden;
-    /* Impedisce alla pagina di "molleggiare" e mostrare il grigio sotto */
-    position: fixed; 
-    background-color: #000; /* Se proprio c'è un glitch, sarà nero e non bianco */
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100% !important;
+    height: 100dvh !important; /* Forza l'altezza dinamica */
+    width: 100% !important;
+    overflow: hidden !important; /* Elimina ogni possibilità di scroll */
+    position: fixed; /* Blocca la pagina sullo schermo */
+    background-color: #000; /* Se appare un bordo, sarà nero e non si vedrà */
   }
 
   #map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
-    height: 100dvh; 
+    height: 100%; /* Si adatta al contenitore body che è 100dvh */
+    margin: 0;
+    padding: 0;
+    border: none; /* Elimina eventuali bordi residui */
     display: block;
     touch-action: none;
   }
 
-  /* Rendi i controlli Leaflet un po' più alti per non finirci sopra con le dita */
-  .leaflet-control-container {
-    margin-bottom: env(safe-area-inset-bottom);
-  }
-  /* Box info trasparente */
+ /* Box info trasparente */
   #info-panel {
     display: none;
     position: absolute;
