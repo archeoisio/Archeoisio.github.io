@@ -313,9 +313,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let lng = coords[0];
             let lat = coords[1];
             // Se siamo nell'estremo ovest (coord negativa) ma a Nord (Russia)
-            // Escludiamo l'Alaska (che inizia circa a -168)
-            if (lng < -168.5 && lat > 60) { 
-                lng += 360; // Sposta matematicamente a destra (es. +191)
+            // Se è Russia estremo est (Nord) OPPURE Isole del Pacifico (Sud e Ovest)
+if ( (coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -170 && coord[1] < 0) ) {
+    coord[0] += 360; 
+}
             }
             return L.latLng(lat, lng);
         },
