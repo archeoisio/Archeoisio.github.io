@@ -68,9 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Bamako", nation: "Mali", coords: [12.6392, -8.0029], flag: "🇲🇱" },
 { name: "Bandar Seri Begawan", nation: "Brunei", coords: [4.9031, 114.9398], flag: "🇧🇳" },
 { name: "Bangkok", nation: "Thailand", coords: [13.7563, 100.5018], flag: "🇹🇭" },
-{ name: "Bangui", nation: "Central African Republic", coords: [4.3947, 18.5582], flag: "🇨🇫" },
+{ name: "Bangui", nation: "Central African Rep.", coords: [4.3947, 18.5582], flag: "🇨🇫" },
 { name: "Banjul", nation: "Gambia", coords: [13.4549, -16.5790], flag: "🇬🇲" },
-{ name: "Basseterre", nation: "Saint Kitts and Nevis", coords: [17.3026, -62.7177], flag: "🇰🇳" },
+{ name: "Basseterre", nation: "St. Kitts and Nevis", coords: [17.3026, -62.7177], flag: "🇰🇳" },
 { name: "Beijing", nation: "China", coords: [39.9042, 116.4074], flag: "🇨🇳" },
 { name: "Beirut", nation: "Lebanon", coords: [33.8938, 35.5018], flag: "🇱🇧" },
 { name: "Belgrade", nation: "Serbia", coords: [44.8176, 20.4569], flag: "🇷🇸" },
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Bogota", nation: "Colombia", coords: [4.7110, -74.0721], flag: "🇨🇴" },
 { name: "Brasilia", nation: "Brazil", coords: [-15.7939, -47.8828], flag: "🇧🇷" },
 { name: "Bratislava", nation: "Slovakia", coords: [48.1486, 17.1077], flag: "🇸🇰" },
-{ name: "Brazzaville", nation: "Republic of the Congo", coords: [-4.2634, 15.2429], flag: "🇨🇬" },
+{ name: "Brazzaville", nation: "Congo", coords: [-4.2634, 15.2429], flag: "🇨🇬" },
 { name: "Bridgetown", nation: "Barbados", coords: [13.0975, -59.6167], flag: "🇧🇧" },
 { name: "Brussels", nation: "Belgium", coords: [50.8503, 4.3517], flag: "🇧🇪" },
 { name: "Bucharest", nation: "Romania", coords: [44.4268, 26.1025], flag: "🇷🇴" },
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Hanoi", nation: "Vietnam", coords: [21.0285, 105.8542], flag: "🇻🇳" },
 { name: "Harare", nation: "Zimbabwe", coords: [-17.8292, 31.0522], flag: "🇿🇼" },
 { name: "Helsinki", nation: "Finland", coords: [60.1699, 24.9384], flag: "🇫🇮" },
-{ name: "Honiara", nation: "Solomon Islands", coords: [-9.4456, 159.9729], flag: "🇸🇧" },
+{ name: "Honiara", nation: "Solomon Is.", coords: [-9.4456, 159.9729], flag: "🇸🇧" },
 { name: "Islamabad", nation: "Pakistan", coords: [33.6844, 73.0479], flag: "🇵🇰" },
 { name: "Jakarta", nation: "Indonesia", coords: [-6.2088, 106.8456], flag: "🇮🇩" },
 { name: "Kabul", nation: "Afghanistan", coords: [34.5553, 69.2075], flag: "🇦🇫" },
@@ -119,8 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Khartoum", nation: "Sudan", coords: [15.5007, 32.5599], flag: "🇸🇩" },
 { name: "Kigali", nation: "Rwanda", coords: [-1.9706, 30.1044], flag: "🇷🇼" },
 { name: "Kingston", nation: "Jamaica", coords: [17.9712, -76.7936], flag: "🇯🇲" },
-{ name: "Kingstown", nation: "Saint Vincent and the Grenadines", coords: [13.1600, -61.2248], flag: "🇻🇨" },
-{ name: "Kinshasa", nation: "Democratic Republic of the Congo", coords: [-4.4419, 15.2663], flag: "🇨🇩" },
+{ name: "Kingstown", nation: "St. Vin. and Gren.", coords: [13.1600, -61.2248], flag: "🇻🇨" },
+{ name: "Kinshasa", nation: "Dem. Rep. Congo", coords: [-4.4419, 15.2663], flag: "🇨🇩" },
 { name: "Kuwait City", nation: "Kuwait", coords: [29.3759, 47.9774], flag: "🇰🇼" },
 { name: "La Paz", nation: "Bolivia", coords: [-16.5000, -68.1193], flag: "🇧🇴" },
 { name: "Libreville", nation: "Gabon", coords: [0.4162, 9.4673], flag: "🇬🇦" },
@@ -134,15 +134,15 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Lusaka", nation: "Zambia", coords: [-15.4167, 28.2833], flag: "🇿🇲" },
 { name: "Luxembourg", nation: "Luxembourg", coords: [49.6117, 6.1319], flag: "🇱🇺" },
 { name: "Madrid", nation: "Spain", coords: [40.4168, -3.7038], flag: "🇪🇸" },
-{ name: "Majuro", nation: "Marshall Islands", coords: [7.1167, 171.3667], flag: "🇲🇭" },
-{ name: "Malabo", nation: "Equatorial Guinea", coords: [3.7523, 8.7741], flag: "🇬🇶" },
+{ name: "Majuro", nation: "Marshall Is.", coords: [7.1167, 171.3667], flag: "🇲🇭" },
+{ name: "Malabo", nation: "Eq. Guinea", coords: [3.7523, 8.7741], flag: "🇬🇶" },
 { name: "Malé", nation: "Maldives", coords: [4.1755, 73.5093], flag: "🇲🇻" },
 { name: "Managua", nation: "Nicaragua", coords: [12.1364, -86.2514], flag: "🇳🇮" },
 { name: "Manama", nation: "Bahrain", coords: [26.2154, 50.5832], flag: "🇧🇭" },
 { name: "Manila", nation: "Philippines", coords: [14.5995, 120.9842], flag: "🇵🇭" },
 { name: "Maputo", nation: "Mozambique", coords: [-25.9667, 32.5833], flag: "🇲🇿" },
 { name: "Maseru", nation: "Lesotho", coords: [-29.3167, 27.4833], flag: "🇱🇸" },
-{ name: "Mbabane", nation: "Eswatini", coords: [-26.3167, 31.1333], flag: "🇸🇿" },
+{ name: "Mbabane", nation: "eSwatini", coords: [-26.3167, 31.1333], flag: "🇸🇿" },
 { name: "Mexico City", nation: "Mexico", coords: [19.4333, -99.1333], flag: "🇲🇽" },
 { name: "Minsk", nation: "Belarus", coords: [53.9006, 27.5590], flag: "🇧🇾" },
 { name: "Mogadishu", nation: "Somalia", coords: [2.0419, 45.3269], flag: "🇸🇴" },
@@ -176,8 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Port of Spain", nation: "Trinidad and Tobago", coords: [10.6667, -61.5167], flag: "🇹🇹" },
 { name: "Port Vila", nation: "Vanuatu", coords: [-17.7333, 168.3167], flag: "🇻🇺" },
 { name: "Porto-Novo", nation: "Benin", coords: [6.4969, 2.6289], flag: "🇧🇯" },
-{ name: "Prague", nation: "Czech Republic", coords: [50.0755, 14.4378], flag: "🇨🇿" },
-{ name: "Praia", nation: "Cape Verde", coords: [14.9167, -23.5167], flag: "🇨🇻" },
+{ name: "Prague", nation: "Czechia", coords: [50.0755, 14.4378], flag: "🇨🇿" },
+{ name: "Praia", nation: "Cabo Verde", coords: [14.9167, -23.5167], flag: "🇨🇻" },
 { name: "Pretoria", nation: "South Africa", coords: [-25.7461, 28.1881], flag: "🇿🇦" },
 { name: "Pyongyang", nation: "North Korea", coords: [39.0194, 125.7381], flag: "🇰🇵" },
 { name: "Quito", nation: "Ecuador", coords: [-0.1807, -78.4678], flag: "🇪🇨" },
@@ -192,8 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "San Salvador", nation: "El Salvador", coords: [13.6929, -89.2182], flag: "🇸🇻" },
 { name: "Sana'a", nation: "Yemen", coords: [15.3694, 44.1910], flag: "🇾🇪" },
 { name: "Santiago", nation: "Chile", coords: [-33.4489, -70.6693], flag: "🇨🇱" },
-{ name: "Santo Domingo", nation: "Dominican Republic", coords: [18.4861, -69.9312], flag: "🇩🇴" },
-{ name: "São Tomé", nation: "São Tomé and Príncipe", coords: [0.3365, 6.7273], flag: "🇸🇹" },
+{ name: "Santo Domingo", nation: "Dominican Rep.", coords: [18.4861, -69.9312], flag: "🇩🇴" },
+{ name: "São Tomé", nation: "São Tomé and Principe", coords: [0.3365, 6.7273], flag: "🇸🇹" },
 { name: "Sarajevo", nation: "Bosnia and Herz.", coords: [43.8563, 18.4131], flag: "🇧🇦" },
 { name: "Seoul", nation: "South Korea", coords: [37.5665, 126.9780], flag: "🇰🇷" },
 { name: "Singapore", nation: "Singapore", coords: [1.3521, 103.8198], flag: "🇸🇬" },
@@ -215,25 +215,25 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Ulaanbaatar", nation: "Mongolia", coords: [47.8864, 106.9057], flag: "🇲🇳" },
 { name: "Vaduz", nation: "Liechtenstein", coords: [47.1416, 9.5215], flag: "🇱🇮" },
 { name: "Valletta", nation: "Malta", coords: [35.8997, 14.5146], flag: "🇲🇹" },
-{ name: "Vatican City", nation: "Holy See", coords: [41.9029, 12.4534], flag: "🇻🇦" },
+{ name: "Vatican City", nation: "Vatican", coords: [41.9029, 12.4534], flag: "🇻🇦" },
 { name: "Victoria", nation: "Seychelles", coords: [-4.6191, 55.4513], flag: "🇸🇨" },
 { name: "Vienna", nation: "Austria", coords: [48.2082, 16.3738], flag: "🇦🇹" },
 { name: "Vientiane", nation: "Laos", coords: [17.9757, 102.6331], flag: "🇱🇦" },
 { name: "Vilnius", nation: "Lithuania", coords: [54.6872, 25.2797], flag: "🇱🇹" },
 { name: "Warsaw", nation: "Poland", coords: [52.2297, 21.0122], flag: "🇵🇱" },
-{ name: "Washington D.C.", nation: "United States", coords: [38.8951, -77.0364], flag: "🇺🇸" },
+{ name: "Washington D.C.", nation: "United States of America", coords: [38.8951, -77.0364], flag: "🇺🇸" },
 { name: "Wellington", nation: "New Zealand", coords: [-41.2865, 174.7762], flag: "🇳🇿" },
 { name: "Windhoek", nation: "Namibia", coords: [-22.5597, 17.0832], flag: "🇳🇦" },
-{ name: "Yamoussoukro", nation: "Ivory Coast", coords: [6.8276, -5.2893], flag: "🇨🇮" },
+{ name: "Yamoussoukro", nation: "Côte d'Ivoire", coords: [6.8276, -5.2893], flag: "🇨🇮" },
 { name: "Yaoundé", nation: "Cameroon", coords: [3.8480, 11.5021], flag: "🇨🇲" },
 { name: "Yerevan", nation: "Armenia", coords: [40.1792, 44.4991], flag: "🇦🇲" },
 { name: "Zagreb", nation: "Croatia", coords: [45.8150, 15.9819], flag: "🇭🇷" },
-{ name: "Saint John's", nation: "Antigua e Barbuda", coords: [17.1274, -61.8468], flag: "🇦🇬" },
+{ name: "Saint John's", nation: "Antigua and Barb.", coords: [17.1274, -61.8468], flag: "🇦🇬" },
 { name: "St. George's", nation: "Grenada", coords: [12.0561, -61.7486], flag: "🇬🇩" },
 { name: "Guatemala City", nation: "Guatemala", coords: [14.6349, -90.5069], flag: "🇬🇹" },
 { name: "Conakry", nation: "Guinea", coords: [9.5092, -13.7122], flag: "🇬🇳" },
-{ name: "Kuala Lumpur", nation: "Malesia", coords: [3.1390, 101.6869], flag: "🇲🇾" },
-{ name: "Juba", nation: "Sud Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
+{ name: "Kuala Lumpur", nation: "Malaysia", coords: [3.1390, 101.6869], flag: "🇲🇾" },
+{ name: "Juba", nation: "S. Sudan", coords: [4.8517, 31.5825], flag: "🇸🇸" },
 { name: "Dushanbe", nation: "Tagikistan", coords: [38.5598, 68.7870], flag: "🇹🇯" },
 { name: "Tel Aviv", nation: "Israel", coords: [32.0853, 34.7818], flag: "🇮🇱" },
 { name: "Ramallah", nation: "Palestine", coords: [31.8990, 35.2048], flag: "🇵🇸" },
@@ -313,37 +313,59 @@ fetch(bordersUrl)
         fillOpacity: 0.1
       },
       onEachFeature: (feature, layer) => {
-        layer.on('click', (e) => {
-          L.DomEvent.stopPropagation(e); // Impedisce al click di passare alla mappa sotto
-          // Se c'era una nazione rossa, la riportiamo al colore originale
-          if (selectedLayer) {
+    layer.on('click', (e) => {
+        L.DomEvent.stopPropagation(e); // Blocca il click sulla mappa sotto
+
+        // 1. Gestione Colore: resetta la precedente e colora la nuova di rosso
+        if (selectedLayer) {
             geoJsonLayer.resetStyle(selectedLayer);
-          }
-          // Coloriamo la nazione attuale di ROSSO
-          layer.setStyle({
+        }
+        layer.setStyle({
             fillColor: '#ff0000',
             fillOpacity: 0.5,
             color: '#ff0000',
             weight: 2
-          });
-          selectedLayer = layer;
         });
-      }
+        selectedLayer = layer;
+
+        // 2. Recupero dati dal GeoJSON e dal tuo array
+        const nationName = feature.properties.NAME; // Nome nazione dal file geografico
+        const capitalFromGeo = feature.properties.PRIMARY_CP; // Capitale dal file geografico
+
+        // Cerchiamo nel TUO capitalsData la bandiera e le coordinate per il volo
+        const myData = capitalsData.find(c => c.nation === nationName);
+
+        // 3. Riempimento del Pop-up in basso a sinistra
+        const panel = document.getElementById('info-panel');
+        const content = document.getElementById('info-content');
+
+        if (panel && content) {
+            // Se troviamo la nazione nel tuo elenco usiamo la tua bandiera, altrimenti una neutra
+            const flag = myData ? myData.flag : "🏳️";
+
+            content.innerHTML = `
+                <div style="font-size:16px; font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+                    ${nationName} ${flag}
+                </div>
+                <div style="font-size:14px; margin-top:5px; color:#ddd;">
+                    Capitale: <b style="color:white;">${capitalFromGeo}</b>
+                </div>
+                <button id="fly-to-cap" style="width:100%; margin-top:12px; cursor:pointer; background:white; color:black; border:none; padding:8px; border-radius:5px; font-weight:bold;">
+                    ✈️ Vola sulla Capitale
+                </button>
+            `;
+
+            panel.style.display = 'block';
+
+            // 4. Funzione Volo
+            document.getElementById('fly-to-cap').onclick = () => {
+                // Se hai le coordinate nel tuo array le usiamo, altrimenti usiamo quelle del click (approssimative)
+                const coords = myData ? myData.coords : e.latlng;
+                map.flyTo(coords, 10, { animate: true, duration: 3 });
+            };
+        }
     });
-    bordersLayer.addLayer(geoJsonLayer);
-  })
-  .catch(err => console.error("Errore caricamento confini:", err));
-bordersLayer.addTo(map);
-// Click sulla mappa (spazio vuoto) per deselezionare la nazione
-map.on('click', () => {
-  if (selectedLayer) {
-    // Qui serve accedere al layer geojson per resettare
-    bordersLayer.eachLayer(l => {
-        if(l.resetStyle) l.resetStyle(selectedLayer);
-    });
-    selectedLayer = null;
-  }
-});
+}
 // --- LAYER LUOGHI DEL CUORE (Uppsala e Atene) ---
 const heartsLayer = L.layerGroup();
 
@@ -406,6 +428,19 @@ specialPlaces.forEach(place => {
 
 heartsLayer.addTo(map);
 
+    map.on('click', () => {
+    // Nascondi il pannello
+    const panel = document.getElementById('info-panel');
+    if (panel) panel.style.display = 'none';
+
+    // Ripristina il colore della nazione (se ce n'era una selezionata)
+    if (selectedLayer) {
+        bordersLayer.eachLayer(l => {
+            if (l.resetStyle) l.resetStyle(selectedLayer);
+        });
+        selectedLayer = null;
+    }
+});
   
   // --- Layer switcher ---
 L.control.layers(
