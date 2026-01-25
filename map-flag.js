@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zoom: initialView.zoom,
     layers: [satellite],
     zoomControl: true,
-    minZoom: isMobile ? 1 : 3,
+    minZoom: isMobile ? 1 : 2,
     maxZoom: 18,
     worldCopyJump: true,
     maxBounds: maxBounds,
