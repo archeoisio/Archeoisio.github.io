@@ -477,15 +477,24 @@ controlBox.addTo(map);
         } catch(err) { alert("Località non trovata"); }
     }
 
-    // Event listeners per pulsanti routing (usiamo delega perché creati dinamicamente)
-    document.addEventListener('click', (e) => {
-        if(e.target.id === 'exec-route') startRouting();
-        if(e.target.id === 'reset-route') {
-            if(control) map.removeControl(control);
-            document.getElementById('start').value = '';
-            document.getElementById('end').value = '';
+// --- Event listener universale per i pulsanti dinamici ---
+document.addEventListener('click', async (e) => {
+    // Gestione tasto CALCOLA
+    if (e.target && e.target.id === 'route-btn') {
+        const start = document.getElementById('start').value.trim();
+        const end = document.getElementById('end').value.trim();
+        if (start && end) {
+            await calculateRoute(start, end);
+        } else {
+            alert("Inserisci sia punto di partenza che destinazione!");
         }
-    });
+    }
+
+    // Gestione tasto RESET
+    if (e.target && e.target.id === 'clear-btn') {
+        resetRoute();
+    }
+});
 
     // Altezza Viewport
     function setVh() {
