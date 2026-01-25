@@ -298,7 +298,7 @@ fetch(bordersUrl)
 
                         document.getElementById('fly-to-cap').onclick = () => {
                             if (myData && myData.coords) {
-                                map.flyTo(myData.coords, 10, { animate: true, duration: 3 });
+                                map.flyTo(myData.coords, 14, { animate: true, duration: 3 });
                             } else {
                                 map.flyTo(e.latlng, 8, { animate: true, duration: 3 });
                             }
@@ -486,7 +486,7 @@ heartsListBox.style.overflowY = 'auto';
             flyBtn.style.cursor = 'pointer';
             flyBtn.onclick = (e) => {
                 e.stopPropagation(); // Evita di chiudere il menu cliccando il bottone
-                map.flyTo(p.coords, 12, {animate: true, duration: 2});
+                map.flyTo(p.coords, 14, {animate: true, duration: 5});
             };
             
             row.appendChild(flyBtn);
