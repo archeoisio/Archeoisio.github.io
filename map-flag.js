@@ -576,7 +576,6 @@ controlBox.onAdd = function(map) {
 
   return container;
 };
-};
 controlBox.addTo(map);
   // --- Funzioni utility ---
   async function geocode(query) {
