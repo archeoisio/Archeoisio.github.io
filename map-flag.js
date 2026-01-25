@@ -491,24 +491,22 @@ controlBox.addTo(map);
         } catch(err) { alert("Località non trovata"); }
     }
 
-// --- Event listener universale per i pulsanti dinamici ---
-document.addEventListener('click', async (e) => {
-    // Gestione tasto CALCOLA
-    if (e.target && e.target.id === 'route-btn') {
+// Listener per il tasto Calcola
+const routeBtn = document.getElementById('route-btn');
+if (routeBtn) {
+    routeBtn.addEventListener('click', async () => {
         const start = document.getElementById('start').value.trim();
         const end = document.getElementById('end').value.trim();
-        if (start && end) {
-            await calculateRoute(start, end);
-        } else {
-            alert("Inserisci sia punto di partenza che destinazione!");
-        }
-    }
+        await calculateRoute(start, end);
+    });
+}
 
-    // Gestione tasto RESET
-    if (e.target && e.target.id === 'clear-btn') {
+// Listener per il tasto Reset
+const clearBtn = document.getElementById('clear-btn');
+if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
         resetRoute();
-    }
-});
+    });
 
     // Altezza Viewport
     function setVh() {
