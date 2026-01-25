@@ -295,34 +295,144 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   labels.addTo(map);
 
-// --- NUOVO: Layer Confini Nazioni ---
+È molto probabile che, copiando e incollando le ultime modifiche, sia saltata qualche parentesi } o ) o una virgola, facendo bloccare l'intero script (è l'errore più comune in JavaScript).
+
+Per risolvere definitivamente e darti una base pulita e funzionante con tutte le modifiche discusse (mappa infinita a destra + Russia corretta + Layer confini), ecco il codice INTERO di map.js.
+
+Cancella tutto quello che c'è nel tuo file map.js e incolla questo blocco completo.
+
+JavaScript
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  // --- Configurazioni viewport ---
+  const MOBILE_MAX_WIDTH = 767;
+  const mobileView = { center: [50, 22], zoom: 4 };
+  const desktopView = { center: [50, 40], zoom: 5 };
+  const isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
+  const initialView = isMobile ? mobileView : desktopView;
+
+  // MODIFICA 1: Limiti "Infiniti" a Est/Ovest per permettere lo scorrimento continuo
+  // Questo risolve il problema della mappa che si tagliava a destra
+  const southWest = L.latLng(-90, -Infinity);
+  const northEast = L.latLng(90, Infinity);
+  const maxBounds = L.latLngBounds(southWest, northEast);
+
+  // --- Layer base ---
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { noWrap: false });
+  const satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { noWrap: false }
+  );
+
+  // --- Mappa ---
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    layers: [satellite], // Layer attivo di default
+    zoomControl: true,
+    minZoom: isMobile ? 1 : 3,
+    maxZoom: 18,
+    worldCopyJump: true, // Importante per la ripetizione del mondo
+    maxBounds: maxBounds,
+    maxBoundsViscosity: 1,
+    wheelPxPerZoomLevel: 120,
+    zoomSnap: 0.1,
+    attributionControl: false
+  });
+
+  // --- Funzione per altezza viewport ---
+  function setVh() {
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    const mapEl = document.getElementById('map');
+    if (mapEl) mapEl.style.height = vh + 'px';
+    setTimeout(() => map.invalidateSize(), 100);
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+  window.addEventListener('orientationchange', setVh);
+
+  // --- LAYER 1: CAPITALI ---
+  const labels = L.layerGroup();
+  let lastMarker = null;
+
+  const capitalsData = [
+    { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
+    { name: "Abuja", nation: "Nigeria", coords: [9.0579, 7.4951], flag: "🇳🇬" },
+    { name: "Accra", nation: "Ghana", coords: [5.6037, -0.1870], flag: "🇬🇭" },
+    { name: "Addis Ababa", nation: "Ethiopia", coords: [9.0300, 38.7400], flag: "🇪🇹" },
+    // ... aggiungi qui le altre tue capitali ...
+  ];
+
+  capitalsData.forEach(({ name, nation, coords, flag }) => {
+    const marker = L.marker(coords, {
+      icon: L.divIcon({
+        className: 'flag-icon',
+        html: `<div class="flag-box">${flag}</div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
+      }),
+      zIndexOffset: 1000
+    });
+
+    marker.on('click', () => {
+      // Logica del pannello info (preservata dal tuo codice)
+      const panel = document.getElementById('info-panel');
+      const content = document.getElementById('info-content');
+      if (!panel || !content) return;
+
+      if (lastMarker === marker) {
+        panel.style.display = 'none';
+        lastMarker = null;
+        return;
+      }
+
+      content.innerHTML = `
+        <div style="font-size:15px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+          ${nation} ${flag}
+        </div>
+        <div style="font-size:14px;font-weight:bold; color:white;">
+          ${name}
+          <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:14px; padding:0; margin-left:4px;">🔍</button>
+        </div>
+      `;
+      panel.style.display = 'block';
+      lastMarker = marker;
+
+      document.getElementById('fly-btn').addEventListener('click', () => {
+        map.flyTo(coords, 14, { animate: true, duration: 3 });
+      });
+    });
+
+    labels.addLayer(marker);
+  });
+  labels.addTo(map);
+
+  // --- LAYER 2: CONFINI NAZIONI (NUOVO CODICE CORRETTO) ---
   const bordersLayer = L.layerGroup();
-  // Usa il link che preferisci (GitHub o Cloudfront)
   const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
 
   fetch(bordersUrl)
-    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(r => { 
+        if(!r.ok) throw new Error(r.status); 
+        return r.json(); 
+    })
     .then(data => {
       const geoJsonLayer = L.geoJSON(data, {
-        interactive: false,
+        interactive: false, // Il mouse passa attraverso i confini
         
-        // --- QUESTA È LA FUNZIONE CHE TI SERVE ---
+        // MODIFICA 2: Trucco per spostare la Russia orientale a destra
         coordsToLatLng: function (coords) {
             let lng = coords[0];
             let lat = coords[1];
-
-            // La Logica:
-            // La punta della Russia si trova tra -170 e -180.
-            // L'Alaska inizia circa a -168.
-            // Se la longitudine è minore di -169 (quindi più a ovest dell'Alaska)
-            // E la latitudine è alta (Russia), spostiamo tutto a destra (+360).
+            // Se siamo nell'estremo ovest (coord negativa) ma a Nord (Russia)
+            // Escludiamo l'Alaska (che inizia circa a -168)
             if (lng < -169 && lat > 60) { 
-                lng += 360; 
+                lng += 360; // Sposta matematicamente a destra (es. +191)
             }
-            
             return L.latLng(lat, lng);
         },
-        // -----------------------------------------
 
         style: {
           color: '#4a90e2', 
@@ -333,16 +443,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       bordersLayer.addLayer(geoJsonLayer);
     })
-    .catch(err => console.error("Errore confini:", err));
-
-  bordersLayer.addTo(map);
-    })
-    .catch(err => {
-      console.error("Errore caricamento confini:", err);
-      alert("Impossibile caricare i confini delle nazioni. Controlla la console per i dettagli.");
-    });
-
-  bordersLayer.addTo(map);
+    .catch(err => console.error("Errore caricamento confini:", err));
+  
+  // Aggiunge i confini alla mappa all'avvio
+  bordersLayer.addTo(map)
   
   // --- Layer switcher ---
 L.control.layers(
