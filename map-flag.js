@@ -1,53 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // --- Configurazioni viewport ---
-  const MOBILE_MAX_WIDTH = 767;
-  const mobileView  = { center: [50, 22], zoom: 4 };
-  const desktopView = { center: [44, 30], zoom: 5 };
-  const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
-  const initialView = isMobile ? mobileView : desktopView;
-  const southWest = L.latLng(-90, -180);
-  const northEast = L.latLng(75, 193);
-  const maxBounds = L.latLngBounds(southWest, northEast);
-  // --- Layer base ---
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { noWrap: false });
-  const satellite = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    { noWrap: false }
-  );
-  // --- Mappa ---
-  const map = L.map('map', {
-    center: initialView.center,
-    zoom: initialView.zoom,
-    layers: [satellite],
-    zoomControl: true,
-    minZoom: isMobile ? 2.5 : 2.5,
-    maxZoom: 18,
-    worldCopyJump: true,
-    maxBounds: maxBounds,
-    maxBoundsViscosity: 1,
-    wheelPxPerZoomLevel: 120,
-    zoomSnap: 0.1,
-    attributionControl: false
-  });
-  // --- Funzione per altezza viewport ---
-  function setVh() {
-    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-    document.documentElement.style.setProperty('--vh', vh + 'px');
-    const mapEl = document.getElementById('map');
-    if (mapEl) mapEl.style.height = vh + 'px';
-    setTimeout(() => map.invalidateSize(), 100);
-  }
-  setVh();
-  window.addEventListener('resize', setVh);
-  window.addEventListener('orientationchange', setVh);
-  // --- Overlay capitali ---
-  const labels = L.layerGroup();
-  let lastMarker = null;
-  let searchMarkers = [];
-  let control = null;
-  
-  // --- Dati capitali (esempio breve, inserisci tutti i tuoi dati) ---
-  const capitalsData = [
+    // --- 1. CONFIGURAZIONI VIEWPORT & MAPPA ---
+    const MOBILE_MAX_WIDTH = 767;
+    const isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
+    const initialView = isMobile ? { center: [50, 22], zoom: 4 } : { center: [44, 30], zoom: 5 };
+    
+    const map = L.map('map', {
+        center: initialView.center,
+        zoom: initialView.zoom,
+        zoomControl: true,
+        minZoom: 2.5,
+        worldCopyJump: true,
+        maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(75, 193)),
+        maxBoundsViscosity: 1.0,
+        attributionControl: false
+    });
+
+    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+    // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
+    const labels = L.layerGroup();
+    const heartsLayer = L.layerGroup().addTo(map);
+    const bordersLayer = L.layerGroup().addTo(map);
+    let selectedLayer = null;
+    let control = null; // Per il routing
+    let searchMarkers = [];
+
+    // --- 3. DATI ---
+    const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
 { name: "Abuja", nation: "Nigeria", coords: [9.0579, 7.4951], flag: "🇳🇬" },
 { name: "Accra", nation: "Ghana", coords: [5.6037, -0.1870], flag: "🇬🇭" },
@@ -244,456 +224,204 @@ document.addEventListener('DOMContentLoaded', () => {
 { name: "Funafuti", nation: "Tuvalu", coords: [-8.5211, 179.1962], flag: "🇹🇻" },
 { name: "Kyiv", nation: "Ukraine", coords: [50.4501, 30.5234], flag: "🇺🇦" }
 ];
-  capitalsData.forEach(({ name, nation, coords, flag }) => {
-    const marker = L.marker(coords, {
-      icon: L.divIcon({
-        className: 'flag-icon',
-        html: `<div class="flag-box">${flag}</div>`,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
-  }),
-  zIndexOffset: 1000 // molto alto, per essere sopra gli altri marker
-});
-    marker.on('click', () => {
-      const panel = document.getElementById('info-panel');
-      const content = document.getElementById('info-content');
-      if (!panel || !content) return;
-      if (lastMarker === marker) {
-        panel.style.display = 'none';
-        lastMarker = null;
-        return;
-      }
-      content.innerHTML = `
-        <div style="font-size:15px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
-          ${nation} ${flag}
-        </div>
-        <div style="font-size:14px;font-weight:bold; color:white;">
-          ${name}
-          <button id="fly-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:14px; padding:0; margin-left:4px;">🔍</button>
-        </div>
-      `;
-      panel.style.display = 'block';
-      lastMarker = marker;
-      document.getElementById('fly-btn').addEventListener('click', () => {
-        map.flyTo(coords, 14, { animate: true, duration: 3 });
-      });
-    });
-    labels.addLayer(marker);
-  });
-  labels.addTo(map);
-  
-// --- LAYER 2: CONFINI NAZIONI (Corretto e Interattivo) ---
-const bordersLayer = L.layerGroup();
-const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
-let selectedLayer = null; // Memorizza la nazione selezionata
-fetch(bordersUrl)
-  .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
-  .then(data => {
-    data.features.forEach(feature => {
-      const fixRing = (ring) => {
-        ring.forEach(coord => {
-          // Errore corretto: rimosso ";" e aggiunta logica += 360
-          if ((coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -165 && coord[1] < 0)) {
-            coord[0] += 360;
-          }
-        });
-      };
-      if (feature.geometry.type === 'MultiPolygon') {
-        feature.geometry.coordinates.forEach(polygon => polygon.forEach(ring => fixRing(ring)));
-      } else if (feature.geometry.type === 'Polygon') {
-        feature.geometry.coordinates.forEach(ring => fixRing(ring));
-      }
-    });
-    const geoJsonLayer = L.geoJSON(data, {
-      interactive: true, // Deve essere true per poter cliccare le nazioni
-      style: {
-        color: '#4a90e2',
-        weight: 1,
-        fillColor: '#4a90e2',
-        fillOpacity: 0.1
-      },
-      onEachFeature: (feature, layer) => {
-    layer.on('click', (e) => {
-        L.DomEvent.stopPropagation(e); // Blocca il click sulla mappa sotto
+ const specialPlaces = [
+        { name: "Uppsala", nation: "Svezia", coords: [59.8586, 17.6389], info: "Città universitaria.", flag: "🇸🇪" },
+        { name: "Atene", nation: "Grecia", coords: [37.9838, 23.7275], info: "Culla della civiltà.", flag: "🇬🇷" }
+    ];
 
-        // 1. Gestione Colore: resetta la precedente e colora la nuova di rosso
-        if (selectedLayer) {
-            geoJsonLayer.resetStyle(selectedLayer);
-        }
-        layer.setStyle({
-            fillColor: '#ff0000',
-            fillOpacity: 0.5,
-            color: '#ff0000',
-            weight: 2
-        });
-        selectedLayer = layer;
-
-        // 2. Recupero dati dal GeoJSON e dal tuo array
-        const nationName = feature.properties.NAME; // Nome nazione dal file geografico
-        const capitalFromGeo = feature.properties.PRIMARY_CP; // Capitale dal file geografico
-
-        // Cerchiamo nel TUO capitalsData la bandiera e le coordinate per il volo
-        const myData = capitalsData.find(c => c.nation === nationName);
-
-        // 3. Riempimento del Pop-up in basso a sinistra
-        const panel = document.getElementById('info-panel');
-        const content = document.getElementById('info-content');
-
-        if (panel && content) {
-            // Se troviamo la nazione nel tuo elenco usiamo la tua bandiera, altrimenti una neutra
-            const flag = myData ? myData.flag : "🏳️";
-
-            content.innerHTML = `
-                <div style="font-size:16px; font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
-                    ${nationName} ${flag}
-                </div>
-                <div style="font-size:14px; margin-top:5px; color:#ddd;">
-                    Capitale: <b style="color:white;">${capitalFromGeo}</b>
-                </div>
-                <button id="fly-to-cap" style="width:100%; margin-top:12px; cursor:pointer; background:white; color:black; border:none; padding:8px; border-radius:5px; font-weight:bold;">
-                    ✈️ Vola sulla Capitale
-                </button>
-            `;
-
-            panel.style.display = 'block';
-
-            // 4. Funzione Volo
-            document.getElementById('fly-to-cap').onclick = () => {
-                // Se hai le coordinate nel tuo array le usiamo, altrimenti usiamo quelle del click (approssimative)
-                const coords = myData ? myData.coords : e.latlng;
-                map.flyTo(coords, 10, { animate: true, duration: 3 });
-            };
-        }
-    });
-}
-// --- LAYER LUOGHI DEL CUORE (Uppsala e Atene) ---
-const heartsLayer = L.layerGroup();
-
-const specialPlaces = [
-  { 
-    name: "Uppsala", 
-    nation: "Svezia", 
-    coords: [59.8586, 17.6389], 
-    info: "Città universitaria e storica.",
-    flag: "🇸🇪" 
-  },
-  { 
-    name: "Atene", 
-    nation: "Grecia", 
-    coords: [37.9838, 23.7275], 
-    info: "Culla della civiltà occidentale.",
-    flag: "🇬🇷" 
-  }
-];
-
-const heartIcon = L.divIcon({
-  className: 'custom-heart-icon',
-  html: `<div class="heart-emoji">❤️</div>`,
-  iconSize: [30, 30],
-  iconAnchor: [15, 15] 
-});
-
-specialPlaces.forEach(place => {
-  const marker = L.marker(place.coords, { 
-    icon: heartIcon,
-    zIndexOffset: 3000 
-  });
-
-  // Configurazione Popup: il "toggle" è gestito automaticamente da Leaflet
-  marker.bindPopup(`
-    <div style="text-align:center; min-width: 150px;">
-      <div style="font-size:14px; font-weight:bold; color:#333;">
-        ${place.nation} ${place.flag}
-      </div>
-      <div style="font-size:16px; font-weight:bold; margin: 5px 0;">
-        ${place.name} ❤️
-      </div>
-      <div style="font-size:12px; color:#666; line-height:1.4;">
-        ${place.info}
-      </div>
-    </div>
-  `, {
-    closeButton: false, // Rimuove la "x" così l'utente è spinto a ricliccare il cuore
-    offset: L.point(0, -10) // Alza leggermente il popup sopra il cuore
-  });
-
-  // Gestione del click per prevenire conflitti con la mappa
-  marker.on('click', (e) => {
-    L.DomEvent.stopPropagation(e);
-    // Nota: Leaflet gestisce già il "apri/chiudi" se riclicchi sullo stesso marker
-  });
-
-  heartsLayer.addLayer(marker);
-});
-
-heartsLayer.addTo(map);
-
-    map.on('click', () => {
-    // Nascondi il pannello
-    const panel = document.getElementById('info-panel');
-    if (panel) panel.style.display = 'none';
-
-    // Ripristina il colore della nazione (se ce n'era una selezionata)
-    if (selectedLayer) {
-        bordersLayer.eachLayer(l => {
-            if (l.resetStyle) l.resetStyle(selectedLayer);
-        });
-        selectedLayer = null;
-    }
-});
-  
-  // --- Layer switcher ---
-L.control.layers(
-  { 
-    "Satellite": satellite, 
-    "OpenStreetMap": osm 
-  }, 
-  { 
-    "Capitali": labels, 
-    "Confini": bordersLayer,
-    "❤️": heartsLayer // <--- Ora è nel menu e puoi accenderlo/spegnerlo
-  }, 
-  { collapsed: true }
-).addTo(map);
-  
-// --- Controlli Home, Locate, Routing a due colonne ---
-const controlBox = L.control({ position: 'topright' });
-controlBox.onAdd = function(map) {
-  const container = L.DomUtil.create('div', 'custom-control-box leaflet-bar');
-
-  // Stile container principale
-  container.style.display = 'flex';
-  container.style.marginTop = '-2px';
-  container.style.marginRight = '7px';
-  container.style.background = 'transparent';
-  container.style.padding = '5px';
-  container.style.border = 'none';
-  container.style.alignItems = 'flex-start';
-
-  // --- 1. COLONNA SINISTRA (Pannelli Routing e Cuori) ---
-  const leftCol = L.DomUtil.create('div', '', container);
-  leftCol.style.display = 'flex';
-  leftCol.style.flexDirection = 'column';
-  leftCol.style.alignItems = 'flex-end';
-
-  // --- BOX ROUTING ---
-  const routeBox = L.DomUtil.create('div', '', leftCol);
-  routeBox.id = 'route-box';
-  routeBox.style.marginTop = '10px';
-  routeBox.style.width = '150px';
-  routeBox.style.display = 'none';
-  routeBox.style.flexDirection = 'column';
-  routeBox.style.background = 'rgba(0, 0, 0, 0.7)';
-  routeBox.style.color = 'white';
-  routeBox.style.padding = '8px';
-  routeBox.style.borderRadius = '5px';
-  routeBox.style.boxSizing = 'border-box';
-
-  // Input Routing
-  const startInput = document.createElement('input');
-  startInput.id = 'start';
-  startInput.placeholder = 'Partenza';
-  startInput.style.width = '100%';
-  startInput.style.marginBottom = '4px';
-  routeBox.appendChild(startInput);
-
-  const endInput = document.createElement('input');
-  endInput.id = 'end';
-  endInput.placeholder = 'Destinazione';
-  endInput.style.width = '100%';
-  endInput.style.marginBottom = '4px';
-  routeBox.appendChild(endInput);
-
-  const buttonRow = document.createElement('div');
-  buttonRow.style.display = 'flex';
-  buttonRow.style.gap = '4px';
-
-  const calcBtn = document.createElement('button');
-  calcBtn.id = 'route-btn';
-  calcBtn.innerText = 'Vai';
-  calcBtn.style.flex = '1';
-  buttonRow.appendChild(calcBtn);
-
-  const clearBtn = document.createElement('button');
-  clearBtn.id = 'clear-btn';
-  clearBtn.innerText = 'Reset';
-  clearBtn.style.flex = '1';
-  buttonRow.appendChild(clearBtn);
-
-  routeBox.appendChild(buttonRow);
-
-  // --- BOX LISTA CUORI ---
-  const heartsListBox = L.DomUtil.create('div', '', leftCol);
-  heartsListBox.id = 'hearts-list-box';
-  heartsListBox.style.marginTop = '10px';
-  heartsListBox.style.width = '160px';
-  heartsListBox.style.display = 'none';
-  heartsListBox.style.flexDirection = 'column';
-  heartsListBox.style.background = 'rgba(0, 0, 0, 0.8)';
-  heartsListBox.style.color = 'white';
-  heartsListBox.style.padding = '10px';
-  heartsListBox.style.borderRadius = '8px';
-
-  specialPlaces.forEach(place => {
-    const item = L.DomUtil.create('div', '', heartsListBox);
-    item.style.display = 'flex';
-    item.style.justifyContent = 'space-between';
-    item.style.alignItems = 'center';
-    item.style.marginBottom = '8px';
-    item.style.fontSize = '12px';
-    item.innerHTML = `<span>${place.flag} ${place.name}</span>`;
-
-    const flyBtn = document.createElement('button');
-    flyBtn.innerText = 'Vola';
-    flyBtn.style.fontSize = '10px';
-    flyBtn.style.cursor = 'pointer';
+    // --- 4. CARICAMENTO CONFINI (GEOJSON) + POP-UP ---
+    const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
     
-    L.DomEvent.on(flyBtn, 'click', (e) => {
-      L.DomEvent.stopPropagation(e);
-      map.flyTo(place.coords, 12, { animate: true, duration: 2 });
-      // Salviamo il riferimento del marker nel caricamento per poterlo aprire qui
-      // Se hai usato marker.addTo(heartsLayer), cerchiamo il marker per coordinate
-      heartsLayer.eachLayer(layer => {
-        if (layer instanceof L.Marker && layer.getLatLng().equals(place.coords)) {
-          setTimeout(() => layer.openPopup(), 2100);
-        }
-      });
+    fetch(bordersUrl)
+        .then(r => r.json())
+        .then(data => {
+            const geoJsonLayer = L.geoJSON(data, {
+                style: { color: '#4a90e2', weight: 1, fillColor: '#4a90e2', fillOpacity: 0.1 },
+                onEachFeature: (feature, layer) => {
+                    layer.on('click', (e) => {
+                        L.DomEvent.stopPropagation(e);
+                        
+                        // Reset colore precedente
+                        if (selectedLayer) geoJsonLayer.resetStyle(selectedLayer);
+                        
+                        // Evidenzia nazione cliccata
+                        layer.setStyle({ fillColor: '#ff0000', fillOpacity: 0.4, color: '#ff0000', weight: 2 });
+                        selectedLayer = layer;
+
+                        const nationName = feature.properties.NAME;
+                        const capitalName = feature.properties.PRIMARY_CP;
+                        const myData = capitalsData.find(c => c.nation === nationName);
+                        
+                        // Pannello info (Basso a sinistra)
+                        const panel = document.getElementById('info-panel');
+                        const content = document.getElementById('info-content');
+                        if (panel && content) {
+                            const flag = myData ? myData.flag : "🏳️";
+                            content.innerHTML = `
+                                <div style="font-size:16px; font-weight:bold;">${nationName} ${flag}</div>
+                                <div style="font-size:14px; margin-top:5px;">Capitale: ${capitalName}</div>
+                                <button id="fly-to-cap" style="width:100%; margin-top:10px; cursor:pointer; background:#fff; color:#000; border:none; padding:8px; border-radius:4px; font-weight:bold;">✈️ Vola sulla Capitale</button>
+                            `;
+                            panel.style.display = 'block';
+                            document.getElementById('fly-to-cap').onclick = () => {
+                                map.flyTo(myData ? myData.coords : e.latlng, 10, { duration: 3 });
+                            };
+                        }
+                    });
+                }
+            }).addTo(bordersLayer);
+        });
+
+    // --- 5. CUORI ❤️ ---
+    const heartIcon = L.divIcon({
+        className: 'custom-heart-icon',
+        html: `<div class="heart-emoji">❤️</div>`,
+        iconSize: [30, 30], iconAnchor: [15, 15]
     });
-    item.appendChild(flyBtn);
-  });
 
-  // --- 2. COLONNA DESTRA (Pulsanti Verticali) ---
-  const btnCol = L.DomUtil.create('div', '', container);
-  btnCol.style.display = 'flex';
-  btnCol.style.flexDirection = 'column';
-  btnCol.style.gap = '5px';
-  btnCol.style.marginLeft = '5px';
+    specialPlaces.forEach(place => {
+        const marker = L.marker(place.coords, { icon: heartIcon, zIndexOffset: 3000 });
+        marker.bindPopup(`<div style="text-align:center;"><b>${place.name} ❤️</b><br>${place.info}</div>`);
+        heartsLayer.addLayer(marker);
+    });
 
-  // Pulsante Home
-  const homeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
-  homeBtn.href = '#';
-  homeBtn.innerHTML = '🏠';
-  L.DomEvent.on(homeBtn, 'click', e => {
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
-  });
+    // --- 6. GESTIONE CLICK MAPPA (DESELEZIONE) ---
+    map.on('click', () => {
+        const panel = document.getElementById('info-panel');
+        if (panel) panel.style.display = 'none';
+        if (selectedLayer) {
+            bordersLayer.eachLayer(l => { if (l.resetStyle) l.resetStyle(selectedLayer); });
+            selectedLayer = null;
+        }
+    });
 
-  // Pulsante Locate (Posizione)
-  const locateControl = L.control.locate({
-    flyTo: { duration: 2 },
-    strings: { title: "Posizione" }
-  });
-  const locateEl = locateControl.onAdd(map);
-  btnCol.appendChild(locateEl);
+    // --- 7. CONTROLLI INTERFACCIA (TOP-RIGHT) ---
+    const controlBox = L.control({ position: 'topright' });
+    controlBox.onAdd = function() {
+        const container = L.DomUtil.create('div', 'custom-control-box');
+        container.style.display = 'flex';
+        container.style.gap = '5px';
 
-  // Pulsante Mappa (Toggle Routing)
-  const routeBtnToggle = L.DomUtil.create('a', 'custom-home-button', btnCol);
-  routeBtnToggle.href = '#';
-  routeBtnToggle.innerHTML = '🗺️';
-  L.DomEvent.on(routeBtnToggle, 'click', e => {
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    heartsListBox.style.display = 'none'; // Chiude i cuori
-    routeBox.style.display = (routeBox.style.display === 'none') ? 'flex' : 'none';
-  });
+        // Colonna Sinistra (Pannelli a scomparsa)
+        const leftCol = L.DomUtil.create('div', '', container);
+        leftCol.style.display = 'flex';
+        leftCol.style.flexDirection = 'column';
+        leftCol.style.alignItems = 'flex-end';
 
-  // Pulsante Cuore (Toggle Lista Cuori)
-  const heartBtn = L.DomUtil.create('a', 'custom-heart-button', btnCol);
-  heartBtn.href = '#';
-  heartBtn.innerHTML = '❤️';
-  L.DomEvent.on(heartBtn, 'click', e => {
-    L.DomEvent.stopPropagation(e);
-    L.DomEvent.preventDefault(e);
-    routeBox.style.display = 'none'; // Chiude il routing
-    heartsListBox.style.display = (heartsListBox.style.display === 'none') ? 'flex' : 'none';
-  });
+        // Box Routing
+        const routeBox = L.DomUtil.create('div', '', leftCol);
+        routeBox.id = 'route-box';
+        routeBox.style.display = 'none';
+        routeBox.style.background = 'rgba(0,0,0,0.8)';
+        routeBox.style.padding = '10px';
+        routeBox.style.borderRadius = '8px';
+        routeBox.innerHTML = `
+            <input id="start" placeholder="Partenza" style="width:140px; margin-bottom:5px;"><br>
+            <input id="end" placeholder="Arrivo" style="width:140px; margin-bottom:5px;"><br>
+            <div style="display:flex; gap:5px;">
+                <button id="exec-route" style="flex:1;">Vai</button>
+                <button id="reset-route" style="flex:1;">Reset</button>
+            </div>
+        `;
 
-  return container;
-};
-controlBox.addTo(map);
-  // --- Funzioni utility ---
-  async function geocode(query) {
-    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
-    const data = await res.json();
-    if (data.length === 0) throw new Error(`Località non trovata: ${query}`);
-    return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-  }
-  async function calculateRoute(start, end) {
-    if (!start || !end) { alert("Inserisci sia punto di partenza che destinazione!"); return; }
-    try {
-      const startCoords = await geocode(start);
-      const endCoords = await geocode(end);
-      // Rimuove vecchi marker e controllo routing
-      searchMarkers.forEach(m => map.removeLayer(m));
-      searchMarkers = [];
-      if (control) { map.removeControl(control); control = null; }
-      // Nuovo controllo routing
-      control = L.Routing.control({
-        waypoints: [L.latLng(startCoords[0], startCoords[1]), L.latLng(endCoords[0], endCoords[1])],
-        routeWhileDragging: true,
-        addWaypoints: true,
-        draggableWaypoints: true,
-        showAlternatives: false,
-        show: false,
-        lineOptions: { styles: [{ color: 'blue', weight: 5, opacity: 0.7 }] },
-        createMarker: function(i, wp, nWps) {
-  const color = i === 0 ? 'green' : i === nWps-1 ? 'red' : 'blue';
-  let label;
-  if (i === 0) label = 'Partenza';
-  else if (i === nWps-1) label = 'Arrivo';
-  else label = `Waypoint ${i}`; // numerazione progressiva
-  const marker = L.marker(wp.latLng, {
-    draggable: i !== 0 && i !== nWps-1,
-    icon: L.divIcon({
-      className: 'routing-marker',
-      html: `<div style="background:${color};width:24px;height:24px;border-radius:50%;border:2px solid white;"></div>`,
-      iconSize: [24, 24],
-      iconAnchor: [12, 12]
-    })
-  });
-  // Qui il popup classico
-  marker.bindPopup(`<b>${label}</b>`);
-  searchMarkers.push(marker);
-  return marker;
-}
-      }).addTo(map);
-// --- Forza il comportamento "collapsible" anche su desktop ---
-const routingContainer = document.querySelector('.leaflet-routing-container');
-if (routingContainer) {
-  routingContainer.classList.add('leaflet-routing-collapsible');
-  routingContainer.classList.remove('leaflet-routing-container-hide');
-}
-      // Zoom automatico sul percorso
-     control.on('routesfound', e => {
-  const route = e.routes[0];
-  const bounds = L.latLngBounds(route.coordinates);
-  // FlyToBounds con durata in secondi
-  map.flyToBounds(bounds, {
-    padding: [50, 50],
-    duration: 5  // durata in secondi
-  });
-});
-    } catch (err) {
-      alert("Errore nel calcolo percorso: " + err.message);
+        // Box Lista Cuori
+        const heartsListBox = L.DomUtil.create('div', '', leftCol);
+        heartsListBox.style.display = 'none';
+        heartsListBox.style.background = 'rgba(0,0,0,0.8)';
+        heartsListBox.style.padding = '10px';
+        heartsListBox.style.borderRadius = '8px';
+        heartsListBox.style.marginTop = '5px';
+        
+        specialPlaces.forEach(p => {
+            const btn = L.DomUtil.create('button', '', heartsListBox);
+            btn.innerHTML = `${p.flag} ${p.name}`;
+            btn.style.display = 'block';
+            btn.style.width = '100%';
+            btn.style.marginBottom = '4px';
+            btn.style.cursor = 'pointer';
+            L.DomEvent.on(btn, 'click', () => map.flyTo(p.coords, 12, {duration: 2}));
+        });
+
+        // Colonna Destra (Pulsanti Verticali)
+        const btnCol = L.DomUtil.create('div', 'leaflet-bar', container);
+        btnCol.style.display = 'flex';
+        btnCol.style.flexDirection = 'column';
+        btnCol.style.border = 'none';
+
+        const homeBtn = L.DomUtil.create('a', '', btnCol);
+        homeBtn.innerHTML = '🏠';
+        homeBtn.href = '#';
+        L.DomEvent.on(homeBtn, 'click', (e) => {
+            L.DomEvent.preventDefault(e);
+            map.flyTo(initialView.center, initialView.zoom);
+        });
+
+        const locateBtn = L.control.locate({ flyTo: true, strings: {title: "Posizione"} }).onAdd(map);
+        btnCol.appendChild(locateBtn);
+
+        const routeToggle = L.DomUtil.create('a', '', btnCol);
+        routeToggle.innerHTML = '🗺️';
+        routeToggle.href = '#';
+        L.DomEvent.on(routeToggle, 'click', (e) => {
+            L.DomEvent.preventDefault(e);
+            heartsListBox.style.display = 'none';
+            routeBox.style.display = routeBox.style.display === 'none' ? 'block' : 'none';
+        });
+
+        const heartToggle = L.DomUtil.create('a', '', btnCol);
+        heartToggle.innerHTML = '❤️';
+        heartToggle.href = '#';
+        L.DomEvent.on(heartToggle, 'click', (e) => {
+            L.DomEvent.preventDefault(e);
+            routeBox.style.display = 'none';
+            heartsListBox.style.display = heartsListBox.style.display === 'none' ? 'block' : 'none';
+        });
+
+        return container;
+    };
+    controlBox.addTo(map);
+
+    // --- 8. LOGICA ROUTING (Geocoding + Routing Control) ---
+    async function geocode(query) {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        if (data.length === 0) throw new Error("Non trovato");
+        return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
     }
-  }
-  function resetRoute() {
-    if (control) { map.removeControl(control); control = null; }
-    searchMarkers.forEach(m => map.removeLayer(m));
-    searchMarkers = [];
-    document.getElementById('start').value = '';
-    document.getElementById('end').value = '';
-    // Ripristina la vista iniziale
-    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 1 });
-  }
-  // --- Event listener ---
-  document.getElementById('route-btn').addEventListener('click', async () => {
-    const start = document.getElementById('start').value.trim();
-    const end = document.getElementById('end').value.trim();
-    await calculateRoute(start, end);
-  });
-  document.getElementById('clear-btn').addEventListener('click', resetRoute);
-  // Vista iniziale
-  map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+
+    async function startRouting() {
+        const start = document.getElementById('start').value;
+        const end = document.getElementById('end').value;
+        if(!start || !end) return;
+        try {
+            const s = await geocode(start);
+            const e = await geocode(end);
+            if (control) map.removeControl(control);
+            control = L.Routing.control({
+                waypoints: [L.latLng(s[0], s[1]), L.latLng(e[0], e[1])],
+                show: false
+            }).addTo(map);
+        } catch(err) { alert("Località non trovata"); }
+    }
+
+    // Event listeners per pulsanti routing (usiamo delega perché creati dinamicamente)
+    document.addEventListener('click', (e) => {
+        if(e.target.id === 'exec-route') startRouting();
+        if(e.target.id === 'reset-route') {
+            if(control) map.removeControl(control);
+            document.getElementById('start').value = '';
+            document.getElementById('end').value = '';
+        }
+    });
+
+    // Switcher Layer Base
+    L.control.layers({"Satellite": satellite, "OSM": osm}, {"❤️ Cuori": heartsLayer, "Nazioni": bordersLayer}).addTo(map);
+
+    // Altezza Viewport
+    function setVh() {
+        document.getElementById('map').style.height = `${window.innerHeight}px`;
+        map.invalidateSize();
+    }
+    window.addEventListener('resize', setVh);
+    setVh();
 });
