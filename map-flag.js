@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Layer switcher ---
 L.control.layers(
     { "Satellite": satellite, "OpenStreetMap": osm }, 
-    { "Capitali": labels, "Confini Nazioni": bordersLayer }, // <--- Aggiunto qui
+    { "Capitali": labels, "Confini": bordersLayer }, // <--- Aggiunto qui
     { collapsed: true }
 ).addTo(map);
 
