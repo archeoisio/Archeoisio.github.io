@@ -295,32 +295,31 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   labels.addTo(map);
 
-  // --- NUOVO: Layer Confini Nazioni ---
-  const bordersLayer = L.layerGroup(); // Creiamo un contenitore vuoto
+ // --- NUOVO: Layer Confini Nazioni (Alta Risoluzione) ---
+  const bordersLayer = L.layerGroup();
 
-  // Scarichiamo i dati dei confini
-  fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+  // URL alternativo: Natural Earth 50m (molto più dettagliato)
+  fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m_cultural/ne_50m_admin_0_countries.json')
     .then(response => response.json())
     .then(data => {
       const geoJsonLayer = L.geoJSON(data, {
+        // Questa riga fa sì che il mouse ignori i confini (niente manina, niente click che vengono bloccati)
+        interactive: false, 
+        
         style: function() {
           return {
-            color: '#4a90e2',       // Colore bordo (azzurro)
-            weight: 1,              // Spessore sottile
-            fillColor: '#4a90e2',   // Colore riempimento
-            fillOpacity: 0.1        // Molto trasparente per vedere la mappa sotto
+            color: '#4a90e2',       // Colore bordo
+            weight: 1,              // Spessore
+            fillColor: '#4a90e2',   // Riempimento
+            fillOpacity: 0.1        // Trasparenza
           };
-        },
-        onEachFeature: function(feature, layer) {
-          // Mostra il nome della nazione se ci clicchi sopra
-          layer.bindPopup(feature.properties.name); 
         }
+        // HO CANCELLATO LA PARTE 'onEachFeature' -> NIENTE PIÙ POPUP
       });
       bordersLayer.addLayer(geoJsonLayer);
     })
     .catch(err => console.error("Errore caricamento confini:", err));
 
-  // Aggiungiamo il layer alla mappa (opzionale: rimuovi questa riga se vuoi che sia spento all'avvio)
   bordersLayer.addTo(map);
   
   // --- Layer switcher ---
