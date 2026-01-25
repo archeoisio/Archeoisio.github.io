@@ -736,18 +736,45 @@ map.on('click', () => {
 
 });
 
+ // --- LAYER 3: LUOGHI DEL CUORE ---
+const heartsLayer = L.layerGroup();
+
+const specialPlaces = [
+  { name: "Uppsala", coords: [59.8586, 17.6389], info: "Città universitaria in Svezia" },
+  { name: "Atene", coords: [37.9838, 23.7275], info: "Cuore della Grecia antica" }
+];
+
+// Icona personalizzata con il cuore
+const heartIcon = L.divIcon({
+  className: 'custom-heart-icon',
+  html: `<div style="font-size:24px; filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">❤️</div>`,
+  iconSize: [30, 30],
+  iconAnchor: [15, 15]
+});
+
+specialPlaces.forEach(place => {
+  const marker = L.marker(place.coords, { icon: heartIcon });
   
+  marker.bindPopup(`
+    <div style="text-align:center;">
+      <b style="font-size:16px;">${place.name}</b><br>
+      ${place.info}
+    </div>
+  `);
+  
+  heartsLayer.addLayer(marker);
+}); 
 
   // --- Layer switcher ---
 
 L.control.layers(
-
     { "Satellite": satellite, "OpenStreetMap": osm }, 
-
-    { "Capitali": labels, "Confini": bordersLayer }, // <--- Aggiunto qui
-
+    { 
+      "Capitali": labels, 
+      "Confini": bordersLayer,
+      "❤️": heartsLayer // <--- Aggiunto qui
+    },
     { collapsed: true }
-
 ).addTo(map);
 
 
