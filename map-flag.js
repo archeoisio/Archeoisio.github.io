@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  const southWest = L.latLng(-90, -180);
+  const southWest = L.latLng(-70, -180);
 
   const northEast = L.latLng(90, 193);
 
