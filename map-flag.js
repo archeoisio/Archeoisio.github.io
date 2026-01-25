@@ -296,6 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 7. CONTROLLI INTERFACCIA (TOP-RIGHT) ---
+
+      // Switcher Layer Base
+    L.control.layers({"Satellite": satellite, "OSM": osm}, {"❤️ Cuori": heartsLayer, "Nazioni": bordersLayer}).addTo(map); 
+    
   // --- Controlli Home, Locate, Routing e Cuori a due colonne ---
 const controlBox = L.control({ position: 'topright' });
 controlBox.onAdd = function(map) {
@@ -482,9 +486,6 @@ controlBox.addTo(map);
             document.getElementById('end').value = '';
         }
     });
-
-    // Switcher Layer Base
-    L.control.layers({"Satellite": satellite, "OSM": osm}, {"❤️ Cuori": heartsLayer, "Nazioni": bordersLayer}).addTo(map);
 
     // Altezza Viewport
     function setVh() {
