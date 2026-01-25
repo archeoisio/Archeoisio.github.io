@@ -178,30 +178,14 @@
     padding: 6px;
   }
 }
- /* Definiamo il battito in modo che non sposti il marker */
-@keyframes heartBeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.2); }
-  50% { transform: scale(1); }
-  75% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
+  
 .custom-heart-icon {
   display: flex !important;
   justify-content: center;
   align-items: center;
   z-index: 3000 !important;
-  /* Importante: mantiene l'icona ferma sul punto */
-  transform-origin: center !important; 
-  transition: transform 0.2s ease;
-}
 
-/* L'animazione si attiva SOLO quando il mouse è sopra o quando viene cliccato */
-.custom-heart-icon:hover {
-  animation: heartBeat 0.8s ease-in-out infinite;
 }
-
 .heart-emoji {
   font-size: 26px;
   /* Rimuoviamo eventuali margini che potrebbero spostare l'emoji */
