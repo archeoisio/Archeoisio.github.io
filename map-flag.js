@@ -310,8 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ring.forEach(coord => {
             // Fix per Russia (Siberia) e Isole del Pacifico (Tonga/Samoa)
             // Se sono molto a ovest, le spostiamo matematicamente a destra
-            if ((coord[0] < -168.5 && coord[1] > 60) || (coord[0] < -165 && coord[1] < 0)) {
-              coord[0] += 360;
+            if ((coord[0] < -168.5 && coord[1] > 60);
             }
           });
         };
