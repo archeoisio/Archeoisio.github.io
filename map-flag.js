@@ -736,18 +736,17 @@ map.on('click', () => {
 
 });
 
- // --- LAYER 3: LUOGHI DEL CUORE ---
+// --- LAYER LUOGHI DEL CUORE ---
 const heartsLayer = L.layerGroup();
 
 const specialPlaces = [
-  { name: "Uppsala", coords: [59.8586, 17.6389], info: "2021/2022" },
-  { name: "Atene", coords: [37.9838, 23.7275], info: "2017/2018" }
+  { name: "Uppsala", nation: "Svezia", coords: [59.8586, 17.6389], info: "Città del cuore ❤️" },
+  { name: "Athens", nation: "Grecia", coords: [37.9838, 23.7275], info: "Culla della civiltà ❤️" }
 ];
 
-// Icona personalizzata con il cuore
 const heartIcon = L.divIcon({
   className: 'custom-heart-icon',
-  html: `<div style="font-size:24px; filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));">❤️</div>`,
+  html: `<div class="heart-emoji">❤️</div>`,
   iconSize: [30, 30],
   iconAnchor: [15, 15]
 });
@@ -755,17 +754,37 @@ const heartIcon = L.divIcon({
 specialPlaces.forEach(place => {
   const marker = L.marker(place.coords, { 
     icon: heartIcon,
-    zIndexOffset: 2000 // <--- Valore molto alto per stare sopra tutto
+    zIndexOffset: 3000 // Sopra le capitali che hanno 1000
   });
   
-  marker.bindPopup(`
-    <div style="text-align:center;">
-      <b style="font-size:16px;">${place.name}</b><br>
-      ${place.info}
-    </div>
-  `);
-  
+  // Colleghiamo il marker al tuo pannello info laterale (come le capitali)
+  marker.on('click', () => {
+    const panel = document.getElementById('info-panel');
+    const content = document.getElementById('info-content');
+    if (!panel || !content) return;
+
+    content.innerHTML = `
+      <div style="font-size:15px;font-weight:bold; display:flex; justify-content:space-between; align-items:center;">
+        ${place.nation} ❤️
+      </div>
+      <div style="font-size:14px;font-weight:bold; color:white;">
+        ${place.name}
+      </div>
+      <div style="font-size:12px; color:white; margin-top:5px;">
+        ${place.info}
+      </div>
+    `;
+    panel.style.display = 'block';
+    
+    // Centra la mappa sul cuore con un leggero zoom
+    map.flyTo(place.coords, 8, { animate: true, duration: 2 });
+  });
+
   heartsLayer.addLayer(marker);
+});
+
+heartsLayer.addTo(map);
+
 });
 
   // --- Layer switcher ---
