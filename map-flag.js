@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Configurazioni viewport ---
   const MOBILE_MAX_WIDTH = 767;
   const mobileView  = { center: [50, 22], zoom: 4 };
-  const desktopView = { center: [45, 30], zoom: 5 };
+  const desktopView = { center: [43, 30], zoom: 5 };
   const isMobile    = window.innerWidth <= MOBILE_MAX_WIDTH;
   const initialView = isMobile ? mobileView : desktopView;
 
