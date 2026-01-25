@@ -568,27 +568,48 @@ controlBox.addTo(map);
         } catch(err) { alert("Località non trovata"); }
     }
 
+// --- 9. EVENT LISTENERS E UTILITY ---
+
 // Listener per il tasto Calcola
-const routeBtn = document.getElementById('route-btn');
-if (routeBtn) {
-    routeBtn.addEventListener('click', async () => {
+const routeBtnAction = document.getElementById('route-btn');
+if (routeBtnAction) {
+    routeBtnAction.addEventListener('click', async () => {
         const start = document.getElementById('start').value.trim();
         const end = document.getElementById('end').value.trim();
-        await calculateRoute(start, end);
+        // Nota: Assicurati che la funzione si chiami calculateRoute o startRouting come definita sopra
+        if (typeof calculateRoute === "function") {
+            await calculateRoute(start, end);
+        } else {
+            await startRouting();
+        }
     });
 }
 
 // Listener per il tasto Reset
-const clearBtn = document.getElementById('clear-btn');
-if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
-        resetRoute();
+const clearBtnAction = document.getElementById('clear-btn');
+if (clearBtnAction) {
+    clearBtnAction.addEventListener('click', () => {
+        if (typeof resetRoute === "function") {
+            resetRoute();
+        } else {
+            // Fallback manuale se resetRoute non è definita
+            if (control) map.removeControl(control);
+            document.getElementById('start').value = '';
+            document.getElementById('end').value = '';
+        }
+    });
+} // <--- CHIUSURA CORRETTA DEL LISTENER RESET
 
-    // Altezza Viewport
-    function setVh() {
-        document.getElementById('map').style.height = `${window.innerHeight}px`;
+// Funzione Altezza Viewport
+function setVh() {
+    const mapEl = document.getElementById('map');
+    if (mapEl) {
+        mapEl.style.height = `${window.innerHeight}px`;
         map.invalidateSize();
     }
-    window.addEventListener('resize', setVh);
-    setVh();
+}
+
+window.addEventListener('resize', setVh);
+setVh();
+
 });
