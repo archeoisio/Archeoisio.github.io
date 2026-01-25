@@ -457,7 +457,7 @@ heartsListBox.style.width = '190px';
 heartsListBox.style.maxHeight = '400px';
 heartsListBox.style.overflowY = 'auto';
 
-["case", "mare", "città"].forEach(category => {
+["home", "mare", "viaggi"].forEach(category => {
     const placesInCategory = specialPlaces.filter(p => p.type === category);
     
     if (placesInCategory.length > 0) {
