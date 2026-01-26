@@ -390,8 +390,8 @@ btnControl.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'leaflet-bar');
     
     // Stile per posizionamento
-    container.style.marginTop = '-5px'; 
-    container.style.marginRight = '4px';
+     
+container.style.marginRight = '4px';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.gap = '5px';
