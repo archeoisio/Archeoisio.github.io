@@ -407,8 +407,6 @@ async function startRouting() {
             lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
         }).addTo(map);
 
-        // Chiude il box dopo il calcolo per liberare visuale
-        document.getElementById('route-box').style.display = 'none';
 
     } catch (e) {
         alert("Località non trovata. Prova a essere più specifico.");
