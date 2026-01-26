@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- 1. CONFIGURAZIONI VIEWPORT & MAPPA ---
-    const MOBILE_MAX_WIDTH = 767;
+    const MOBILE_MAX_WIDTH = 1024;
     const isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
     const initialView = isMobile ? { center: [50, 22], zoom: 4 } : { center: [44, 30], zoom: 5 };
     
