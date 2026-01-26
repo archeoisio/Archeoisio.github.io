@@ -383,7 +383,7 @@ const layersControl = L.control.layers(
 
 // Spostamento Switcher a destra
 const layersContainer = layersControl.getContainer();
-layersContainer.style.marginRight = '0px'; // Riduce lo spazio dal bordo destro
+layersContainer.style.marginRight = '2px'; // Riduce lo spazio dal bordo destro
 
 // --- CONTROLLO 1: PULSANTI (IN ALTO A DESTRA) ---
 const btnControl = L.control({ position: 'topright' });
@@ -391,8 +391,8 @@ btnControl.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'leaflet-bar');
     
     // --- STILE PER ALZARE I PULSANTI ---
-    container.style.marginTop = '-40px'; // Valore negativo per portarli più su
-    container.style.marginRight = '7px';
+    container.style.marginTop = '-20px'; // Valore negativo per portarli più su
+    container.style.marginRight = '2px';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.gap = '5px';
