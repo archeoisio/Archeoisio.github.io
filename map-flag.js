@@ -432,7 +432,8 @@ btnControl.onAdd = function(map) {
     
     // Stile per posizionamento
      
-container.style.marginRight = '4px';
+  container.style.marginTop = '-3px';
+    container.style.marginRight = '4px';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.gap = '5px';
