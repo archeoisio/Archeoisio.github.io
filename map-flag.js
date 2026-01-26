@@ -327,7 +327,7 @@ fetch(bordersUrl)
 const typeIcons = {
     "home": "🏠",
     "mare": "🏖️",
-    "viaggi": "🏞️"
+    "viaggi": "🛬"
 };
 
 specialPlaces.forEach(place => {
