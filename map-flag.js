@@ -455,7 +455,7 @@ heartsListBox.style.marginTop = '10px';
 heartsListBox.style.background = 'rgba(0,0,0,0.85)';
 heartsListBox.style.padding = '8px';
 heartsListBox.style.borderRadius = '5px';
-heartsListBox.style.width = '150px';
+heartsListBox.style.width = '200px';
 heartsListBox.style.maxHeight = '400px';
 heartsListBox.style.overflowY = 'auto';
 
