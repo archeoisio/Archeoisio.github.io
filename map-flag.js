@@ -649,33 +649,26 @@ function setVh() {
     const mapEl = document.getElementById('map');
     if (!mapEl || !map) return;
 
-    // Funzione che applica le dimensioni reali e avvisa Leaflet
-    const forceResize = () => {
-        const vh = window.innerHeight;
-        const vw = window.innerWidth;
+    const runResize = () => {
+        // Applica i pixel correnti del viewport
+        mapEl.style.width = window.innerWidth + 'px';
+        mapEl.style.height = window.innerHeight + 'px';
         
-        mapEl.style.height = vh + 'px';
-        mapEl.style.width = vw + 'px';
-        
-        // invalidateSize({animate: false}) forza il ridisegno immediato dei pezzi di mappa
+        // Forza Leaflet a ridisegnare i quadratini (tiles) mancanti sui lati
         map.invalidateSize({ animate: false });
     };
 
-    // Lanciamo il ricalcolo più volte per sicurezza:
-    // 1. Istantaneo
-    // 2. Dopo 100ms (inizio rotazione)
-    // 3. Dopo 400ms (fine animazione rotazione)
-    forceResize();
-    setTimeout(forceResize, 100);
-    setTimeout(forceResize, 400);
-    setTimeout(forceResize, 800);
+    // Eseguiamo il ricalcolo più volte durante la rotazione (0ms, 200ms, 500ms, 1s)
+    // Questo cattura il momento esatto in cui le bande nere dovrebbero sparire
+    runResize();
+    [200, 500, 1000].forEach(delay => setTimeout(runResize, delay));
 }
 
-// Ascolta il resize (Chrome/Android) e l'orientamento (iOS/Safari)
+// Ascolta sia il ridimensionamento (Chrome Desktop/Android) che la rotazione (iOS)
 window.addEventListener('resize', setVh);
 window.addEventListener('orientationchange', setVh);
 
-// Esegui subito al caricamento
+// Avvio immediato
 setVh();
     
 // Chiusura del DOMContentLoaded
