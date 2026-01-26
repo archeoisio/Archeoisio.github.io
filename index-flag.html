@@ -34,19 +34,24 @@
     background-color: #000; /* Se appare un bordo, sarà nero e non si vedrà */
   }
 #map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw !important; /* Forza la larghezza dell'intero viewport */
+    position: fixed !important; /* Blocca la mappa rispetto allo schermo */
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;    /* Forza la larghezza al 100% della visuale */
     height: 100vh !important;
-    height: 100dvh !important;
+    height: 100dvh !important;  /* Supporto per browser mobile moderni */
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 1;
+}
+
+/* Rimuovi eventuali margini dal body che potrebbero spingere la mappa */
+body {
     margin: 0;
     padding: 0;
-    border: none;
-    display: block;
-    /* Gestisce le aree delle tacche/notch sui telefoni moderni */
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
  /* Box info trasparente */
@@ -170,7 +175,7 @@
     z-index: 10000;       /* sopra altri elementi */
 }
 /* Mobile */
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
   .leaflet-routing-container {
     width: 90%;             /* quasi tutta la larghezza dello schermo */
     max-height: 200px;      /* un po' più alto su mobile */
