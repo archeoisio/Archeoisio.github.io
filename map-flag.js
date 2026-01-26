@@ -536,3 +536,17 @@ document.addEventListener('click', async (e) => {
         if(n) n.value = '';
     }
 });
+// --- FUNZIONE ALTEZZA VIEWPORT ---
+    function setVh() {
+        const mapEl = document.getElementById('map');
+        if (mapEl) {
+            mapEl.style.height = `${window.innerHeight}px`;
+            if (map) map.invalidateSize(); // Forza la mappa a ricalcolare i bordi
+        }
+    }
+
+    // --- ATTIVAZIONE ---
+    window.addEventListener('resize', setVh);
+    setVh();
+
+});
