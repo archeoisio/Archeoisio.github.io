@@ -647,29 +647,31 @@ sideInfoControl.addTo(map);
 
 function setVh() {
     const mapEl = document.getElementById('map');
-    if (mapEl) {
-        // Forza le dimensioni esatte dei pixel visibili
-        mapEl.style.width = window.innerWidth + 'px';
-        mapEl.style.height = window.innerHeight + 'px';
-        
-        if (map) {
-            // timeout necessario: senza questo la mappa ricalcola sulle vecchie dimensioni
-            setTimeout(() => {
-                map.invalidateSize();
-            }, 100); 
-        }
-    }
+    if (!mapEl || !map) return;
+
+    // Forza le dimensioni esatte dello schermo
+    mapEl.style.width = window.innerWidth + 'px';
+    mapEl.style.height = window.innerHeight + 'px';
+
+    // Diciamo a Leaflet di ricalcolare i bordi
+    map.invalidateSize();
+
+    // TRUCCO PER IPHONE: Ripetiamo il calcolo dopo brevi intervalli
+    // perché iOS cambia le dimensioni in modo asincrono durante l'animazione
+    [100, 300, 500, 1000].forEach(delay => {
+        setTimeout(() => {
+            mapEl.style.width = window.innerWidth + 'px';
+            mapEl.style.height = window.innerHeight + 'px';
+            map.invalidateSize();
+        }, delay);
+    });
 }
 
-// Gestione eventi combinata
+// Eventi per attivare il ricalcolo
 window.addEventListener('resize', setVh);
-window.addEventListener('orientationchange', () => {
-    // Doppio controllo per la rotazione mobile
-    setTimeout(setVh, 100);
-    setTimeout(setVh, 500); // Un secondo controllo più tardivo per sicurezza
-});
-
-setVh(); // Esegui subito
+window.addEventListener('orientationchange', setVh);
+// Caricamento iniziale
+setVh();
     
 // Chiusura del DOMContentLoaded
 });
