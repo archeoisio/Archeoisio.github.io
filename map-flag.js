@@ -405,14 +405,15 @@ btnControl.onAdd = function(map) {
     container.appendChild(locateControl.onAdd(map));
     
     // Pulsante Routing 🗺️
-    const routeBtn = L.DomUtil.create('a', 'custom-home-button', container);
+     const routeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
+    routeBtn.href = '#';
     routeBtn.innerHTML = '🗺️';
+    routeBtn.title = "Mostra/Nascondi indicazioni";
     L.DomEvent.on(routeBtn, 'click', e => {
         L.DomEvent.stopPropagation(e);
-        const rb = document.getElementById('route-box');
-        const hb = document.getElementById('hearts-list-box');
-        if(hb) hb.style.display = 'none'; 
-        if(rb) rb.style.display = (rb.style.display === 'none') ? 'flex' : 'none';
+        L.DomEvent.preventDefault(e);
+        heartsListBox.style.display = 'none'; // Chiude i cuori se apri routing
+        routeBox.style.display = (routeBox.style.display === 'none') ? 'flex' : 'none';
     });
 
     // Pulsante Cuore ❤️
