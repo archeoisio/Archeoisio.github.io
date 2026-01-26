@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maxBoundsViscosity: 1.0,
         attributionControl: false
     });
-
+    const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
     const capitalsLayer = L.layerGroup().addTo(map);
@@ -261,6 +261,7 @@ capitalsData.forEach(cap => {
     
     capitalsLayer.addLayer(marker);
 });
+    
     // --- 4. CARICAMENTO CONFINI (GEOJSON) ---
 fetch(bordersUrl)
     .then(r => r.json())
