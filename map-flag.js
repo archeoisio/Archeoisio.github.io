@@ -537,7 +537,7 @@ heartsListBox.style.overflowY = 'auto';
     // Home
     const homeBtn = L.DomUtil.create('a', 'custom-home-button', btnCol);
     homeBtn.href = '#';
-    homeBtn.innerHTML = '🏠';
+    homeBtn.innerHTML = '🌍';
     homeBtn.title = "Torna alla vista iniziale";
     L.DomEvent.on(homeBtn, 'click', e => {
         L.DomEvent.stopPropagation(e);
