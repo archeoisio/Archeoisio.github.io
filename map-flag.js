@@ -1,8 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- 1. CONFIGURAZIONI VIEWPORT & MAPPA ---
     const MOBILE_MAX_WIDTH = 1024;
+    
+    // Rileviamo se è mobile e se è in modalità orizzontale (larghezza > altezza)
     const isMobile = window.innerWidth <= MOBILE_MAX_WIDTH;
-    const initialView = isMobile ? { center: [50, 22], zoom: 4 } : { center: [44, 30], zoom: 5 };
+    const isLandscape = window.innerWidth > window.innerHeight;
+
+    let initialView;
+
+    if (isMobile) {
+        if (isLandscape) {
+            // VISTA MOBILE RUOTATO (Orizzontale)
+            // Usiamo uno zoom intermedio o lo stesso, ma puoi cambiare il centro per bilanciare i pannelli
+            initialView = { center: [48, 25], zoom: 4 }; 
+        } else {
+            // VISTA MOBILE VERTICALE (Il tuo originale)
+            initialView = { center: [50, 22], zoom: 4 };
+        }
+    } else {
+        // VISTA DESKTOP (Il tuo originale)
+        initialView = { center: [44, 30], zoom: 5 };
+    }
     
     const map = L.map('map', {
         center: initialView.center,
