@@ -343,8 +343,8 @@ specialPlaces.forEach(place => {
                 display: flex; 
                 align-items: center; 
                 justify-content: center; 
-                width: 36px; 
-                height: 36px; 
+                width: 32px; 
+                height: 32px; 
                 background-color: white; 
                 border: 2px solid #fff; 
                 border-radius: 50%; 
@@ -354,7 +354,7 @@ specialPlaces.forEach(place => {
                 ${categoryIcon}
             </div>
         `,
-        iconSize: [36, 36],
+        iconSize: [30, 30],
         iconAnchor: [18, 18] // Centra il cerchio sulle coordinate
     });
 
