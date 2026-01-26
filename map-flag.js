@@ -372,7 +372,48 @@ marker.bindPopup(`
             selectedLayer = null;
         }
     });
+async function startRouting() {
+    const startInput = document.getElementById('start');
+    const endInput = document.getElementById('end');
 
+    if (!startInput || !endInput) return;
+
+    const startVal = startInput.value;
+    const endVal = endInput.value;
+
+    if (!startVal || !endVal) {
+        alert("Inserisci sia partenza che destinazione");
+        return;
+    }
+
+    try {
+        // Funzione Geocoding interna
+        const geocode = async (query) => {
+            const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+            const d = await r.json();
+            if (d.length === 0) throw new Error();
+            return L.latLng(d[0].lat, d[0].lon);
+        };
+
+        const startCoords = await geocode(startVal);
+        const endCoords = await geocode(endVal);
+
+        if (control) map.removeControl(control);
+
+        control = L.Routing.control({
+            waypoints: [startCoords, endCoords],
+            language: 'it',
+            routeWhileDragging: true,
+            lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
+        }).addTo(map);
+
+        // Chiude il box dopo il calcolo per liberare visuale
+        document.getElementById('route-box').style.display = 'none';
+
+    } catch (e) {
+        alert("Località non trovata. Prova a essere più specifico.");
+    }
+}
 // --- 7. CONTROLLI INTERFACCIA ---
 
 // 1. Switcher Layer Base (Spostato a destra)
@@ -476,20 +517,29 @@ sideInfoControl.onAdd = function(map) {
         </div>
     `;
 
-    // Collegamento eventi Calcola e Reset direttamente qui
+   // Colleghiamo i tasti usando il sistema di eventi di Leaflet
     setTimeout(() => {
-        const rBtn = routeBox.querySelector('#route-btn');
-        const cBtn = routeBox.querySelector('#clear-btn');
-        
-        if(rBtn) rBtn.onclick = async () => await startRouting();
-        if(cBtn) cBtn.onclick = () => {
-            if (control) {
-                map.removeControl(control);
-                control = null;
-            }
-            document.getElementById('start').value = '';
-            document.getElementById('end').value = '';
-        };
+        const rb = document.getElementById('route-btn');
+        const cb = document.getElementById('clear-btn');
+
+        if (rb) {
+            L.DomEvent.on(rb, 'click', async (e) => {
+                L.DomEvent.stopPropagation(e);
+                await startRouting();
+            });
+        }
+
+        if (cb) {
+            L.DomEvent.on(cb, 'click', (e) => {
+                L.DomEvent.stopPropagation(e);
+                if (control) {
+                    map.removeControl(control);
+                    control = null;
+                }
+                document.getElementById('start').value = '';
+                document.getElementById('end').value = '';
+            });
+        }
     }, 100);
 
     // 2. Box Lista Cuori
