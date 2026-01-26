@@ -391,8 +391,8 @@ btnControl.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'leaflet-bar');
     
     // --- STILE PER ALZARE I PULSANTI ---
-    container.style.marginTop = '-20px'; // Valore negativo per portarli più su
-    container.style.marginRight = '2px';
+    container.style.marginTop = '-10px'; // Valore negativo per portarli più su
+    container.style.marginRight = '5px';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.gap = '5px';
