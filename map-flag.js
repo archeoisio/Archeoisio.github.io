@@ -546,13 +546,29 @@ sideInfoControl.onAdd = function(map) {
     heartsListBox.id = 'hearts-list-box';
     heartsListBox.style.display = 'none';
     heartsListBox.style.marginTop = '10px';
-    heartsListBox.style.background = 'rgba(0,0,0,0.85)';
+    heartsListBox.style.background = 'rgba(0,0,0,0.5)';
     heartsListBox.style.padding = '10px';
     heartsListBox.style.borderRadius = '8px';
     heartsListBox.style.width = '200px';
     heartsListBox.style.maxHeight = '350px';
     heartsListBox.style.overflowY = 'auto';
+    
+// Impedisce che lo scroll del mouse o il trascinamento touch muovano la mappa sotto
+L.DomEvent.disableScrollPropagation(heartsListBox);
+L.DomEvent.disableClickPropagation(heartsListBox);
 
+// Blocco specifico per il touch (Mobile) e trascinamento (Desktop)
+L.DomEvent.on(heartsListBox, 'mousedown mousewheel touchstart pointerdown', (e) => {
+    L.DomEvent.stopPropagation(e);
+    map.dragging.disable();
+    map.scrollWheelZoom.disable();
+});
+
+// Riattiva tutto quando usciamo dal riquadro
+L.DomEvent.on(heartsListBox, 'mouseleave touchend', () => {
+    map.dragging.enable();
+    map.scrollWheelZoom.enable();
+});
     ["home", "mare", "viaggi"].forEach(category => {
         const placesInCategory = specialPlaces.filter(p => p.type === category);
         if (placesInCategory.length > 0) {
