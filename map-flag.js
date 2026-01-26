@@ -650,26 +650,22 @@ function setVh() {
     if (!mapEl || !map) return;
 
     const runResize = () => {
-        // Applica i pixel correnti del viewport
+        // Reset asimmetria Chrome
+        mapEl.style.left = "0px";
+        mapEl.style.top = "0px";
+        
+        // Pixel reali del viewport
         mapEl.style.width = window.innerWidth + 'px';
         mapEl.style.height = window.innerHeight + 'px';
         
-        // Forza Leaflet a ridisegnare i quadratini (tiles) mancanti sui lati
         map.invalidateSize({ animate: false });
     };
 
-    // Eseguiamo il ricalcolo più volte durante la rotazione (0ms, 200ms, 500ms, 1s)
-    // Questo cattura il momento esatto in cui le bande nere dovrebbero sparire
     runResize();
-    [200, 500, 1000].forEach(delay => setTimeout(runResize, delay));
+    // Eseguiamo più volte perché Chrome aggiorna il viewport con ritardo
+    setTimeout(runResize, 100);
+    setTimeout(runResize, 500);
 }
-
-// Ascolta sia il ridimensionamento (Chrome Desktop/Android) che la rotazione (iOS)
-window.addEventListener('resize', setVh);
-window.addEventListener('orientationchange', setVh);
-
-// Avvio immediato
-setVh();
     
 // Chiusura del DOMContentLoaded
 });
