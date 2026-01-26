@@ -645,18 +645,30 @@ L.DomEvent.on(heartsListBox, 'mouseleave touchend', () => {
 };
 sideInfoControl.addTo(map);
 
-// --- FUNZIONI DI UTILITÀ FINALI ---
-
-function setVh() {
-    const mapEl = document.getElementById('map');
-    if (mapEl) {
-        mapEl.style.height = `${window.innerHeight}px`;
-        if (map) map.invalidateSize();
+// --- FUNZIONE ALTEZZA E LARGHEZZA VIEWPORT ---
+    function setVh() {
+        const mapEl = document.getElementById('map');
+        if (mapEl) {
+            // Forza sia altezza che larghezza per eliminare le bande nere
+            mapEl.style.height = `${window.innerHeight}px`;
+            mapEl.style.width = `${window.innerWidth}px`;
+            
+            if (map) {
+                // InvalidateSize dice a Leaflet di ricalcolare i bordi immediatamente
+                map.invalidateSize();
+            }
+        }
     }
-}
 
-window.addEventListener('resize', setVh);
-setVh();
+    // Ascolta sia il ridimensionamento che il cambio di orientamento
+    window.addEventListener('resize', setVh);
+    window.addEventListener('orientationchange', () => {
+        // Piccolo delay per dare tempo al browser di aggiornare le coordinate
+        setTimeout(setVh, 300);
+    });
+
+    // Esegui subito al caricamento
+    setVh();
 
 // Chiusura del DOMContentLoaded
 });
