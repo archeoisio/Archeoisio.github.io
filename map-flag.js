@@ -649,28 +649,33 @@ function setVh() {
     const mapEl = document.getElementById('map');
     if (!mapEl || !map) return;
 
-    // Forza le dimensioni esatte dello schermo
-    mapEl.style.width = window.innerWidth + 'px';
-    mapEl.style.height = window.innerHeight + 'px';
+    // Funzione che applica le dimensioni reali e avvisa Leaflet
+    const forceResize = () => {
+        const vh = window.innerHeight;
+        const vw = window.innerWidth;
+        
+        mapEl.style.height = vh + 'px';
+        mapEl.style.width = vw + 'px';
+        
+        // invalidateSize({animate: false}) forza il ridisegno immediato dei pezzi di mappa
+        map.invalidateSize({ animate: false });
+    };
 
-    // Diciamo a Leaflet di ricalcolare i bordi
-    map.invalidateSize();
-
-    // TRUCCO PER IPHONE: Ripetiamo il calcolo dopo brevi intervalli
-    // perché iOS cambia le dimensioni in modo asincrono durante l'animazione
-    [100, 300, 500, 1000].forEach(delay => {
-        setTimeout(() => {
-            mapEl.style.width = window.innerWidth + 'px';
-            mapEl.style.height = window.innerHeight + 'px';
-            map.invalidateSize();
-        }, delay);
-    });
+    // Lanciamo il ricalcolo più volte per sicurezza:
+    // 1. Istantaneo
+    // 2. Dopo 100ms (inizio rotazione)
+    // 3. Dopo 400ms (fine animazione rotazione)
+    forceResize();
+    setTimeout(forceResize, 100);
+    setTimeout(forceResize, 400);
+    setTimeout(forceResize, 800);
 }
 
-// Eventi per attivare il ricalcolo
+// Ascolta il resize (Chrome/Android) e l'orientamento (iOS/Safari)
 window.addEventListener('resize', setVh);
 window.addEventListener('orientationchange', setVh);
-// Caricamento iniziale
+
+// Esegui subito al caricamento
 setVh();
     
 // Chiusura del DOMContentLoaded
