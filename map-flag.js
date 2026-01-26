@@ -624,7 +624,7 @@ L.DomEvent.on(heartsListBox, 'mouseleave touchend', () => {
                 
                 const vBtn = document.createElement('button');
                 vBtn.innerText = 'Vola';
-                vBtn.style.fontSize = '10px';
+                vBtn.style.fontSize = '12px';
                 vBtn.style.padding = '2px 5px';
                 vBtn.onclick = () => map.flyTo(p.coords, 16);
                 
