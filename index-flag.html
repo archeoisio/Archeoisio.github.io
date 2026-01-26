@@ -23,25 +23,24 @@
     box-sizing: border-box;
   }
 
-  html, body {
+html, body {
     margin: 0 !important;
     padding: 0 !important;
-    height: 100% !important;
-    height: 100dvh !important; /* Forza l'altezza dinamica */
     width: 100% !important;
-    overflow: hidden !important; /* Elimina ogni possibilità di scroll */
-    position: fixed; /* Blocca la pagina sullo schermo */
-    background-color: #000; /* Se appare un bordo, sarà nero e non si vedrà */
-  }
+    height: 100% !important;
+    overflow: hidden !important;
+    background-color: #000; /* Nasconde eventuali glitch durante la rotazione */
+}
+
 #map {
-    position: fixed !important; /* Blocca la mappa rispetto allo schermo */
+    position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100vw !important;    /* Forza la larghezza al 100% della visuale */
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
     height: 100vh !important;
-    height: 100dvh !important;  /* Supporto per browser mobile moderni */
-    margin: 0 !important;
-    padding: 0 !important;
+    height: 100dvh !important;
     z-index: 1;
 }
 
