@@ -645,30 +645,31 @@ L.DomEvent.on(heartsListBox, 'mouseleave touchend', () => {
 };
 sideInfoControl.addTo(map);
 
-// --- FUNZIONE ALTEZZA E LARGHEZZA VIEWPORT ---
-    function setVh() {
-        const mapEl = document.getElementById('map');
-        if (mapEl) {
-            // Forza sia altezza che larghezza per eliminare le bande nere
-            mapEl.style.height = `${window.innerHeight}px`;
-            mapEl.style.width = `${window.innerWidth}px`;
-            
-            if (map) {
-                // InvalidateSize dice a Leaflet di ricalcolare i bordi immediatamente
+function setVh() {
+    const mapEl = document.getElementById('map');
+    if (mapEl) {
+        // Forza le dimensioni esatte dei pixel visibili
+        mapEl.style.width = window.innerWidth + 'px';
+        mapEl.style.height = window.innerHeight + 'px';
+        
+        if (map) {
+            // timeout necessario: senza questo la mappa ricalcola sulle vecchie dimensioni
+            setTimeout(() => {
                 map.invalidateSize();
-            }
+            }, 100); 
         }
     }
+}
 
-    // Ascolta sia il ridimensionamento che il cambio di orientamento
-    window.addEventListener('resize', setVh);
-    window.addEventListener('orientationchange', () => {
-        // Piccolo delay per dare tempo al browser di aggiornare le coordinate
-        setTimeout(setVh, 300);
-    });
+// Gestione eventi combinata
+window.addEventListener('resize', setVh);
+window.addEventListener('orientationchange', () => {
+    // Doppio controllo per la rotazione mobile
+    setTimeout(setVh, 100);
+    setTimeout(setVh, 500); // Un secondo controllo più tardivo per sicurezza
+});
 
-    // Esegui subito al caricamento
-    setVh();
-
+setVh(); // Esegui subito
+    
 // Chiusura del DOMContentLoaded
 });
