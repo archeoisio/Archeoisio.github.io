@@ -393,10 +393,15 @@ controlBox.onAdd = function(map) {
     container.style.alignItems = 'flex-start';
 
     // --- Colonna sinistra: Box (Routing e Cuori) ---
-    const leftCol = L.DomUtil.create('div', '', container);
-    leftCol.style.display = 'flex';
-    leftCol.style.flexDirection = 'column';
-    leftCol.style.alignItems = 'flex-end';
+  // Cerca il punto in cui definisci leftCol
+const leftCol = L.DomUtil.create('div', '', container);
+leftCol.style.position = 'absolute'; 
+leftCol.style.top = '10px';    // Distanza dal margine superiore
+leftCol.style.left = '10px';   // Distanza dal margine sinistro
+leftCol.style.zIndex = '1000'; // Fondamentale per stare sopra la mappa
+leftCol.style.display = 'flex';
+leftCol.style.flexDirection = 'column';
+leftCol.style.alignItems = 'flex-start';
 
     // 1. Box Routing
     const routeBox = L.DomUtil.create('div', '', leftCol);
