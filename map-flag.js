@@ -396,7 +396,7 @@ controlBox.onAdd = function(map) {
   // Cerca il punto in cui definisci leftCol
 const leftCol = L.DomUtil.create('div', '', container);
 leftCol.style.position = 'absolute'; 
-leftCol.style.top = '100px';    // Distanza dal margine superiore
+leftCol.style.top = '300px';    // Distanza dal margine superiore
 leftCol.style.left = '1px';   // Distanza dal margine sinistro
 leftCol.style.zIndex = '1000'; // Fondamentale per stare sopra la mappa
 leftCol.style.display = 'flex';
