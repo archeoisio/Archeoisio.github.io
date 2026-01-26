@@ -520,3 +520,19 @@ sideInfoControl.onAdd = function(map) {
     return container;
 };
 sideInfoControl.addTo(map);
+    // Listener universale per bottoni dinamici
+document.addEventListener('click', async (e) => {
+    // Bottone Calcola
+    if (e.target && e.target.id === 'route-btn') {
+        await startRouting();
+    }
+    
+    // Bottone Reset
+    if (e.target && e.target.id === 'clear-btn') {
+        if (control) map.removeControl(control);
+        const s = document.getElementById('start');
+        const n = document.getElementById('end');
+        if(s) s.value = '';
+        if(n) n.value = '';
+    }
+});
