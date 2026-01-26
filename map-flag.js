@@ -261,35 +261,36 @@ capitalsData.forEach(cap => {
     
     capitalsLayer.addLayer(marker);
 });
-    // --- 4. CARICAMENTO CONFINI (GEOJSON) + POP-UP ---
-  const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
-
+    // --- 4. CARICAMENTO CONFINI (GEOJSON) ---
 fetch(bordersUrl)
     .then(r => r.json())
     .then(data => {
         const geoJsonLayer = L.geoJSON(data, {
-            style: { 
-                color: '#4a90e2', 
-                weight: 1, 
-                fillOpacity: 0 
-            },
+            style: { color: '#4a90e2', weight: 1, fillOpacity: 0 },
             onEachFeature: (feature, layer) => {
                 layer.on('click', (e) => {
                     L.DomEvent.stopPropagation(e);
 
+                    // --- LOGICA TOGGLE ---
+                    if (selectedLayer === layer) {
+                        // Se clicco la nazione già attiva, la deseleziono
+                        geoJsonLayer.resetStyle(layer);
+                        selectedLayer = null;
+                        document.getElementById('info-panel').style.display = 'none';
+                        return; // Esco subito dalla funzione
+                    }
+
+                    // Se clicco una nazione diversa, resetto quella precedente
                     if (selectedLayer) {
                         geoJsonLayer.resetStyle(selectedLayer);
                     }
 
-                    layer.setStyle({ 
-                        color: '#ff0000', 
-                        weight: 3, 
-                        fillOpacity: 0 
-                    });
-
+                    // Attivo la nuova nazione
+                    layer.setStyle({ color: '#ff0000', weight: 3, fillOpacity: 0 });
                     layer.bringToFront();
                     selectedLayer = layer;
 
+                    // --- Aggiornamento Pannello Info ---
                     const nationName = feature.properties.NAME;
                     const myData = capitalsData.find(c => c.nation === nationName);
                     const panel = document.getElementById('info-panel');
@@ -310,7 +311,7 @@ fetch(bordersUrl)
 
                         document.getElementById('fly-to-cap').onclick = () => {
                             if (myData && myData.coords) {
-                                map.flyTo(myData.coords, 18, { animate: true, duration: 5 });
+                                map.flyTo(myData.coords, 14, { animate: true, duration: 3 });
                             } else {
                                 map.flyTo(e.latlng, 8, { animate: true, duration: 3 });
                             }
