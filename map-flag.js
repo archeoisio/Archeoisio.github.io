@@ -336,17 +336,29 @@ specialPlaces.forEach(place => {
     // Recuperiamo l'emoji corretta in base al tipo (se non trova il tipo, usa il cuore come backup)
     const categoryIcon = typeIcons[place.type] || "❤️";
 
-    const customIcon = L.divIcon({
-        className: 'custom-heart-icon',
-        html: `<div class="heart-emoji" style="font-size: 24px;">${categoryIcon}</div>`,
-        iconSize: [25, 25],
-        iconAnchor: [15, 15]
+  const customIcon = L.divIcon({
+        className: 'marker-container', // Classe neutra
+        html: `
+            <div style="
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                width: 36px; 
+                height: 36px; 
+                background-color: white; 
+                border: 2px solid #fff; 
+                border-radius: 50%; 
+                box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+                font-size: 20px;
+            ">
+                ${categoryIcon}
+            </div>
+        `,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18] // Centra il cerchio sulle coordinate
     });
 
-    const marker = L.marker(place.coords, { 
-        icon: customIcon, 
-        zIndexOffset: 3000 
-    });
+    const marker = L.marker(place.coords, { icon: customIcon }).addTo(heartsLayer);
 
     // Pop-up personalizzato
 marker.bindPopup(`
