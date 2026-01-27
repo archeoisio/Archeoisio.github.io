@@ -263,8 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Helsinki", type: "viaggi", nation: "Finlandia", coords: [60.168953224843925, 24.94689033493932], info: "Crociera, Neve, Capodanno", date: "Dicembre 2022/Gennaio 2023", flag: "🇫🇮" },
     { name: "Venezia", type: "viaggi", nation: "Italia", coords: [45.43609815015466, 12.347256638246101], info: "Carnevale", date: "Febbraio 2023", flag: "🇮🇹" },
     { name: "Dubrovnik", type: "viaggi", nation: "Croazia", coords: [42.6537607716032, 18.07592177449959], info: "Estate", date: "Agosto 2023", flag: "🇭🇷" },
-    { name: "Baden-Baden", type: "viaggi", nation: "Germania", coords: [48.76311189146083, 8.242163002948708], info: "Terme tutti infagottati", date: "Novembre 2023", flag: "🇩🇪" }
-];
+    { name: "Baden-Baden", type: "viaggi", nation: "Germania", coords: [48.76311189146083, 8.242163002948708], info: "Terme tutti infagottati", date: "Novembre 2023", flag: "🇩🇪" },
+    { name: "Katowice", type: "viaggi", nation: "Polonia", coords: [50.24632416470166, 19.015144725883367], info: "Yufe", date: "Giugno 2024", flag: "🇵🇱" },
+    { name: "Cracovia", type: "viaggi", nation: "Polonia", coords: [50.05817774525755, 19.938720764381273], info: "Krakow", date: "Giugno 2024", flag: "🇵🇱" } 
+
+ ];
     
 capitalsData.forEach(cap => {
     const capIcon = L.divIcon({
