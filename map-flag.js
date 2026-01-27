@@ -470,6 +470,13 @@ btnControl.onAdd = function(map) {
     container.style.background = 'transparent';
     container.style.border = 'none';
 
+    // --- PUNTO DI INSERIMENTO: BLOCCO INTERAZIONE MAPPA ---
+    // Questo impedisce che il click o il tocco passino alla mappa sottostante
+    L.DomEvent.disableClickPropagation(container);
+    L.DomEvent.on(container, 'mousewheel', L.DomEvent.stopPropagation);
+    L.DomEvent.on(container, 'touchstart', L.DomEvent.stopPropagation);
+    L.DomEvent.on(container, 'pointerdown', L.DomEvent.stopPropagation);
+
     // Funzione helper per creare bottoni uniformi
     const createBtn = (html, title, onClick) => {
         const btn = L.DomUtil.create('a', 'custom-home-button', container);
