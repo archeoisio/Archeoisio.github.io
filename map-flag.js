@@ -305,7 +305,7 @@ fetch(bordersUrl)
                     }
 
                     // Attivo la nuova nazione
-                    layer.setStyle({ color: '#ff0000', weight: 3, fillOpacity: 0 });
+                    layer.setStyle({ color: '#ff0000', weight: 2, fillOpacity: 0 });
                     layer.bringToFront();
                     selectedLayer = layer;
 
@@ -523,7 +523,7 @@ sideInfoControl.onAdd = function(map) {
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.alignItems = 'flex-start';
-    container.style.marginBottom = '20px'; 
+    container.style.marginBottom = '10px'; 
     container.style.marginLeft = '10px';   
     container.style.pointerEvents = 'auto';
 
