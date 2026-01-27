@@ -254,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
  
     // --- TIPOLOGIA: mare ---
     { name: "Balos", type: "mare", nation: "Grecia", coords: [35.580276911058206, 23.590131576784163], info: "💩", date: "Agosto 2017", flag: "🇬🇷" },
+    { name: "Capo Greco", type: "mare", nation: "Cipro", coords: [34.96262274223841, 34.080584242215515], info: "Bagnetto FDB", date: "Aprile 2025", flag: "🇨🇾" }, 
 
     // --- TIPOLOGIA: viaggi ---
     { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico,<br> da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
@@ -265,8 +266,9 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Dubrovnik", type: "viaggi", nation: "Croazia", coords: [42.6537607716032, 18.07592177449959], info: "Estate", date: "Agosto 2023", flag: "🇭🇷" },
     { name: "Baden-Baden", type: "viaggi", nation: "Germania", coords: [48.76311189146083, 8.242163002948708], info: "Terme tutti infagottati", date: "Novembre 2023", flag: "🇩🇪" },
     { name: "Katowice", type: "viaggi", nation: "Polonia", coords: [50.24632416470166, 19.015144725883367], info: "Yufe", date: "Giugno 2024", flag: "🇵🇱" },
-    { name: "Cracovia", type: "viaggi", nation: "Polonia", coords: [50.05817774525755, 19.938720764381273], info: "Krakow", date: "Giugno 2024", flag: "🇵🇱" } 
-
+    { name: "Cracovia", type: "viaggi", nation: "Polonia", coords: [50.05817774525755, 19.938720764381273], info: "Krakow", date: "Giugno 2024", flag: "🇵🇱" }, 
+    { name: "Nicosia", type: "viaggi", nation: "Cipro", coords: [35.16544721239677, 33.36724088336895], info: "Kalo Paska", date: "Aprile 2025", flag: "🇨🇾" }, 
+    { name: "Troodos", type: "viaggi", nation: "Cipro", coords: [34.97171952564583, 32.9192788083969], info: "Risto Chrysanthis", date: "Aprile 2025", flag: "🇨🇾" }, 
  ];
     
 capitalsData.forEach(cap => {
