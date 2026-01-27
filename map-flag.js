@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         maxBoundsViscosity: 1.0,
         attributionControl: false
     });
-    const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson';
+    const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson';
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
     const capitalsLayer = L.layerGroup().addTo(map);
@@ -622,10 +622,11 @@ L.DomEvent.on(heartsListBox, 'mouseleave touchend', () => {
                 item.style.justifyContent = 'space-between';
                 item.style.marginBottom = '5px';
                 item.style.alignItems = 'center';
-                item.innerHTML = `<span style="font-size:11px; color:white;">${p.flag} ${p.name}</span>`;
+                item.innerHTML = `<span style="font-size:12px; font-weight:bold; color:white;">${p.flag} ${p.name}</span>`;
                 
                 const vBtn = document.createElement('button');
                 vBtn.innerText = 'Vola';
+                vBtn.style.fontWeight = 'bold';
                 vBtn.style.fontSize = '12px';
                 vBtn.style.padding = '2px 5px';
                 vBtn.onclick = () => map.flyTo(p.coords, 16);
