@@ -530,7 +530,7 @@ sideInfoControl.onAdd = function(map) {
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.alignItems = 'flex-start';
-    container.style.marginBottom = '10px'; 
+    container.style.marginBottom = '12px'; 
     container.style.marginLeft = '10px';   
     container.style.pointerEvents = 'auto';
 
