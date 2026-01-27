@@ -384,9 +384,11 @@ marker.bindPopup(`
         <span style="font-size: 20px;">${categoryIcon}</span><br>
         <b style="font-size: 15px; color: #333;">${place.name}</b><br>
         <div style="font-size: 13px; color: #555; margin: 4px 0;">${place.info}</div>
-        <div style="font-size: 11px; color: #4a90e2; font-weight: bold; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">
-            🗓️ ${place.date}
-        </div>
+       ${place.date ? `
+            <div style="font-size: 11px; color: #4a90e2; font-weight: bold; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">
+                🗓️ ${place.date}
+            </div>
+        ` : ''}
     </div>
 `);
 
