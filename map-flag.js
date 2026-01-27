@@ -526,7 +526,6 @@ sideInfoControl.onAdd = function(map) {
     container.style.marginBottom = '10px'; 
     container.style.marginLeft = '10px';   
     container.style.pointerEvents = 'auto';
-    container.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)'
 
     // 1. Box Routing
     const routeBox = L.DomUtil.create('div', '', container);
