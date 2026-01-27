@@ -367,8 +367,8 @@ fetch(bordersUrl)
 // Definiamo le icone per i marker (le stesse usate nella lista)
 const typeIcons = {
     "home": "🏠",
-    "mare": "🏖️",
-    "viaggi": "✈️"
+    "viaggi": "✈️",
+    "mare": "🏖️"
 };
 
 specialPlaces.forEach(place => {
@@ -470,7 +470,7 @@ async function startRouting() {
 // 1. Switcher Layer Base (Spostato a destra)
 const layersControl = L.control.layers(
     {"Satellite": satellite, "OSM": osm}, 
-    {"Nazioni": bordersLayer, "Capitali": capitalsLayer, "❤️": heartsLayer }
+    {"Nazioni": bordersLayer, "Capitali": capitalsLayer }
 ).addTo(map);
 
 const layersContainer = layersControl.getContainer();
@@ -629,7 +629,7 @@ L.DomEvent.on(heartsListBox, 'mouseleave touchend', () => {
     map.dragging.enable();
     map.scrollWheelZoom.enable();
 });
-    ["home", "mare", "viaggi"].forEach(category => {
+    ["home", "viaggi", "mare"].forEach(category => {
         const placesInCategory = specialPlaces.filter(p => p.type === category);
         if (placesInCategory.length > 0) {
             const wrapper = document.createElement('div');
