@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Dipylou 8A", type: "home", nation: "Grecia", coords: [37.979367399856606, 23.72075051641102], info: "Atene, Monastiraki/Ceramico", date: "Settembre 2017/Aprile 2018", flag: "🇬🇷" },
     { name: "Rethymno", type: "home", nation: "Grecia", coords: [35.36987174693328, 24.473314364073172], info: "Αραμπατζόγλου, Creta", date: "Aprile/Giugno 2018", flag: "🇬🇷" },
     { name: "Balos", type: "mare", nation: "Grecia", coords: [35.580276911058206, 23.590131576784163], info: "💩", date: "Agosto 2017", flag: "🇬🇷" },
-    { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico, da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
+    { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico,<br> da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
     { name: "Piana del Lago", type: "viaggi", nation: "Italia", coords: [40.47193226964949, 15.762858874330147], info: "Basilicata", date: "Ferragosto 2021", flag: "🇮🇹" },
     { name: "Baden-Baden", type: "viaggi", nation: "Germania", coords: [48.76311189146083, 8.242163002948708], info: "Terme tutti infagottati", date: "Novembre 2023", flag: "🇩🇪" },
 ];
