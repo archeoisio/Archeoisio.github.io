@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Katowice", type: "viaggi", nation: "Polonia", coords: [50.24632416470166, 19.015144725883367], info: "Yufe", date: "Giugno 2024", flag: "🇵🇱" },
     { name: "Cracovia", type: "viaggi", nation: "Polonia", coords: [50.05817774525755, 19.938720764381273], info: "Krakow", date: "Giugno 2024", flag: "🇵🇱" },
     { name: "Bruxelles", type: "viaggi", nation: "Belgio", coords: [50.81686279375348, 4.352760116138274], info: "Da FranciPallara 🤰🏼", date: "Marzo 2025", flag: "🇧🇪" },
-    { name: "Rotterdam", type: "viaggi", nation: "Olanda", coords: [51.91658782690381, 4.462282637008077], info: "Depot Museum et alii <br> passando per la porticina", date: "Marzo 2025", flag: "🇳🇱" },
+    { name: "Rotterdam", type: "viaggi", nation: "Olanda", coords: [51.91658782690381, 4.462282637008077], info: "Depot Museum et alii <br> passando per la porticina <br> di Marie Claire", date: "Marzo 2025", flag: "🇳🇱" },
     { name: "Utrecht", type: "viaggi", nation: "Olanda", coords: [52.08417326738667, 5.122713348100471], info: "Colazioni in camera <br> sul canale", date: "Marzo 2025", flag: "🇳🇱" }, 
     { name: "Amsterdam", type: "viaggi", nation: "Olanda", coords: [52.366979168037396, 4.907657275613615], info: "Musei, pancake, farfalle <br> (e spinielli)", date: "Marzo 2025", flag: "🇳🇱" }, 
     { name: "Nicosia", type: "viaggi", nation: "Cipro", coords: [35.16544721239677, 33.36724088336895], info: "Kalo Paska", date: "Aprile 2025", flag: "🇨🇾" }, 
