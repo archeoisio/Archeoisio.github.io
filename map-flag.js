@@ -381,11 +381,11 @@ specialPlaces.forEach(place => {
     // Pop-up personalizzato
 marker.bindPopup(`
     <div style="text-align:center; min-width: 100px; font-family: sans-serif;">
-        <span style="font-size: 20px;">${categoryIcon}</span><br>
-        <b style="font-size: 15px; color: #333;">${place.name}</b><br>
-        <div style="font-size: 13px; color: #555; margin: 4px 0;">${place.info}</div>
+        <span style="font-size: 14px;">${categoryIcon}</span><br>
+        <b style="font-size: 12px; color: #333;">${place.name}</b><br>
+        <div style="font-size: 11px; color: #555; margin: 4px 0;">${place.info}</div>
        ${place.date ? `
-            <div style="font-size: 11px; color: #4a90e2; font-weight: bold; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">
+            <div style="font-size: 10px; color: #4a90e2; font-weight: bold; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">
                 🗓️ ${place.date}
             </div>
         ` : ''}
