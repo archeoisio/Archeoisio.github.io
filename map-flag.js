@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } else {
         // VISTA DESKTOP (Il tuo originale)
-        initialView = { center: [30, 30], zoom: 4 };
+        initialView = { center: [60, 30], zoom: 4 };
     }
     
     const map = L.map('map', {
