@@ -380,7 +380,7 @@ specialPlaces.forEach(place => {
 
     // Pop-up personalizzato
 marker.bindPopup(`
-    <div style="text-align:center; min-width: 150px; font-family: sans-serif;">
+    <div style="text-align:center; min-width: 100px; font-family: sans-serif;">
         <span style="font-size: 20px;">${categoryIcon}</span><br>
         <b style="font-size: 15px; color: #333;">${place.name}</b><br>
         <div style="font-size: 13px; color: #555; margin: 4px 0;">${place.info}</div>
