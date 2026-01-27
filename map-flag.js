@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
  const specialPlaces = [
     { name: "Uppsala", type: "home", nation: "Svezia", coords: [59.862514043172986, 17.65992409050815], info: "Frodegatan 33E", date: "Settembre 2022/Gennaio 2023", flag: "🇸🇪" },
     { name: "Stoccolma", type: "viaggi", nation: "Svezia", coords: [59.3294951830058, 18.068096560204545], info: "", date: "2022", flag: "🇸🇪" },
-    { name: "Venezia", type: "viaggi", nation: "Italia", coords: [59.3294951830058, 18.068096560204545], info: "Carnevale", date: "Febbraio 2023", flag: "🇮🇹" }, 
+    { name: "Venezia", type: "viaggi", nation: "Italia", coords: [45.43609815015466, 12.347256638246101], info: "Carnevale", date: "Febbraio 2023", flag: "🇮🇹" }, 
     { name: "Helsinki", type: "viaggi", nation: "Finlandia", coords: [60.168953224843925, 24.94689033493932], info: "Crociera, Neve, Capodanno", date: "Dicembre 2022/Gennaio 2023", flag: "🇫🇮" },
     { name: "Dubrovnik", type: "viaggi", nation: "Croazia", coords: [42.6537607716032, 18.07592177449959], info: "Estate", date: "Agosto 2023", flag: "🇭🇷" },
     { name: "Ecce Homo", type: "home", nation: "Italia", coords: [40.84505106749316, 14.253687972830459], info: "FDB", date: "", flag: "🇮🇹" },
