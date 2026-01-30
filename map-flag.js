@@ -685,7 +685,7 @@ vBtn.onclick = () => {
 
 item.appendChild(vBtn);
 content.appendChild(item);
-
+});
             header.onclick = () => {
                 const isHidden = content.style.display === 'none';
                 content.style.display = isHidden ? 'block' : 'none';
