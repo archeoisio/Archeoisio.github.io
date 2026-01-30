@@ -675,10 +675,10 @@ vBtn.style.cursor = 'pointer';
 
 vBtn.onclick = () => {
     // Usiamo paddingBottomRight per spingere il marker nella metà alta dello schermo
-    // [0, 300] significa: ignora 0px a destra e 300px dal basso
+    // [0, 300] significa: ignora 0px a destra e 350px dal basso
     map.flyTo(p.coords, 16, {
-        paddingBottomRight: [0, 300], 
-        duration: 1.5, // Rende l'animazione più fluida
+        paddingBottomRight: [0, 400], 
+        duration: 2, // Rende l'animazione più fluida
         easeLinearity: 0.25
     });
 };
