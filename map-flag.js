@@ -623,7 +623,7 @@ sideInfoControl.onAdd = function(map) {
     heartsListBox.style.background = 'rgba(0,0,0,0.5)';
     heartsListBox.style.padding = '10px';
     heartsListBox.style.borderRadius = '8px';
-    heartsListBox.style.width = '200px';
+    heartsListBox.style.width = '220px';
     heartsListBox.style.maxHeight = '200px';
     heartsListBox.style.overflowY = 'auto';
     
