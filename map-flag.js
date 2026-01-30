@@ -264,6 +264,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Piana del Lago", type: "viaggi", nation: "Italia", coords: [40.47193226964949, 15.762858874330147], info: "Basilicata", date: "Ferragosto 2021", flag: "🇮🇹" },
     { name: "Scario", type: "viaggi", nation: "Italia", coords: [40.056169104315494, 15.474022101206561], info: "Due Cuori, <br> una capanna <br> e un pavone", date: "Giugno 2022", flag: "🇮🇹" },
     { name: "Vibonati", type: "viaggi", nation: "Italia", coords: [40.098656186942726, 15.585004300434067], info: "MA' UAMMA, <br> complefede 1", date: "Giugno 2022", flag: "🇮🇹" },
+    { name: "Sassari", type: "viaggi", nation: "Italia", coords: [40.72501999743394, 8.564039538988249], info: "Tour con Edoardo", date: "Agosto 2022", flag: "🇮🇹" },
+    { name: "Castel Sardo", type: "viaggi", nation: "Italia", coords: [40.90652600951569, 8.689772838581723], info: "Sardegna", date: "Agosto 2022", flag: "🇮🇹" },
     { name: "Copenaghen", type: "viaggi", nation: "Danimarca", coords: [55.672371078279056, 12.562182923586093], info: "KebabCompleanno", date: "Agosto/Settembre 2022", flag: "🇩🇰" },
     { name: "Stoccolma", type: "viaggi", nation: "Svezia", coords: [59.3294951830058, 18.068096560204545], info: "", date: "2022", flag: "🇸🇪" },
     { name: "Helsinki", type: "viaggi", nation: "Finlandia", coords: [60.168953224843925, 24.94689033493932], info: "Crociera, Neve, Capodanno", date: "Dicembre 2022/Gennaio 2023", flag: "🇫🇮" },
