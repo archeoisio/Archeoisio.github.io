@@ -666,16 +666,25 @@ L.DomEvent.on(heartsListBox, 'mouseleave touchend', () => {
                 item.style.alignItems = 'center';
                 item.innerHTML = `<span style="font-size:12px; font-weight:bold; color:white;">${p.flag} ${p.name}</span>`;
                 
-                const vBtn = document.createElement('button');
-                vBtn.innerText = 'Vola';
-                vBtn.style.fontWeight = 'bold';
-                vBtn.style.fontSize = '12px';
-                vBtn.style.padding = '2px 5px';
-                vBtn.onclick = () => map.flyTo(p.coords, 16);
-                
-                item.appendChild(vBtn);
-                content.appendChild(item);
-            });
+              const vBtn = document.createElement('button');
+vBtn.innerText = 'VOLA'; // In maiuscolo è più leggibile
+vBtn.style.fontWeight = 'bold';
+vBtn.style.fontSize = '12px';
+vBtn.style.padding = '2px 8px'; // Leggermente più largo per il tocco mobile
+vBtn.style.cursor = 'pointer';
+
+vBtn.onclick = () => {
+    // Usiamo paddingBottomRight per spingere il marker nella metà alta dello schermo
+    // [0, 300] significa: ignora 0px a destra e 300px dal basso
+    map.flyTo(p.coords, 16, {
+        paddingBottomRight: [0, 300], 
+        duration: 1.5, // Rende l'animazione più fluida
+        easeLinearity: 0.25
+    });
+};
+
+item.appendChild(vBtn);
+content.appendChild(item);
 
             header.onclick = () => {
                 const isHidden = content.style.display === 'none';
