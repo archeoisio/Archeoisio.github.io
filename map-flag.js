@@ -288,6 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Amsterdam", type: "viaggi", nation: "Olanda", coords: [52.366979168037396, 4.907657275613615], info: "Musei, pancake, farfalle <br> (e spinielli)", date: "Marzo 2025", flag: "🇳🇱" }, 
     { name: "Nicosia", type: "viaggi", nation: "Cipro", coords: [35.16544721239677, 33.36724088336895], info: "Kalo Paska", date: "Aprile 2025", flag: "🇨🇾" }, 
     { name: "Troodos", type: "viaggi", nation: "Cipro", coords: [34.97171952564583, 32.9192788083969], info: "Risto Chrysanthis", date: "Aprile 2025", flag: "🇨🇾" }, 
+    { name: "Foresta Umbra", type: "viaggi", nation: "Italia", coords: [41.818655594328206, 15.990982831743176], info: "Elda Hotel, <br> Gargano", date: "Agosto 2024", flag: "🇮🇹" },
  ];
     
 capitalsData.forEach(cap => {
