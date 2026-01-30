@@ -254,11 +254,14 @@ document.addEventListener('DOMContentLoaded', () => {
  
     // --- TIPOLOGIA: mare ---
     { name: "Balos", type: "mare", nation: "Grecia", coords: [35.580276911058206, 23.590131576784163], info: "💩", date: "Agosto 2017", flag: "🇬🇷" },
+     { name: "Pietracciaio", type: "mare", nation: "Italia", coords: [34.96262274223841, 34.080584242215515], info: "Pisciotta", date: "Luglio/Agosto 2019", flag: "🇮🇹" }, 
     { name: "Capo Greco", type: "mare", nation: "Cipro", coords: [34.96262274223841, 34.080584242215515], info: "Bagnetto FDB", date: "Aprile 2025", flag: "🇨🇾" }, 
 
     // --- TIPOLOGIA: viaggi ---
     { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico,<br> da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
     { name: "Piana del Lago", type: "viaggi", nation: "Italia", coords: [40.47193226964949, 15.762858874330147], info: "Basilicata", date: "Ferragosto 2021", flag: "🇮🇹" },
+    { name: "Scario", type: "viaggi", nation: "Italia", coords: [40.056169104315494, 15.474022101206561], info: "Due Cuori, <br> una capanna <br> e un pavone", date: "Giugno 2022", flag: "🇮🇹" },
+    { name: "Vibonati", type: "viaggi", nation: "Italia", coords: [40.098656186942726, 15.585004300434067], info: "MA' UAMMA, <br> complefede 1", date: "Giugno 2022", flag: "🇮🇹" },
     { name: "Copenaghen", type: "viaggi", nation: "Danimarca", coords: [55.672371078279056, 12.562182923586093], info: "KebabCompleanno", date: "Agosto/Settembre 2022", flag: "🇩🇰" },
     { name: "Stoccolma", type: "viaggi", nation: "Svezia", coords: [59.3294951830058, 18.068096560204545], info: "", date: "2022", flag: "🇸🇪" },
     { name: "Helsinki", type: "viaggi", nation: "Finlandia", coords: [60.168953224843925, 24.94689033493932], info: "Crociera, Neve, Capodanno", date: "Dicembre 2022/Gennaio 2023", flag: "🇫🇮" },
