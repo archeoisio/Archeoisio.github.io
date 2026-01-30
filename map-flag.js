@@ -262,7 +262,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Capo Greco", type: "mare", nation: "Cipro", coords: [34.96262274223841, 34.080584242215515], info: "Bagnetto FDB", date: "Aprile 2025", flag: "🇨🇾" }, 
 
     // --- TIPOLOGIA: viaggi ---
-    { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico,<br> da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
+    { name: "Petrokephali", type: "viaggi", nation: "Grecia", coords: [35.02968350447732, 24.83473953247764], info: "Il primo bacio, <br> e non solo..", date: "Settembre 2016", flag: "🇬🇷" }, 
+     { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico,<br> da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
     { name: "Amigdalokephali", type: "viaggi", nation: "Grecia", coords: [35.361749678509035, 23.56458769833856], info: "Noi e il mare", date: "Agosto 2017", flag: "🇬🇷" },  
      { name: "Thronos", type: "viaggi", nation: "Grecia", coords: [35.257303102689164, 24.643210181804626], info: "Dall'amico Aravanes", date: "Agosto 2017", flag: "🇬🇷" }, 
     { name: "Kato Zakros", type: "viaggi", nation: "Grecia", coords: [35.09517870349943, 26.255505464023663], info: "Due cuori e un caravan", date: "Agosto 2017", flag: "🇬🇷" },
