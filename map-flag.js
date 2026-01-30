@@ -257,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Pietracciaio", type: "mare", nation: "Italia", coords: [40.12376647494626, 15.204890192336517], info: "Pisciotta", date: "Luglio/Agosto 2019", flag: "🇮🇹" },
     { name: "Angolo Azzurro", type: "mare", nation: "Italia", coords: [41.1861142682813, 9.33066385150799], info: "Porto Puddu, <br> Sardegna", date: "Agosto 2022 <br> and Agosto 2024", flag: "🇮🇹" }, 
     { name: "Testa del Polpo", type: "mare", nation: "Italia", coords: [41.23222933632019, 9.446820997382444], info: "La Maddalena, <br> Sardegna", date: "Agosto 2024", flag: "🇮🇹" }, 
+    { name: "Valle della Luna", type: "mare", nation: "Italia", coords: [41.23866120756442, 9.141376696518336], info: "Trekking, <br> e bagnetti", date: "Agosto 2024", flag: "🇮🇹" }, 
     { name: "Capo Greco", type: "mare", nation: "Cipro", coords: [34.96262274223841, 34.080584242215515], info: "Bagnetto FDB", date: "Aprile 2025", flag: "🇨🇾" }, 
 
     // --- TIPOLOGIA: viaggi ---
