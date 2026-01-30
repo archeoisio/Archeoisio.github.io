@@ -624,7 +624,7 @@ sideInfoControl.onAdd = function(map) {
     heartsListBox.style.padding = '10px';
     heartsListBox.style.borderRadius = '8px';
     heartsListBox.style.width = '200px';
-    heartsListBox.style.maxHeight = '350px';
+    heartsListBox.style.maxHeight = '200px';
     heartsListBox.style.overflowY = 'auto';
     
 // Impedisce che lo scroll del mouse o il trascinamento touch muovano la mappa sotto
