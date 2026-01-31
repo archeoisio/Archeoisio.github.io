@@ -375,8 +375,8 @@ fetch(bordersUrl)
                         const capitalName = myData ? myData.name : "Non in elenco";
                         
                         content.innerHTML = `
-                            <div style="font-size:16px; font-weight:bold; color:white;">${nationName} ${flag}</div>
-                            <div style="font-size:14px; margin-top:5px; color:white;">Capitale: <b style="color:#ffeb3b;">${capitalName}</b></div>
+                            <div style="font-size:15px; font-weight:bold; color:white;">${nationName} ${flag}</div>
+                            <div style="font-size:12px; margin-top:5px; color:white;">Capitale: <b style="color:#ffeb3b;">${capitalName}</b></div>
                             <button id="fly-to-cap" style="width:100%; margin-top:10px; cursor:pointer; background:white; color:black; border:none; padding:8px; border-radius:4px; font-weight:bold;">
                                 ✈️ Vola
                             </button>
@@ -410,7 +410,7 @@ const typeIcons = {
 specialPlaces.forEach(place => {
     const categoryIcon = typeIcons[place.type] || "❤️";
     // Definiamo una dimensione base iniziale (es. 30px)
-    const baseSize = 12;
+    const baseSize = 10;
     const customIcon = L.divIcon({
         className: 'marker-container',
         html: `
@@ -418,7 +418,7 @@ specialPlaces.forEach(place => {
                 display: flex; align-items: center; justify-content: center; 
                 width: 100%; height: 100%; background-color: white; 
                 border: 2px solid #fff; border-radius: 50%; 
-                box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 15px;">
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 16px;">
                 ${categoryIcon}
             </div>
         `,
@@ -615,7 +615,7 @@ sideInfoControl.onAdd = function(map) {
     heartsListBox.style.marginTop = '5px';
     heartsListBox.style.background = 'rgba(0,0,0,0.5)';
     heartsListBox.style.padding = '10px';
-    heartsListBox.style.borderRadius = '8px';
+    heartsListBox.style.borderRadius = '5px';
     heartsListBox.style.width = '220px';
     heartsListBox.style.maxHeight = '200px';
     heartsListBox.style.overflowY = 'auto';
