@@ -22,7 +22,22 @@
  *, *::before, *::after {
     box-sizing: border-box;
 }
+* Rende lo sfondo della tooltip trasparente e personalizza il testo */
+.leaflet-tooltip.capital-label {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+    white-space: nowrap;
+}
 
+/* Nasconde la "freccetta" della tooltip */
+.leaflet-tooltip-right.capital-label::before {
+    border-right-color: transparent;
+}
 /* 2. Body e HTML devono essere "invisibili" e non avere scroll */
 html, body {
     margin: 0 !important;
