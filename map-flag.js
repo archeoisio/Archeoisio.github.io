@@ -255,7 +255,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- TIPOLOGIA: mare ---
     { name: "Balos", type: "mare", nation: "Grecia", coords: [35.580276911058206, 23.590131576784163], info: "💩", date: "Agosto 2017", flag: "🇬🇷" },
     { name: "Pietracciaio", type: "mare", nation: "Italia", coords: [40.12376647494626, 15.204890192336517], info: "Pisciotta", date: "Luglio/Agosto 2019", flag: "🇮🇹" },
-    { name: "Angolo Azzurro", type: "mare", nation: "Italia", coords: [41.1861142682813, 9.33066385150799], info: "Porto Puddu, <br> Sardegna", date: "Agosto 2022 <br> and Agosto 2024", flag: "🇮🇹" }, 
+    { name: "Angolo Azzurro", type: "mare", nation: "Italia", coords: [41.1861142682813, 9.33066385150799], info: "Porto Puddu, <br> Sardegna", date: "Agosto 2022 <br> and Agosto 2024", flag: "🇮🇹" },
+     { name: "Spiaggia del Postino", type: "mare", nation: "Italia", coords: [40.76299300071693, 14.009121961808995], info: "CompleFede a <br> Peocida", date: "Giugno 2024", flag: "🇮🇹" }, 
     { name: "Testa del Polpo", type: "mare", nation: "Italia", coords: [41.23222933632019, 9.446820997382444], info: "La Maddalena, <br> Sardegna", date: "Agosto 2024", flag: "🇮🇹" }, 
     { name: "Cala Scilla", type: "mare", nation: "Italia", coords: [41.199417478390096, 9.337446888619738], info: "Sugli scogli giganti, <br> Sardegna", date: "Agosto 2024", flag: "🇮🇹" }, 
     { name: "Valle della Luna", type: "mare", nation: "Italia", coords: [41.23866120756442, 9.141376696518336], info: "Trekking, <br> e bagnetti", date: "Agosto 2024", flag: "🇮🇹" }, 
@@ -267,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Amigdalokephali", type: "viaggi", nation: "Grecia", coords: [35.361749678509035, 23.56458769833856], info: "Noi e il mare", date: "Agosto 2017", flag: "🇬🇷" },  
      { name: "Thronos", type: "viaggi", nation: "Grecia", coords: [35.257303102689164, 24.643210181804626], info: "Dall'amico Aravanes", date: "Agosto 2017", flag: "🇬🇷" }, 
     { name: "Kato Zakros", type: "viaggi", nation: "Grecia", coords: [35.09517870349943, 26.255505464023663], info: "Due cuori e un caravan", date: "Agosto 2017", flag: "🇬🇷" },
+     { name: "Ischia", type: "viaggi", nation: "Italia", coords: [40.75708273218593, 13.878017767241982], info: "Terme e schiuppariello, <br> Ischia", date: "Luglio/Agosto 2021", flag: "🇮🇹" }, 
      { name: "Piana del Lago", type: "viaggi", nation: "Italia", coords: [40.47193226964949, 15.762858874330147], info: "Basilicata", date: "Ferragosto 2021", flag: "🇮🇹" },
     { name: "Scario", type: "viaggi", nation: "Italia", coords: [40.056169104315494, 15.474022101206561], info: "Due Cuori, <br> una capanna <br> e un pavone", date: "Giugno 2022", flag: "🇮🇹" },
     { name: "Vibonati", type: "viaggi", nation: "Italia", coords: [40.098656186942726, 15.585004300434067], info: "MA' UAMMA, <br> complefede 1", date: "Giugno 2022", flag: "🇮🇹" },
