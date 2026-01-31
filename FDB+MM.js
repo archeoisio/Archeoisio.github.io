@@ -31,12 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
     maxBoundsViscosity: 1.0,
     attributionControl: false
 });
+    // Forza Leaflet a caricare le tile anche se sono leggermente fuori dallo schermo
+map.on('zoomstart', function() {
+    map.getContainer().style.background = '#1a1a1a'; // Colore scuro per simulare profondità
+});
     const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson';
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    updateWhenIdle: false, // Carica le tiles anche mentre ti muovi, non solo quando ti fermi
-    keepBuffer: 10,        // Tiene in memoria molte più tiles intorno alla vista attuale
-    updateInterval: 100,   // Riduce il ritardo di aggiornamento (default 200ms)
-    noWrap: false          // Aiuta con la continuità della mappa
+    attribution: 'Esri',
+    maxZoom: 19,
+    // OTTIMIZZAZIONI VELOCITÀ:
+    keepBuffer: 15,        // Carica 15 "anelli" di tile invisibili attorno alla vista
+    updateWhenIdle: false, // Carica le tile MENTRE ti muovi
+    updateWhenZooming: true, 
+    edgeBufferTiles: 5,    // Pre-carica le tile fuori bordo
+    crossOrigin: true      // Aiuta la cache del browser
 }).addTo(map);
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     updateWhenIdle: false,
@@ -704,12 +712,14 @@ vBtn.style.fontSize = '12px';
 vBtn.style.padding = '2px 8px'; // Leggermente più largo per il tocco mobile
 vBtn.style.cursor = 'pointer';
 vBtn.onclick = () => {
-    // Usiamo paddingBottomRight per spingere il marker nella metà alta dello schermo
-    // [0, 300] significa: ignora 0px a destra e 350px dal basso
-    map.flyTo(p.coords, 16, {
-        paddingBottomRight: [0, 400], 
-        duration: 3.5, // Rende l'animazione più fluida
-        easeLinearity: 0.1
+ map.flyTo(p.coords, 16, {
+        animate: true,
+        duration: 2.5,
+        // Questo parametro è fondamentale: 
+        // 1.0 = volo altissimo (molte tile grigie)
+        // 0.1 = volo rasoterra (molto più veloce a caricare)
+        easeLinearity: 0.1, 
+        noMoveStart: true
     });
 };
 item.appendChild(vBtn);
