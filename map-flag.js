@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- TIPOLOGIA: mare ---
     { name: "Balos", type: "mare", nation: "Grecia", coords: [35.580276911058206, 23.590131576784163], info: "💩, <br> Cretini 2017", date: "Agosto 2017", flag: "🇬🇷" },
     { name: "Elafonissi", type: "mare", nation: "Grecia", coords: [35.26879840662773, 23.529527654121953], info: "Cretini 2017", date: "Agosto 2017", flag: "🇬🇷" },
-    { name: "Kommos", type: "mare", nation: "Grecia", coords: [35.0157427155446, 24.760791952969882], info: "Diciamo mare.. <br>, Festòs 2017", date: "Agosto 2017", flag: "🇬🇷" },
+    { name: "Kommos", type: "mare", nation: "Grecia", coords: [35.0157427155446, 24.760791952969882], info: "Diciamo mare.., <br> Festòs 2017", date: "Agosto 2017", flag: "🇬🇷" },
     { name: "Pietracciaio", type: "mare", nation: "Italia", coords: [40.12376647494626, 15.204890192336517], info: "Pisciotta", date: "Luglio/Agosto 2019", flag: "🇮🇹" },
     { name: "Ieranto", type: "mare", nation: "Italia", coords: [40.57442911437379, 14.34105506675237], info: "Aiuto!", date: "Giugno 2021", flag: "🇮🇹" },
     { name: "Baia Arena", type: "mare", nation: "Italia", coords: [40.23239780375146, 14.954697709523506], info: "Toccata e fuga", date: "Luglio 2021", flag: "🇮🇹" },
@@ -370,7 +370,7 @@ fetch(bordersUrl)
                             <div style="font-size:16px; font-weight:bold; color:white;">${nationName} ${flag}</div>
                             <div style="font-size:14px; margin-top:5px; color:white;">Capitale: <b style="color:#ffeb3b;">${capitalName}</b></div>
                             <button id="fly-to-cap" style="width:100%; margin-top:10px; cursor:pointer; background:white; color:black; border:none; padding:8px; border-radius:4px; font-weight:bold;">
-                                ✈️ Vola sulla Capitale
+                                ✈️ Vola
                             </button>
                         `;
                         panel.style.display = 'block';
@@ -631,7 +631,7 @@ sideInfoControl.onAdd = function(map) {
     const heartsListBox = L.DomUtil.create('div', '', container);
     heartsListBox.id = 'hearts-list-box';
     heartsListBox.style.display = 'none';
-    heartsListBox.style.marginTop = '10px';
+    heartsListBox.style.marginTop = '5px';
     heartsListBox.style.background = 'rgba(0,0,0,0.5)';
     heartsListBox.style.padding = '10px';
     heartsListBox.style.borderRadius = '8px';
