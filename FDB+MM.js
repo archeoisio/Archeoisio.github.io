@@ -350,14 +350,13 @@ let searchMarkers = [];
  ];
     
 capitalsData.forEach(cap => {
-    // Usiamo L.circle (metri) invece di L.circleMarker (pixel)
-    const marker = L.circle(cap.coords, {
-        radius: 800,           // Raggio in METRI (regola questo valore per la grandezza desiderata)
-        renderer: myRenderer,  // Fondamentale per la fluidità
-        fillColor: "white",
-        color: "black",
-        weight: 1,
-        fillOpacity: 1,
+    // Creiamo un'icona minuscola che non cambia mai dimensione pixel
+    const dotIcon = L.divIcon({
+        className: 'dot-capital'
+    });
+
+    const marker = L.marker(cap.coords, {
+        icon: dotIcon,
         interactive: false
     });
 
