@@ -37,15 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const capitalsLayer = L.layerGroup();
     
     // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
-    const labels = L.layerGroup();
-    const layerHome = L.layerGroup();
-    const layerViaggi = L.layerGroup();
-    const layerMare = L.layerGroup();
-    const bordersLayer = L.layerGroup().addTo(map);
-    let selectedLayer = null;
-    let control = null; // Per il routing
-    let searchMarkers = [];
-    let allHeartMarkers = []; // Array per memorizzare i riferimenti ai marker dei cuori
+const labels = L.layerGroup();
+const bordersLayer = L.layerGroup().addTo(map);
+
+// 1. Creiamo i tre layer specifici per i toggle
+const layerHome = L.layerGroup().addTo(map);
+const layerViaggi = L.layerGroup().addTo(map);
+const layerMare = L.layerGroup().addTo(map);
+
+// 2. DEFINIAMO heartsLayer (così il resto del codice non va in errore)
+// Lo creiamo come un gruppo che contiene i tre sottogruppi
+const heartsLayer = L.layerGroup([layerHome, layerViaggi, layerMare]).addTo(map);
+
+const capitalsLayer = L.layerGroup();
     
     // --- 3. DATI ---
     const capitalsData = [
