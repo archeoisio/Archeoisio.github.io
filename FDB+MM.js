@@ -436,7 +436,7 @@ capitalsData.forEach(cap => {
                                 // ZOOM SULLA CAPITALE (Punto preciso)
                                 map.flyTo(myData.coords, 18, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
                                     animate: true,
-                                    duration: 8
+                                    duration: 6
                                 });
                             } else {
                                 // Fallback sui confini se non abbiamo le coordinate della capitale
@@ -595,11 +595,11 @@ btnControl.onAdd = function(map) {
     };
     // Pulsante Home 🌍
     createBtn('🌍', "Torna alla vista iniziale", () => {
-        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 8 });
+        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 6, easeLinearity: 0.25 });
     });
     // Pulsante Locate 📍
     const locateControl = L.control.locate({
-        flyTo: { duration: 8 },
+        flyTo: { duration: 6 },
         strings: { title: "Posizione" }
     });
     container.appendChild(locateControl.onAdd(map));
@@ -731,11 +731,11 @@ vBtn.style.cursor = 'pointer';
 vBtn.onclick = () => {
  map.flyTo(p.coords, 18, {
         animate: true,
-        duration: 8,
+        duration: 5,
         // Questo parametro è fondamentale: 
         // 1.0 = volo altissimo (molte tile grigie)
         // 0.1 = volo rasoterra (molto più veloce a caricare)
-        easeLinearity: 0.1, 
+        easeLinearity: 0.25, 
         noMoveStart: true
     });
 };
