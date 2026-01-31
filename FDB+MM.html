@@ -22,15 +22,29 @@
   *, *::before, *::after {
     box-sizing: border-box;
   }
-/* AGGIUNGI QUESTO: Forza le tile a non sparire immediatamente */
+/* --- OTTIMIZZAZIONE TILE (ANTISFARFALLIO E RIGHE) --- */
+
+/* 1. Forza la fluidità dei livelli di zoom */
 .leaflet-fade-anim .leaflet-tile-pane {
     transition: opacity 0.2s linear;
 }
 
+/* 2. Elimina le righe tra le tiles e attiva la scheda video */
 .leaflet-tile {
-    /* Evita il "flash" nero tra un livello di zoom e l'altro */
-    filter: brightness(1); 
-    transition: filter 0.2s;
+    outline: 1px solid transparent; /* Nasconde le giunture */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;   /* Rendering hardware */
+    filter: brightness(1);         /* Evita il flash nero */
+    transition: filter 0.2s, opacity 0.2s;
+    will-change: transform;
+}
+
+/* 3. Il "Trucco dello stretching": sovrappone leggermente le immagini per tappare i buchi */
+.leaflet-tile-container img {
+    width: 256.5px !important; 
+    height: 256.5px !important;
+    margin-left: -0.25px;
+    margin-top: -0.25px;
 }
   /* 1. PINPOINT CAPITALI (Il pallino bianco) */
   .dot-capital {
