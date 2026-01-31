@@ -54,16 +54,14 @@ map.on('zoomstart', function() {
     // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
 const labels = L.layerGroup();
 const bordersLayer = L.layerGroup().addTo(map);
-map.on('zoomend', function() {
+map.on('zoom', function() {
     const currentZoom = map.getZoom();
     
     if (currentZoom > 8) {
-        // Rimuove l'intero gruppo (confini nazioni) dalla mappa
         if (map.hasLayer(bordersLayer)) {
             map.removeLayer(bordersLayer);
         }
     } else {
-        // Lo riaggiunge solo se siamo a zoom 8 o inferiore
         if (!map.hasLayer(bordersLayer)) {
             map.addLayer(bordersLayer);
         }
