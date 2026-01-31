@@ -17,14 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } else {
         // VISTA DESKTOP (Il tuo originale)
-        initialView = { center: [50, 30], zoom: 4.3 };
+        initialView = { center: [50, 30], zoom: 4 };
     }
   const map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    zoomSnap: 0.1,         // Permette decimali come 4.5
+    zoomSnap: 0.5,         // Permette decimali come 4.5
     zoomDelta: 1,        // Fa sì che i tasti + e - scattino di 0.5 alla volta
-    zoomControl: true,
+    wheelPxPerZoomLevel: 150, // Rende la rotella meno "frenetica"
+   zoomControl: true,
     minZoom: 2.5,
     worldCopyJump: true,
     maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(75, 193)),
