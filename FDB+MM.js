@@ -418,7 +418,7 @@ capitalsData.forEach(cap => {
                                 // ZOOM SULLA CAPITALE (Punto preciso)
                                 map.flyTo(myData.coords, 18, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
                                     animate: true,
-                                    duration: 5
+                                    duration: 10
                                 });
                             } else {
                                 // Fallback sui confini se non abbiamo le coordinate della capitale
@@ -713,7 +713,7 @@ vBtn.style.cursor = 'pointer';
 vBtn.onclick = () => {
  map.flyTo(p.coords, 18, {
         animate: true,
-        duration: 5,
+        duration: 10,
         // Questo parametro è fondamentale: 
         // 1.0 = volo altissimo (molte tile grigie)
         // 0.1 = volo rasoterra (molto più veloce a caricare)
