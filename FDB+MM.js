@@ -49,7 +49,12 @@ const layerMare = L.layerGroup().addTo(map);
 const heartsLayer = L.layerGroup([layerHome, layerViaggi, layerMare]).addTo(map);
 
 const capitalsLayer = L.layerGroup();
-    
+let allHeartMarkers = []; 
+// ------------------------------------------------
+
+let selectedLayer = null;
+let control = null; 
+let searchMarkers = [];   
     // --- 3. DATI ---
     const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
@@ -450,7 +455,6 @@ specialPlaces.forEach(place => {
     }
     // Aggiungiamo il marker all'array e al layer
     allHeartMarkers.push({ marker: marker, type: place.type });
-    heartsLayer.addLayer(marker);
 
     // Pop-up personalizzato (inserito correttamente dentro il ciclo)
     marker.bindPopup(`
