@@ -55,7 +55,7 @@ const layerMare = L.layerGroup();
 
 // 2. DEFINIAMO heartsLayer (così il resto del codice non va in errore)
 // Lo creiamo come un gruppo che contiene i tre sottogruppi
-const heartsLayer = L.layerGroup([layerHome, layerViaggi, layerMare]).addTo(map);
+const heartsLayer = L.layerGroup([layerHome, layerViaggi, layerMare]);
 
 const capitalsLayer = L.layerGroup();
 let allHeartMarkers = []; 
