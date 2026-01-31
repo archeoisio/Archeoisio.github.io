@@ -731,7 +731,7 @@ vBtn.style.fontSize = '12px';
 vBtn.style.padding = '2px 8px'; // Leggermente più largo per il tocco mobile
 vBtn.style.cursor = 'pointer';
 vBtn.onclick = () => {
- map.flyTo(p.coords, 15, {
+ map.flyTo(p.coords, 20, {
         animate: true,
         duration: 5,
         // Questo parametro è fondamentale: 
