@@ -386,7 +386,7 @@ fetch(bordersUrl)
                         document.getElementById('fly-to-cap').onclick = () => {
                             if (myData && myData.coords) {
                                 // ZOOM SULLA CAPITALE (Punto preciso)
-                                map.flyTo(myData.coords, 6, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
+                                map.flyTo(myData.coords, 15, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
                                     animate: true,
                                     duration: 2.5
                                 });
@@ -410,7 +410,7 @@ const typeIcons = {
 specialPlaces.forEach(place => {
     const categoryIcon = typeIcons[place.type] || "❤️";
     // Definiamo una dimensione base iniziale (es. 30px)
-    const baseSize = 10;
+    const baseSize = 14;
     const customIcon = L.divIcon({
         className: 'marker-container',
         html: `
