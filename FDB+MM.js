@@ -392,7 +392,7 @@ const myRenderer = L.canvas({ padding: 0.5 });
                     }
                     if (selectedLayer) { geoJsonLayer.resetStyle(selectedLayer); }
                     
-                    layer.setStyle({ color: '#ff0000', weight: 2, fillOpacity: 0 });
+                    layer.setStyle({ color: '#ff0000', weight: 1, fillOpacity: 0 });
                     layer.bringToFront();
                     selectedLayer = layer;
 
