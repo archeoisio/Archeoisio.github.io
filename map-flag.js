@@ -17,19 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } else {
         // VISTA DESKTOP (Il tuo originale)
-        initialView = { center: [50, 30], zoom: 4,5 };
+        initialView = { center: [50, 30], zoom: 4.5 };
     }
-    
-    const map = L.map('map', {
-        center: initialView.center,
-        zoom: initialView.zoom,
-        zoomControl: true,
-        minZoom: 2.5,
-        worldCopyJump: true,
-        maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(75, 193)),
-        maxBoundsViscosity: 1.0,
-        attributionControl: false
-    });
+  const map = L.map('map', {
+    center: initialView.center,
+    zoom: initialView.zoom,
+    zoomSnap: 0.1,         // Permette decimali come 4.5
+    zoomDelta: 0.5,        // Fa sì che i tasti + e - scattino di 0.5 alla volta
+    zoomControl: true,
+    minZoom: 2.5,
+    worldCopyJump: true,
+    maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(75, 193)),
+    maxBoundsViscosity: 1.0,
+    attributionControl: false
+});
     const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson';
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
