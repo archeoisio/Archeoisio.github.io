@@ -416,7 +416,7 @@ capitalsData.forEach(cap => {
                         document.getElementById('fly-to-cap').onclick = () => {
                             if (myData && myData.coords) {
                                 // ZOOM SULLA CAPITALE (Punto preciso)
-                                map.flyTo(myData.coords, 15, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
+                                map.flyTo(myData.coords, 18, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
                                     animate: true,
                                     duration: 5
                                 });
@@ -577,11 +577,11 @@ btnControl.onAdd = function(map) {
     };
     // Pulsante Home 🌍
     createBtn('🌍', "Torna alla vista iniziale", () => {
-        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 5 });
+        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 10 });
     });
     // Pulsante Locate 📍
     const locateControl = L.control.locate({
-        flyTo: { duration: 5 },
+        flyTo: { duration: 10 },
         strings: { title: "Posizione" }
     });
     container.appendChild(locateControl.onAdd(map));
@@ -711,7 +711,7 @@ vBtn.style.fontSize = '12px';
 vBtn.style.padding = '2px 8px'; // Leggermente più largo per il tocco mobile
 vBtn.style.cursor = 'pointer';
 vBtn.onclick = () => {
- map.flyTo(p.coords, 16, {
+ map.flyTo(p.coords, 18, {
         animate: true,
         duration: 5,
         // Questo parametro è fondamentale: 
