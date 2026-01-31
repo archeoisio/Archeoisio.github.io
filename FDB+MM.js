@@ -64,6 +64,12 @@ map.on('zoom', function() {
     } else {
         if (!map.hasLayer(bordersLayer)) {
             map.addLayer(bordersLayer);
+            
+            // --- SOLUZIONE: Porta il bordo selezionato in primo piano ---
+            // Se esiste una nazione selezionata, forzala sopra le altre
+            if (selectedCountryLayer) {
+                selectedCountryLayer.bringToFront();
+            }
         }
     }
 });
