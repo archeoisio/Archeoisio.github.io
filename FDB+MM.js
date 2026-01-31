@@ -374,7 +374,6 @@ capitalsData.forEach(cap => {
 });
     
 // --- 4. CARICAMENTO CONFINI (GEOJSON) ---
-const myRenderer = L.canvas({ padding: 0.5 });
     fetch(bordersUrl)
     .then(r => r.json())
     .then(data => {
