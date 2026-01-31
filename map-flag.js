@@ -420,7 +420,7 @@ specialPlaces.forEach(place => {
     const categoryIcon = typeIcons[place.type] || "❤️";
 
     // Definiamo una dimensione base iniziale (es. 30px)
-    const baseSize = 20;
+    const baseSize = 12;
 
     const customIcon = L.divIcon({
         className: 'marker-container',
@@ -429,7 +429,7 @@ specialPlaces.forEach(place => {
                 display: flex; align-items: center; justify-content: center; 
                 width: 100%; height: 100%; background-color: white; 
                 border: 2px solid #fff; border-radius: 50%; 
-                box-shadow: 0 2px 6px rgba(0,0,0,0.4); font-size: 18px;">
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 15px;">
                 ${categoryIcon}
             </div>
         `,
