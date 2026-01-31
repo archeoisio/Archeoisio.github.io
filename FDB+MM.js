@@ -559,6 +559,9 @@ const layersControl = L.control.layers(
         "✈️ Viaggi": layerViaggi,  // Nuovo Toggle
         "🏖️ Mare": layerMare      // Nuovo Toggle
     }
+{
+        collapsed: false
+    }
 ).addTo(map);
 const layersContainer = layersControl.getContainer();
 layersContainer.style.marginRight = '2px'; 
