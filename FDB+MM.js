@@ -595,7 +595,7 @@ btnControl.onAdd = function(map) {
     };
     // Pulsante Home 🌍
     createBtn('🌍', "Torna alla vista iniziale", () => {
-        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 6, easeLinearity: 0.25 });
+        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 4, easeLinearity: 0.1 });
     });
     // Pulsante Locate 📍
     const locateControl = L.control.locate({
@@ -729,13 +729,13 @@ vBtn.style.fontSize = '12px';
 vBtn.style.padding = '2px 8px'; // Leggermente più largo per il tocco mobile
 vBtn.style.cursor = 'pointer';
 vBtn.onclick = () => {
- map.flyTo(p.coords, 18, {
+ map.flyTo(p.coords, 15, {
         animate: true,
         duration: 5,
         // Questo parametro è fondamentale: 
         // 1.0 = volo altissimo (molte tile grigie)
         // 0.1 = volo rasoterra (molto più veloce a caricare)
-        easeLinearity: 0.25, 
+        easeLinearity: 0.15, 
         noMoveStart: true
     });
 };
