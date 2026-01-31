@@ -279,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { name: "Polignano a Mare", type: "viaggi", nation: "Italia", coords: [40.99507945627362, 17.21971610088795], info: "Puglia con amiche <br> e family FDB", date: "Agosto 2018", flag: "🇮🇹" }, 
        { name: "Ostuni", type: "viaggi", nation: "Italia", coords: [40.730049695291164, 17.5762456744103], info: "Puglia con amiche <br> e family FDB", date: "Agosto 2018", flag: "🇮🇹" }, 
       { name: "Lecce", type: "viaggi", nation: "Italia", coords: [40.351813757865116, 18.175285171323758], info: "Puglia con amiche <br> e family FDB", date: "Agosto 2018", flag: "🇮🇹" }, 
-     { name: "Santa Caterina", type: "viaggi", nation: "Italia", coords: [40.142268416018595, 17.983671349275756], info: "Puglia con amiche <br> e family FDB", date: "Agosto 2018", flag: "🇮🇹" }, 
+ { name: "Santa Caterina", type: "viaggi", nation: "Italia", coords: [40.142268416018595, 17.983671349275756], info: "Puglia con amiche <br> e family FDB", date: "Agosto 2018", flag: "🇮🇹" }, 
      { name: "Galatina", type: "viaggi", nation: "Italia", coords: [40.175865550040655, 18.17290752127361], info: "Puglia con amiche <br> e family FDB", date: "Agosto 2018", flag: "🇮🇹" }, 
    { name: "Roma", type: "viaggi", nation: "Italia", coords: [41.899578526349586, 12.472988364982722], info: "Biblioteca EFROME, soppalco, <br> giretti e mangiatine", date: "Ottobre 2019", flag: "🇮🇹" }, 
      { name: "Ischia", type: "viaggi", nation: "Italia", coords: [40.75708273218593, 13.878017767241982], info: "Terme e schiuppariello, <br> Ischia", date: "Luglio/Agosto 2021", flag: "🇮🇹" }, 
@@ -410,7 +410,7 @@ const typeIcons = {
 specialPlaces.forEach(place => {
     const categoryIcon = typeIcons[place.type] || "❤️";
     // Definiamo una dimensione base iniziale (es. 30px)
-    const baseSize = 14;
+    const baseSize = 16;
     const customIcon = L.divIcon({
         className: 'marker-container',
         html: `
@@ -418,7 +418,7 @@ specialPlaces.forEach(place => {
                 display: flex; align-items: center; justify-content: center; 
                 width: 100%; height: 100%; background-color: white; 
                 border: 2px solid #fff; border-radius: 50%; 
-                box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 16px;">
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 14px;">
                 ${categoryIcon}
             </div>
         `,
@@ -495,14 +495,14 @@ const layersControl = L.control.layers(
 ).addTo(map);
 const layersContainer = layersControl.getContainer();
 layersContainer.style.marginRight = '2px'; 
+    
 // --- CONTROLLO 1: PULSANTI (IN ALTO A DESTRA) ---
 const btnControl = L.control({ position: 'topright' });
 btnControl.onAdd = function(map) {
     const container = L.DomUtil.create('div', 'leaflet-bar');
     
     // Stile per posizionamento
-     
-  container.style.marginTop = '4px';
+    container.style.marginTop = '4px';
     container.style.marginRight = '4px';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
@@ -566,6 +566,7 @@ sideInfoControl.onAdd = function(map) {
     container.style.marginBottom = '12px'; 
     container.style.marginLeft = '10px';   
     container.style.pointerEvents = 'auto';
+    
     // 1. Box Routing
     const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
@@ -713,9 +714,9 @@ function setVh() {
         
         // Formule per calcolare dimensioni proporzionali allo zoom
         // Il cerchio bianco cresce con lo zoom (base 12px minimo)
-        const newSize = Math.max(14, z * 2); 
+        const newSize = Math.max(16, z * 2); 
         // L'emoji interna cresce proporzionalmente
-        const newFontSize = Math.max(12, z * 1.5);
+        const newFontSize = Math.max(14, z * 1.5);
         allHeartMarkers.forEach(item => {
             const iconEmoji = typeIcons[item.type] || "❤️";
             
