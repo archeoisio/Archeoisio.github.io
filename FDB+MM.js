@@ -366,7 +366,7 @@ capitalsData.forEach(cap => {
     marker.bindTooltip(cap.name, {
         permanent: true,
         direction: 'top',
-        offset: [0, 0],
+        offset: [0, -20],
         className: 'capital-label'
     });
 
