@@ -435,7 +435,7 @@ capitalsData.forEach(cap => {
                         document.getElementById('fly-to-cap').onclick = () => {
                             if (myData && myData.coords) {
                                 // ZOOM SULLA CAPITALE (Punto preciso)
-                                map.flyTo(myData.coords, 18, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
+                                map.flyTo(myData.coords, 14, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
                                     animate: true,
                                     duration: 6
                                 });
