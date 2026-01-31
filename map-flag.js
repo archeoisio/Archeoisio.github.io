@@ -400,17 +400,17 @@ fetch(bordersUrl)
             }
         }).addTo(bordersLayer);
     });
-  // --- 5. CUORI ❤️ (Marker dinamici per tipologia) ---
-// Definiamo le icone per i marker (le stesse usate nella lista)
+  // --- 5. CUORI ❤️ (Marker fissi per tipologia) ---
 const typeIcons = {
     "home": "🏠",
     "viaggi": "✈️",
     "mare": "🏖️"
 };
+
 specialPlaces.forEach(place => {
     const categoryIcon = typeIcons[place.type] || "❤️";
-    const baseSize = 24; // Dimensione fissa del cerchio
-    const fontSize = 16; // Dimensione fissa dell'emoji
+    const baseSize = 24; 
+    const fontSize = 16; 
 
     const customIcon = L.divIcon({
         className: 'marker-container',
@@ -435,26 +435,23 @@ specialPlaces.forEach(place => {
 
     const marker = L.marker(place.coords, { icon: customIcon });
     
-    // AGGIUNGIAMO IL MARKER ALL'ARRAY PER IL RESIZE
-   allHeartMarkers.push({ marker: marker, type: place.type });
+    // Aggiungiamo il marker all'array e al layer
+    allHeartMarkers.push({ marker: marker, type: place.type });
     heartsLayer.addLayer(marker);
 
-    marker.bindPopup(`<b>${place.name}</b><br>${place.info}`);
-});
-    // Pop-up personalizzato
-marker.bindPopup(`
-    <div style="text-align:center; min-width: 80px; font-family: sans-serif;">
-        <span style="font-size: 16px;">${categoryIcon}</span><br>
-        <b style="font-size: 14px; color: #333;">${place.name}</b><br>
-        <div style="font-size: 12px; color: #555; margin: 4px 0;">${place.info}</div>
-       ${place.date ? `
-            <div style="font-size: 12px; color: #4a90e2; font-weight: bold; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">
-                🗓️ ${place.date}
-            </div>
-        ` : ''}
-    </div>
-`);
-    heartsLayer.addLayer(marker);
+    // Pop-up personalizzato (inserito correttamente dentro il ciclo)
+    marker.bindPopup(`
+        <div style="text-align:center; min-width: 80px; font-family: sans-serif;">
+            <span style="font-size: 16px;">${categoryIcon}</span><br>
+            <b style="font-size: 14px; color: #333;">${place.name}</b><br>
+            <div style="font-size: 12px; color: #555; margin: 4px 0;">${place.info}</div>
+            ${place.date ? `
+                <div style="font-size: 12px; color: #4a90e2; font-weight: bold; border-top: 1px solid #eee; padding-top: 5px; margin-top: 5px;">
+                    🗓️ ${place.date}
+                </div>
+            ` : ''}
+        </div>
+    `);
 });
     // --- 6. GESTIONE CLICK MAPPA (DESELEZIONE) ---
     map.on('click', () => {
