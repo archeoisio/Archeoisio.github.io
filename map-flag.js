@@ -336,7 +336,7 @@ capitalsData.forEach(cap => {
     marker.bindTooltip(cap.name, {
         permanent: true,       // Sempre visibile
         direction: 'top',    // Forza la posizione a DESTRA
-        offset: [0, 1],        // Sposta l'etichetta di 5px a destra del punto
+        offset: [0, 10],        // Sposta l'etichetta di 5px a destra del punto
         className: 'capital-label' // Classe CSS per lo stile
     });
 
