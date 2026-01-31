@@ -420,7 +420,7 @@ specialPlaces.forEach(place => {
     const categoryIcon = typeIcons[place.type] || "❤️";
 
     // Definiamo una dimensione base iniziale (es. 30px)
-    const baseSize = 30;
+    const baseSize = 20;
 
     const customIcon = L.divIcon({
         className: 'marker-container',
