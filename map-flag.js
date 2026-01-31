@@ -382,18 +382,16 @@ fetch(bordersUrl)
                                 ✈️ Vola
                             </button>
                         `;
-                        panel.style.display = 'block';
-                     document.getElementById('fly-to-cap').onclick = () => {
-        // e.target è il poligono (lo Stato) su cui hai cliccato
-        const bounds = e.target.getBounds(); 
-        
-        map.flyToBounds(bounds, {
-            padding: [50, 50], // Lascia un po' di margine ai bordi per non "attaccare" lo stato ai bordi dello schermo
-            animate: true,
-            duration: 2.5 // Durata del volo in secondi
-        });
-    };
-}
+                      panel.style.display = 'block';
+                        document.getElementById('fly-to-cap').onclick = () => {
+                            map.flyToBounds(layer.getBounds(), { padding: [50, 50], duration: 2.5 });
+                        };
+                    }
+                });
+            }
+        }).addTo(bordersLayer);
+    });
+    
   // --- 5. CUORI ❤️ (Marker dinamici per tipologia) ---
 // Definiamo le icone per i marker (le stesse usate nella lista)
 const typeIcons = {
