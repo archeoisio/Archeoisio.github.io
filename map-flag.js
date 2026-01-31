@@ -376,7 +376,7 @@ fetch(bordersUrl)
                         const capitalName = myData ? myData.name : "Non in elenco";
                         
                         content.innerHTML = `
-                            <div style="font-size:14px; font-weight:bold; color:white;">${nationName} ${flag}</div>
+                            <div style="font-size:13px; font-weight:bold; color:white;">${nationName} ${flag}</div>
                             <div style="font-size:12px; margin-top:5px; color:white;">Capitale: <b style="color:#ffeb3b;">${capitalName}</b></div>
                             <button id="fly-to-cap" style="width:100%; margin-top:10px; cursor:pointer; background:white; color:black; border:none; padding:8px; border-radius:4px; font-weight:bold;">
                                 ✈️ Vola
