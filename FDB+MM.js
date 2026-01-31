@@ -32,17 +32,26 @@ document.addEventListener('DOMContentLoaded', () => {
     attributionControl: false
 });
     const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson';
-    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
-    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    updateWhenIdle: false, // Carica le tiles anche mentre ti muovi, non solo quando ti fermi
+    keepBuffer: 10,        // Tiene in memoria molte più tiles intorno alla vista attuale
+    updateInterval: 100,   // Riduce il ritardo di aggiornamento (default 200ms)
+    noWrap: false          // Aiuta con la continuità della mappa
+}).addTo(map);
+    const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    updateWhenIdle: false,
+    keepBuffer: 10,
+    updateInterval: 100
+});;
    
     // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
 const labels = L.layerGroup();
 const bordersLayer = L.layerGroup().addTo(map);
 
 // 1. Creiamo i tre layer specifici per i toggle
-const layerHome = L.layerGroup().addTo(map);
-const layerViaggi = L.layerGroup().addTo(map);
-const layerMare = L.layerGroup().addTo(map);
+const layerHome = L.layerGroup();
+const layerViaggi = L.layerGroup();
+const layerMare = L.layerGroup();
 
 // 2. DEFINIAMO heartsLayer (così il resto del codice non va in errore)
 // Lo creiamo come un gruppo che contiene i tre sottogruppi
