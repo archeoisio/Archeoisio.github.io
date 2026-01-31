@@ -312,6 +312,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Amsterdam", type: "viaggi", nation: "Olanda", coords: [52.366979168037396, 4.907657275613615], info: "Musei, pancake, farfalle", date: "Marzo 2025", flag: "🇳🇱" }, 
     { name: "Maastricht", type: "viaggi", nation: "Olanda", coords: [50.84777443007412, 5.6949609971683435], info: "Giretti", date: "Marzo 2025", flag: "🇳🇱" }, 
     { name: "Nicosia", type: "viaggi", nation: "Cipro", coords: [35.16544721239677, 33.36724088336895], info: "Kalo Paska", date: "Aprile 2025", flag: "🇨🇾" }, 
+    { name: "Kourion", type: "viaggi", nation: "Cipro", coords: [34.66385368214509, 32.88123417879638], info: "Sito Archeologico<br>e fragoline", date: "Aprile 2025", flag: "🇨🇾" },
+    { name: "Βαρώσια", type: "viaggi", nation: "Cipro", coords: [35.11761820629892, 33.9545501142631], info: "Ghost Town", date: "Aprile 2025", flag: "🇨🇾" },
     { name: "Troodos", type: "viaggi", nation: "Cipro", coords: [34.97171952564583, 32.9192788083969], info: "Risto Chrysanthis", date: "Aprile 2025", flag: "🇨🇾" },
     { name: "Siponto", type: "viaggi", nation: "Italia", coords: [41.608228815256595, 15.889319417710412], info: "Basilica, <br> Gargano", date: "Agosto 2025", flag: "🇮🇹" },
     { name: "Vieste", type: "viaggi", nation: "Italia", coords: [41.910176718755864, 16.112361869911446], info: "Hotel Palme Gemelle, <br> Gargano", date: "Agosto 2025", flag: "🇮🇹" },
