@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     center: initialView.center,
     zoom: initialView.zoom,
     zoomSnap: 0.1,         // Permette decimali come 4.5
-    zoomDelta: 0.5,        // Fa sì che i tasti + e - scattino di 0.5 alla volta
+    zoomDelta: 1,        // Fa sì che i tasti + e - scattino di 0.5 alla volta
     zoomControl: true,
     minZoom: 2.5,
     worldCopyJump: true,
