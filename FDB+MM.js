@@ -34,8 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson';
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}').addTo(map);
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-    const capitalsLayer = L.layerGroup();
-    
+   
     // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
 const labels = L.layerGroup();
 const bordersLayer = L.layerGroup().addTo(map);
