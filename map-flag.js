@@ -426,47 +426,184 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) { alert("Località non trovata"); }
     }
 
-    // --- 8. CONTROLLI INTERFACCIA ---
-    L.control.layers({"Satellite": satellite, "OSM": osm}, {"Nazioni": bordersLayer, "Capitali": capitalsLayer }).addTo(map);
+   // --- 7. CONTROLLI INTERFACCIA ---
 
-    const btnControl = L.control({ position: 'topright' });
-    btnControl.onAdd = function() {
-        const container = L.DomUtil.create('div', 'leaflet-bar');
-        container.style.display = 'flex';
-        container.style.flexDirection = 'column';
-        container.style.gap = '5px';
-        container.style.background = 'transparent';
-        container.style.border = 'none';
-        L.DomEvent.disableClickPropagation(container);
+// 1. Switcher Layer Base (Spostato a destra)
+const layersControl = L.control.layers(
+    {"Satellite": satellite, "OSM": osm}, 
+    {"Nazioni": bordersLayer, "Capitali": capitalsLayer }
+).addTo(map);
 
-        const createBtn = (html, title, onClick) => {
-            const btn = L.DomUtil.create('a', '', container);
-            btn.innerHTML = html;
-            btn.title = title;
-            btn.style.background = 'white';
-            btn.style.width = '30px';
-            btn.style.height = '30px';
-            btn.style.display = 'flex';
-            btn.style.alignItems = 'center';
-            btn.style.justifyContent = 'center';
-            btn.style.cursor = 'pointer';
-            btn.onclick = (e) => { e.preventDefault(); onClick(); };
-            return btn;
-        };
+const layersContainer = layersControl.getContainer();
+layersContainer.style.marginRight = '2px'; 
 
-        createBtn('🌍', "Home", () => map.flyTo(initialView.center, initialView.zoom));
-        createBtn('🗺️', "Routing", () => {
-            const rb = document.getElementById('route-box');
-            rb.style.display = rb.style.display === 'none' ? 'flex' : 'none';
+// --- CONTROLLO 1: PULSANTI (IN ALTO A DESTRA) ---
+const btnControl = L.control({ position: 'topright' });
+btnControl.onAdd = function(map) {
+    const container = L.DomUtil.create('div', 'leaflet-bar');
+     
+    container.style.marginTop = '4px';
+    container.style.marginRight = '4px';
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.gap = '5px';
+    container.style.background = 'transparent';
+    container.style.border = 'none';
+
+    // Blocco interazione mappa
+    L.DomEvent.disableClickPropagation(container);
+    L.DomEvent.on(container, 'mousewheel', L.DomEvent.stopPropagation);
+    L.DomEvent.on(container, 'touchstart', L.DomEvent.stopPropagation);
+    L.DomEvent.on(container, 'pointerdown', L.DomEvent.stopPropagation);
+
+    // Funzione helper originale per creare bottoni uniformi
+    const createBtn = (html, title, onClick) => {
+        const btn = L.DomUtil.create('a', 'custom-home-button', container);
+        btn.innerHTML = html;
+        btn.title = title;
+        btn.href = '#';
+        L.DomEvent.on(btn, 'click', e => {
+            L.DomEvent.stopPropagation(e);
+            L.DomEvent.preventDefault(e);
+            onClick();
         });
-        createBtn('❤️', "Lista", () => {
-            const hb = document.getElementById('hearts-list-box');
-            hb.style.display = hb.style.display === 'none' ? 'flex' : 'none';
-        });
-
-        return container;
+        return btn;
     };
-    btnControl.addTo(map);
+
+    // Pulsante Home 🌍
+    createBtn('🌍', "Torna alla vista iniziale", () => {
+        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+    });
+
+    // Pulsante Locate 📍 (Ripristinato)
+    const locateControl = L.control.locate({
+        flyTo: { duration: 2 },
+        strings: { title: "Posizione" },
+        locateOptions: { enableHighAccuracy: true }
+    });
+    container.appendChild(locateControl.onAdd(map));
+    
+    // Pulsante Routing 🗺️
+    createBtn('🗺️', "Mostra/Nascondi indicazioni", () => {
+        const rb = document.getElementById('route-box');
+        const hb = document.getElementById('hearts-list-box');
+        if(hb) hb.style.display = 'none'; 
+        if(rb) rb.style.display = (rb.style.display === 'none') ? 'flex' : 'none';
+    });
+
+    // Pulsante Cuore ❤️
+    createBtn('❤️', "Luoghi del cuore", () => {
+        const rb = document.getElementById('route-box');
+        const hb = document.getElementById('hearts-list-box');
+        if(rb) rb.style.display = 'none'; 
+        if(hb) hb.style.display = (hb.style.display === 'none') ? 'flex' : 'none';
+    });
+
+    return container;
+};
+btnControl.addTo(map);
+
+// --- CONTROLLO 2: PANNELLI INFORMATIVI (BASSO SINISTRA) ---
+const sideInfoControl = L.control({ position: 'bottomleft' });
+sideInfoControl.onAdd = function(map) {
+    const container = L.DomUtil.create('div', 'info-container-bottom');
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.alignItems = 'flex-start';
+    container.style.marginBottom = '12px'; 
+    container.style.marginLeft = '10px';   
+    container.style.pointerEvents = 'auto';
+
+    // 1. Box Routing
+    const routeBox = L.DomUtil.create('div', '', container);
+    routeBox.id = 'route-box';
+    routeBox.style.display = 'none';
+    routeBox.style.flexDirection = 'column';
+    routeBox.style.background = 'rgba(0,0,0,0.5)';
+    routeBox.style.color = 'white';
+    routeBox.style.padding = '10px';
+    routeBox.style.borderRadius = '8px';
+    routeBox.style.width = '180px';
+    routeBox.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+    
+    routeBox.innerHTML = `
+        <input id="start" placeholder="Partenza" style="width:100%; margin-bottom:5px; padding:4px;">
+        <input id="end" placeholder="Destinazione" style="width:100%; margin-bottom:8px; padding:4px;">
+        <div style="display:flex; gap:5px;">
+            <button id="route-btn" style="flex:1; cursor:pointer; padding:5px; border-radius:4px; border:none; background:white; font-weight:bold;">Calcola</button>
+            <button id="clear-btn" style="flex:1; cursor:pointer; padding:5px; border-radius:4px; border:none; background:#ff5252; color:white;">Reset</button>
+        </div>
+    `;
+
+    // 2. Box Lista Cuori
+    const heartsListBox = L.DomUtil.create('div', '', container);
+    heartsListBox.id = 'hearts-list-box';
+    heartsListBox.style.display = 'none';
+    heartsListBox.style.marginTop = '5px';
+    heartsListBox.style.background = 'rgba(0,0,0,0.5)';
+    heartsListBox.style.padding = '10px';
+    heartsListBox.style.borderRadius = '8px';
+    heartsListBox.style.width = '220px';
+    heartsListBox.style.maxHeight = '200px';
+    heartsListBox.style.overflowY = 'auto';
+    
+    L.DomEvent.disableScrollPropagation(heartsListBox);
+    L.DomEvent.disableClickPropagation(heartsListBox);
+
+    // Popolamento lista categorie
+    ["home", "viaggi", "mare"].forEach(category => {
+        const placesInCategory = specialPlaces.filter(p => p.type === category);
+        if (placesInCategory.length > 0) {
+            const wrapper = document.createElement('div');
+            wrapper.style.marginBottom = '8px';
+            wrapper.innerHTML = `
+                <div class="header" style="cursor:pointer; display:flex; justify-content:space-between; padding:5px; background:rgba(255,255,255,0.1); border-radius:4px;">
+                    <span style="color:#ffeb3b; font-size:12px; font-weight:bold;">${typeIcons[category]} ${category.toUpperCase()}</span>
+                    <span class="arrow" style="color:white;">►</span>
+                </div>
+                <div class="content" style="display:none; padding:5px 0 0 10px;"></div>
+            `;
+            const header = wrapper.querySelector('.header');
+            const content = wrapper.querySelector('.content');
+
+            placesInCategory.forEach(p => {
+                const item = document.createElement('div');
+                item.style.display = 'flex';
+                item.style.justifyContent = 'space-between';
+                item.style.marginBottom = '5px';
+                item.style.alignItems = 'center';
+                item.innerHTML = `<span style="font-size:12px; font-weight:bold; color:white;">${p.flag} ${p.name}</span>`;
+                
+                const vBtn = document.createElement('button');
+                vBtn.innerText = 'VOLA';
+                vBtn.style.fontWeight = 'bold';
+                vBtn.style.fontSize = '12px';
+                vBtn.style.padding = '2px 8px';
+                vBtn.style.cursor = 'pointer';
+
+                vBtn.onclick = () => {
+                    map.flyTo(p.coords, 16, {
+                        paddingBottomRight: [0, 400], 
+                        duration: 2
+                    });
+                };
+
+                item.appendChild(vBtn);
+                content.appendChild(item);
+            });
+
+            header.onclick = () => {
+                const isHidden = content.style.display === 'none';
+                content.style.display = isHidden ? 'block' : 'none';
+                wrapper.querySelector('.arrow').innerHTML = isHidden ? '▼' : '►';
+            };
+            heartsListBox.appendChild(wrapper);
+        }
+    });
+
+    return container;
+};
+sideInfoControl.addTo(map);
 
     // --- 9. EVENTI MAPPA & RESIZE ---
     map.on('zoomend', () => {
