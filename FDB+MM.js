@@ -350,24 +350,22 @@ let searchMarkers = [];
  ];
     
 capitalsData.forEach(cap => {
-    // 1. Creiamo un marker invisibile o un cerchietto piccolissimo
-    const marker = L.circleMarker(cap.coords, {
-        radius: 3,
+    // Usiamo L.circle (metri) invece di L.circleMarker (pixel)
+    const marker = L.circle(cap.coords, {
+        radius: 800,           // Raggio in METRI (regola questo valore per la grandezza desiderata)
+        renderer: myRenderer,  // Fondamentale per la fluidità
         fillColor: "white",
-        color: "#000",
+        color: "black",
         weight: 1,
-        opacity: 1,
         fillOpacity: 1,
-        interactive: false, // Così non interferisce con i click sulle nazioni
-        renderer: myRenderer
+        interactive: false
     });
 
-    // 2. Agganciamo l'etichetta a destra
     marker.bindTooltip(cap.name, {
-        permanent: true,       // Sempre visibile
-        direction: 'top',    // Forza la posizione a DESTRA
-        offset: [0, 10],        // Sposta l'etichetta di 5px a destra del punto
-        className: 'capital-label' // Classe CSS per lo stile
+        permanent: true,
+        direction: 'top',
+        offset: [0, -5],
+        className: 'capital-label'
     });
 
     capitalsLayer.addLayer(marker);
