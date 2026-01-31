@@ -403,7 +403,7 @@ capitalsData.forEach(cap => {
                     }
                     if (selectedLayer) { geoJsonLayer.resetStyle(selectedLayer); }
                     
-                    layer.setStyle({ color: '#ff0000', weight: 1, fillOpacity: 0 });
+                    layer.setStyle({ color: '#ff0000', weight: 2, fillOpacity: 0 });
                     layer.bringToFront();
                     selectedLayer = layer;
 
