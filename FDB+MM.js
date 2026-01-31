@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 map.on('zoomstart', function() {
     map.getContainer().style.background = '#1a1a1a'; // Colore scuro per simulare profondità
 });
+    const myRenderer = L.canvas({ padding: 0.5 });
     const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson';
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Esri',
@@ -357,7 +358,8 @@ capitalsData.forEach(cap => {
         weight: 1,
         opacity: 1,
         fillOpacity: 1,
-        interactive: false // Così non interferisce con i click sulle nazioni
+        interactive: false, // Così non interferisce con i click sulle nazioni
+        renderer: myRenderer
     });
 
     // 2. Agganciamo l'etichetta a destra
