@@ -38,12 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
     const labels = L.layerGroup();
-    const heartsLayer = L.layerGroup().addTo(map);
+    const layerHome = L.layerGroup();
+    const layerViaggi = L.layerGroup();
+    const layerMare = L.layerGroup();
     const bordersLayer = L.layerGroup().addTo(map);
     let selectedLayer = null;
     let control = null; // Per il routing
     let searchMarkers = [];
     let allHeartMarkers = []; // Array per memorizzare i riferimenti ai marker dei cuori
+    
     // --- 3. DATI ---
     const capitalsData = [
 { name: "Abu Dhabi", nation: "United Arab Emirates", coords: [24.4539, 54.3773], flag: "🇦🇪" },
@@ -435,7 +438,13 @@ specialPlaces.forEach(place => {
     });
 
     const marker = L.marker(place.coords, { icon: customIcon });
-    
+    if (place.type === 'home') {
+        layerHome.addLayer(marker);
+    } else if (place.type === 'viaggi') {
+        layerViaggi.addLayer(marker);
+    } else if (place.type === 'mare') {
+        layerMare.addLayer(marker);
+    }
     // Aggiungiamo il marker all'array e al layer
     allHeartMarkers.push({ marker: marker, type: place.type });
     heartsLayer.addLayer(marker);
@@ -498,7 +507,13 @@ async function startRouting() {
 // 1. Switcher Layer Base (Spostato a destra)
 const layersControl = L.control.layers(
     {"Satellite": satellite, "OSM": osm}, 
-    {"Nazioni": bordersLayer, "Capitali": capitalsLayer }
+    {
+        "Nazioni": bordersLayer, 
+        "Capitali": capitalsLayer,
+        "🏠 Home": layerHome,      // Nuovo Toggle
+        "✈️ Viaggi": layerViaggi,  // Nuovo Toggle
+        "🏖️ Mare": layerMare      // Nuovo Toggle
+    }
 ).addTo(map);
 const layersContainer = layersControl.getContainer();
 layersContainer.style.marginRight = '2px'; 
