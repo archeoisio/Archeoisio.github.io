@@ -321,25 +321,25 @@ document.addEventListener('DOMContentLoaded', () => {
  ];
     
 capitalsData.forEach(cap => {
-    const capIcon = L.divIcon({
-        className: 'capital-marker',
-        html: `
-            <div style="display: flex; flex-direction: column; align-items: center; pointer-events: none; transform: translate(-50%, -50%);">
-                <div style="width: 6px; height: 6px; background: white; border: 1px solid #000; border-radius: 50%;"></div>
-                <div style="color: white; font-size: 10px; font-weight: bold; text-shadow: 1px 1px 2px black; margin-top: 1px; white-space: nowrap;">
-                    ${cap.name}
-                </div>
-            </div>
-        `,
-        iconSize: [0, 0],
-        iconAnchor: [0, 0]
+    // 1. Creiamo un marker invisibile o un cerchietto piccolissimo
+    const marker = L.circleMarker(cap.coords, {
+        radius: 3,
+        fillColor: "white",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 1,
+        interactive: false // Così non interferisce con i click sulle nazioni
     });
-    // CREAZIONE DEL MARKER (Mancava questa parte)
-    const marker = L.marker(cap.coords, { 
-        icon: capIcon,
-        interactive: false 
+
+    // 2. Agganciamo l'etichetta a destra
+    marker.bindTooltip(cap.name, {
+        permanent: true,       // Sempre visibile
+        direction: 'right',    // Forza la posizione a DESTRA
+        offset: [5, 0],        // Sposta l'etichetta di 5px a destra del punto
+        className: 'capital-label' // Classe CSS per lo stile
     });
-    
+
     capitalsLayer.addLayer(marker);
 });
     
@@ -376,7 +376,7 @@ fetch(bordersUrl)
                         const capitalName = myData ? myData.name : "Non in elenco";
                         
                         content.innerHTML = `
-                            <div style="font-size:15px; font-weight:bold; color:white;">${nationName} ${flag}</div>
+                            <div style="font-size:14px; font-weight:bold; color:white;">${nationName} ${flag}</div>
                             <div style="font-size:12px; margin-top:5px; color:white;">Capitale: <b style="color:#ffeb3b;">${capitalName}</b></div>
                             <button id="fly-to-cap" style="width:100%; margin-top:10px; cursor:pointer; background:white; color:black; border:none; padding:8px; border-radius:4px; font-weight:bold;">
                                 ✈️ Vola
