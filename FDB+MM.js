@@ -40,12 +40,12 @@ map.on('zoomstart', function() {
     const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Esri',
     maxZoom: 19,
-    // OTTIMIZZAZIONI VELOCITÀ:
-    keepBuffer: 15,        // Carica 15 "anelli" di tile invisibili attorno alla vista
-    updateWhenIdle: false, // Carica le tile MENTRE ti muovi
-    updateWhenZooming: true, 
-    edgeBufferTiles: 5,    // Pre-carica le tile fuori bordo
-    crossOrigin: true      // Aiuta la cache del browser
+    // --- AGGIUNGI/MODIFICA QUESTE ---
+    updateWhenIdle: true,    // Aspetta che l'animazione finisca per caricare i dettagli massimi
+    updateWhenZooming: false, // Impedisce il caricamento compulsivo di tile intermedie
+    keepBuffer: 10,           // Mantiene in memoria le zone circostanti
+    updateInterval: 100,      // Ritardo millisecondi tra caricamenti
+    className: 'smooth-tiles' // Ci serve per il CSS sotto
 }).addTo(map);
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     updateWhenIdle: false,
