@@ -22,7 +22,16 @@
   *, *::before, *::after {
     box-sizing: border-box;
   }
+/* AGGIUNGI QUESTO: Forza le tile a non sparire immediatamente */
+.leaflet-fade-anim .leaflet-tile-pane {
+    transition: opacity 0.2s linear;
+}
 
+.leaflet-tile {
+    /* Evita il "flash" nero tra un livello di zoom e l'altro */
+    filter: brightness(1); 
+    transition: filter 0.2s;
+}
   /* 1. PINPOINT CAPITALI (Il pallino bianco) */
   .dot-capital {
     background-color: white !important;
