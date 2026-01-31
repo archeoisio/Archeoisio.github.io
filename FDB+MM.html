@@ -38,16 +38,20 @@
     pointer-events: none;
     transition: opacity 0.2s;
   }
-* Crea il pallino della capitale */
+/* Il contenitore del marker deve essere trasparente */
+.leaflet-div-icon {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Il pallino bianco reale */
 .dot-capital {
-    background-color: white;
-    border: 1.5px solid black;
+    background-color: white !important;
+    border: 1px solid black !important;
     border-radius: 50%;
     width: 6px !important;
     height: 6px !important;
-    margin-left: -3px; /* Centra il punto */
-    margin-top: -3px;
-}
+    display: block;
 }
 
 /* Evita che le tile "sfarfallino" scomparendo e riapparendo */
