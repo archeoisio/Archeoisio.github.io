@@ -363,7 +363,8 @@ let searchMarkers = [];
     { name: "Vieste", type: "viaggi", nation: "Italia", coords: [41.910176718755864, 16.112361869911446], info: "Hotel Palme Gemelle, <br> Gargano", date: "Agosto 2025", flag: "🇮🇹" },
     { name: "Foresta Umbra", type: "viaggi", nation: "Italia", coords: [41.818655594328206, 15.990982831743176], info: "Elda Hotel, <br> Gargano", date: "Agosto 2025", flag: "🇮🇹" },
     { name: "Monte Pucci", type: "viaggi", nation: "Italia", coords: [41.94781312438587, 15.993285267635214], info: "Cena sul Trabucco, <br> Gargano", date: "Agosto 2025", flag: "🇮🇹" },
-    { name: "Culture Hotel", type: "viaggi", nation: "Italia", coords: [40.84441191508071, 14.251797195603405], info: "Guerre di baci, pigiamini <br> e koreani", date: "Gennaio 2026", flag: "🇮🇹" },
+     { name: "Termoli", type: "viaggi", nation: "Italia", coords: [42.00452447502328, 14.996119889679802], info: "Matrimonio ChiaraDeg", date: "Settembre 2026", flag: "🇮🇹" },
+     { name: "Culture Hotel", type: "viaggi", nation: "Italia", coords: [40.84441191508071, 14.251797195603405], info: "Guerre di baci, pigiamini <br> e koreani", date: "Gennaio 2026", flag: "🇮🇹" },
  ];
     
 capitalsData.forEach(cap => {
