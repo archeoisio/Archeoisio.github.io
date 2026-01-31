@@ -30,7 +30,11 @@
 }
 
 /* 2. SOLUZIONE REALE: Smoothing e Antialiasing */
-.leaflet-tile {
+/* Rende la sparizione del layer GeoJSON fluida e non brusca */
+.leaflet-overlay-pane {
+    transition: opacity 0.2s ease-in-out;
+}
+  .leaflet-tile {
     /* Rende i bordi delle immagini "morbidi" eliminando lo stacco netto */
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges; /* Per Firefox */
