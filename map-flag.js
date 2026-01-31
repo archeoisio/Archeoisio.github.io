@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedLayer = null;
     let control = null; // Per il routing
     let searchMarkers = [];
+    let allHeartMarkers = []; // Array per memorizzare i riferimenti ai marker dei cuori
 
     // --- 3. DATI ---
     const capitalsData = [
@@ -414,32 +415,33 @@ const typeIcons = {
 };
 
 specialPlaces.forEach(place => {
-    // Recuperiamo l'emoji corretta in base al tipo (se non trova il tipo, usa il cuore come backup)
     const categoryIcon = typeIcons[place.type] || "❤️";
 
-  const customIcon = L.divIcon({
-        className: 'marker-container', // Classe neutra
+    // Definiamo una dimensione base iniziale (es. 30px)
+    const baseSize = 30;
+
+    const customIcon = L.divIcon({
+        className: 'marker-container',
         html: `
-            <div style="
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                width: 32px; 
-                height: 32px; 
-                background-color: white; 
-                border: 2px solid #fff; 
-                border-radius: 50%; 
-                box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-                font-size: 20px;
-            ">
+            <div class="heart-icon-inner" style="
+                display: flex; align-items: center; justify-content: center; 
+                width: 100%; height: 100%; background-color: white; 
+                border: 2px solid #fff; border-radius: 50%; 
+                box-shadow: 0 2px 6px rgba(0,0,0,0.4); font-size: 18px;">
                 ${categoryIcon}
             </div>
         `,
-        iconSize: [30, 30],
-        iconAnchor: [18, 18] // Centra il cerchio sulle coordinate
+        iconSize: [baseSize, baseSize],
+        iconAnchor: [baseSize/2, baseSize/2] 
     });
 
-    const marker = L.marker(place.coords, { icon: customIcon }).addTo(heartsLayer);
+    const marker = L.marker(place.coords, { icon: customIcon });
+    
+    // AGGIUNGIAMO IL MARKER ALL'ARRAY PER IL RESIZE
+    allHeartMarkers.push({
+        marker: marker,
+        type: place.type // Salviamo il tipo per recuperare l'icona dopo
+    });
 
     // Pop-up personalizzato
 marker.bindPopup(`
@@ -728,26 +730,72 @@ content.appendChild(item);
 sideInfoControl.addTo(map);
 
 function setVh() {
-    const mapEl = document.getElementById('map');
-    if (!mapEl || !map) return;
+        const mapEl = document.getElementById('map');
+        if (!mapEl || !map) return;
 
-    const runResize = () => {
-        // Reset asimmetria Chrome
-        mapEl.style.left = "0px";
-        mapEl.style.top = "0px";
-        
-        // Pixel reali del viewport
-        mapEl.style.width = window.innerWidth + 'px';
-        mapEl.style.height = window.innerHeight + 'px';
-        
-        map.invalidateSize({ animate: false });
-    };
+        const runResize = () => {
+            // Reset asimmetria Chrome
+            mapEl.style.left = "0px";
+            mapEl.style.top = "0px";
+            
+            // Pixel reali del viewport
+            mapEl.style.width = window.innerWidth + 'px';
+            mapEl.style.height = window.innerHeight + 'px';
+            
+            map.invalidateSize({ animate: false });
+        };
 
-    runResize();
-    // Eseguiamo più volte perché Chrome aggiorna il viewport con ritardo
-    setTimeout(runResize, 100);
-    setTimeout(runResize, 500);
-}
-    
-// Chiusura del DOMContentLoaded
+        runResize();
+        // Eseguiamo più volte perché Chrome aggiorna il viewport con ritardo
+        setTimeout(runResize, 100);
+        setTimeout(runResize, 500);
+    }
+
+    // --- 1. ATTIVAZIONE DEL RESIZE ---
+    setVh();
+    window.addEventListener('resize', setVh);
+
+    // --- 2. LOGICA RIDIMENSIONAMENTO DINAMICO ICONE (ZOOM) ---
+    map.on('zoomend', () => {
+        const z = map.getZoom();
+        
+        // Formule per calcolare dimensioni proporzionali allo zoom
+        // Il cerchio bianco cresce con lo zoom (base 12px minimo)
+        const newSize = Math.max(12, z * 3.5); 
+        // L'emoji interna cresce proporzionalmente
+        const newFontSize = Math.max(8, z * 2.2);
+
+        allHeartMarkers.forEach(item => {
+            const iconEmoji = typeIcons[item.type] || "❤️";
+            
+            // Creiamo la nuova icona con le dimensioni aggiornate
+            const resizedIcon = L.divIcon({
+                className: 'marker-container',
+                html: `
+                    <div style="
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: center; 
+                        width: 100%; 
+                        height: 100%; 
+                        background-color: white; 
+                        border: 2px solid #fff; 
+                        border-radius: 50%; 
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.4); 
+                        font-size: ${newFontSize}px;
+                        pointer-events: auto;
+                    ">
+                        ${iconEmoji}
+                    </div>
+                `,
+                iconSize: [newSize, newSize],
+                iconAnchor: [newSize / 2, newSize / 2]
+            });
+            
+            // Applichiamo l'icona al marker salvato nell'array
+            item.marker.setIcon(resizedIcon);
+        });
+    });
+
+    // --- FINE DEL SCRIPT ---
 });
