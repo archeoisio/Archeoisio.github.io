@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>ATLAS</title>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<!-- LocateControl CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
+
+<!-- Routing Machine CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+<!-- Geocoder CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+<style>
+  /* Reset totale e aggressivo */
+ *, *::before, *::after {
+    box-sizing: border-box;
+}
+/* Rimuove lo sfondo e il bordo da TUTTE le tooltip con classe capital-label */
+.leaflet-tooltip.capital-label {
+    background: none !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: white !important;
+    font-size: 11px;
+    font-weight: bold;
+    -webkit-text-stroke: 0.1px black; 
+    white-space: nowrap;
+}
+
+/* Rimuove la freccetta (triangolino) */
+.leaflet-tooltip.capital-label::before {
+    display: none !important;
+    border: none !important;
+}
+/* 2. Body e HTML devono essere "invisibili" e non avere scroll */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    background-color: #000; /* Fondo nero: se c'è un glitch, non vedi bianco */
+}
+
+/* 3. Mappa: Ancoraggio totale ai 4 angoli */
+#map {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;  /* AGGIUNTO: Forza l'estensione a destra */
+    bottom: 0 !important; /* AGGIUNTO: Forza l'estensione in basso */
+    width: 100% !important; /* Meglio 100% di 100vw per evitare bug Chrome */
+    height: 100% !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 1;
+}
+ /* Box info trasparente */
+  #info-panel {
+    display: none;
+    position: fixed;
+    bottom: 12px;
+    left: 235px;
+    max-width: 230px;
+    min-height: 30px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: sans-serif;
+    font-size: 14px;
+    z-index: 1000;
+  }
+
+  #info-content { }
+
+  /* Flag e pulsanti personalizzati */
+  .flag-box {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+    line-height: 1;
+    cursor: pointer;
+  }
+ .leaflet-control-geocoder {
+    z-index: 2000 !important; /* sopra altri controlli */
+    margin-bottom: 0;
+  }
+  /* Box home + LOCATE */
+.custom-home-box {
+  position: relative;
+  top: -8px;
+  right: 2px;
+  background: transparent;
+  padding: 0;
+  border: none !important;
+  display: flex !important;
+  flex-direction: column;
+  gap: 4px;
+
+}
+ /* Custom home button */
+.custom-home-button {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 25px !important;
+  background: white !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+}
+
+/* Leaflet locate control button */
+.leaflet-control-locate a {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 25px !important;
+  background: white !important;
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+}
+.leaflet-control-geocoder-results {
+    position: absolute;      /* necessario */
+    top: 100%;               /* subito sotto l'input */
+    left: 0 !important;                 /* allinea a sinistra dell'input */
+    max-height: 50px;       /* puoi regolare altezza */
+    overflow-y: auto;        /* scroll se tanti risultati */
+    z-index: 3000;
+    min-width: 150px;        /* larghezza minima */
+}
+/* Leaflet locate container */
+.leaflet-control-locate {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+  /* Routing Machine custom */
+ .leaflet-routing-container {
+  width: 210px;
+  max-height: 150px;
+  overflow-y: hidden;        /* scroll verticale */
+  overflow-x: hidden;      /* niente overflow orizzontale */
+  font-size: 14px;
+  background: white;
+  padding: 8px;
+  box-sizing: border-box;
+  z-index: 2000 !important;
+  word-wrap: break-word;   /* spezza parole troppo lunghe */
+  border-radius: 4px;      /* bordi leggermente arrotondati */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* ombra leggera */
+}
+
+.leaflet-routing-toggle {
+    position: absolute;   /* importante */
+    top: 80px;            /* distanza dall’alto del container */
+    right: 10px;          /* distanza da destra */
+    left: auto;           /* resettare se necessario */
+    z-index: 10000;       /* sopra altri elementi */
+}
+/* Mobile */
+@media (max-width: 1024px) {
+  .leaflet-routing-container {
+    width: 90%;             /* quasi tutta la larghezza dello schermo */
+    max-height: 200px;      /* un po' più alto su mobile */
+    font-size: 13px;        /* testo leggermente più piccolo */
+    padding: 6px;
+  }
+}
+  
+.custom-heart-button {
+    background-color: white;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+}
+
+/* Pannello lista cuori (simile al route-box) */
+#hearts-list-box {
+    margin-top: 10px;
+    width: 180px;
+    display: none; /* Nascosto di default */
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.heart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 5px;
+}
+
+.fly-to-heart {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+}
+</style>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <!-- Box info trasparente -->
+  <div id="info-panel">
+    <div id="info-content"></div>
+  </div>
+
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Leaflet Routing Machine JS -->
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+  <!-- LocateControl JS -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
+
+  <!-- LabelTextCollision plugin -->
+  <script src="https://unpkg.com/leaflet-labeltextcollision"></script>
+
+  <!-- Leaflet Control Geocoder -->
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+  <!-- Script principale -->
+  <script src="FDB+MM.js"></script>
+
+</body>
+</html>
