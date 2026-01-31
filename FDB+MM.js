@@ -409,11 +409,11 @@ fetch(bordersUrl)
                                 // ZOOM SULLA CAPITALE (Punto preciso)
                                 map.flyTo(myData.coords, 15, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
                                     animate: true,
-                                    duration: 2.5
+                                    duration: 3.5
                                 });
                             } else {
                                 // Fallback sui confini se non abbiamo le coordinate della capitale
-                                map.flyToBounds(layer.getBounds(), { padding: [50, 50], duration: 2 });
+                                map.flyToBounds(layer.getBounds(), { padding: [50, 50], duration: 3 });
                             }
                         };
                     }
@@ -568,11 +568,11 @@ btnControl.onAdd = function(map) {
     };
     // Pulsante Home 🌍
     createBtn('🌍', "Torna alla vista iniziale", () => {
-        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 2 });
+        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 3.5 });
     });
     // Pulsante Locate 📍
     const locateControl = L.control.locate({
-        flyTo: { duration: 2 },
+        flyTo: { duration: 3.5 },
         strings: { title: "Posizione" }
     });
     container.appendChild(locateControl.onAdd(map));
@@ -706,8 +706,8 @@ vBtn.onclick = () => {
     // [0, 300] significa: ignora 0px a destra e 350px dal basso
     map.flyTo(p.coords, 16, {
         paddingBottomRight: [0, 400], 
-        duration: 2, // Rende l'animazione più fluida
-        easeLinearity: 0.25
+        duration: 3.5, // Rende l'animazione più fluida
+        easeLinearity: 0.1
     });
 };
 item.appendChild(vBtn);
