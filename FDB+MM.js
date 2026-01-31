@@ -314,7 +314,7 @@ let searchMarkers = [];
     { name: "Porto Greco", type: "mare", nation: "Italia", coords: [41.799886137604105, 16.192595512599883], info: "Pietre in testa, ahia! <br>Gargano", date: "Agosto 2025", flag: "🇮🇹" },
 
     // --- TIPOLOGIA: viaggi ---
-    { name: "Petrokephali", type: "viaggi", nation: "Grecia", coords: [35.02968350447732, 24.83473953247764], info: "Il primo bacio, <br> e non solo..", date: "Settembre 2016", flag: "🇬🇷" }, 
+    { name: "Petrokephali", type: "viaggi", nation: "Grecia", coords: [35.02968350447732, 24.83473953247764], info: "Marmottina, pasta col tonno, <br> il primo bacio, <br> e non solo..", date: "Settembre 2016", flag: "🇬🇷" }, 
      { name: "Lancusi", type: "viaggi", nation: "Italia", coords: [40.763215727362144, 14.781918443062908], info: "Preparando esame <br> e facendo all'ammore..", date: "Settembre 2016", flag: "🇮🇹" },
      { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico,<br> da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
      { name: "Ravenna", type: "viaggi", nation: "Italia", coords: [44.41839937547548, 12.203726238252631], info: "Pioggia e <br> FDB morente", date: "Ottobre 2016", flag: "🇮🇹" },
