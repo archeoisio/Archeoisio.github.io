@@ -409,26 +409,38 @@ const typeIcons = {
 };
 specialPlaces.forEach(place => {
     const categoryIcon = typeIcons[place.type] || "❤️";
-    // Definiamo una dimensione base iniziale (es. 30px)
-   const baseSize = 24; // Dimensione fissa del cerchio bianco
-const fontSize = 16; // Dimensione fissa dell'emoji
+    const baseSize = 24; // Dimensione fissa del cerchio
+    const fontSize = 16; // Dimensione fissa dell'emoji
 
-const customIcon = L.divIcon({
-    className: 'marker-container',
-    html: `
-        <div style="... width: 100%; height: 100%; font-size: ${fontSize}px;">
-            ${categoryIcon}
-        </div>`,
-    iconSize: [baseSize, baseSize],
-    iconAnchor: [baseSize / 2, baseSize / 2]
-});
+    const customIcon = L.divIcon({
+        className: 'marker-container',
+        html: `
+            <div style="
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                width: ${baseSize}px; 
+                height: ${baseSize}px; 
+                background-color: white; 
+                border: 2px solid #fff; 
+                border-radius: 50%; 
+                box-shadow: 0 2px 6px rgba(0,0,0,0.3); 
+                font-size: ${fontSize}px;
+            ">
+                ${categoryIcon}
+            </div>`,
+        iconSize: [baseSize, baseSize],
+        iconAnchor: [baseSize / 2, baseSize / 2]
+    });
+
     const marker = L.marker(place.coords, { icon: customIcon });
     
     // AGGIUNGIAMO IL MARKER ALL'ARRAY PER IL RESIZE
-    allHeartMarkers.push({
-        marker: marker,
-        type: place.type // Salviamo il tipo per recuperare l'icona dopo
-    });
+   allHeartMarkers.push({ marker: marker, type: place.type });
+    heartsLayer.addLayer(marker);
+
+    marker.bindPopup(`<b>${place.name}</b><br>${place.info}`);
+});
     // Pop-up personalizzato
 marker.bindPopup(`
     <div style="text-align:center; min-width: 80px; font-family: sans-serif;">
