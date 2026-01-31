@@ -350,9 +350,12 @@ let searchMarkers = [];
  ];
     
 capitalsData.forEach(cap => {
-    // Creiamo un'icona minuscola che non cambia mai dimensione pixel
     const dotIcon = L.divIcon({
-        className: 'dot-capital'
+        // Inseriamo un div con la classe dot-capital dentro l'icona
+        html: '<div class="dot-capital"></div>', 
+        className: '', // Lasciamo vuota la classe esterna per evitare conflitti
+        iconSize: [6, 6],
+        iconAnchor: [3, 3]
     });
 
     const marker = L.marker(cap.coords, {
@@ -363,7 +366,7 @@ capitalsData.forEach(cap => {
     marker.bindTooltip(cap.name, {
         permanent: true,
         direction: 'top',
-        offset: [0, -5],
+        offset: [0, -8],
         className: 'capital-label'
     });
 
