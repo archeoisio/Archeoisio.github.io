@@ -410,21 +410,18 @@ const typeIcons = {
 specialPlaces.forEach(place => {
     const categoryIcon = typeIcons[place.type] || "❤️";
     // Definiamo una dimensione base iniziale (es. 30px)
-    const baseSize = 20;
-    const customIcon = L.divIcon({
-        className: 'marker-container',
-        html: `
-            <div class="heart-icon-inner" style="
-                display: flex; align-items: center; justify-content: center; 
-                width: 100%; height: 100%; background-color: white; 
-                border: 2px solid #fff; border-radius: 50%; 
-                box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-size: 14px;">
-                ${categoryIcon}
-            </div>
-        `,
-        iconSize: [baseSize, baseSize],
-        iconAnchor: [baseSize/2, baseSize/2] 
-    });
+   const baseSize = 24; // Dimensione fissa del cerchio bianco
+const fontSize = 16; // Dimensione fissa dell'emoji
+
+const customIcon = L.divIcon({
+    className: 'marker-container',
+    html: `
+        <div style="... width: 100%; height: 100%; font-size: ${fontSize}px;">
+            ${categoryIcon}
+        </div>`,
+    iconSize: [baseSize, baseSize],
+    iconAnchor: [baseSize / 2, baseSize / 2]
+});
     const marker = L.marker(place.coords, { icon: customIcon });
     
     // AGGIUNGIAMO IL MARKER ALL'ARRAY PER IL RESIZE
@@ -708,45 +705,5 @@ function setVh() {
     // --- 1. ATTIVAZIONE DEL RESIZE ---
     setVh();
     window.addEventListener('resize', setVh);
-    // --- 2. LOGICA RIDIMENSIONAMENTO DINAMICO ICONE (ZOOM) ---
-    map.on('zoomend', () => {
-        const z = map.getZoom();
-        
-        // Formule per calcolare dimensioni proporzionali allo zoom
-        // Il cerchio bianco cresce con lo zoom (base 12px minimo)
-        const newSize = Math.max(16, z * 2); 
-        // L'emoji interna cresce proporzionalmente
-        const newFontSize = Math.max(14, z * 1.5);
-        allHeartMarkers.forEach(item => {
-            const iconEmoji = typeIcons[item.type] || "❤️";
-            
-            // Creiamo la nuova icona con le dimensioni aggiornate
-            const resizedIcon = L.divIcon({
-                className: 'marker-container',
-                html: `
-                    <div style="
-                        display: flex; 
-                        align-items: center; 
-                        justify-content: center; 
-                        width: 100%; 
-                        height: 100%; 
-                        background-color: white; 
-                        border: 2px solid #fff; 
-                        border-radius: 50%; 
-                        box-shadow: 0 2px 6px rgba(0,0,0,0.4); 
-                        font-size: ${newFontSize}px;
-                        pointer-events: auto;
-                    ">
-                        ${iconEmoji}
-                    </div>
-                `,
-                iconSize: [newSize, newSize],
-                iconAnchor: [newSize / 2, newSize / 2]
-            });
-            
-            // Applichiamo l'icona al marker salvato nell'array
-            item.marker.setIcon(resizedIcon);
-        });
-    });
-    // --- FINE DEL SCRIPT ---
+    
 });
