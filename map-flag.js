@@ -342,7 +342,7 @@ capitalsData.forEach(cap => {
     capitalsLayer.addLayer(marker);
 });
     
-    // --- 4. CARICAMENTO CONFINI (GEOJSON) ---
+// --- 4. CARICAMENTO CONFINI (GEOJSON) ---
 fetch(bordersUrl)
     .then(r => r.json())
     .then(data => {
@@ -351,30 +351,29 @@ fetch(bordersUrl)
             onEachFeature: (feature, layer) => {
                 layer.on('click', (e) => {
                     L.DomEvent.stopPropagation(e);
-                    // --- LOGICA TOGGLE ---
+                    
+                    // Toggle deselezione
                     if (selectedLayer === layer) {
-                        // Se clicco la nazione già attiva, la deseleziono
                         geoJsonLayer.resetStyle(layer);
                         selectedLayer = null;
                         document.getElementById('info-panel').style.display = 'none';
-                        return; // Esco subito dalla funzione
+                        return;
                     }
-                    // Se clicco una nazione diversa, resetto quella precedente
-                    if (selectedLayer) {
-                        geoJsonLayer.resetStyle(selectedLayer);
-                    }
-                    // Attivo la nuova nazione
+                    if (selectedLayer) { geoJsonLayer.resetStyle(selectedLayer); }
+                    
                     layer.setStyle({ color: '#ff0000', weight: 2, fillOpacity: 0 });
                     layer.bringToFront();
                     selectedLayer = layer;
-                    // --- Aggiornamento Pannello Info ---
+
                     const nationName = feature.properties.NAME;
                     const myData = capitalsData.find(c => c.nation === nationName);
                     const panel = document.getElementById('info-panel');
                     const content = document.getElementById('info-content');
+
                     if (panel && content) {
                         const flag = myData ? myData.flag : "🏳️";
                         const capitalName = myData ? myData.name : "Non in elenco";
+                        
                         content.innerHTML = `
                             <div style="font-size:16px; font-weight:bold; color:white;">${nationName} ${flag}</div>
                             <div style="font-size:14px; margin-top:5px; color:white;">Capitale: <b style="color:#ffeb3b;">${capitalName}</b></div>
@@ -382,16 +381,25 @@ fetch(bordersUrl)
                                 ✈️ Vola
                             </button>
                         `;
-                      panel.style.display = 'block';
+                        panel.style.display = 'block';
+
                         document.getElementById('fly-to-cap').onclick = () => {
-                            map.flyToBounds(layer.getBounds(), { padding: [50, 50], duration: 2.5 });
+                            if (myData && myData.coords) {
+                                // ZOOM SULLA CAPITALE (Punto preciso)
+                                map.flyTo(myData.coords, 6, { // Zoom 6 è un buon compromesso per vedere la città e i dintorni
+                                    animate: true,
+                                    duration: 2.5
+                                });
+                            } else {
+                                // Fallback sui confini se non abbiamo le coordinate della capitale
+                                map.flyToBounds(layer.getBounds(), { padding: [50, 50], duration: 2 });
+                            }
                         };
                     }
                 });
             }
         }).addTo(bordersLayer);
     });
-    
   // --- 5. CUORI ❤️ (Marker dinamici per tipologia) ---
 // Definiamo le icone per i marker (le stesse usate nella lista)
 const typeIcons = {
