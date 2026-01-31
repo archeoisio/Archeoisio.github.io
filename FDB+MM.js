@@ -37,15 +37,13 @@ map.on('zoomstart', function() {
 });
     const myRenderer = L.canvas({ padding: 0.5 });
     const bordersUrl = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson';
-    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Esri',
-    maxZoom: 19,
-    // --- AGGIUNGI/MODIFICA QUESTE ---
-    updateWhenIdle: true,    // Aspetta che l'animazione finisca per caricare i dettagli massimi
-    updateWhenZooming: false, // Impedisce il caricamento compulsivo di tile intermedie
-    keepBuffer: 10,           // Mantiene in memoria le zone circostanti
-    updateInterval: 100,      // Ritardo millisecondi tra caricamenti
-    className: 'smooth-tiles' // Ci serve per il CSS sotto
+   const satellite = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+    attribution: 'Google',
+    maxZoom: 20,
+    // Parametri per la massima velocità
+    updateWhenIdle: false, 
+    updateWhenZooming: true,
+    keepBuffer: 15
 }).addTo(map);
     const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     updateWhenIdle: false,
