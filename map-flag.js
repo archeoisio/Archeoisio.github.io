@@ -763,9 +763,9 @@ function setVh() {
         
         // Formule per calcolare dimensioni proporzionali allo zoom
         // Il cerchio bianco cresce con lo zoom (base 12px minimo)
-        const newSize = Math.max(12, z * 3.5); 
+        const newSize = Math.max(12, z * 2); 
         // L'emoji interna cresce proporzionalmente
-        const newFontSize = Math.max(8, z * 2.2);
+        const newFontSize = Math.max(8, z * 1.5);
 
         allHeartMarkers.forEach(item => {
             const iconEmoji = typeIcons[item.type] || "❤️";
