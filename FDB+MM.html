@@ -22,29 +22,31 @@
   *, *::before, *::after {
     box-sizing: border-box;
   }
-/* --- OTTIMIZZAZIONE TILE (ANTISFARFALLIO E RIGHE) --- */
-
-/* 1. Forza la fluidità dei livelli di zoom */
-.leaflet-fade-anim .leaflet-tile-pane {
-    transition: opacity 0.2s linear;
-}
-
-/* 2. Elimina le righe tra le tiles e attiva la scheda video */
-.leaflet-tile {
-    outline: 1px solid transparent; /* Nasconde le giunture */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;   /* Rendering hardware */
-    filter: brightness(1);         /* Evita il flash nero */
-    transition: filter 0.2s, opacity 0.2s;
-    will-change: transform;
-}
-
-/* 3. Il "Trucco dello stretching": sovrappone leggermente le immagini per tappare i buchi */
+/* 1. RESET: Torna alla dimensione standard per evitare sovrapposizioni sporche */
 .leaflet-tile-container img {
-    width: 256.5px !important; 
-    height: 256.5px !important;
-    margin-left: -0.25px;
-    margin-top: -0.25px;
+    width: 256px !important; 
+    height: 256px !important;
+    margin: 0 !important;
+}
+
+/* 2. SOLUZIONE REALE: Smoothing e Antialiasing */
+.leaflet-tile {
+    /* Rende i bordi delle immagini "morbidi" eliminando lo stacco netto */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges; /* Per Firefox */
+    
+    /* Crea un micro-bordo interno dello stesso colore del satellite */
+    /* Questo "sigilla" lo spazio tra le tile senza ingrandirle */
+    box-shadow: 0 0 0.5px 0.5px rgba(26, 26, 26, 0.5); 
+    
+    /* Forza il browser a non ricalcolare i bordi durante il volo */
+    transform-origin: 0 0;
+}
+
+/* 3. Forza lo sfondo del contenitore delle tile */
+/* Se c'è un buco millimetrico, vedrai questo colore invece del bianco/nero */
+.leaflet-tile-pane {
+    background-color: #1a1a1a !important;
 }
   /* 1. PINPOINT CAPITALI (Il pallino bianco) */
   .dot-capital {
