@@ -34,7 +34,15 @@
     -webkit-text-stroke: 0.1px black; 
     white-space: nowrap;
 }
+.leaflet-tile-container {
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
 
+/* Evita che le tile "sfarfallino" scomparendo e riapparendo */
+.leaflet-tile {
+    will-change: transform;
+}
 /* Rimuove la freccetta (triangolino) */
 .leaflet-tooltip.capital-label::before {
     display: none !important;
