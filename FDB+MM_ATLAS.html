@@ -232,7 +232,7 @@
     padding: 0 !important;
   }
 
-/* --- 1. CONTENITORE INDICAZIONI --- */
+/* --- 1. CONTENITORE INDICAZIONI (Pannello Bianco) --- */
 .leaflet-routing-container {
     width: 210px;
     max-height: 150px;
@@ -244,9 +244,12 @@
     z-index: 2000 !important;
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    /* Se il toggle "sparisce", spesso è perché il container si sposta fuori schermo */
+    margin-right: 10px !important;
+    margin-top: 10px !important;
 }
 
-/* FORZA IL QUADRATINO DEL TOGGLE SEMPRE VISIBILE */
+/* --- 2. IL QUADRATINO DEL TOGGLE (Sempre visibile) --- */
 .leaflet-routing-toggle {
     display: block !important;
     visibility: visible !important;
@@ -255,42 +258,45 @@
     background-color: white !important;
     background-image: url('https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet.routing.icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: center !important; /* Centra l'auto */
+    background-position: center !important; 
     background-size: 160px auto !important;
     border-radius: 4px !important;
     border: 2px solid rgba(0,0,0,0.2) !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
     cursor: pointer !important;
-    text-indent: -9999px !important; /* Nasconde scritte spurie */
+    text-indent: -9999px !important; 
     overflow: hidden !important;
+    
+    /* Posizionamento assoluto forzato */
     position: absolute !important;
-    top: 80px !important;
+    top: 80px !important; /* Sotto i bottoni dello zoom */
     right: 10px !important;
     z-index: 10000 !important;
 }
 
-/* Pannello indicazioni */
-.leaflet-routing-container {
-    background: white;
-    padding: 8px;
-    border-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    width: 210px;
-    max-height: 150px;
-    overflow-y: auto;
-}
-
-/* Classe per nascondere il pannello */
+/* --- 3. LOGICA DI VISIBILITÀ --- */
 .leaflet-routing-container-hide {
     display: none !important;
 }
 
-/* MOBILE */
+/* Quando il pannello è nascosto, assicuriamoci che il toggle resti visibile */
+.leaflet-routing-container-hide .leaflet-routing-toggle {
+    display: block !important;
+}
+
+/* --- 4. RESPONSIVE MOBILE (Sotto 600px) --- */
 @media (max-width: 600px) {
+    .leaflet-routing-container {
+        width: 170px !important;
+        max-height: 120px !important;
+        font-size: 12px !important;
+    }
+
     .leaflet-routing-toggle {
-        top: 140px !important; /* Lo abbassa per i layer */
+        top: 140px !important; /* Abbassato per non sovrapporsi allo switcher layer */
         width: 38px !important;
         height: 38px !important;
+        background-size: 180px auto !important; /* Icona leggermente più grande */
     }
 }
   .custom-heart-button {
