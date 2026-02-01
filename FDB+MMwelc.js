@@ -888,14 +888,13 @@ function showStep() {
     }
 
     let popupPoint;
-    if (target) {
+   if (target) {
         const rect = target.getBoundingClientRect();
-        // Puntiamo leggermente a sinistra del pulsante (visto che sono a destra)
-        popupPoint = map.containerPointToLayerPoint([rect.left - 20, rect.top + (rect.height / 2)]);
-    } else {
-        popupPoint = map.containerPointToLayerPoint([window.innerWidth / 2, window.innerHeight / 2]);
+        
+        // rect.left - 50  => sposta il punto di ancoraggio 50px a sinistra del tasto
+        // rect.top + 40   => sposta il punto di ancoraggio 40px più in basso
+        popupPoint = map.containerPointToLayerPoint([rect.left - 50, rect.top + 40]);
     }
-    
     const popupLatLng = map.layerPointToLatLng(popupPoint);
 
   L.popup({ 
