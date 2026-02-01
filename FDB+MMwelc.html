@@ -27,11 +27,20 @@
   /* --- SEZIONE TUTORIAL (CORRETTA) --- */
   .tutorial-pointer .leaflet-popup-content {
     margin: 10px !important;
-    padding: 5px !important;
-    width: 280px !important;
-    overflow: visible !important;
-  }
-
+    width: auto !important; /* Permette al testo di fluire */
+    min-width: 220px !important; 
+    max-width: 280px !important; /* Impedisce di diventare troppo largo */
+}
+/* Media Query specifica per schermi piccoli (Mobile) */
+@media (max-width: 600px) {
+    .tutorial-pointer .leaflet-popup-content-wrapper {
+        min-width: 240px !important; 
+    }
+  .tutorial-pointer .leaflet-popup-content {
+        min-width: 220px !important;
+        margin: 8px !important; /* Riduce i margini interni su mobile */
+    }
+}
   /* FRECCIA LATERALE (Pulsanti) */
   .tutorial-pointer .leaflet-popup-tip-container {
     width: 20px;
@@ -55,15 +64,14 @@
     right: auto !important;
   }
 
-  .tutorial-pointer .leaflet-popup-content-wrapper {
-    width: auto !important;
-    min-width: 320px !important; 
-    max-width: 350px !important;
+ .tutorial-pointer .leaflet-popup-content-wrapper {
+    width: 320px !important; /* Larghezza standard Desktop */
+    max-width: 90vw !important; /* Su mobile non supera mai il 90% dello schermo */
     border-radius: 8px;
     padding: 0;
     overflow: visible !important;
     border: 2px solid #3498db;
-  }
+}
 
   .tutorial-pointer { z-index: 10000 !important; }
   .tutorial-pointer .leaflet-popup-tip { background: #3498db !important; }
