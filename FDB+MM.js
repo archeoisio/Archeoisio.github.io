@@ -54,7 +54,7 @@ map.on('zoomstart', function() {
 });;
    
     // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
-const labels = L.layerGroup().addTo(map);
+const labels = L.layerGroup();
 const bordersLayer = L.layerGroup().addTo(map);
 map.on('zoom', function() {
     const currentZoom = map.getZoom();
@@ -85,7 +85,7 @@ const layerNextStop = L.layerGroup();
 // Lo creiamo come un gruppo che contiene i tre sottogruppi
 const heartsLayer = L.layerGroup([layerHome, layerViaggi, layerMare, layerNextStop]);
 
-const capitalsLayer = L.layerGroup();
+const capitalsLayer = L.layerGroup().addTo(map);
 let allHeartMarkers = []; 
 // ------------------------------------------------
 
