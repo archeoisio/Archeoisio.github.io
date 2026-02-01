@@ -555,7 +555,7 @@ async function startRouting() {
     }
 
     try {
-        // Funzione Geocoding interna
+        // 1. Geocoding
         const geocode = async (query) => {
             const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
             const d = await r.json();
@@ -566,13 +566,12 @@ async function startRouting() {
         const startCoords = await geocode(startVal);
         const endCoords = await geocode(endVal);
 
-        // Rimuove il controllo precedente se esiste
+        // 2. Pulizia controllo precedente
         if (typeof control !== 'undefined' && control) {
             map.removeControl(control);
         }
 
-        if (control) map.removeControl(control);
-
+        // 3. Creazione Controllo Routing
         control = L.Routing.control({
             waypoints: [startCoords, endCoords],
             language: 'it',
@@ -582,26 +581,31 @@ async function startRouting() {
             lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
         }).addTo(map);
 
-        // FIX MANUALE: Usiamo un approccio più solido
+        // 4. Fix Manuale Toggle (Timeout per attendere il DOM)
         setTimeout(() => {
             const toggleBtn = document.querySelector('.leaflet-routing-toggle');
             if (toggleBtn) {
-                // Rimuoviamo eventuali vecchi eventi clonando il pulsante
                 const newToggleBtn = toggleBtn.cloneNode(true);
                 toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
 
                 newToggleBtn.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    
                     const container = document.querySelector('.leaflet-routing-container');
                     if (container) {
-                        // Leaflet usa questa classe per nascondere
                         container.classList.toggle('leaflet-routing-container-hide');
                     }
                 });
             }
         }, 500);
+
+    } catch (e) {
+        // Questo è il blocco "catch" che mancava o era mal posizionato
+        console.error(e);
+        alert(e.message || "Errore durante il calcolo del percorso.");
+    }
+} // <--- Fine della funzione startRouting
+    
 // --- 7. CONTROLLI INTERFACCIA ---
 // 1. Switcher Layer Base (Spostato a destra)
 const layersControl = L.control.layers(
