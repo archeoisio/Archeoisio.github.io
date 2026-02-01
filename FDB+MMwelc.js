@@ -819,12 +819,12 @@ const tutorialSteps = [
     { 
         id: ".leaflet-control-layers", 
         titolo: "Switcher Mappa", 
-        testo: "Qui puoi cambiare la basemap e attivare i vari layers (Nazioni, COnfini e Livelli Atlas)" 
+        testo: "Qui puoi cambiare la basemap e attivare i vari layers (Nazioni, Confini e Livelli Atlas)" 
     },
     { 
         id: ".btn-tutorial-home", 
         titolo: "Tasto Home", 
-        testo: "Ti riporta istantaneamente alla visuale globale." 
+        testo: "Resetta la mappa alla vista iniziale." 
     },
     { 
         id: ".btn-tutorial-locate", 
@@ -834,17 +834,17 @@ const tutorialSteps = [
     { 
         id: ".btn-tutorial-route", 
         titolo: "Percorsi", 
-        testo: "Calcola itinerari tra due punti." 
+        testo: "Calcola itinerari tra due punti inserisci partenza e destinazione e clicca 'Calcola' o 'Reset'." 
     },
     { 
         id: ".btn-tutorial-hearts", 
-        titolo: "I tuoi preferiti", 
-        testo: "Clicca qui per aprire la lista dei luoghi del cuore." 
+        titolo: "Elenco luoghi speciali", 
+        testo: "Clicca qui per aprire elenchi dei layers ATLAS." 
     },
     { 
         id: "#hearts-list-box", 
-        titolo: "Lista Cuori", 
-        testo: "Qui trovi tutti i posti che hai salvato!",
+        titolo: "Elenco luoghi speciali", 
+        testo: "Elenco layers divisi per categoria, click su "Vola" per raggiungere la destinazione, clicca sui marker per maggiori info sul luogo.",
         action: "openHearts" // Segnale per aprire il box
     }
 ];
