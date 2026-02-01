@@ -893,7 +893,7 @@ function showStep() {
         
         // rect.left - 50  => sposta il punto di ancoraggio 50px a sinistra del tasto
         // rect.top + 40   => sposta il punto di ancoraggio 40px più in basso
-        popupPoint = map.containerPointToLayerPoint([rect.left - 50, rect.top + 40]);
+        popupPoint = map.containerPointToLayerPoint([rect.left - 80, rect.top + 60]);
     }
     const popupLatLng = map.layerPointToLatLng(popupPoint);
 
