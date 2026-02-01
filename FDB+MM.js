@@ -297,6 +297,7 @@ let searchMarkers = [];
     { name: "Ecce Homo", type: "home", nation: "Italia", coords: [40.84505106749316, 14.253687972830459], info: "FDB", date: "", flag: "🇮🇹" },
     { name: "Dipylou 8A", type: "home", nation: "Grecia", coords: [37.979367399856606, 23.72075051641102], info: "Atene, Monastiraki/Ceramico", date: "Settembre 2017/Aprile 2018", flag: "🇬🇷" },
     { name: "Rethymno", type: "home", nation: "Grecia", coords: [35.36987174693328, 24.473314364073172], info: "Αραμπατζόγλου, Creta", date: "Aprile/Giugno 2018", flag: "🇬🇷" },
+    {name: "Pignasecca", type: "home", nation: "Italia", coords: [40.84671415786524, 14.24715665951185], info: "Da Enzo, con Elly e Gaia", date: "Ottobre 2020/Marzo 2022", flag: "🇮🇹" },
     { name: "Fratte", type: "home", nation: "Italia", coords: [40.69672994658257, 14.77710915495002], info: "Via Francesco Spirito 51", date: "Settembre 2021/Novembre 2023", flag: "🇮🇹" },
     { name: "Uppsala", type: "home", nation: "Svezia", coords: [59.862514043172986, 17.65992409050815], info: "Frodegatan 33E", date: "Settembre 2022/Gennaio 2023", flag: "🇸🇪" },
  
