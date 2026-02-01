@@ -565,7 +565,7 @@ const layersControl = L.control.layers(
         "🏠 Home": layerHome,      // Nuovo Toggle
         "✈️ Viaggi": layerViaggi,  // Nuovo Toggle
         "🏖️ Mare": layerMare,      // Nuovo Toggle
-        "❓" NextStop: layerNextStop
+        "❓ NextStop": layerNextStop
     },
 {
         collapsed: true
