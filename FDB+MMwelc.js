@@ -652,7 +652,6 @@ container.appendChild(locBtn);
     if(rb) rb.style.display = 'none'; 
     if(hb) hb.style.display = (hb.style.display === 'none') ? 'flex' : 'none';
 }, 'btn-tutorial-hearts');
-    });
     return container;
 };
 btnControl.addTo(map);
