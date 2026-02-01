@@ -370,7 +370,7 @@ let searchMarkers = [];
      // --- TIPOLOGIA: NextStop ---
      { name: "Nicosia", type: "NextStop", nation: "Cipro", coords: [35.16544721239677, 33.36724088336895], info: "Living la Vida Loca, <br> together", date: "2026", flag: "🇨🇾" },
      { name: "Porto", type: "NextStop", nation: "Portogallo", coords: [41.14636917086563, -8.606643703282842], info: "Per ricominciare,<br>da dove ci siamo fermati", date: "2026", flag: "🇵🇹" },
-     { name: "Andalucia", type: "NextStop", nation: "Spagna", coords: [37.37388995019381, -5.800445300762278], info: "Per esaudire tuo desiderio di andarci, <br> mio di tornarci", date: "2026", flag: "🇪🇸" },
+     { name: "Siviglia", type: "NextStop", nation: "Spagna", coords: [37.38703922819611, -5.986177854161874], info: "Andalucia, per esaudire tuo desiderio di andarci, <br> mio di tornarci", date: "2026", flag: "🇪🇸" },
      { name: "Marrakech", type: "NextStop", nation: "Marocco", coords: [31.631597017143186, -7.9868416614654425], info: "Per un weekend romantico,<br> fuori dall'Europa", date: "???", flag: "🇲🇦" },
      { name: "Istanbul", type: "NextStop", nation: "Turchia", coords: [40.999279878160635, 28.93924044149299], info: "Per darci un bacio <br> sullo stretto dei Dardanelli,<br>e magari vedere Troia e la Cappadocia", date: "???", flag: "🇹🇷" },
      { name: "Parigi", type: "NextStop", nation: "Francia", coords: [48.86011859811617, 2.326124871376955], info: "Per un weekend romantico,<br> e dirci je t'aime mon amour! <br> (e per mangiare Croissant e Pan au chocolat)", date: "???", flag: "🇫🇷" },
