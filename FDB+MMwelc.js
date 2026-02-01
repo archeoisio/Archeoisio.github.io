@@ -880,28 +880,40 @@ function showStep() {
     const step = tutorialSteps[currentStep];
     const target = document.querySelector(step.id);
     const isLast = currentStep === tutorialSteps.length - 1;
+    const isHeartBox = step.id === "#hearts-list-box"; // Controllo se è il box cuori
 
-    // Se lo step prevede un'azione (aprire i cuori), la eseguiamo
     if (step.action === "openHearts") {
         const hb = document.getElementById('hearts-list-box');
         if (hb) hb.style.display = 'flex';
     }
 
     let popupPoint;
-   if (target) {
+    let customOffset = L.point(-20, 10); // Offset standard per i pulsanti a destra
+
+    if (target) {
         const rect = target.getBoundingClientRect();
         
-        // rect.left - 50  => sposta il punto di ancoraggio 50px a sinistra del tasto
-        // rect.top + 40   => sposta il punto di ancoraggio 40px più in basso
-        popupPoint = map.containerPointToLayerPoint([rect.left - 80, rect.top + 60]);
+        if (isHeartBox) {
+            // POSIZIONAMENTO SOPRA IL BOX
+            // Puntiamo al centro orizzontale del box e alla sua cima (top)
+            popupPoint = map.containerPointToLayerPoint([rect.left + (rect.width / 2), rect.top]);
+            customOffset = L.point(0, -10); // Sposta il popup un po' più su rispetto al bordo del box
+        } else {
+            // POSIZIONAMENTO STANDARD A SINISTRA DEI PULSANTI
+            popupPoint = map.containerPointToLayerPoint([rect.left - 120, rect.top + 120]);
+        }
+    } else {
+        popupPoint = map.containerPointToLayerPoint([window.innerWidth / 2, window.innerHeight / 2]);
     }
+
     const popupLatLng = map.layerPointToLatLng(popupPoint);
 
-  L.popup({ 
+    L.popup({ 
         closeButton: false, 
         closeOnClick: false,
-        autoPan: false, // <--- QUESTA È LA RIGA CHIAVE: impedisce alla mappa di muoversi
-        className: 'tutorial-pointer'
+        autoPan: false,
+        className: 'tutorial-pointer',
+        offset: customOffset // Usa l'offset dinamico
     })
     .setLatLng(popupLatLng)
     .setContent(`
@@ -913,30 +925,24 @@ function showStep() {
             </button>
         </div>
     `)
-    .openOn(map)
+    .openOn(map);
 }
 
 function nextTutorialStep() {
     currentStep++;
+    
     if (currentStep < tutorialSteps.length) {
-        showStep();
+        showStep(); // Passa al prossimo step (es. il box cuori)
     } else {
-        // --- 1. CHIUSURA FORZATA DI TUTTI I POPUP ---
-        map.eachLayer(function (layer) {
-            if (layer instanceof L.Popup) {
-                map.removeLayer(layer);
-            }
-        });
-      const hb = document.getElementById('hearts-list-box');
-        if (hb) hb.style.display = 'none';
-        
-        // --- 2. SBLOCCO DELLA MAPPA ---
+        // SOLO QUI la mappa torna interattiva
         map.dragging.enable();
         map.touchZoom.enable();
         map.doubleClickZoom.enable();
         map.scrollWheelZoom.enable();
-        if (map.tap) map.tap.enable();
         
-        console.log("Tutorial terminato: mappa sbloccata e popup rimossi.");
+        // Chiudiamo tutto
+        map.eachLayer(l => { if (l instanceof L.Popup) map.removeLayer(l); });
+        const hb = document.getElementById('hearts-list-box');
+        if (hb) hb.style.display = 'none';
     }
 }
