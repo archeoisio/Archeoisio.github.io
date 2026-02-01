@@ -20,27 +20,31 @@
     height: 256px !important;
     margin: 0 !important;
   }
-/* 1. Nasconde il quadratino/checkbox per la riga Atlas */
-.leaflet-control-layers-overlays label:has(.atlas-title) input {
+/* 1. Nasconde il checkbox e lo span vuoto che Leaflet crea per l'icona */
+.leaflet-control-layers-overlays label:has(.atlas-title) input,
+.leaflet-control-layers-overlays label:has(.atlas-title) span.leaflet-control-layers-selector {
     display: none !important;
 }
 
-/* 2. Rimuove lo spazio vuoto lasciato dal checkbox nascosto */
+/* 2. Rimuove lo spazio vuoto a sinistra e resetta il cursore */
 .leaflet-control-layers-overlays label:has(.atlas-title) {
-    padding-left: 2px !important;
+    padding-left: 0 !important;
+    margin-left: -4px !important; /* Recupera lo spazio del checkbox sparito */
     cursor: default !important;
 }
 
-/* 3. Il tuo stile (TIENILO, è perfetto) */
+/* 3. Il tuo stile ottimizzato */
 .atlas-title {
     pointer-events: none;
-    display: inline-block;
-    padding-top: 10px; /* Aumentato per distanziarlo dai layer sopra */
-    font-size: 1.1em;
+    display: block; /* 'block' assicura che il bordo occupi tutta la larghezza */
+    padding-top: 12px; 
+    padding-bottom: 4px;
+    font-size: 0.95em; /* Leggermente ridotto per non eccedere nel pannello */
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
-    border-bottom: 1px solid rgba(0,0,0,0.1); /* Sottile linea di divisione */
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    color: #2c3e50; /* Il blu notte che piace a te */
+    border-bottom: 2px solid rgba(44, 62, 80, 0.2); /* Linea più visibile */
     width: 100%;
 }
   /* Forza i popup del tutorial a stare sopra tutto */
