@@ -21,22 +21,18 @@
   /* --- STILI TUTORIAL (MODIFICATI SOLO PER FRECCE E ALLINEAMENTO) --- */
   .tutorial-pointer { z-index: 10000 !important; }
   
-  .tutorial-pointer .leaflet-popup-content-wrapper {
-    width: auto !important;
-    min-width: 330px !important; 
-    max-width: 350px !important;
-    border: 2px solid #3498db;
-    border-radius: 8px;
-    padding: 0;
+ /* Assicura che il wrapper non abbia padding extra */
+.tutorial-pointer .leaflet-popup-content-wrapper {
+    padding: 0 !important;
     overflow: visible !important;
-  }
-
-  .tutorial-pointer .leaflet-popup-content {
-    margin: 0 !important; /* Rimosso margine Leaflet per evitare disallineamenti */
-    padding: 12px !important;
+}
+/* RESET TOTALE CONTENUTO POPUP */
+.tutorial-pointer .leaflet-popup-content {
+    margin: 0 !important; /* Rimuove lo spazio che sposta tutto */
+    padding: 12px !important; /* Gestiamo noi lo spazio interno */
     width: 310px !important;
-    display: block !important; /* Assicura che il flex interno funzioni */
-  }
+    line-height: 1 !important; /* Evita salti di riga strani */
+}
 
   /* 1. FRECCIA A DESTRA (Default per pulsanti laterali) */
   .tutorial-pointer .leaflet-popup-tip-container {
