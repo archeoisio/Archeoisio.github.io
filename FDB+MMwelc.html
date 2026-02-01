@@ -22,51 +22,49 @@
   .tutorial-pointer { z-index: 10000 !important; }
   
   .tutorial-pointer .leaflet-popup-content-wrapper {
-    width: auto !important;
-    min-width: 320px !important; 
-    max-width: 350px !important;
+    width: 330px !important; /* Forza larghezza fissa */
+    border: 2px solid #3498db;
     border-radius: 8px;
     padding: 0;
-    overflow: visible !important;
-    border: 2px solid #3498db;
-  }
+    overflow: visible !important; /* Permette alla freccia di uscire */
+}
 
   .tutorial-pointer .leaflet-popup-content {
-    margin: 12px !important;
+    margin: 0 !important; /* Reset margin per gestire tutto via JS */
+    padding: 12px !important;
     width: 300px !important;
-    overflow: visible !important;
-  }
+}
 
   /* --- DIREZIONE FRECCE --- */
   
   /* 1. TUTTE LE FRECCE A DESTRA (Default per pulsanti) */
-  .tutorial-pointer .leaflet-popup-tip-container {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    transform: rotate(-90deg) !important; /* Ruota per puntare a destra */
+.tutorial-pointer .leaflet-popup-tip-container {
+    width: 20px !important;
+    height: 20px !important;
+    position: absolute !important;
     top: 50% !important;
-    margin-top: -10px !important;
-    right: -11px !important; /* A filo sul bordo destro */
+    right: -12px !important; /* Esce esattamente a filo */
     left: auto !important;
+    margin-top: -10px !important;
+    transform: rotate(-90deg) !important;
     z-index: 1000;
-  }
+}
 
   /* 2. FRECCIA VERSO IL BASSO (Solo per Box Cuore) */
-  .tutorial-pointer.heart-box-popup .leaflet-popup-tip-container {
-    transform: rotate(0deg) !important; /* Punta verso il basso */
+ .tutorial-pointer.heart-box-popup .leaflet-popup-tip-container {
     top: auto !important;
-    bottom: -11px !important; /* A filo sul bordo inferiore */
+    bottom: -12px !important; /* Esce sotto */
     left: 50% !important;
     right: auto !important;
     margin-left: -10px !important;
     margin-top: 0 !important;
-  }
+    transform: rotate(0deg) !important;
+}
 
   .tutorial-pointer .leaflet-popup-tip {
-    background: #3498db;
+    background: #3498db !important; /* Stesso colore del bordo */
     box-shadow: none !important;
-  }
+}
 
   /* --- ALTRI STILI MAPPA --- */
   .leaflet-overlay-pane { transition: opacity 0.2s ease-in-out; }
