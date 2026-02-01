@@ -20,18 +20,28 @@
     height: 256px !important;
     margin: 0 !important;
   }
-.leaflet-control-layers-overlays label div:has(.atlas-title) input {
+/* 1. Nasconde il quadratino/checkbox per la riga Atlas */
+.leaflet-control-layers-overlays label:has(.atlas-title) input {
     display: none !important;
 }
 
-/* Rende il titolo non cliccabile e meglio spaziato */
+/* 2. Rimuove lo spazio vuoto lasciato dal checkbox nascosto */
+.leaflet-control-layers-overlays label:has(.atlas-title) {
+    padding-left: 2px !important;
+    cursor: default !important;
+}
+
+/* 3. Il tuo stile (TIENILO, è perfetto) */
 .atlas-title {
     pointer-events: none;
     display: inline-block;
-    padding-top: 5px;
+    padding-top: 10px; /* Aumentato per distanziarlo dai layer sopra */
     font-size: 1.1em;
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(0,0,0,0.1); /* Sottile linea di divisione */
+    width: 100%;
 }
   /* Forza i popup del tutorial a stare sopra tutto */
   .leaflet-popup-pane { z-index: 1000 !important; }
