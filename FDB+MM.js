@@ -78,10 +78,11 @@ map.on('zoom', function() {
 const layerHome = L.layerGroup();
 const layerViaggi = L.layerGroup();
 const layerMare = L.layerGroup();
-
+const layerNextStop = L.layerGroup();
+    
 // 2. DEFINIAMO heartsLayer (così il resto del codice non va in errore)
 // Lo creiamo come un gruppo che contiene i tre sottogruppi
-const heartsLayer = L.layerGroup([layerHome, layerViaggi, layerMare]);
+const heartsLayer = L.layerGroup([layerHome, layerViaggi, layerMare, layerNextStop]);
 
 const capitalsLayer = L.layerGroup();
 let allHeartMarkers = []; 
@@ -363,8 +364,11 @@ let searchMarkers = [];
     { name: "Vieste", type: "viaggi", nation: "Italia", coords: [41.910176718755864, 16.112361869911446], info: "Hotel Palme Gemelle, <br> Gargano", date: "Agosto 2025", flag: "🇮🇹" },
     { name: "Foresta Umbra", type: "viaggi", nation: "Italia", coords: [41.818655594328206, 15.990982831743176], info: "Elda Hotel, <br> Gargano", date: "Agosto 2025", flag: "🇮🇹" },
     { name: "Monte Pucci", type: "viaggi", nation: "Italia", coords: [41.94781312438587, 15.993285267635214], info: "Cena sul Trabucco, <br> Gargano", date: "Agosto 2025", flag: "🇮🇹" },
-     { name: "Termoli", type: "viaggi", nation: "Italia", coords: [42.00452447502328, 14.996119889679802], info: "Matrimonio ChiaraDeg", date: "Settembre 2026", flag: "🇮🇹" },
-     { name: "Culture Hotel", type: "viaggi", nation: "Italia", coords: [40.84441191508071, 14.251797195603405], info: "Guerre di baci, pigiamini <br> e koreani", date: "Gennaio 2026", flag: "🇮🇹" },
+    { name: "Termoli", type: "viaggi", nation: "Italia", coords: [42.00452447502328, 14.996119889679802], info: "Matrimonio ChiaraDeg", date: "Settembre 2026", flag: "🇮🇹" },
+    { name: "Culture Hotel", type: "viaggi", nation: "Italia", coords: [40.84441191508071, 14.251797195603405], info: "Guerre di baci, pigiamini <br> e koreani", date: "Gennaio 2026", flag: "🇮🇹" },
+
+     // --- TIPOLOGIA: NextStop ---
+         { name: "Nicosia", type: "NextStop", nation: "Cipro", coords: [35.16544721239677, 33.36724088336895], info: "Living la Vida Loca <br> togheter", date: "2026", flag: "🇨🇾" },
  ];
     
 capitalsData.forEach(cap => {
@@ -455,6 +459,7 @@ const typeIcons = {
     "home": "🏠",
     "viaggi": "✈️",
     "mare": "🏖️"
+    "NextStop": "❓"
 };
 
 specialPlaces.forEach(place => {
@@ -490,6 +495,8 @@ specialPlaces.forEach(place => {
         layerViaggi.addLayer(marker);
     } else if (place.type === 'mare') {
         layerMare.addLayer(marker);
+        } else if (place.type === 'NextStop') {
+        layerNextStop.addLayer(marker);
     }
     // Aggiungiamo il marker all'array e al layer
     allHeartMarkers.push({ marker: marker, type: place.type });
@@ -557,7 +564,8 @@ const layersControl = L.control.layers(
         "Capitali": capitalsLayer,
         "🏠 Home": layerHome,      // Nuovo Toggle
         "✈️ Viaggi": layerViaggi,  // Nuovo Toggle
-        "🏖️ Mare": layerMare      // Nuovo Toggle
+        "🏖️ Mare": layerMare,      // Nuovo Toggle
+        "❓" NextStop: layerNextStop
     },
 {
         collapsed: true
@@ -705,7 +713,7 @@ L.DomEvent.on(heartsListBox, 'mouseleave touchend', () => {
     map.dragging.enable();
     map.scrollWheelZoom.enable();
 });
-    ["home", "viaggi", "mare"].forEach(category => {
+    ["home", "viaggi", "mare", "NextStop"].forEach(category => {
         const placesInCategory = specialPlaces.filter(p => p.type === category);
         if (placesInCategory.length > 0) {
             const wrapper = document.createElement('div');
