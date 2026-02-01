@@ -543,35 +543,70 @@ specialPlaces.forEach(place => {
 async function startRouting() {
     const startInput = document.getElementById('start');
     const endInput = document.getElementById('end');
+    
     if (!startInput || !endInput) return;
+    
     const startVal = startInput.value;
     const endVal = endInput.value;
+
     if (!startVal || !endVal) {
         alert("Inserisci sia partenza che destinazione");
         return;
     }
+
     try {
         // Funzione Geocoding interna
         const geocode = async (query) => {
             const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
             const d = await r.json();
-            if (d.length === 0) throw new Error();
+            if (d.length === 0) throw new Error("Località non trovata");
             return L.latLng(d[0].lat, d[0].lon);
         };
+
         const startCoords = await geocode(startVal);
         const endCoords = await geocode(endVal);
-        if (control) map.removeControl(control);
+
+        // Rimuove il controllo precedente se esiste
+        if (typeof control !== 'undefined' && control) {
+            map.removeControl(control);
+        }
+
+        // Creazione del controllo Routing
         control = L.Routing.control({
             waypoints: [startCoords, endCoords],
-            collapsible: true,              // Permette di chiudere il pannello cliccando il tasto
-            collapseBtnClass: 'leaflet-routing-collapse-btn', // Classe per il tastino interno (opzionale)
-            show: false,
             language: 'it',
+            collapsible: true,
+            show: false, // Parte chiuso, mostra solo il toggle
             routeWhileDragging: true,
-            lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
+            itineraryClassName: 'leaflet-routing-container',
+            collapseBtnClass: 'leaflet-routing-collapse-btn', 
+            containerClassName: 'leaflet-routing-container',
+            lineOptions: { 
+                styles: [{ color: '#4a90e2', weight: 5 }] 
+            },
+            // Corretto minuscola: createItinerary
+            createItinerary: function(itinerary) {
+                return itinerary;
+            }
         }).addTo(map);
+
+        // Gestione manuale del Toggle per Desktop/Mobile
+        control.on('routesfound', function() {
+            const toggleBtn = document.querySelector('.leaflet-routing-toggle');
+            if (toggleBtn) {
+                toggleBtn.onclick = function() {
+                    const container = document.querySelector('.leaflet-routing-container');
+                    if (container.classList.contains('leaflet-routing-container-hide')) {
+                        control.show();
+                    } else {
+                        control.hide();
+                    }
+                };
+            }
+        });
+
     } catch (e) {
-        alert("Località non trovata. Prova a essere più specifico.");
+        alert(e.message || "Errore durante la ricerca. Riprova.");
     }
 }
 // --- 7. CONTROLLI INTERFACCIA ---
