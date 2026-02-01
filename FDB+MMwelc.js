@@ -837,38 +837,17 @@ function closeModal() {
 function startTutorial() {
     closeModal();
     currentStep = 0;
+    
+    // --- BLOCCO MAPPA ---
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
+    map.boxZoom.disable();
+    map.keyboard.disable();
+    if (map.tap) map.tap.disable(); // Per dispositivi touch
+    
     showStep();
-}
-
-function showStep() {
-    if (currentStep < tutorialSteps.length) {
-        const step = tutorialSteps[currentStep];
-        const isLast = currentStep === tutorialSteps.length - 1;
-
-        // Piccola verifica di sicurezza in console
-        console.log("Mostro step:", currentStep, "sulla mappa:", map);
-
-        const popup = L.popup({ 
-            closeButton: false, 
-            autoClose: false,
-            closeOnClick: false,
-            className: 'tutorial-popup' 
-        })
-        .setLatLng(map.getCenter()) // Qui usa la mappa globale
-        .setContent(`
-            <div style="text-align:center; min-width: 200px; font-family: sans-serif;">
-                <h4 style="margin:0 0 8px 0; color: #2c3e50;">${step.titolo}</h4>
-                <p style="margin:0 0 15px 0; font-size: 14px; color: #34495e;">${step.testo}</p>
-                <button onclick="nextTutorialStep()" style="
-                    background: ${isLast ? '#27ae60' : '#3498db'}; 
-                    color: white; border: none; padding: 10px 15px; 
-                    border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">
-                    ${isLast ? 'INIZIA' : 'AVANTI'}
-                </button>
-            </div>
-        `)
-        .openOn(map);
-    }
 }
 
 function nextTutorialStep() {
@@ -876,7 +855,18 @@ function nextTutorialStep() {
     if (currentStep < tutorialSteps.length) {
         showStep();
     } else {
-        // Chiude l'ultimo popup (accedendo al metodo globale di Leaflet se map è capricciosa)
-        if (typeof map !== 'undefined') map.closePopup();
+        // --- FINE TUTORIAL ---
+        map.closePopup(); // Chiude l'ultimo popup
+        
+        // --- SBLOCCO MAPPA ---
+        map.dragging.enable();
+        map.touchZoom.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        map.boxZoom.enable();
+        map.keyboard.enable();
+        if (map.tap) map.tap.enable();
+        
+        console.log("Tutorial finito, mappa sbloccata.");
     }
 }
