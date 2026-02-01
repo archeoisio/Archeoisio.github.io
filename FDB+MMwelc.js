@@ -873,7 +873,7 @@ function startTutorial() {
     } catch (e) { console.warn("Alcuni controlli non possono essere disabilitati", e); }
     
     // Mostra il primo step con un micro-ritardo per dare tempo al browser
-    setTimeout(showStep, 100);
+    setTimeout(showStep, 50);
 }
 
 function showStep() {
@@ -888,32 +888,28 @@ function showStep() {
     }
 
     let popupPoint;
-    let customOffset = L.point(-20, 10); // Offset standard per i pulsanti a destra
-
     if (target) {
         const rect = target.getBoundingClientRect();
-        
         if (isHeartBox) {
-            // POSIZIONAMENTO SOPRA IL BOX
-            // Puntiamo al centro orizzontale del box e alla sua cima (top)
+            // Posizione sopra il box cuore
             popupPoint = map.containerPointToLayerPoint([rect.left + (rect.width / 2), rect.top]);
-            customOffset = L.point(30, -30); // Sposta il popup un po' più su rispetto al bordo del box
         } else {
-            // POSIZIONAMENTO STANDARD A SINISTRA DEI PULSANTI
-            popupPoint = map.containerPointToLayerPoint([rect.left - 170, rect.top + 90]);
+            // Posizione standard a sinistra dei pulsanti
+            popupPoint = map.containerPointToLayerPoint([rect.left - 170, rect.top + (rect.height / 2)]);
         }
-    } else {
-        popupPoint = map.containerPointToLayerPoint([window.innerWidth / 2, window.innerHeight / 2]);
     }
 
     const popupLatLng = map.layerPointToLatLng(popupPoint);
 
+    // 2. APPLICAZIONE DELLA CLASSE DINAMICA
     L.popup({ 
         closeButton: false, 
         closeOnClick: false,
         autoPan: false,
-        className: 'tutorial-pointer',
-        offset: customOffset // Usa l'offset dinamico
+        // Nota lo SPAZIO prima di heart-box-popup: ' heart-box-popup'
+        className: 'tutorial-pointer' + (isHeartBox ? ' heart-box-popup' : ''),
+        // Offset per distanziare il popup a seconda di dove punta la freccia
+        offset: isHeartBox ? L.point(0, -15) : L.point(-10, 0) 
     })
     .setLatLng(popupLatLng)
     .setContent(`
