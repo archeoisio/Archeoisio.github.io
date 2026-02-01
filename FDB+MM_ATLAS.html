@@ -232,10 +232,11 @@
     padding: 0 !important;
   }
 
-  .leaflet-routing-container {
+ /* STILE STANDARD (Desktop) */
+.leaflet-routing-container {
     width: 210px;
     max-height: 150px;
-    overflow: hidden;
+    overflow-y: auto; /* 'auto' è meglio di 'hidden' per poter scorrere le indicazioni */
     font-size: 14px;
     background: white;
     padding: 8px;
@@ -243,7 +244,24 @@
     z-index: 2000 !important;
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  }
+}
+
+/* VERSIONE MOBILE (sotto i 600px) */
+@media (max-width: 600px) {
+    .leaflet-routing-container {
+        width: 170px !important;    /* Lo stringiamo di altri 40px */
+        max-height: 120px !important; /* Lo abbassiamo un po' */
+        font-size: 11px !important;   /* Testo più piccolo per farlo stare in meno spazio */
+        padding: 5px !important;     /* Riduciamo lo spreco di spazio interno */
+    }
+
+    /* Rimpiccioliamo le icone delle frecce/svolte per il mobile */
+    .leaflet-routing-instruction-icon {
+        width: 14px !important;
+        height: 14px !important;
+        background-size: 14px 14px !important;
+    }
+}
 
   .leaflet-routing-toggle {
     position: absolute;
