@@ -805,7 +805,7 @@ function setVh() {
     window.addEventListener('resize', setVh);
     
 });
-/ INCOLLA IL CODICE DEL TUTORIAL DA QUI IN POI (FUORI DALLE GRAFFE)
+// --- SEZIONE TUTORIAL (FUORI DALLE GRAFFE) ---
 
 const tutorialSteps = [
     { 
@@ -840,6 +840,13 @@ function startTutorial() {
 }
 
 function showStep() {
+    // Cerchiamo la variabile map: se è dentro il blocco sopra, 
+    // dobbiamo assicurarci che sia accessibile globalmente.
+    if (typeof map === 'undefined') {
+        console.error("Errore: la variabile 'map' non è accessibile. Assicurati che non sia preceduta da 'const' o 'let' dentro il blocco sopra.");
+        return;
+    }
+
     if (currentStep < tutorialSteps.length) {
         const step = tutorialSteps[currentStep];
         const isLast = currentStep === tutorialSteps.length - 1;
@@ -852,13 +859,13 @@ function showStep() {
         })
         .setLatLng(map.getCenter()) 
         .setContent(`
-            <div style="text-align:center; min-width: 200px;">
+            <div style="text-align:center; min-width: 200px; font-family: sans-serif;">
                 <h4 style="margin:0 0 8px 0; color: #2c3e50;">${step.titolo}</h4>
-                <p style="margin:0 0 15px 0; font-size: 14px;">${step.testo}</p>
+                <p style="margin:0 0 15px 0; font-size: 14px; color: #34495e;">${step.testo}</p>
                 <button onclick="nextTutorialStep()" style="
                     background: ${isLast ? '#27ae60' : '#3498db'}; 
-                    color: white; border: none; padding: 8px 15px; 
-                    border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">
+                    color: white; border: none; padding: 10px 15px; 
+                    border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">
                     ${isLast ? 'INIZIA' : 'AVANTI'}
                 </button>
             </div>
@@ -872,6 +879,7 @@ function nextTutorialStep() {
     if (currentStep < tutorialSteps.length) {
         showStep();
     } else {
-        map.closePopup();
+        // Chiude l'ultimo popup (accedendo al metodo globale di Leaflet se map è capricciosa)
+        if (typeof map !== 'undefined') map.closePopup();
     }
 }
