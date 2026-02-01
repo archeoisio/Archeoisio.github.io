@@ -14,68 +14,69 @@
   /* Reset totale */
   *, *::before, *::after { box-sizing: border-box; }
 
-  /* RESET TILE E MAPPA */
-  .leaflet-tile-container img { width: 256px !important; height: 256px !important; margin: 0 !important; }
-  .leaflet-popup-pane { z-index: 1000 !important; }
+  /* 1. RESET TILE (Il tuo codice originale) */
+  .leaflet-tile-container img {
+    width: 256px !important; 
+    height: 256px !important;
+    margin: 0 !important;
+  }
 
-  /* --- STILI TUTORIAL (MODIFICATI SOLO PER FRECCE E ALLINEAMENTO) --- */
+  /* 2. IMPOSTAZIONI TUTORIAL (Isolate per non rompere lo switcher o i tasti) */
+  .leaflet-popup-pane { z-index: 1000 !important; }
   .tutorial-pointer { z-index: 10000 !important; }
-  
- /* Assicura che il wrapper non abbia padding extra */
-.tutorial-pointer .leaflet-popup-content-wrapper {
-    width: 330px !important;
-    border: 2px solid #3498db !important;
-    border-radius: 8px !important;
-    padding: 0 !important;
+
+  .tutorial-pointer .leaflet-popup-content-wrapper {
+    width: auto !important;
+    min-width: 320px !important; 
+    max-width: 350px !important;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    padding: 0;
     overflow: visible !important;
-}
-/* RESET TOTALE CONTENUTO POPUP */
-/* Contenuto interno al popup */
-.tutorial-pointer .leaflet-popup-content {
+  }
+
+  .tutorial-pointer .leaflet-popup-content {
     margin: 0 !important;
     padding: 12px !important;
     width: 300px !important;
-}
+  }
 
-  /* 1. FRECCIA A DESTRA (Default per pulsanti laterali) */
+  /* FRECCIA A DESTRA (Default) */
   .tutorial-pointer .leaflet-popup-tip-container {
     width: 20px !important;
     height: 20px !important;
     position: absolute !important;
-    top: 50% !important;
-    right: -11px !important; /* Esce a destra */
-    left: auto !important;
-    margin-top: -10px !important;
     transform: rotate(-90deg) !important;
-    z-index: 1000 !important;
-    display: block !important;
-}
+    top: 50% !important;
+    margin-top: -10px !important;
+    right: -11px !important;
+    left: auto !important;
+  }
 
-  /* 2. FRECCIA IN BASSO (Solo per Box Cuore) */
+  /* FRECCIA IN BASSO (Solo Cuore) */
   .tutorial-pointer.heart-box-popup .leaflet-popup-tip-container {
     transform: none !important;
     top: auto !important;
-    bottom: -11px !important; /* Esce sotto */
+    bottom: -11px !important;
     left: 50% !important;
     margin-left: -10px !important;
     right: auto !important;
-}
+  }
 
   .tutorial-pointer .leaflet-popup-tip {
     background: #3498db !important;
     box-shadow: none !important;
-}
+  }
 
-  /* --- TUTTO IL TUO CODICE ORIGINALE INALTERATO --- */
+  /* 3. TUTTE LE TUE IMPOSTAZIONI ORIGINALI (Switcher, Geocoder, ecc.) */
   .leaflet-overlay-pane { transition: opacity 0.2s ease-in-out; }
   .leaflet-tile {
     image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
     box-shadow: 0 0 0.5px 0.5px rgba(26, 26, 26, 0.5); 
     transform-origin: 0 0;
   }
   .leaflet-tile-pane { background-color: #1a1a1a !important; }
-
+  
   .dot-capital {
     background-color: white !important;
     border: 1px solid black !important;
@@ -86,38 +87,45 @@
 
   .leaflet-tooltip.capital-label {
     background: transparent !important; border: none !important;
-    box-shadow: none !important; color: white !important;
-    font-size: 11px; font-weight: bold; text-shadow: 1px 1px 3px black;
-    white-space: nowrap; padding: 0 !important; line-height: 1;
+    color: white !important; font-size: 11px; font-weight: bold;
+    text-shadow: 1px 1px 3px black; white-space: nowrap;
   }
 
-  .leaflet-tooltip.capital-label::before { display: none !important; }
-
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #0b0b0b; }
-  #map { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100dvh; z-index: 1; background: #0b0b0b !important; }
+  #map { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; background: #0b0b0b !important; }
 
   #info-panel {
     display: none; position: fixed; bottom: 12px; left: 235px;
-    max-width: 230px; min-height: 30px; background: rgba(0,0,0,0.5);
-    color: white; padding: 10px; border-radius: 8px; font-family: sans-serif; z-index: 1000;
+    max-width: 230px; background: rgba(0,0,0,0.5); color: white;
+    padding: 10px; border-radius: 8px; z-index: 1000;
   }
 
-  .custom-home-box { position: relative; top: -8px; right: 2px; display: flex !important; flex-direction: column; gap: 4px; }
+  .leaflet-control-geocoder { z-index: 2000 !important; margin-bottom: 0; }
+
+  /* BOX HOME + LOCATE (Switcher) */
+  .custom-home-box {
+    position: relative; top: -8px; right: 2px;
+    background: transparent; display: flex !important;
+    flex-direction: column; gap: 4px;
+  }
+
   .custom-home-button, .leaflet-control-locate a {
-    width: 44px !important; height: 44px !important; display: flex !important;
-    justify-content: center !important; align-items: center !important;
-    font-size: 25px !important; background: white !important; border-radius: 4px !important;
+    width: 44px !important; height: 44px !important;
+    display: flex !important; justify-content: center !important;
+    align-items: center !important; font-size: 25px !important;
+    background: white !important; border-radius: 4px !important;
   }
 
   .leaflet-routing-container {
-    width: 210px; max-height: 150px; overflow: hidden; background: white;
+    width: 210px; max-height: 150px; background: white;
     padding: 8px; z-index: 2000 !important; border-radius: 4px;
   }
 
   #hearts-list-box {
-    margin-top: 10px; width: 180px; display: none; flex-direction: column;
-    background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
-    color: white; padding: 10px; border-radius: 8px; max-height: 300px; overflow-y: auto;
+    margin-top: 10px; width: 180px; display: none;
+    flex-direction: column; background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px); color: white; padding: 10px;
+    border-radius: 8px; max-height: 300px; overflow-y: auto;
   }
 </style>
 </head>
@@ -127,14 +135,14 @@
   <div id="info-panel"><div id="info-content"></div></div>
 
   <div id="welcome-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
-      <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; font-family: sans-serif;">
-          <h2 style="margin-top: 0;">Benvenuto su FDB+MM</h2>
-          <p>Vuoi visualizzare il tutorial rapido per scoprire i comandi?</p>
-          <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-              <button onclick="startTutorial()" style="padding: 10px 20px; cursor: pointer; background: #27ae60; color: white; border: none; border-radius: 5px; font-weight: bold;">SÌ, mostrami</button>
-              <button onclick="closeModal()" style="padding: 10px 20px; cursor: pointer; background: #7f8c8d; color: white; border: none; border-radius: 5px;">NO, grazie</button>
-          </div>
-      </div>
+    <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; font-family: sans-serif;">
+        <h2 style="margin-top: 0;">Benvenuto su FDB+MM</h2>
+        <p>Vuoi visualizzare il tutorial rapido per scoprire i comandi?</p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+            <button onclick="startTutorial()" style="padding: 10px 20px; cursor: pointer; background: #27ae60; color: white; border: none; border-radius: 5px; font-weight: bold;">SÌ, mostrami</button>
+            <button onclick="closeModal()" style="padding: 10px 20px; cursor: pointer; background: #7f8c8d; color: white; border: none; border-radius: 5px;">NO, grazie</button>
+        </div>
+    </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
