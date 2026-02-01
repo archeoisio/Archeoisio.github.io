@@ -368,7 +368,19 @@ let searchMarkers = [];
     { name: "Culture Hotel", type: "viaggi", nation: "Italia", coords: [40.84441191508071, 14.251797195603405], info: "Guerre di baci, pigiamini <br> e koreani", date: "Gennaio 2026", flag: "🇮🇹" },
 
      // --- TIPOLOGIA: NextStop ---
-         { name: "Nicosia", type: "NextStop", nation: "Cipro", coords: [35.16544721239677, 33.36724088336895], info: "Living la Vida Loca <br> togheter", date: "2026", flag: "🇨🇾" },
+     { name: "Nicosia", type: "NextStop", nation: "Cipro", coords: [35.16544721239677, 33.36724088336895], info: "Living la Vida Loca, <br> together", date: "2026", flag: "🇨🇾" },
+     { name: "Porto", type: "NextStop", nation: "Portogallo", coords: [41.14636917086563, -8.606643703282842], info: "Per ricominciare,<br>da dove ci siamo fermati", date: "2026", flag: "🇵🇹" },
+     { name: "Andalucia", type: "NextStop", nation: "Spagna", coords: [37.37388995019381, -5.800445300762278], info: "Per esaudire tuo desiderio di andarci, <br> mio di tornarci", date: "2026", flag: "🇪🇸" },
+     { name: "Marrakech", type: "NextStop", nation: "Marocco", coords: [31.631597017143186, -7.9868416614654425], info: "Per un weekend romantico,<br> fuori dall'Europa", date: "???", flag: "🇲🇦" },
+     { name: "Istanbul", type: "NextStop", nation: "Turchia", coords: [40.999279878160635, 28.93924044149299], info: "Per darci un bacio <br> sullo stretto dei Dardanelli,<br>e magari vedere Troia e la Cappadocia", date: "???", flag: "🇹🇷" },
+     { name: "Parigi", type: "NextStop", nation: "Francia", coords: [48.86011859811617, 2.326124871376955], info: "Per un weekend romantico,<br> e dirci je t'aime mon amour! <br> (e per mangiare Croissant e Pan au chocolat)", date: "???", flag: "🇫🇷" },
+     { name: "Abisko", type: "NextStop", nation: "Svezia", coords: [68.3494573211554, 18.830873994999063], info: "Una promessa è una promessa,<br>vedremo le Northern Lights! <br> e ci puzzeremo di freddo!", date: "???", flag: "🇸🇪" },
+     {name: "Oslo", type: "NextStop", nation: "Norvegia", coords: [59.9131771994163, 10.748661804606396], info: "L'ultima capitale del Nord che ci manca da vedere insieme,<br> e poi una sosta a Bergen", date: "???", flag: "🇳🇴" },
+     { name: "Tokyo", type: "NextStop", nation: "Giappone", coords: [35.67955981952091, 139.77016952038218], info: "Mi vuoi fa anda solo a me? Sicura?!", date: "???", flag: "🇯🇵" },
+     { name: "New York", type: "NextStop", nation: "USA", coords: [40.74887131726865, -73.98633085538198], info: "New York, New York!", date: "???", flag: "🇺🇸" },
+     
+     
+ 
  ];
     
 capitalsData.forEach(cap => {
