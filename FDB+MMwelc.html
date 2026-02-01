@@ -23,15 +23,18 @@
   
  /* Assicura che il wrapper non abbia padding extra */
 .tutorial-pointer .leaflet-popup-content-wrapper {
+    width: 330px !important;
+    border: 2px solid #3498db !important;
+    border-radius: 8px !important;
     padding: 0 !important;
     overflow: visible !important;
 }
 /* RESET TOTALE CONTENUTO POPUP */
+/* Contenuto interno al popup */
 .tutorial-pointer .leaflet-popup-content {
-    margin: 0 !important; /* Rimuove lo spazio che sposta tutto */
-    padding: 12px !important; /* Gestiamo noi lo spazio interno */
-    width: 310px !important;
-    line-height: 1 !important; /* Evita salti di riga strani */
+    margin: 0 !important;
+    padding: 12px !important;
+    width: 300px !important;
 }
 
   /* 1. FRECCIA A DESTRA (Default per pulsanti laterali) */
@@ -39,28 +42,29 @@
     width: 20px !important;
     height: 20px !important;
     position: absolute !important;
-    transform: rotate(-90deg) !important;
     top: 50% !important;
-    margin-top: -10px !important;
-    right: -11px !important; /* A filo esterno */
+    right: -11px !important; /* Esce a destra */
     left: auto !important;
-    z-index: 1000;
-  }
+    margin-top: -10px !important;
+    transform: rotate(-90deg) !important;
+    z-index: 1000 !important;
+    display: block !important;
+}
 
   /* 2. FRECCIA IN BASSO (Solo per Box Cuore) */
   .tutorial-pointer.heart-box-popup .leaflet-popup-tip-container {
     transform: none !important;
     top: auto !important;
-    bottom: -11px !important; /* A filo inferiore */
+    bottom: -11px !important; /* Esce sotto */
     left: 50% !important;
     margin-left: -10px !important;
     right: auto !important;
-  }
+}
 
   .tutorial-pointer .leaflet-popup-tip {
     background: #3498db !important;
     box-shadow: none !important;
-  }
+}
 
   /* --- TUTTO IL TUO CODICE ORIGINALE INALTERATO --- */
   .leaflet-overlay-pane { transition: opacity 0.2s ease-in-out; }
