@@ -917,14 +917,18 @@ function showStep() {
     })
     .setLatLng(popupLatLng)
     .setContent(`
-        <div style="text-align:center; min-width: 150px; font-family: sans-serif;">
-            <b style="color:#3498db">${step.titolo}</b>
-            <p style="font-size:12px; margin: 8px 0;">${step.testo}</p>
-            <button onclick="nextTutorialStep()" style="background:#3498db; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; width:100%">
+    <div style="text-align: left; width: 320px; font-family: sans-serif; display: flex; flex-direction: column; gap: 5px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 4px;">
+            <b style="color:#3498db; font-size: 14px;">${step.titolo}</b>
+            <button onclick="nextTutorialStep()" style="background:#3498db; color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer; font-size: 11px;">
                 ${isLast ? 'INIZIA' : 'AVANTI'}
             </button>
         </div>
-    `)
+        <p style="font-size:12px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            ${step.testo}
+        </p>
+    </div>
+`)
     .openOn(map);
 }
 
