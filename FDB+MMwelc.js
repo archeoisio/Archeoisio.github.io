@@ -579,7 +579,7 @@ const layersControl = L.control.layers(
         "Nazioni": bordersLayer, 
         "Capitali": capitalsLayer,
     // SOTTOGRUPPO 2
-        "<br><b style='color: #2c3e50;'ATLAS LAYERS'": L.layerGroup([]),
+       "<b class='atlas-title' style='color: #2c3e50;'>ATLAS LAYERS</b>": L.layerGroup([]),
         "🏠 Home": layerHome,      
         "✈️ Viaggi": layerViaggi,  
         "🏖️ Mare": layerMare,      
@@ -844,7 +844,7 @@ const tutorialSteps = [
     { 
         id: "#hearts-list-box", 
         titolo: "Elenco luoghi speciali", 
-        testo: "Elenco layers divisi per categoria, click su "Vola" per raggiungere la destinazione, clicca sui marker per maggiori info sul luogo.",
+        testo: "Elenco layers divisi per categoria, click su 'Vola' per raggiungere la destinazione, clicca sui marker per maggiori info sul luogo.",
         action: "openHearts" // Segnale per aprire il box
     }
 ];
