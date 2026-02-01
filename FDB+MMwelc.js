@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomControl: true,
     minZoom: 2.5,
     worldCopyJump: true,
-    maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(75, 193)),
+    maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 193)),
     maxBoundsViscosity: 1.0,
     attributionControl: false
 });
