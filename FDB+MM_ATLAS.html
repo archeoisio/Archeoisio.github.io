@@ -232,71 +232,69 @@
     padding: 0 !important;
   }
 
-/* --- 1. CONTENITORE INDICAZIONI (Pannello Bianco) --- */
-.leaflet-routing-container {
-    width: 210px;
-    max-height: 150px;
-    overflow-y: auto; 
-    font-size: 14px;
-    background: white;
-    padding: 8px;
-    box-sizing: border-box;
-    z-index: 2000 !important;
-    border-radius: 4px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    /* Se il toggle "sparisce", spesso è perché il container si sposta fuori schermo */
-    margin-right: 10px !important;
-    margin-top: 10px !important;
-}
-
-/* --- 2. IL QUADRATINO DEL TOGGLE (Sempre visibile) --- */
+/* --- 1. IL PULSANTE (TOGGLE) --- */
 .leaflet-routing-toggle {
     display: block !important;
     visibility: visible !important;
+    position: absolute !important;
+    /* Posizionalo sotto i tuoi tasti a destra */
+    top: 150px !important; 
+    right: 12px !important;
     width: 34px !important;
     height: 34px !important;
     background-color: white !important;
     background-image: url('https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet.routing.icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: center !important; 
+    background-position: center !important;
     background-size: 160px auto !important;
-    border-radius: 4px !important;
     border: 2px solid rgba(0,0,0,0.2) !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
-    cursor: pointer !important;
-    text-indent: -9999px !important; 
+    border-radius: 4px !important;
+    z-index: 10005 !important; /* Più alto di tutto */
+    text-indent: -9999px !important;
     overflow: hidden !important;
-    
-    /* Posizionamento assoluto forzato */
-    position: absolute !important;
-    top: 80px !important; /* Sotto i bottoni dello zoom */
-    right: 10px !important;
-    z-index: 10000 !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.4) !important;
 }
 
-/* --- 3. LOGICA DI VISIBILITÀ --- */
+/* --- 2. IL PANNELLO (ITINERARIO) --- */
+.leaflet-routing-container {
+    background: white !important;
+    color: #333 !important;
+    padding: 10px !important;
+    width: 240px !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+    /* Posizione quando è APERTO */
+    position: absolute !important;
+    top: 190px !important;
+    right: 12px !important;
+}
+
+/* --- 3. LOGICA DI NASCONDIMENTO --- */
+/* Invece di nascondere tutto, nascondiamo solo il contenuto utile, 
+   ma per semplicità qui nascondiamo il contenitore MA forziamo il toggle fuori */
 .leaflet-routing-container-hide {
     display: none !important;
 }
 
-/* Quando il pannello è nascosto, assicuriamoci che il toggle resti visibile */
-.leaflet-routing-container-hide .leaflet-routing-toggle {
+/* IMPORTANTE: Questo assicura che il toggle non venga nascosto dalla classe sopra */
+.leaflet-routing-container-hide .leaflet-routing-toggle,
+.leaflet-routing-container .leaflet-routing-toggle {
     display: block !important;
 }
 
-/* --- 4. RESPONSIVE MOBILE (Sotto 600px) --- */
+/* MOBILE */
 @media (max-width: 600px) {
-    .leaflet-routing-container {
-        width: 170px !important;
-        max-height: 120px !important;
-        font-size: 12px !important;
-    }
-
     .leaflet-routing-toggle {
-        top: 140px !important; /* Abbassato per non sovrapporsi allo switcher layer */
-        width: 38px !important;
-        height: 38px !important;
-        background-size: 180px auto !important; /* Icona leggermente più grande */
+        top: 220px !important; /* Più in basso per non coprire altri bottoni */
+        width: 40px !important;
+        height: 40px !important;
+    }
+    .leaflet-routing-container {
+        width: 200px !important;
+        top: 270px !important;
     }
 }
   .custom-heart-button {
