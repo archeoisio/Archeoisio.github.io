@@ -843,7 +843,7 @@ const tutorialSteps = [
     { 
         id: ".btn-tutorial-route", 
         titolo: "Percorsi", 
-        testo: "Calcola itinerari tra due punti inserisci partenza e destinazione e clicca 'Calcola' o 'Reset', clicca 'X' per ridurre pannello indicazioni stradali" 
+        testo: "Calcola itinerari tra due punti inserisci partenza e destinazione e clicca 'Calcola' per indicazioni stradali" 
     },
     { 
         id: ".btn-tutorial-hearts", 
