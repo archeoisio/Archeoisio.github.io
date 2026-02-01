@@ -890,15 +890,20 @@ function nextTutorialStep() {
     if (currentStep < tutorialSteps.length) {
         showStep();
     } else {
-        // FINE: CHIUDI E SBLOCCA
-        map.closePopup();
-        
+        // --- 1. CHIUSURA FORZATA DI TUTTI I POPUP ---
+        map.eachLayer(function (layer) {
+            if (layer instanceof L.Popup) {
+                map.removeLayer(layer);
+            }
+        });
+
+        // --- 2. SBLOCCO DELLA MAPPA ---
         map.dragging.enable();
         map.touchZoom.enable();
         map.doubleClickZoom.enable();
         map.scrollWheelZoom.enable();
         if (map.tap) map.tap.enable();
         
-        console.log("Mappa sbloccata correttamente.");
+        console.log("Tutorial terminato: mappa sbloccata e popup rimossi.");
     }
 }
