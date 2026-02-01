@@ -555,7 +555,6 @@ async function startRouting() {
     }
 
     try {
-        // 1. Funzione Geocoding interna
         const geocode = async (query) => {
             const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
             const d = await r.json();
@@ -566,7 +565,9 @@ async function startRouting() {
         const startCoords = await geocode(startVal);
         const endCoords = await geocode(endVal);
 
-       if (control) map.removeControl(control);
+        if (typeof control !== 'undefined' && control) {
+            map.removeControl(control);
+        }
 
         control = L.Routing.control({
             waypoints: [startCoords, endCoords],
@@ -577,21 +578,25 @@ async function startRouting() {
             lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
         }).addTo(map);
 
-        // Aspettiamo un attimo che il DOM venga generato
+        // --- FIX CRUCIALE PER IL TOGGLE ---
         setTimeout(() => {
-            const toggleBtn = document.querySelector('.leaflet-routing-toggle');
             const container = document.querySelector('.leaflet-routing-container');
+            const toggleBtn = document.querySelector('.leaflet-routing-toggle');
 
-            if (toggleBtn && container) {
-                // Rimuoviamo eventuali listener precedenti clonando
+            if (container && toggleBtn) {
+                // 1. Forza la classe di chiusura iniziale
+                container.classList.add('leaflet-routing-container-hide');
+
+                // 2. Clone del pulsante per pulire i vecchi eventi di Leaflet
                 const newToggle = toggleBtn.cloneNode(true);
                 toggleBtn.parentNode.replaceChild(newToggle, toggleBtn);
 
-                // Forza lo stato iniziale chiuso
-                container.classList.add('leaflet-routing-container-hide');
-
+                // 3. Nuovo evento click manuale
                 newToggle.addEventListener('click', (e) => {
-                    L.DomEvent.stop(e);
+                    L.DomEvent.stopPropagation(e);
+                    L.DomEvent.preventDefault(e);
+                    
+                    // Verifichiamo lo stato e invertiamo
                     const isHidden = container.classList.contains('leaflet-routing-container-hide');
                     if (isHidden) {
                         container.classList.remove('leaflet-routing-container-hide');
@@ -600,13 +605,13 @@ async function startRouting() {
                     }
                 });
             }
-        }, 500);
+        }, 600); // Leggero ritardo per dare tempo al plugin di creare il DOM
 
     } catch (e) {
         console.error("Errore Routing:", e);
-        alert(e.message || "Impossibile calcolare il percorso. Controlla i nomi delle località.");
+        alert(e.message || "Errore nel calcolo del percorso.");
     }
-} // Fine della funzione startRouting
+}
     
 // --- 7. CONTROLLI INTERFACCIA ---
 // 1. Switcher Layer Base (Spostato a destra)
