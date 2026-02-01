@@ -578,9 +578,11 @@ const layersControl = L.control.layers(
     {
         "Nazioni": bordersLayer, 
         "Capitali": capitalsLayer,
-        "🏠 Home": layerHome,      // Nuovo Toggle
-        "✈️ Viaggi": layerViaggi,  // Nuovo Toggle
-        "🏖️ Mare": layerMare,      // Nuovo Toggle
+    // SOTTOGRUPPO 2
+        "<br><b style='color: #2c3e50;'ATLAS LAYERS'": L.layerGroup([]),
+        "🏠 Home": layerHome,      
+        "✈️ Viaggi": layerViaggi,  
+        "🏖️ Mare": layerMare,      
         "❓ NextStop": layerNextStop
     },
 {
@@ -817,7 +819,7 @@ const tutorialSteps = [
     { 
         id: ".leaflet-control-layers", 
         titolo: "Switcher Mappa", 
-        testo: "Qui puoi cambiare lo sfondo e attivare i confini." 
+        testo: "Qui puoi cambiare la basemap e attivare i vari layers (Nazioni, COnfini e Livelli Atlas)" 
     },
     { 
         id: ".btn-tutorial-home", 
