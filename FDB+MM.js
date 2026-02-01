@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isLandscape) {
             // VISTA MOBILE RUOTATO (Orizzontale)
             // Usiamo uno zoom intermedio o lo stesso, ma puoi cambiare il centro per bilanciare i pannelli
-            initialView = { center: [48, 25], zoom: 4 }; 
+            initialView = { center: [40, 25], zoom: 4 }; 
         } else {
             // VISTA MOBILE VERTICALE (Il tuo originale)
-            initialView = { center: [48, 22], zoom: 4 };
+            initialView = { center: [60, 22], zoom: 4 };
         }
     } else {
         // VISTA DESKTOP (Il tuo originale)
@@ -560,7 +560,7 @@ const layersControl = L.control.layers(
         "🏖️ Mare": layerMare      // Nuovo Toggle
     },
 {
-        collapsed: false
+        collapsed: true
     }
 ).addTo(map);
 const layersContainer = layersControl.getContainer();
