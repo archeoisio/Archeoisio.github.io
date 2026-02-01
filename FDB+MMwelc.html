@@ -28,7 +28,16 @@
     height: 256px !important;
     margin: 0 !important;
 }
+/* Forza i popup del tutorial a stare sopra tutto */
+.leaflet-popup-pane {
+    z-index: 1000 !important;
+}
 
+.tutorial-popup .leaflet-popup-content-wrapper {
+    background: white !important;
+    color: black !important;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
 /* 2. SOLUZIONE REALE: Smoothing e Antialiasing */
 /* Rende la sparizione del layer GeoJSON fluida e non brusca */
 .leaflet-overlay-pane {
