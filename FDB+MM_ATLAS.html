@@ -246,53 +246,47 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* --- 2. PULSANTE TOGGLE (Icona) --- */
-/* Usiamo selettori multipli per assicurarci che Leaflet non lo rimpicciolisca */
-.leaflet-routing-toggle, 
-.leaflet-routing-container-hide .leaflet-routing-toggle {
+/* 1. RESET TOTALE DEL PULSANTE (Desktop e Mobile) */
+.leaflet-routing-toggle {
     display: block !important;
-    position: absolute;
-    top: 80px; /* Sotto lo zoom */
-    right: 10px;
-    z-index: 10000 !important;
-    
-    width: 34px !important; /* Stessa dimensione del tasto Home/Zoom */
+    width: 34px !important;
     height: 34px !important;
-    
+    position: absolute !important;
+    top: 80px !important;
+    right: 10px !important;
+    z-index: 10000 !important;
     background-color: white !important;
+    /* Icona standard dell'auto */
     background-image: url('https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet.routing.icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: 2px 2px !important; /* Centra l'auto */
+    background-position: 2px 2px !important; 
     background-size: 150px auto !important;
-    
-    border-radius: 4px;
+    border-radius: 4px !important;
     border: 2px solid rgba(0,0,0,0.2) !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    cursor: pointer;
-    text-indent: -9999px; /* Nasconde scritte spurie */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
+    cursor: pointer !important;
+    /* Nasconde testi extra che allungano il pulsante */
+    text-indent: -9999px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
 }
 
-/* --- 3. MOBILE (Sotto 600px) --- */
+/* 2. GESTIONE PANNELLO (Nascondi/Mostra) */
+.leaflet-routing-container {
+    display: block !important; /* Sempre blocco di base */
+}
+
+.leaflet-routing-container-hide {
+    display: none !important; /* Sparisce del tutto quando ha questa classe */
+}
+
+/* 3. AGGIUSTAMENTO MOBILE (Sotto 600px) */
 @media (max-width: 600px) {
-    .leaflet-routing-container {
-        width: 160px !important;
-        max-height: 110px !important; 
-        font-size: 11px !important;   
-        padding: 5px !important;     
-    }
-
-    .leaflet-routing-toggle,
-    .leaflet-routing-container-hide .leaflet-routing-toggle {
-        top: 140px !important; /* Spostato per non sovrapporsi ai layer */
-        width: 38px !important;
+    .leaflet-routing-toggle {
+        top: 140px !important; /* Abbassato per i layer */
+        width: 38px !important; /* Leggermente più grande per il touch */
         height: 38px !important;
-        background-position: 4px 4px !important; /* Ricentra l'auto nel tasto più grande */
-    }
-
-    .leaflet-routing-instruction-icon {
-        width: 14px !important;
-        height: 14px !important;
-        background-size: 14px 14px !important;
+        background-position: 4px 4px !important; /* Ricentra l'icona */
     }
 }
   .custom-heart-button {
