@@ -819,7 +819,7 @@ const tutorialSteps = [
     { 
         id: ".leaflet-control-layers", 
         titolo: "Switcher Mappa", 
-        testo: "Scegli basemap e i layers (Nazioni, Capitali e Livelli Atlas)" 
+        testo: "Scegli basemap e i layers (Nazioni, Capitali e ATLAS LAYERS)" 
     },
     { 
         id: ".btn-tutorial-home", 
