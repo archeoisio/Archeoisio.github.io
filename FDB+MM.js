@@ -458,7 +458,7 @@ capitalsData.forEach(cap => {
 const typeIcons = {
     "home": "🏠",
     "viaggi": "✈️",
-    "mare": "🏖️"
+    "mare": "🏖️",
     "NextStop": "❓"
 };
 
