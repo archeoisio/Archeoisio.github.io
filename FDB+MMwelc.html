@@ -37,11 +37,36 @@
     width: 300px !important;
     overflow: visible !important;
 }
+Se la vuoi "a filo", significa che la freccia deve nascere esattamente dal bordo del popup, senza spazi vuoti e senza sovrapporsi al testo interno.
+
+Per ottenere questo effetto millimetrico, dobbiamo regolare il CSS in modo che il contenitore della freccia sia posizionato precisamente sul margine del wrapper.
+
+1. CSS per Freccia "a filo"
+Modifica le coordinate nel tuo <style>. Il segreto è usare un valore che porti la base della freccia a toccare il bordo del popup.
+
+CSS
+
+/* FRECCIA LATERALE (Pulsanti) */
 .tutorial-pointer .leaflet-popup-tip-container {
+    width: 20px;
+    height: 20px;
+    position: absolute;
     transform: rotate(-90deg);
-    right: 0px;
     top: 50%;
+    margin-top: -10px; /* Centra la freccia verticalmente */
+    right: -11px; 
     left: auto;
+    z-index: 1000;
+}
+
+/* FRECCIA IN BASSO (Box Cuore) */
+.tutorial-pointer.heart-box-popup .leaflet-popup-tip-container {
+    transform: none;
+    top: auto;
+    bottom: -11px; /* Attaccata al bordo inferiore */
+    left: 50%;
+    margin-left: -10px;
+    right: auto;
 }
 .tutorial-pointer .leaflet-popup-content-wrapper {
     width: auto !important;
