@@ -718,21 +718,11 @@ sideInfoControl.onAdd = function(map) {
     const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
    // --- BLOCCO INTERAZIONE MAPPA ---
-// Impedisce lo zoom con la rotellina sopra il box
+L.DomEvent.disableClickPropagation(routeBox);
 L.DomEvent.disableScrollPropagation(routeBox);
 
-// Impedisce che i click sul box passino alla mappa (es. niente marker indesiderati)
-L.DomEvent.disableClickPropagation(routeBox);
-
-// Disabilita il trascinamento della mappa quando il mouse è sopra il box
-routeBox.addEventListener('mouseenter', function() {
-    map.dragging.disable();
-});
-
-// Riabilita il trascinamento quando il mouse esce
-routeBox.addEventListener('mouseleave', function() {
-    map.dragging.enable();
-});
+routeBox.addEventListener('mouseenter', () => map.dragging.disable());
+routeBox.addEventListener('mouseleave', () => map.dragging.enable());
     routeBox.style.display = 'none';
     routeBox.style.flexDirection = 'column';
     routeBox.style.background = 'rgba(0,0,0,0.5)';
