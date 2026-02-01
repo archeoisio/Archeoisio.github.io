@@ -318,7 +318,7 @@ let searchMarkers = [];
     { name: "Porto Greco", type: "mare", nation: "Italia", coords: [41.799886137604105, 16.192595512599883], info: "Pietre in testa, ahia! <br>Gargano", date: "Agosto 2025", flag: "🇮🇹" },
 
     // --- TIPOLOGIA: viaggi ---
-    { name: "Petrokephali", type: "viaggi", nation: "Grecia", coords: [35.02968350447732, 24.83473953247764], info: "Marmottina, pasta col tonno, <br> il primo bacio, <br> e non solo..", date: "Settembre 2016", flag: "🇬🇷" }, 
+    { name: "Petrokephali", type: "viaggi", nation: "Grecia", coords: [35.02968350447732, 24.83473953247764], info: "Pasta col tonno, marmottina <br> il primo bacio, <br> e non solo..", date: "Settembre 2016", flag: "🇬🇷" }, 
      { name: "Lancusi", type: "viaggi", nation: "Italia", coords: [40.763215727362144, 14.781918443062908], info: "Preparando esame <br> e facendo all'ammore..", date: "Settembre 2016", flag: "🇮🇹" },
      { name: "Rovereto", type: "viaggi", nation: "Italia", coords: [45.89395899156252, 11.044717689909284], info: "Rassegna del Cinema Archeologico,<br> da Walter", date: "Ottobre 2016", flag: "🇮🇹" },
      { name: "Ravenna", type: "viaggi", nation: "Italia", coords: [44.41839937547548, 12.203726238252631], info: "Pioggia e <br> FDB morente", date: "Ottobre 2016", flag: "🇮🇹" },
@@ -340,7 +340,7 @@ let searchMarkers = [];
     { name: "Sasso di Castalda", type: "viaggi", nation: "Italia", coords: [40.48560698930334, 15.677812942495702], info: "Basilicata", date: "Agosto 2021", flag: "🇮🇹" },
      { name: "Scario", type: "viaggi", nation: "Italia", coords: [40.056169104315494, 15.474022101206561], info: "Due Cuori, <br> una capanna <br> e un pavone", date: "Giugno 2022", flag: "🇮🇹" },
     { name: "Vibonati", type: "viaggi", nation: "Italia", coords: [40.098656186942726, 15.585004300434067], info: "MA' UAMMA, <br> Complefede ", date: "Giugno 2022 and <br> Giugno 2024", flag: "🇮🇹" },
-    { name: "Sassari", type: "viaggi", nation: "Italia", coords: [40.72501999743394, 8.564039538988249], info: "Tour con Edoardo", date: "Agosto 2022", flag: "🇮🇹" },
+    { name: "Sassari", type: "viaggi", nation: "Italia", coords: [40.72501999743394, 8.564039538988249], info: "Tour con Eduardo", date: "Agosto 2022", flag: "🇮🇹" },
     { name: "Castel Sardo", type: "viaggi", nation: "Italia", coords: [40.90652600951569, 8.689772838581723], info: "Sardegna", date: "Agosto 2022", flag: "🇮🇹" },
     { name: "Copenaghen", type: "viaggi", nation: "Danimarca", coords: [55.672371078279056, 12.562182923586093], info: "KebabCompleanno", date: "Agosto/Settembre 2022", flag: "🇩🇰" },
     { name: "Stoccolma", type: "viaggi", nation: "Svezia", coords: [59.3294951830058, 18.068096560204545], info: "", date: "2022", flag: "🇸🇪" },
