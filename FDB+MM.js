@@ -844,8 +844,8 @@ const tutorialSteps = [
     },
     { 
         id: ".btn-tutorial-hearts", 
-        titolo: "Elenco luoghi speciali", 
-        testo: "Clicca qui per aprire elenchi degli ATLAS LAYERS ❤️." 
+        titolo: "ATLAS LAYERS ❤️", 
+        testo: "Clicca qui per aprire elenchi degli ATLAS LAYERS." 
     },
     { 
         id: "#hearts-list-box", 
