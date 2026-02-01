@@ -895,7 +895,7 @@ function showStep() {
             popupPoint = map.containerPointToLayerPoint([rect.left + 170, rect.top -10]);
         } else {
             // Posizione standard a sinistra dei pulsanti
-            popupPoint = map.containerPointToLayerPoint([rect.left - 170, rect.top + 85]);
+            popupPoint = map.containerPointToLayerPoint([rect.left - 170, rect.top + 88]);
         }
     }
 
