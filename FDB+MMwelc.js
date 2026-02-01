@@ -581,7 +581,6 @@ const layersControl = L.control.layers(
     // SOTTOGRUPPO 2
        // Aggiungiamo SIA l'id che la classe per sicurezza massima
 "<span id='atlas-header' class='atlas-title' style='color: #2c3e50; font-weight: bold;'>ATLAS LAYERS</span>": L.layerGroup([]),
-        "🏠 Home": layerHome,      
         "✈️ Viaggi": layerViaggi,  
         "🏖️ Mare": layerMare,      
         "❓ NextStop": layerNextStop
