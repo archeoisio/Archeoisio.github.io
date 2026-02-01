@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             initialView = { center: [50, 25], zoom: 3.5 }; 
         } else {
             // VISTA MOBILE VERTICALE (Il tuo originale)
-            initialView = { center: [55, 20], zoom: 4 };
+            initialView = { center: [52, 20], zoom: 4 };
         }
     } else {
         // VISTA DESKTOP (Il tuo originale)
