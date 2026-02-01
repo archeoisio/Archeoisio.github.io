@@ -900,7 +900,7 @@ function showStep() {
             customOffset = L.point(0, -10); // Sposta il popup un po' più su rispetto al bordo del box
         } else {
             // POSIZIONAMENTO STANDARD A SINISTRA DEI PULSANTI
-            popupPoint = map.containerPointToLayerPoint([rect.left - 120, rect.top + 120]);
+            popupPoint = map.containerPointToLayerPoint([rect.left - 100, rect.top + 100]);
         }
     } else {
         popupPoint = map.containerPointToLayerPoint([window.innerWidth / 2, window.innerHeight / 2]);
