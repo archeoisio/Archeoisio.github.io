@@ -822,6 +822,11 @@ const tutorialSteps = [
         titolo: "Switcher Mappa", 
         testo: "Scegli basemap e i layers (Nazioni, Capitali e ATLAS LAYERS)" 
     },
+   { 
+        id: ".leaflet-control-layers", 
+        titolo: "Switcher Mappa", 
+        testo: "Cliccando su una Nazione si apre pannello info, clicca sul pulsante per volare sulla Capitale" 
+    },
     { 
         id: ".btn-tutorial-home", 
         titolo: "Tasto Home", 
@@ -876,7 +881,7 @@ function startTutorial() {
     } catch (e) { console.warn("Alcuni controlli non possono essere disabilitati", e); }
     
     // Mostra il primo step con un micro-ritardo per dare tempo al browser
-    setTimeout(showStep, 50);
+    setTimeout(showStep, 20);
 }
 
 function showStep() {
