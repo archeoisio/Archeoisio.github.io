@@ -5,370 +5,116 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>FDB+MM</title>
 
-<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-<!-- LocateControl CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.css" />
-
-<!-- Routing Machine CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-
-<!-- Geocoder CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
 <style>
   /* Reset totale */
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-/* 1. RESET: Torna alla dimensione standard per evitare sovrapposizioni sporche */
-.leaflet-tile-container img {
-    width: 256px !important; 
-    height: 256px !important;
-    margin: 0 !important;
-}
-/* Forza i popup del tutorial a stare sopra tutto */
-.leaflet-popup-pane {
-    z-index: 1000 !important;
-}
-.tutorial-pointer .leaflet-popup-content {
-    margin: 12px !important;
-    width: 300px !important;
-    overflow: visible !important;
-}
-Se la vuoi "a filo", significa che la freccia deve nascere esattamente dal bordo del popup, senza spazi vuoti e senza sovrapporsi al testo interno.
+  *, *::before, *::after { box-sizing: border-box; }
 
-Per ottenere questo effetto millimetrico, dobbiamo regolare il CSS in modo che il contenitore della freccia sia posizionato precisamente sul margine del wrapper.
-
-1. CSS per Freccia "a filo"
-Modifica le coordinate nel tuo <style>. Il segreto è usare un valore che porti la base della freccia a toccare il bordo del popup.
-
-CSS
-
-/* FRECCIA LATERALE (Pulsanti) */
-.tutorial-pointer .leaflet-popup-tip-container {
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    transform: rotate(-90deg);
-    top: 50%;
-    margin-top: -10px; /* Centra la freccia verticalmente */
-    right: -11px; 
-    left: auto;
-    z-index: 1000;
-}
-
-/* FRECCIA IN BASSO (Box Cuore) */
-.tutorial-pointer.heart-box-popup .leaflet-popup-tip-container {
-    transform: none;
-    top: auto;
-    bottom: -11px; /* Attaccata al bordo inferiore */
-    left: 50%;
-    margin-left: -10px;
-    right: auto;
-}
-.tutorial-pointer .leaflet-popup-content-wrapper {
+  /* Mappa e Reset Tile */
+  .leaflet-tile-container img { width: 256px !important; height: 256px !important; margin: 0 !important; }
+  .leaflet-popup-pane { z-index: 1000 !important; }
+  
+  /* --- STILE POPUP TUTORIAL --- */
+  .tutorial-pointer { z-index: 10000 !important; }
+  
+  .tutorial-pointer .leaflet-popup-content-wrapper {
     width: auto !important;
     min-width: 320px !important; 
     max-width: 350px !important;
     border-radius: 8px;
     padding: 0;
-    overflow: visible !important; /* Fondamentale */
-}
-/* Stile per i popup "puntatori" */
-.tutorial-pointer {
-    z-index: 10000 !important;
-}
-
-.tutorial-pointer .leaflet-popup-content-wrapper {
+    overflow: visible !important;
     border: 2px solid #3498db;
-    border-radius: 8px;
-}
-
-/* Freccia che punta al pulsante (opzionale) */
-.tutorial-pointer .leaflet-popup-tip {
-    background: #3498db;
-}
-  /* 2. SOLUZIONE REALE: Smoothing e Antialiasing */
-/* Rende la sparizione del layer GeoJSON fluida e non brusca */
-.leaflet-overlay-pane {
-    transition: opacity 0.2s ease-in-out;
-}
-  .leaflet-tile {
-    /* Rende i bordi delle immagini "morbidi" eliminando lo stacco netto */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges; /* Per Firefox */
-    
-    /* Crea un micro-bordo interno dello stesso colore del satellite */
-    /* Questo "sigilla" lo spazio tra le tile senza ingrandirle */
-    box-shadow: 0 0 0.5px 0.5px rgba(26, 26, 26, 0.5); 
-    
-    /* Forza il browser a non ricalcolare i bordi durante il volo */
-    transform-origin: 0 0;
-}
-
-/* 3. Forza lo sfondo del contenitore delle tile */
-/* Se c'è un buco millimetrico, vedrai questo colore invece del bianco/nero */
-.leaflet-tile-pane {
-    background-color: #1a1a1a !important;
-}
-  /* 1. PINPOINT CAPITALI (Il pallino bianco) */
-  .dot-capital {
-    background-color: white !important;
-    border: 1px solid black !important;
-    border-radius: 50%;
-    width: 6px !important;
-    height: 6px !important;
-    display: block;
-    margin: 0 !important; /* Fondamentale per la centratura */
   }
 
-  /* 2. ETICHETTE NOMI (Tooltip) */
-  .leaflet-tooltip.capital-label {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    color: white !important;
-    font-size: 11px;
-    font-weight: bold;
-    text-shadow: 1px 1px 3px black; /* Molto più pulito del webkit-stroke */
-    white-space: nowrap;
-    padding: 0 !important;
-    line-height: 1;
-    pointer-events: none;
+  .tutorial-pointer .leaflet-popup-content {
+    margin: 12px !important;
+    width: 300px !important;
+    overflow: visible !important;
   }
 
-  /* Rimuove la freccetta del tooltip */
-  .leaflet-tooltip.capital-label::before {
-    display: none !important;
-  }
-
-  /* 3. OTTIMIZZAZIONI FLUIDITÀ MAPPA */
-  .leaflet-tile-container {
-    pointer-events: none;
-    transition: opacity 0.2s;
-  }
-
-  .leaflet-tile {
-    will-change: transform;
-    /* Rende il caricamento delle tile meno brusco */
-  }
-
-  /* Rimuove lo sfondo bianco dei marker DivIcon */
-  .leaflet-div-icon {
-    background: transparent !important;
-    border: none !important;
-  }
-
-  /* 4. BODY E MAPPA */
-  html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    overflow: hidden !important;
-    background-color: #0b0b0b; /* Sfondo quasi nero per mimetizzare i caricamenti tile */
-  }
-
-  #map {
-    position: fixed !important;
-    top: 0; left: 0; right: 0; bottom: 0;
-    width: 100% !important;
-    height: 100dvh !important;
-    z-index: 1;
-    background: #0b0b0b !important;
-  }
- /* Box info trasparente */
-  #info-panel {
-    display: none;
-    position: fixed;
-    bottom: 12px;
-    left: 235px;
-    max-width: 230px;
-    min-height: 30px;
-    background: rgba(0,0,0,0.5);
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    font-family: sans-serif;
-    font-size: 14px;
+  /* --- DIREZIONE FRECCE --- */
+  
+  /* 1. TUTTE LE FRECCE A DESTRA (Default per pulsanti) */
+  .tutorial-pointer .leaflet-popup-tip-container {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    transform: rotate(-90deg) !important; /* Ruota per puntare a destra */
+    top: 50% !important;
+    margin-top: -10px !important;
+    right: -11px !important; /* A filo sul bordo destro */
+    left: auto !important;
     z-index: 1000;
   }
 
-  #info-content { }
-
-  /* Flag e pulsanti personalizzati */
-  .flag-box {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
-    line-height: 1;
-    cursor: pointer;
+  /* 2. FRECCIA VERSO IL BASSO (Solo per Box Cuore) */
+  .tutorial-pointer.heart-box-popup .leaflet-popup-tip-container {
+    transform: rotate(0deg) !important; /* Punta verso il basso */
+    top: auto !important;
+    bottom: -11px !important; /* A filo sul bordo inferiore */
+    left: 50% !important;
+    right: auto !important;
+    margin-left: -10px !important;
+    margin-top: 0 !important;
   }
- .leaflet-control-geocoder {
-    z-index: 2000 !important; /* sopra altri controlli */
-    margin-bottom: 0;
+
+  .tutorial-pointer .leaflet-popup-tip {
+    background: #3498db;
+    box-shadow: none !important;
   }
-  /* Box home + LOCATE */
-.custom-home-box {
-  position: relative;
-  top: -8px;
-  right: 2px;
-  background: transparent;
-  padding: 0;
-  border: none !important;
-  display: flex !important;
-  flex-direction: column;
-  gap: 4px;
 
-}
- /* Custom home button */
-.custom-home-button {
-  width: 44px !important;
-  height: 44px !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  font-size: 25px !important;
-  background: white !important;
-  border-radius: 4px !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  line-height: 1 !important;
-}
-
-/* Leaflet locate control button */
-.leaflet-control-locate a {
-  width: 44px !important;
-  height: 44px !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  font-size: 25px !important;
-  background: white !important;
-  border-radius: 4px !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  line-height: 1 !important;
-}
-.leaflet-control-geocoder-results {
-    position: absolute;      /* necessario */
-    top: 100%;               /* subito sotto l'input */
-    left: 0 !important;                 /* allinea a sinistra dell'input */
-    max-height: 50px;       /* puoi regolare altezza */
-    overflow-y: auto;        /* scroll se tanti risultati */
-    z-index: 3000;
-    min-width: 150px;        /* larghezza minima */
-}
-/* Leaflet locate container */
-.leaflet-control-locate {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-  /* Routing Machine custom */
- .leaflet-routing-container {
-  width: 210px;
-  max-height: 150px;
-  overflow-y: hidden;        /* scroll verticale */
-  overflow-x: hidden;      /* niente overflow orizzontale */
-  font-size: 14px;
-  background: white;
-  padding: 8px;
-  box-sizing: border-box;
-  z-index: 2000 !important;
-  word-wrap: break-word;   /* spezza parole troppo lunghe */
-  border-radius: 4px;      /* bordi leggermente arrotondati */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2); /* ombra leggera */
-}
-
-.leaflet-routing-toggle {
-    position: absolute;   /* importante */
-    top: 80px;            /* distanza dall’alto del container */
-    right: 10px;          /* distanza da destra */
-    left: auto;           /* resettare se necessario */
-    z-index: 10000;       /* sopra altri elementi */
-}
-/* Mobile */
-@media (max-width: 1024px) {
-  .leaflet-routing-container {
-    width: 90%;             /* quasi tutta la larghezza dello schermo */
-    max-height: 200px;      /* un po' più alto su mobile */
-    font-size: 13px;        /* testo leggermente più piccolo */
-    padding: 6px;
+  /* --- ALTRI STILI MAPPA --- */
+  .leaflet-overlay-pane { transition: opacity 0.2s ease-in-out; }
+  .leaflet-tile {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    box-shadow: 0 0 0.5px 0.5px rgba(26, 26, 26, 0.5); 
+    transform-origin: 0 0;
   }
-}
-  
-.custom-heart-button {
-    background-color: white;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    display: block;
-    text-align: center;
-    text-decoration: none;
-    color: black;
-    font-size: 18px;
-    border-radius: 4px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-}
+  .leaflet-tile-pane { background-color: #1a1a1a !important; }
 
-/* Pannello lista cuori (simile al route-box) */
-#hearts-list-box {
-    margin-top: 10px;
-    width: 180px;
-    display: none; /* Nascosto di default */
-    flex-direction: column;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    box-sizing: border-box;
-    max-height: 300px;
-    overflow-y: auto;
-}
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #0b0b0b; }
+  #map { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; background: #0b0b0b !important; }
 
-.heart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-    padding-bottom: 5px;
-}
+  /* Pannelli e Bottoni */
+  #info-panel {
+    display: none; position: fixed; bottom: 12px; left: 235px;
+    max-width: 230px; background: rgba(0,0,0,0.5); color: white;
+    padding: 10px; border-radius: 8px; font-family: sans-serif; z-index: 1000;
+  }
 
-.fly-to-heart {
-    background: #e74c3c;
-    border: none;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-}
+  .custom-home-box {
+    position: relative; top: -8px; right: 2px; display: flex !important;
+    flex-direction: column; gap: 4px;
+  }
+
+  .custom-home-button, .leaflet-control-locate a {
+    width: 44px !important; height: 44px !important; display: flex !important;
+    justify-content: center !important; align-items: center !important;
+    font-size: 25px !important; background: white !important; border-radius: 4px !important;
+  }
+
+  #hearts-list-box {
+    margin-top: 10px; width: 180px; display: none; flex-direction: column;
+    background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); color: white;
+    padding: 10px; border-radius: 8px; max-height: 300px; overflow-y: auto;
+  }
 </style>
 </head>
 
 <body>
   <div id="map"></div>
 
-  <!-- Box info trasparente -->
   <div id="info-panel">
     <div id="info-content"></div>
   </div>
 
-<div id="welcome-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+  <div id="welcome-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
     <div style="background: white; padding: 30px; border-radius: 15px; text-align: center; max-width: 400px; font-family: sans-serif;">
         <h2 style="margin-top: 0;">Benvenuto su FDB+MM</h2>
         <p>Vuoi visualizzare il tutorial rapido per scoprire i comandi?</p>
@@ -377,26 +123,13 @@ CSS
             <button onclick="closeModal()" style="padding: 10px 20px; cursor: pointer; background: #7f8c8d; color: white; border: none; border-radius: 5px;">NO, grazie</button>
         </div>
     </div>
-</div>
-  <!-- Leaflet JS -->
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Leaflet Routing Machine JS -->
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-
-  <!-- LocateControl JS -->
   <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.76.0/dist/L.Control.Locate.min.js"></script>
-
-  <!-- LabelTextCollision plugin -->
   <script src="https://unpkg.com/leaflet-labeltextcollision"></script>
-
-  <!-- Leaflet Control Geocoder -->
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-  <!-- Script principale -->
   <script src="FDB+MMwelc.js"></script>
-
 </body>
-
-
 </html>
