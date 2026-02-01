@@ -579,7 +579,8 @@ const layersControl = L.control.layers(
         "Nazioni": bordersLayer, 
         "Capitali": capitalsLayer,
     // SOTTOGRUPPO 2
-       "<span id='atlas-header' style='color: #2c3e50; font-weight: bold;'>ATLAS LAYERS</span>": L.layerGroup([]),
+       // Aggiungiamo SIA l'id che la classe per sicurezza massima
+"<span id='atlas-header' class='atlas-title' style='color: #2c3e50; font-weight: bold;'>ATLAS LAYERS</span>": L.layerGroup([]),
         "🏠 Home": layerHome,      
         "✈️ Viaggi": layerViaggi,  
         "🏖️ Mare": layerMare,      
