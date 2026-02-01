@@ -555,56 +555,66 @@ async function startRouting() {
     }
 
     try {
-        // 1. Geocoding
+        // 1. Funzione Geocoding interna
         const geocode = async (query) => {
             const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
             const d = await r.json();
-            if (d.length === 0) throw new Error("Località non trovata");
+            if (d.length === 0) throw new Error("Località non trovata: " + query);
             return L.latLng(d[0].lat, d[0].lon);
         };
 
         const startCoords = await geocode(startVal);
         const endCoords = await geocode(endVal);
 
-        // 2. Pulizia controllo precedente
+        // 2. Rimuove il controllo precedente se esiste
         if (typeof control !== 'undefined' && control) {
             map.removeControl(control);
         }
 
-        // 3. Creazione Controllo Routing
+        // 3. Creazione del controllo Routing
         control = L.Routing.control({
             waypoints: [startCoords, endCoords],
             language: 'it',
             collapsible: true,
-            show: false, 
+            show: false, // Parte sempre chiuso (mostra solo l'icona)
             itineraryClassName: 'leaflet-routing-container',
-            lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
+            lineOptions: { 
+                styles: [{ color: '#4a90e2', weight: 5 }] 
+            }
         }).addTo(map);
 
-        // 4. Fix Manuale Toggle (Timeout per attendere il DOM)
+        // 4. FIX MANUALE PER IL TOGGLE (Desktop e Mobile)
+        // Usiamo un timeout per attendere che Leaflet crei l'HTML del pulsante
         setTimeout(() => {
             const toggleBtn = document.querySelector('.leaflet-routing-toggle');
-            if (toggleBtn) {
-                const newToggleBtn = toggleBtn.cloneNode(true);
-                toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
+            const container = document.querySelector('.leaflet-routing-container');
 
-                newToggleBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const container = document.querySelector('.leaflet-routing-container');
-                    if (container) {
-                        container.classList.toggle('leaflet-routing-container-hide');
+            if (toggleBtn && container) {
+                // Forza la chiusura iniziale per sicurezza
+                container.classList.add('leaflet-routing-container-hide');
+
+                // Sovrascriviamo il comportamento del click
+                toggleBtn.onclick = function(e) {
+                    // Impedisce a Leaflet di gestire il click a modo suo
+                    L.DomEvent.stop(e); 
+                    
+                    // Alterna la visibilità del pannello
+                    if (container.classList.contains('leaflet-routing-container-hide')) {
+                        container.classList.remove('leaflet-routing-container-hide');
+                        control.show(); // Metodo interno per sicurezza
+                    } else {
+                        container.classList.add('leaflet-routing-container-hide');
+                        control.hide(); // Metodo interno per sicurezza
                     }
-                });
+                };
             }
-        }, 500);
+        }, 800);
 
     } catch (e) {
-        // Questo è il blocco "catch" che mancava o era mal posizionato
-        console.error(e);
-        alert(e.message || "Errore durante il calcolo del percorso.");
+        console.error("Errore Routing:", e);
+        alert(e.message || "Impossibile calcolare il percorso. Controlla i nomi delle località.");
     }
-} // <--- Fine della funzione startRouting
+} // Fine della funzione startRouting
     
 // --- 7. CONTROLLI INTERFACCIA ---
 // 1. Switcher Layer Base (Spostato a destra)
@@ -707,6 +717,22 @@ sideInfoControl.onAdd = function(map) {
     // 1. Box Routing
     const routeBox = L.DomUtil.create('div', '', container);
     routeBox.id = 'route-box';
+   // --- BLOCCO INTERAZIONE MAPPA ---
+// Impedisce lo zoom con la rotellina sopra il box
+L.DomEvent.disableScrollPropagation(routeBox);
+
+// Impedisce che i click sul box passino alla mappa (es. niente marker indesiderati)
+L.DomEvent.disableClickPropagation(routeBox);
+
+// Disabilita il trascinamento della mappa quando il mouse è sopra il box
+routeBox.addEventListener('mouseenter', function() {
+    map.dragging.disable();
+});
+
+// Riabilita il trascinamento quando il mouse esce
+routeBox.addEventListener('mouseleave', function() {
+    map.dragging.enable();
+});
     routeBox.style.display = 'none';
     routeBox.style.flexDirection = 'column';
     routeBox.style.background = 'rgba(0,0,0,0.5)';
