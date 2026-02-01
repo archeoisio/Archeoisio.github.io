@@ -610,10 +610,10 @@ btnControl.onAdd = function(map) {
     L.DomEvent.on(container, 'touchstart', L.DomEvent.stopPropagation);
     L.DomEvent.on(container, 'pointerdown', L.DomEvent.stopPropagation);
     // Funzione helper per creare bottoni uniformi
-    const createBtn = (html, title, onClick) => {
-        const btn = L.DomUtil.create('a', 'custom-home-button', container);
-        btn.innerHTML = html;
-        btn.title = title;
+    const createBtn = (html, title, onClick, className) => {
+    const btn = L.DomUtil.create('a', 'custom-home-button ' + (className || ''), container);
+    btn.innerHTML = html;
+    btn.title = title;
         btn.href = '#';
         L.DomEvent.on(btn, 'click', e => {
             L.DomEvent.stopPropagation(e);
@@ -624,28 +624,34 @@ btnControl.onAdd = function(map) {
     };
     // Pulsante Home 🌍
     createBtn('🌍', "Torna alla vista iniziale", () => {
-        map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 4, easeLinearity: 0.1 });
-    });
+    map.flyTo(initialView.center, initialView.zoom, { animate: true, duration: 4, easeLinearity: 0.1 });
+}, 'btn-tutorial-home');
+    
     // Pulsante Locate 📍
-    const locateControl = L.control.locate({
-        flyTo: { duration: 6 },
-        strings: { title: "Posizione" }
-    });
-    container.appendChild(locateControl.onAdd(map));
+   const locateControl = L.control.locate({
+    flyTo: { duration: 6 },
+    strings: { title: "Posizione" }
+});
+
+const locBtn = locateControl.onAdd(map);
+locBtn.classList.add('btn-tutorial-locate'); // <-- Aggiungiamo la classe qui!
+container.appendChild(locBtn);
     
     // Pulsante Routing 🗺️
-    createBtn('🗺️', "Mostra/Nascondi indicazioni", () => {
-        const rb = document.getElementById('route-box');
-        const hb = document.getElementById('hearts-list-box');
-        if(hb) hb.style.display = 'none'; 
-        if(rb) rb.style.display = (rb.style.display === 'none') ? 'flex' : 'none';
-    });
+ createBtn('🗺️', "Mostra/Nascondi indicazioni", () => {
+    const rb = document.getElementById('route-box');
+    const hb = document.getElementById('hearts-list-box');
+    if(hb) hb.style.display = 'none'; 
+    if(rb) rb.style.display = (rb.style.display === 'none') ? 'flex' : 'none';
+}, 'btn-tutorial-route');
+    
     // Pulsante Cuore ❤️
-    createBtn('❤️', "Luoghi del cuore", () => {
-        const rb = document.getElementById('route-box');
-        const hb = document.getElementById('hearts-list-box');
-        if(rb) rb.style.display = 'none'; 
-        if(hb) hb.style.display = (hb.style.display === 'none') ? 'flex' : 'none';
+   createBtn('❤️', "Luoghi del cuore", () => {
+    const rb = document.getElementById('route-box');
+    const hb = document.getElementById('hearts-list-box');
+    if(rb) rb.style.display = 'none'; 
+    if(hb) hb.style.display = (hb.style.display === 'none') ? 'flex' : 'none';
+}, 'btn-tutorial-hearts');
     });
     return container;
 };
@@ -810,23 +816,37 @@ function setVh() {
 
 const tutorialSteps = [
     { 
-        titolo: "1. Ricerca", 
-        testo: "Usa la lente in alto a sinistra per trovare città o indirizzi."
+        id: ".leaflet-control-layers", 
+        titolo: "Switcher Mappa", 
+        testo: "Qui puoi cambiare lo sfondo e attivare i confini." 
     },
     { 
-        titolo: "2. Layer e Filtri", 
-        testo: "Il pannello a destra ti permette di attivare nazioni e categorie (Home, Viaggi, Mare)."
+        id: ".btn-tutorial-home", 
+        titolo: "Tasto Home", 
+        testo: "Ti riporta istantaneamente alla visuale globale." 
     },
     { 
-        titolo: "3. Home e Zoom", 
-        testo: "Clicca la casetta per resettare la vista o usa + e - per lo zoom."
+        id: ".btn-tutorial-locate", 
+        titolo: "Geolocalizzazione", 
+        testo: "Trova la tua posizione attuale sulla mappa." 
     },
     { 
-        titolo: "4. Fine", 
-        testo: "Il tutorial è finito. Buona esplorazione!"
+        id: ".btn-tutorial-route", 
+        titolo: "Percorsi", 
+        testo: "Calcola itinerari tra due punti." 
+    },
+    { 
+        id: ".btn-tutorial-hearts", 
+        titolo: "I tuoi preferiti", 
+        testo: "Clicca qui per aprire la lista dei luoghi del cuore." 
+    },
+    { 
+        id: "#hearts-list-box", 
+        titolo: "Lista Cuori", 
+        testo: "Qui trovi tutti i posti che hai salvato!",
+        action: "openHearts" // Segnale per aprire il box
     }
 ];
-
 let currentStep = 0;
 
 function closeModal() {
@@ -858,31 +878,43 @@ function startTutorial() {
 }
 
 function showStep() {
-    if (currentStep < tutorialSteps.length) {
-        const step = tutorialSteps[currentStep];
-        const isLast = currentStep === tutorialSteps.length - 1;
+    const step = tutorialSteps[currentStep];
+    const target = document.querySelector(step.id);
+    const isLast = currentStep === tutorialSteps.length - 1;
 
-        L.popup({ 
-            closeButton: false, 
-            autoClose: false, // Cambiato in false per evitare che sparisca subito
-            closeOnClick: false,
-            className: 'tutorial-popup' 
-        })
-        .setLatLng(map.getCenter()) 
-        .setContent(`
-            <div style="text-align:center; min-width: 200px; font-family: sans-serif;">
-                <h4 style="margin:0 0 8px 0; color: #2c3e50;">${step.titolo}</h4>
-                <p style="margin:0 0 15px 0; font-size: 14px; color: #34495e;">${step.testo}</p>
-                <button onclick="nextTutorialStep()" style="
-                    background: ${isLast ? '#27ae60' : '#3498db'}; 
-                    color: white; border: none; padding: 10px 15px; 
-                    border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">
-                    ${isLast ? 'INIZIA' : 'AVANTI'}
-                </button>
-            </div>
-        `)
-        .openOn(map);
+    // Se lo step prevede un'azione (aprire i cuori), la eseguiamo
+    if (step.action === "openHearts") {
+        const hb = document.getElementById('hearts-list-box');
+        if (hb) hb.style.display = 'flex';
     }
+
+    let popupPoint;
+    if (target) {
+        const rect = target.getBoundingClientRect();
+        // Puntiamo leggermente a sinistra del pulsante (visto che sono a destra)
+        popupPoint = map.containerPointToLayerPoint([rect.left - 10, rect.top + (rect.height / 2)]);
+    } else {
+        popupPoint = map.containerPointToLayerPoint([window.innerWidth / 2, window.innerHeight / 2]);
+    }
+    
+    const popupLatLng = map.layerPointToLatLng(popupPoint);
+
+    L.popup({ 
+        closeButton: false, 
+        closeOnClick: false,
+        className: 'tutorial-pointer'
+    })
+    .setLatLng(popupLatLng)
+    .setContent(`
+        <div style="text-align:center; min-width: 150px; font-family: sans-serif;">
+            <b style="color:#3498db">${step.titolo}</b>
+            <p style="font-size:12px; margin: 8px 0;">${step.testo}</p>
+            <button onclick="nextTutorialStep()" style="background:#3498db; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; width:100%">
+                ${isLast ? 'INIZIA' : 'AVANTI'}
+            </button>
+        </div>
+    `)
+    .openOn(map);
 }
 
 function nextTutorialStep() {
@@ -896,7 +928,9 @@ function nextTutorialStep() {
                 map.removeLayer(layer);
             }
         });
-
+      const hb = document.getElementById('hearts-list-box');
+        if (hb) hb.style.display = 'none';
+        
         // --- 2. SBLOCCO DELLA MAPPA ---
         map.dragging.enable();
         map.touchZoom.enable();
