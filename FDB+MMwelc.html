@@ -27,9 +27,8 @@
   /* --- SEZIONE TUTORIAL (CORRETTA) --- */
   .tutorial-pointer .leaflet-popup-content {
     margin: 8px !important;
-    width: 200px !important; /* Deve essere più piccolo del wrapper sopra */
-    min-width: unset !important; /* Rimuovi vincoli minimi */
-    max-width: 200px !important;
+    width: 180px !important;
+    margin: 10px !important;
 }
 @media (max-width: 600px) {
     .tutorial-pointer .leaflet-popup-content-wrapper {
@@ -64,11 +63,9 @@
   }
 
 .tutorial-pointer .leaflet-popup-content-wrapper {
-    width: 220px !important;    /* Forza una larghezza piccola base */
-    max-width: 70vw !important;  /* Non permette di allargarsi troppo */
-    border-radius: 8px;
-    padding: 0;
-    overflow: visible !important;
+    width: 200px !important; /* Questo deve essere poco più grande del div nel JS */
+    min-width: 0 !important;  /* Rimuove ogni blocco precedente */
+    max-width: 200px !important;
     border: 2px solid #3498db;
 }
 
