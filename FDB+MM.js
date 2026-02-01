@@ -825,22 +825,22 @@ const tutorialSteps = [
    { 
         id: ".leaflet-control-layers", 
         titolo: "Switcher Mappa", 
-        testo: "Seleziona una Nazione per attivare pannello info e volare sulla Capitale" 
+        testo: "Seleziona una Nazione per attivare pannello info, clicca su 'Vola' per raggiungere la Capitale" 
     },
     { 
         id: ".btn-tutorial-home", 
         titolo: "Tasto Home", 
-        testo: "Resetta la mappa alla vista iniziale." 
+        testo: "Resetta la mappa alla vista zoom iniziale" 
     },
     { 
         id: ".btn-tutorial-locate", 
         titolo: "Geolocalizzazione", 
-        testo: "Trova la tua posizione attuale sulla mappa." 
+        testo: "Trova la tua posizione attuale sulla mappa. Necessario attivare localizzazione su telefono/pc" 
     },
     { 
         id: ".btn-tutorial-route", 
         titolo: "Percorsi", 
-        testo: "Calcola itinerari tra due punti inserisci partenza e destinazione e clicca 'Calcola' o 'Reset'." 
+        testo: "Calcola itinerari tra due punti inserisci partenza e destinazione e clicca 'Calcola' o 'Reset', clicca 'X' per ridurre pannello indicazioni stradali" 
     },
     { 
         id: ".btn-tutorial-hearts", 
@@ -850,7 +850,7 @@ const tutorialSteps = [
     { 
         id: "#hearts-list-box", 
         titolo: "ATLAS LAYERS ❤️", 
-        testo: "Elenco layers divisi per categoria, click su 'Vola' per raggiungere la destinazione, clicca sui marker per maggiori info sul luogo.",
+        testo: "Elenco layers divisi per categoria, clicca su 'Vola' per raggiungere la destinazione, clicca sui marker per maggiori info sul luogo.",
         action: "openHearts" // Segnale per aprire il box
     }
 ];
