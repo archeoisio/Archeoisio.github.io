@@ -828,7 +828,7 @@ const tutorialSteps = [
    { 
         id: ".leaflet-control-layers", 
         titolo: "Switcher Mappa", 
-        testo: "Seleziona una Nazione per attivare pannello info, clicca su 'Vola' per raggiungere la Capitale" 
+        testo: "Seleziona una Nazione per pannello Info, clicca su 'Vola' per raggiungere la Capitale" 
     },
     { 
         id: ".btn-tutorial-home", 
