@@ -917,16 +917,16 @@ function showStep() {
     })
     .setLatLng(popupLatLng)
     .setContent(`
-    <div style="text-align: left; width: 320px; font-family: sans-serif; display: flex; flex-direction: column; gap: 5px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 4px;">
-            <b style="color:#3498db; font-size: 14px;">${step.titolo}</b>
-            <button onclick="nextTutorialStep()" style="background:#3498db; color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer; font-size: 11px;">
+    <div style="width: 300px; font-family: sans-serif; color: #333;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <b style="color:#3498db; font-size: 14px; white-space: nowrap;">${step.titolo}</b>
+            <button onclick="nextTutorialStep()" style="background:#3498db; color:white; border:none; padding:4px 10px; border-radius:4px; cursor:pointer; font-size: 11px; font-weight: bold; flex-shrink: 0; margin-left: 10px;">
                 ${isLast ? 'INIZIA' : 'AVANTI'}
             </button>
         </div>
-        <p style="font-size:12px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <div style="font-size: 12px; line-height: 1.3; border-top: 1px solid #eee; padding-top: 4px;">
             ${step.testo}
-        </p>
+        </div>
     </div>
 `)
     .openOn(map);
