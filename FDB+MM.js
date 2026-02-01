@@ -372,15 +372,17 @@ let searchMarkers = [];
      { name: "Porto", type: "NextStop", nation: "Portogallo", coords: [41.14636917086563, -8.606643703282842], info: "Per ricominciare,<br>da dove ci siamo fermati", date: "2026", flag: "🇵🇹" },
      { name: "Siviglia", type: "NextStop", nation: "Spagna", coords: [37.38703922819611, -5.986177854161874], info: "Andalucia, per esaudire tuo desiderio di andarci, <br> mio di tornarci", date: "2026", flag: "🇪🇸" },
      { name: "Marrakech", type: "NextStop", nation: "Marocco", coords: [31.631597017143186, -7.9868416614654425], info: "Per un weekend romantico,<br> fuori dall'Europa", date: "???", flag: "🇲🇦" },
-     { name: "Istanbul", type: "NextStop", nation: "Turchia", coords: [40.999279878160635, 28.93924044149299], info: "Per darci un bacio <br> sullo stretto dei Dardanelli,<br>e magari vedere Troia e la Cappadocia", date: "???", flag: "🇹🇷" },
-     { name: "Parigi", type: "NextStop", nation: "Francia", coords: [48.86011859811617, 2.326124871376955], info: "Per un weekend romantico,<br> e dirci je t'aime mon amour! <br> (e per mangiare Croissant e Pan au chocolat)", date: "???", flag: "🇫🇷" },
+     { name: "Istanbul", type: "NextStop", nation: "Turchia", coords: [41.01569476137644, 28.963165126228542], info: "Per darci un bacio <br> sullo stretto dei Dardanelli,<br>e magari vedere Troia e la Cappadocia", date: "???", flag: "🇹🇷" },
+     { name: "Capri", type: "NextStop", nation: "Italia", coords: [40.5535118191965, 14.217917874785694], info: "Se mi dai l'ok prenoto!", date: "???", flag: "🇮🇹" },
+     { name: "Folegandros", type: "NextStop", nation: "Grecia", coords: [36.62694903345871, 24.919693654979124], info: "una settimana o due a girare per le Cicladi..", date: "???", flag: "🇬🇷" },
+     { name: "Parigi", type: "NextStop", nation: "Francia", coords: [48.86011859811617, 2.326124871376955], info: "Per un weekend romantico per Musei,<br> e per dirci je t'aime mon amour!<br> (e per mangiare Croissant e Pan au chocolat!)", date: "???", flag: "🇫🇷" },
      { name: "Abisko", type: "NextStop", nation: "Svezia", coords: [68.3494573211554, 18.830873994999063], info: "Una promessa è una promessa,<br>vedremo le Northern Lights! <br> e ci puzzeremo di freddo!", date: "???", flag: "🇸🇪" },
-     {name: "Oslo", type: "NextStop", nation: "Norvegia", coords: [59.9131771994163, 10.748661804606396], info: "L'ultima capitale del Nord che ci manca da vedere insieme,<br> e poi una sosta a Bergen", date: "???", flag: "🇳🇴" },
+     {name: "Oslo", type: "NextStop", nation: "Norvegia", coords: [59.9131771994163, 10.748661804606396], info: "L'ultima capitale del Nord che ci manca da vedere insieme, e poi una sosta a Bergen", date: "???", flag: "🇳🇴" },
      { name: "Tokyo", type: "NextStop", nation: "Giappone", coords: [35.67955981952091, 139.77016952038218], info: "Mi vuoi fa anda solo a me? Sicura?!", date: "???", flag: "🇯🇵" },
      { name: "New York", type: "NextStop", nation: "USA", coords: [40.74887131726865, -73.98633085538198], info: "New York, New York!", date: "???", flag: "🇺🇸" },
-     
-     
- 
+     { name: "Bogotà", type: "NextStop", nation: "Colombia", coords: [4.700687680067036, -74.04562243254365], info: "tu vai a trovare Viviana..e io faccio giretti 😝", date: "???", flag: "🇨🇴" },
+     { name: "Quito", type: "NextStop", nation: "Ecuador", coords: [-0.19482353254652943, -78.50109413965171], info: "e a quel punto che fai? <br> non ti allunghiamo da Ana?! 😝", date: "???", flag: "🇪🇨" },
+     { name: "Machu Picchu", type: "NextStop", nation: "Perù", coords: [ -13.163073423851058, -72.5449402402928], info: "Sarebbe bellissimo!!", date: "???", flag: "🇵🇪" },
  ];
     
 capitalsData.forEach(cap => {
