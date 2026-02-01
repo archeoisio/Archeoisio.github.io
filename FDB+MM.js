@@ -563,6 +563,9 @@ async function startRouting() {
         if (control) map.removeControl(control);
         control = L.Routing.control({
             waypoints: [startCoords, endCoords],
+            collapsible: true,              // Permette di chiudere il pannello cliccando il tasto
+            collapseBtnClass: 'leaflet-routing-collapse-btn', // Classe per il tastino interno (opzionale)
+            show: false,
             language: 'it',
             routeWhileDragging: true,
             lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
