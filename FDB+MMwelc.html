@@ -33,19 +33,20 @@
     z-index: 1000 !important;
 }
 .tutorial-pointer .leaflet-popup-content {
-    margin: 10px !important;
-    width: 160px !important; /* Forza una larghezza contenuta */
+    margin: 8px 12px !important;
+    width: 320px !important;
 }
 .tutorial-pointer .leaflet-popup-tip-container {
     transform: rotate(-90deg);
-    right: -20px;
+    right: 0px;
     top: 50%;
     left: auto;
 }
-.tutorial-popup .leaflet-popup-content-wrapper {
-    background: white !important;
-    color: black !important;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+.tutorial-pointer .leaflet-popup-content-wrapper {
+    width: auto !important; 
+    min-width: 340px !important; /* Forza la forma orizzontale */
+    border-radius: 6px;
+    padding: 0;
 }
 /* Stile per i popup "puntatori" */
 .tutorial-pointer {
