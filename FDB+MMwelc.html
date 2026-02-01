@@ -20,7 +20,19 @@
     height: 256px !important;
     margin: 0 !important;
   }
+.leaflet-control-layers-overlays label div:has(.atlas-title) input {
+    display: none !important;
+}
 
+/* Rende il titolo non cliccabile e meglio spaziato */
+.atlas-title {
+    pointer-events: none;
+    display: inline-block;
+    padding-top: 5px;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
   /* Forza i popup del tutorial a stare sopra tutto */
   .leaflet-popup-pane { z-index: 1000 !important; }
 
