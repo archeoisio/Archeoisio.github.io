@@ -566,49 +566,41 @@ async function startRouting() {
         const startCoords = await geocode(startVal);
         const endCoords = await geocode(endVal);
 
-        // 2. Rimuove il controllo precedente se esiste
-        if (typeof control !== 'undefined' && control) {
-            map.removeControl(control);
-        }
+       if (control) map.removeControl(control);
 
-        // 3. Creazione del controllo Routing
         control = L.Routing.control({
             waypoints: [startCoords, endCoords],
             language: 'it',
             collapsible: true,
-            show: false, // Parte sempre chiuso (mostra solo l'icona)
+            show: false, // Inizia chiuso
             itineraryClassName: 'leaflet-routing-container',
-            lineOptions: { 
-                styles: [{ color: '#4a90e2', weight: 5 }] 
-            }
+            lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
         }).addTo(map);
 
-        // 4. FIX MANUALE PER IL TOGGLE (Desktop e Mobile)
-        // Usiamo un timeout per attendere che Leaflet crei l'HTML del pulsante
+        // Aspettiamo un attimo che il DOM venga generato
         setTimeout(() => {
             const toggleBtn = document.querySelector('.leaflet-routing-toggle');
             const container = document.querySelector('.leaflet-routing-container');
 
             if (toggleBtn && container) {
-                // Forza la chiusura iniziale per sicurezza
+                // Rimuoviamo eventuali listener precedenti clonando
+                const newToggle = toggleBtn.cloneNode(true);
+                toggleBtn.parentNode.replaceChild(newToggle, toggleBtn);
+
+                // Forza lo stato iniziale chiuso
                 container.classList.add('leaflet-routing-container-hide');
 
-                // Sovrascriviamo il comportamento del click
-                toggleBtn.onclick = function(e) {
-                    // Impedisce a Leaflet di gestire il click a modo suo
-                    L.DomEvent.stop(e); 
-                    
-                    // Alterna la visibilità del pannello
-                    if (container.classList.contains('leaflet-routing-container-hide')) {
+                newToggle.addEventListener('click', (e) => {
+                    L.DomEvent.stop(e);
+                    const isHidden = container.classList.contains('leaflet-routing-container-hide');
+                    if (isHidden) {
                         container.classList.remove('leaflet-routing-container-hide');
-                        control.show(); // Metodo interno per sicurezza
                     } else {
                         container.classList.add('leaflet-routing-container-hide');
-                        control.hide(); // Metodo interno per sicurezza
                     }
-                };
+                });
             }
-        }, 800);
+        }, 500);
 
     } catch (e) {
         console.error("Errore Routing:", e);
