@@ -54,7 +54,7 @@ map.on('zoomstart', function() {
 });;
    
     // --- 2. DEFINIZIONE LAYER E VARIABILI DI STATO ---
-const labels = L.layerGroup();
+const labels = L.layerGroup().addTo(map);
 const bordersLayer = L.layerGroup().addTo(map);
 map.on('zoom', function() {
     const currentZoom = map.getZoom();
@@ -76,7 +76,7 @@ map.on('zoom', function() {
     }
 });
 // 1. Creiamo i tre layer specifici per i toggle
-const layerHome = L.layerGroup();
+const layerHome = L.layerGroup().addTo(map);
 const layerViaggi = L.layerGroup();
 const layerMare = L.layerGroup();
 const layerNextStop = L.layerGroup();
