@@ -649,7 +649,7 @@ container.appendChild(locBtn);
 }, 'btn-tutorial-route');
     
     // Pulsante Cuore ❤️
-   createBtn('❤️', "Luoghi del cuore", () => {
+   createBtn('❤️', "Atlas Layers", () => {
     const rb = document.getElementById('route-box');
     const hb = document.getElementById('hearts-list-box');
     if(rb) rb.style.display = 'none'; 
