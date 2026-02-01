@@ -23,14 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
   map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    zoomSnap: 0.5,           
+    zoomSnap: 0.1,           
     zoomDelta: 1,           
     wheelPxPerZoomLevel: 150, 
     zoomControl: true,
     minZoom: 2.5,
     worldCopyJump: true,
     maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 193)),
-    maxBoundsViscosity: 1.0,
+    maxBoundsViscosity: 0.6,
+      bounceAtZoomLimits: false,
     attributionControl: false
 });
     // Forza Leaflet a caricare le tile anche se sono leggermente fuori dallo schermo
