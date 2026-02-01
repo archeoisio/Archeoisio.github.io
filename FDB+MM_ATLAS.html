@@ -233,10 +233,11 @@
   }
 
  /* STILE STANDARD (Desktop) */
+/* 1. PANNELLO INDICAZIONI (Desktop e Standard) */
 .leaflet-routing-container {
     width: 210px;
     max-height: 150px;
-    overflow-y: auto; /* 'auto' è meglio di 'hidden' per poter scorrere le indicazioni */
+    overflow-y: auto; 
     font-size: 14px;
     background: white;
     padding: 8px;
@@ -246,34 +247,56 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* VERSIONE MOBILE (sotto i 600px) */
+/* 2. PULSANTE TOGGLE (L'icona per aprire/chiudere) */
+.leaflet-routing-toggle {
+    position: absolute;
+    top: 80px;
+    right: 10px;
+    z-index: 10000;
+    
+    /* Dimensioni per pareggiare gli altri pulsanti (es. Home/Zoom) */
+    width: 34px !important;
+    height: 34px !important;
+    background-color: white;
+    background-size: 20px 20px; /* Dimensione dell'icona interna */
+    border-radius: 4px;
+    border: 2px solid rgba(0,0,0,0.2);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+/* 3. COMPORTAMENTO RESPONSIVE (Tablet e Mobile) */
+
+/* Per Tablet (sotto i 1024px) */
+@media (max-width: 1024px) {
+    .leaflet-routing-container { 
+        width: 190px; /* Leggermente ridotto rispetto al desktop */
+        max-height: 140px; 
+        font-size: 13px; 
+    }
+}
+
+/* Per Mobile (sotto i 600px) - REGOLE PIÙ AGGRESSIVE */
 @media (max-width: 600px) {
     .leaflet-routing-container {
-        width: 170px !important;    /* Lo stringiamo di altri 40px */
-        max-height: 120px !important; /* Lo abbassiamo un po' */
-        font-size: 11px !important;   /* Testo più piccolo per farlo stare in meno spazio */
-        padding: 5px !important;     /* Riduciamo lo spreco di spazio interno */
+        width: 160px !important;    /* Molto stretto per lasciare spazio alla mappa */
+        max-height: 110px !important; 
+        font-size: 11px !important;   
+        padding: 5px !important;     
     }
 
-    /* Rimpiccioliamo le icone delle frecce/svolte per il mobile */
+    .leaflet-routing-toggle {
+        top: 140px; /* Lo abbassiamo per non sovrapporlo allo switcher dei layer su mobile */
+        width: 38px !important; /* Lo facciamo un filo più grande: più facile da tappare col dito */
+        height: 38px !important;
+    }
+
     .leaflet-routing-instruction-icon {
         width: 14px !important;
         height: 14px !important;
         background-size: 14px 14px !important;
     }
 }
-
-  .leaflet-routing-toggle {
-    position: absolute;
-    top: 80px;
-    right: 10px;
-    z-index: 10000;
-  }
-
-  @media (max-width: 1024px) {
-    .leaflet-routing-container { width: 90%; max-height: 200px; font-size: 13px; }
-  }
-
   .custom-heart-button {
     background-color: white;
     width: 30px; height: 30px;
