@@ -10,14 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isLandscape) {
             // VISTA MOBILE RUOTATO (Orizzontale)
             // Usiamo uno zoom intermedio o lo stesso, ma puoi cambiare il centro per bilanciare i pannelli
-            initialView = { center: [50, 25], zoom: 4 }; 
+            initialView = { center: [40, 25], zoom: 4 }; 
         } else {
             // VISTA MOBILE VERTICALE (Il tuo originale)
             initialView = { center: [50, 20], zoom: 4 };
         }
     } else {
         // VISTA DESKTOP (Il tuo originale)
-        initialView = { center: [50, 30], zoom: 4 };
+        initialView = { center: [55, 30], zoom: 4 };
     }
   const map = L.map('map', {
     center: initialView.center,
