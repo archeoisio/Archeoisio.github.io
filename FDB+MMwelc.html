@@ -33,8 +33,9 @@
     z-index: 1000 !important;
 }
 .tutorial-pointer .leaflet-popup-content {
-    margin: 8px 12px !important;
-    width: 320px !important;
+    margin: 12px !important;
+    width: 300px !important;
+    overflow: visible !important;
 }
 .tutorial-pointer .leaflet-popup-tip-container {
     transform: rotate(-90deg);
@@ -43,10 +44,12 @@
     left: auto;
 }
 .tutorial-pointer .leaflet-popup-content-wrapper {
-    width: auto !important; 
-    min-width: 340px !important; /* Forza la forma orizzontale */
-    border-radius: 6px;
+    width: auto !important;
+    min-width: 320px !important; 
+    max-width: 350px !important;
+    border-radius: 8px;
     padding: 0;
+    overflow: visible !important; /* Fondamentale */
 }
 /* Stile per i popup "puntatori" */
 .tutorial-pointer {
