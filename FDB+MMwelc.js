@@ -1,3 +1,4 @@
+let map; //
 document.addEventListener('DOMContentLoaded', () => {
     // --- 1. CONFIGURAZIONI VIEWPORT & MAPPA ---
     const MOBILE_MAX_WIDTH = 1024;
@@ -19,13 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // VISTA DESKTOP (Il tuo originale)
         initialView = { center: [50, 30], zoom: 4 };
     }
-  const map = L.map('map', {
+  map = L.map('map', {
     center: initialView.center,
     zoom: initialView.zoom,
-    zoomSnap: 0.5,         // Permette decimali come 4.5
-    zoomDelta: 1,        // Fa sì che i tasti + e - scattino di 0.5 alla volta
-    wheelPxPerZoomLevel: 150, // Rende la rotella meno "frenetica"
-   zoomControl: true,
+    zoomSnap: 0.5,           
+    zoomDelta: 1,           
+    wheelPxPerZoomLevel: 150, 
+    zoomControl: true,
     minZoom: 2.5,
     worldCopyJump: true,
     maxBounds: L.latLngBounds(L.latLng(-90, -180), L.latLng(75, 193)),
@@ -840,16 +841,12 @@ function startTutorial() {
 }
 
 function showStep() {
-    // Cerchiamo la variabile map: se è dentro il blocco sopra, 
-    // dobbiamo assicurarci che sia accessibile globalmente.
-    if (typeof map === 'undefined') {
-        console.error("Errore: la variabile 'map' non è accessibile. Assicurati che non sia preceduta da 'const' o 'let' dentro il blocco sopra.");
-        return;
-    }
-
     if (currentStep < tutorialSteps.length) {
         const step = tutorialSteps[currentStep];
         const isLast = currentStep === tutorialSteps.length - 1;
+
+        // Piccola verifica di sicurezza in console
+        console.log("Mostro step:", currentStep, "sulla mappa:", map);
 
         const popup = L.popup({ 
             closeButton: false, 
@@ -857,7 +854,7 @@ function showStep() {
             closeOnClick: false,
             className: 'tutorial-popup' 
         })
-        .setLatLng(map.getCenter()) 
+        .setLatLng(map.getCenter()) // Qui usa la mappa globale
         .setContent(`
             <div style="text-align:center; min-width: 200px; font-family: sans-serif;">
                 <h4 style="margin:0 0 8px 0; color: #2c3e50;">${step.titolo}</h4>
