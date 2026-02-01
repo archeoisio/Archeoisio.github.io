@@ -580,7 +580,7 @@ const layersControl = L.control.layers(
         "Capitali": capitalsLayer,
     // SOTTOGRUPPO 2
        // Aggiungiamo SIA l'id che la classe per sicurezza massima
-"<span id='atlas-header' class='atlas-title' style='color: #2c3e50; font-weight: bold;'>ATLAS LAYERS</span>": L.layerGroup([]),
+"<span id='atlas-header' class='atlas-title' style='color: #2c3e50; font-weight: bold;'>ATLAS LAYERS ❤️</span>": L.layerGroup([]),
         "✈️ Viaggi": layerViaggi,  
         "🏖️ Mare": layerMare,      
         "❓ NextStop": layerNextStop
@@ -839,11 +839,11 @@ const tutorialSteps = [
     { 
         id: ".btn-tutorial-hearts", 
         titolo: "Elenco luoghi speciali", 
-        testo: "Clicca qui per aprire elenchi dei layers ATLAS." 
+        testo: "Clicca qui per aprire elenchi degli ATLAS LAYERS ❤️." 
     },
     { 
         id: "#hearts-list-box", 
-        titolo: "Elenco luoghi speciali", 
+        titolo: "ATLAS LAYERS ❤️", 
         testo: "Elenco layers divisi per categoria, click su 'Vola' per raggiungere la destinazione, clicca sui marker per maggiori info sul luogo.",
         action: "openHearts" // Segnale per aprire il box
     }
