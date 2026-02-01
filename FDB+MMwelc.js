@@ -891,16 +891,17 @@ function showStep() {
     if (target) {
         const rect = target.getBoundingClientRect();
         // Puntiamo leggermente a sinistra del pulsante (visto che sono a destra)
-        popupPoint = map.containerPointToLayerPoint([rect.left - 10, rect.top + (rect.height / 2)]);
+        popupPoint = map.containerPointToLayerPoint([rect.left - 20, rect.top + (rect.height / 2)]);
     } else {
         popupPoint = map.containerPointToLayerPoint([window.innerWidth / 2, window.innerHeight / 2]);
     }
     
     const popupLatLng = map.layerPointToLatLng(popupPoint);
 
-    L.popup({ 
+  L.popup({ 
         closeButton: false, 
         closeOnClick: false,
+        autoPan: false, // <--- QUESTA È LA RIGA CHIAVE: impedisce alla mappa di muoversi
         className: 'tutorial-pointer'
     })
     .setLatLng(popupLatLng)
@@ -913,7 +914,7 @@ function showStep() {
             </button>
         </div>
     `)
-    .openOn(map);
+    .openOn(map)
 }
 
 function nextTutorialStep() {
