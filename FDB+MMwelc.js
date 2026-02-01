@@ -805,3 +805,73 @@ function setVh() {
     window.addEventListener('resize', setVh);
     
 });
+/ INCOLLA IL CODICE DEL TUTORIAL DA QUI IN POI (FUORI DALLE GRAFFE)
+
+const tutorialSteps = [
+    { 
+        titolo: "1. Ricerca", 
+        testo: "Usa la lente in alto a sinistra per trovare città o indirizzi."
+    },
+    { 
+        titolo: "2. Layer e Filtri", 
+        testo: "Il pannello a destra ti permette di attivare nazioni e categorie (Home, Viaggi, Mare)."
+    },
+    { 
+        titolo: "3. Home e Zoom", 
+        testo: "Clicca la casetta per resettare la vista o usa + e - per lo zoom."
+    },
+    { 
+        titolo: "4. Fine", 
+        testo: "Il tutorial è finito. Buona esplorazione!"
+    }
+];
+
+let currentStep = 0;
+
+function closeModal() {
+    const modal = document.getElementById('welcome-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+function startTutorial() {
+    closeModal();
+    currentStep = 0;
+    showStep();
+}
+
+function showStep() {
+    if (currentStep < tutorialSteps.length) {
+        const step = tutorialSteps[currentStep];
+        const isLast = currentStep === tutorialSteps.length - 1;
+
+        const popup = L.popup({ 
+            closeButton: false, 
+            autoClose: false,
+            closeOnClick: false,
+            className: 'tutorial-popup' 
+        })
+        .setLatLng(map.getCenter()) 
+        .setContent(`
+            <div style="text-align:center; min-width: 200px;">
+                <h4 style="margin:0 0 8px 0; color: #2c3e50;">${step.titolo}</h4>
+                <p style="margin:0 0 15px 0; font-size: 14px;">${step.testo}</p>
+                <button onclick="nextTutorialStep()" style="
+                    background: ${isLast ? '#27ae60' : '#3498db'}; 
+                    color: white; border: none; padding: 8px 15px; 
+                    border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">
+                    ${isLast ? 'INIZIA' : 'AVANTI'}
+                </button>
+            </div>
+        `)
+        .openOn(map);
+    }
+}
+
+function nextTutorialStep() {
+    currentStep++;
+    if (currentStep < tutorialSteps.length) {
+        showStep();
+    } else {
+        map.closePopup();
+    }
+}
