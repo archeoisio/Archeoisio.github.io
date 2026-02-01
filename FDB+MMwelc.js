@@ -838,16 +838,51 @@ function startTutorial() {
     closeModal();
     currentStep = 0;
     
-    // --- BLOCCO MAPPA ---
-    map.dragging.disable();
-    map.touchZoom.disable();
-    map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
-    map.boxZoom.disable();
-    map.keyboard.disable();
-    if (map.tap) map.tap.disable(); // Per dispositivi touch
+    // Verifica di sicurezza: se la mappa non esiste, non procedere
+    if (typeof map === 'undefined') {
+        console.error("Mappa non trovata! Controlla di aver tolto 'const' davanti a map.");
+        return;
+    }
+
+    // BLOCCA LA MAPPA
+    try {
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        if (map.tap) map.tap.disable();
+    } catch (e) { console.warn("Alcuni controlli non possono essere disabilitati", e); }
     
-    showStep();
+    // Mostra il primo step con un micro-ritardo per dare tempo al browser
+    setTimeout(showStep, 100);
+}
+
+function showStep() {
+    if (currentStep < tutorialSteps.length) {
+        const step = tutorialSteps[currentStep];
+        const isLast = currentStep === tutorialSteps.length - 1;
+
+        L.popup({ 
+            closeButton: false, 
+            autoClose: false, // Cambiato in false per evitare che sparisca subito
+            closeOnClick: false,
+            className: 'tutorial-popup' 
+        })
+        .setLatLng(map.getCenter()) 
+        .setContent(`
+            <div style="text-align:center; min-width: 200px; font-family: sans-serif;">
+                <h4 style="margin:0 0 8px 0; color: #2c3e50;">${step.titolo}</h4>
+                <p style="margin:0 0 15px 0; font-size: 14px; color: #34495e;">${step.testo}</p>
+                <button onclick="nextTutorialStep()" style="
+                    background: ${isLast ? '#27ae60' : '#3498db'}; 
+                    color: white; border: none; padding: 10px 15px; 
+                    border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">
+                    ${isLast ? 'INIZIA' : 'AVANTI'}
+                </button>
+            </div>
+        `)
+        .openOn(map);
+    }
 }
 
 function nextTutorialStep() {
@@ -855,18 +890,15 @@ function nextTutorialStep() {
     if (currentStep < tutorialSteps.length) {
         showStep();
     } else {
-        // --- FINE TUTORIAL ---
-        map.closePopup(); // Chiude l'ultimo popup
+        // FINE: CHIUDI E SBLOCCA
+        map.closePopup();
         
-        // --- SBLOCCO MAPPA ---
         map.dragging.enable();
         map.touchZoom.enable();
         map.doubleClickZoom.enable();
         map.scrollWheelZoom.enable();
-        map.boxZoom.enable();
-        map.keyboard.enable();
         if (map.tap) map.tap.enable();
         
-        console.log("Tutorial finito, mappa sbloccata.");
+        console.log("Mappa sbloccata correttamente.");
     }
 }
