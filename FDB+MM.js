@@ -571,44 +571,37 @@ async function startRouting() {
             map.removeControl(control);
         }
 
-        // Creazione del controllo Routing
+        if (control) map.removeControl(control);
+
         control = L.Routing.control({
             waypoints: [startCoords, endCoords],
             language: 'it',
             collapsible: true,
-            show: false, // Parte chiuso, mostra solo il toggle
-            routeWhileDragging: true,
+            show: false, 
             itineraryClassName: 'leaflet-routing-container',
-            collapseBtnClass: 'leaflet-routing-collapse-btn', 
-            containerClassName: 'leaflet-routing-container',
-            lineOptions: { 
-                styles: [{ color: '#4a90e2', weight: 5 }] 
-            },
-            // Corretto minuscola: createItinerary
-            createItinerary: function(itinerary) {
-                return itinerary;
-            }
+            lineOptions: { styles: [{ color: '#4a90e2', weight: 5 }] }
         }).addTo(map);
 
-        // Gestione manuale del Toggle per Desktop/Mobile
-        control.on('routesfound', function() {
+        // FIX MANUALE: Usiamo un approccio più solido
+        setTimeout(() => {
             const toggleBtn = document.querySelector('.leaflet-routing-toggle');
             if (toggleBtn) {
-                toggleBtn.onclick = function() {
-                    const container = document.querySelector('.leaflet-routing-container');
-                    if (container.classList.contains('leaflet-routing-container-hide')) {
-                        control.show();
-                    } else {
-                        control.hide();
-                    }
-                };
-            }
-        });
+                // Rimuoviamo eventuali vecchi eventi clonando il pulsante
+                const newToggleBtn = toggleBtn.cloneNode(true);
+                toggleBtn.parentNode.replaceChild(newToggleBtn, toggleBtn);
 
-    } catch (e) {
-        alert(e.message || "Errore durante la ricerca. Riprova.");
-    }
-}
+                newToggleBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const container = document.querySelector('.leaflet-routing-container');
+                    if (container) {
+                        // Leaflet usa questa classe per nascondere
+                        container.classList.toggle('leaflet-routing-container-hide');
+                    }
+                });
+            }
+        }, 500);
 // --- 7. CONTROLLI INTERFACCIA ---
 // 1. Switcher Layer Base (Spostato a destra)
 const layersControl = L.control.layers(
