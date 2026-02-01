@@ -246,47 +246,51 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* 1. RESET TOTALE DEL PULSANTE (Desktop e Mobile) */
+/* FORZA IL QUADRATINO DEL TOGGLE SEMPRE VISIBILE */
 .leaflet-routing-toggle {
     display: block !important;
+    visibility: visible !important;
     width: 34px !important;
     height: 34px !important;
-    position: absolute !important;
-    top: 80px !important;
-    right: 10px !important;
-    z-index: 10000 !important;
     background-color: white !important;
-    /* Icona standard dell'auto */
     background-image: url('https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet.routing.icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: 2px 2px !important; 
-    background-size: 150px auto !important;
+    background-position: center !important; /* Centra l'auto */
+    background-size: 160px auto !important;
     border-radius: 4px !important;
     border: 2px solid rgba(0,0,0,0.2) !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
     cursor: pointer !important;
-    /* Nasconde testi extra che allungano il pulsante */
-    text-indent: -9999px !important;
-    white-space: nowrap !important;
+    text-indent: -9999px !important; /* Nasconde scritte spurie */
     overflow: hidden !important;
+    position: absolute !important;
+    top: 80px !important;
+    right: 10px !important;
+    z-index: 10000 !important;
 }
 
-/* 2. GESTIONE PANNELLO (Nascondi/Mostra) */
+/* Pannello indicazioni */
 .leaflet-routing-container {
-    display: block !important; /* Sempre blocco di base */
+    background: white;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    width: 210px;
+    max-height: 150px;
+    overflow-y: auto;
 }
 
+/* Classe per nascondere il pannello */
 .leaflet-routing-container-hide {
-    display: none !important; /* Sparisce del tutto quando ha questa classe */
+    display: none !important;
 }
 
-/* 3. AGGIUSTAMENTO MOBILE (Sotto 600px) */
+/* MOBILE */
 @media (max-width: 600px) {
     .leaflet-routing-toggle {
-        top: 140px !important; /* Abbassato per i layer */
-        width: 38px !important; /* Leggermente più grande per il touch */
+        top: 140px !important; /* Lo abbassa per i layer */
+        width: 38px !important;
         height: 38px !important;
-        background-position: 4px 4px !important; /* Ricentra l'icona */
     }
 }
   .custom-heart-button {
