@@ -913,14 +913,14 @@ function showStep() {
     })
     .setLatLng(popupLatLng)
     .setContent(`
-    <div style="width: 300px; font-family: sans-serif; display: flex; flex-direction: column; gap: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <b style="color:#3498db; font-size: 14px; white-space: nowrap; flex-grow: 1;">${step.titolo}</b>
-            <button onclick="nextTutorialStep()" style="background:#3498db; color:white; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; font-size: 11px; font-weight: bold; flex-shrink: 0; margin-left: 10px;">
+    <div style="width: 290px; font-family: sans-serif; display: block; text-align: left;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <b style="color:#3498db; font-size: 14px; margin: 0; padding: 0;">${step.titolo}</b>
+            <button onclick="nextTutorialStep()" style="background:#3498db; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-size: 11px; font-weight: bold; flex-shrink: 0;">
                 ${isLast ? 'INIZIA' : 'AVANTI'}
             </button>
         </div>
-        <div style="font-size: 12px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 6px; color: #333;">
+        <div style="font-size: 12px; line-height: 1.4; border-top: 1px solid #eee; padding-top: 8px; color: #333; clear: both;">
             ${step.testo}
         </div>
     </div>
