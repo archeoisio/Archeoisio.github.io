@@ -892,7 +892,7 @@ function showStep() {
         const rect = target.getBoundingClientRect();
         if (isHeartBox) {
             // Posizione sopra il box cuore
-            popupPoint = map.containerPointToLayerPoint([rect.left + (rect.width / 2), rect.top]);
+            popupPoint = map.containerPointToLayerPoint([rect.left + 50, rect.top]);
         } else {
             // Posizione standard a sinistra dei pulsanti
             popupPoint = map.containerPointToLayerPoint([rect.left - 170, rect.top + 85]);
